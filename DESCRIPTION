@@ -1,0 +1,8 @@
+Package: imcRtools
+Version: 0.0.1
+Date: 2019-09-17
+Title: Methods for imaging mass cytometry data analysis
+Description: 
+    This package contains functions to read in cell features after CellProfiler analysis and further offers functions for the low level analysis of IMC data.  
+Authors@R: 
+    c(person("Nils", "Eling", role = c("aut", "cre"), email = "nils.eling@uzh.ch")
