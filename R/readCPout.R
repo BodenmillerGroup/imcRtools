@@ -110,6 +110,10 @@ readCPout <- function(cells,
   # Extend column data by image metadata
   col.data$FileName_FullStack <- image.mat[col.data$image_number,"FileName_FullStack"]
   
+  # Add these metadata to SCE object
+  colData(sce) <- col.data
+  rowData(sce) <- row.data  
+  
   # Scale counts
   
   
