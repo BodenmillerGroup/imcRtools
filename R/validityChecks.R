@@ -6,26 +6,26 @@
   
   # Cells.csv file
   if(!file.exists(cells)){
-    errors <- c(errors, "The file containing the cell features does not exist. \n 
-                Please correct the path to the file.")
+    errors <- c(errors, paste0("The file containing the cell features does not exist. ", 
+                "Please correct the path to the file.\n"))
   }
   
   # Image metadata file
   if(!file.exists(image_meta)){
-    errors <- c(errors, "The file containing the image metadata does not exist. \n 
-                Please correct the path to the file.")
+    errors <- c(errors, paste0("The file containing the image metadata does not exist. ",
+                "Please correct the path to the file.\n"))
   }
   
   # Relationship file
   if(!file.exists(relationships)){
-    errors <- c(errors, "The file containing the cell-cell relationships does not exist. \n 
-                Please correct the path to the file.")
+    errors <- c(errors, paste0("The file containing the cell-cell relationships does not exist. ",
+                "Please correct the path to the file.\n"))
   }
   
   # Panel file
   if(!file.exists(panel)){
-    errors <- c(errors, "The file containing the panel does not exist. \n 
-                Please correct the path to the file.")
+    errors <- c(errors, paste0("The file containing the panel does not exist. ",
+                "Please correct the path to the file.\n"))
   }
   
   return(errors)
