@@ -38,12 +38,12 @@ plotCellCounts <- function(x, colour_by = NULL, split_by = NULL){
 
   # Plot the counts
   if(!is.null(split_by)){
-    cur_df <- data.frame(split_by = colData(sce)[,split_by],
-                         colour_by = colData(sce)[,colour_by])
+    cur_df <- data.frame(split_by = as.factor(colData(sce)[,split_by]),
+                         colour_by = as.factor(colData(sce)[,colour_by]))
   }
   else{
-    cur_df <- data.frame(split_by = rep("All", ncol(x)),
-                         colour_by = colData(sce)[,colour_by])
+    cur_df <- data.frame(split_by = as.factor(rep("All", ncol(x))),
+                         colour_by = as.factor(colData(sce)[,colour_by]))
   }
 
   ggplot(cur_df) + geom_bar(aes(x = split_by, fill = colour_by)) +
