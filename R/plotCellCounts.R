@@ -1,0 +1,50 @@
+#' @rdname plotCellCounts
+#' @title Visualizes number of cells per factor level
+#'
+#' @description This function plots the number of cells per chosen cell metadata factor.
+#'
+#' @param x a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.
+#' @param colour_by character string corresponding to a \code{colData(x)} slot.
+#'  The resulting bar plot will be coloured by this factor.
+#' @param split_by character string corresponding to a \code{colData(x)} slot.
+#'  Defines what will be plotted on the x-axis.
+#'
+#' @return Returns a \code{ggplot} barplot object that can be further modified following the \code{ggplot2} syntax.
+#'
+#' @examples
+#' TODO
+#'
+#' @author Nils Eling \email{nils.eling@@uzh.ch}
+#'
+#' @import ggplot2
+#' @importFrom SingleCellExperiment colDatat
+#' @importFrom reshape2 melt
+#' @export
+
+plotCellCounts <- function(x, colour_by = NULL, split_by = NULL){
+
+  # Check if x is SingleCellExpriment
+  .sceCheck(x)
+
+  # Check if selected variable exists
+  entries <- colnames(colData(x))
+  if(!is.null(colour_by) & !(colour_by %in% entries)){
+    stop("The entry for colour_by is not a colData slot of the object.")
+  }
+
+  if(!is.null(split_by) & !(split_by %in% entries)){
+    stop("The entry for split_by is not a colData slot of the object.")
+  }
+
+  # Plot the counts
+  if(!is.null(split_by)){
+    cur_df <- data.frame(split_by = colData(sce)[,split_by],
+                         colour_by = colData(sce)[,colour_by])
+    ggplot(cur_df) + geom_bar(aes(x = split_by, fill = colour_by))
+  }
+  else{
+    cur_df <- data.frame(split_by = rep("All", ncol(x)),
+                         colour_by = colData(sce)[,colour_by])
+    ggplot(cur_df) + geom_bar(aes(x = split_by, fill = colour_by))
+  }
+}
