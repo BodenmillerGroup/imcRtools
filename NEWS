@@ -1,2 +1,6 @@
 2019-09-17: Initial commit
-Creation of the imcRtools package and readCPfunction
+- Creation of the imcRtools package and readCPfunction
+
+2019-11-28: Initial set of functions
+- The functions calculateSummary, plotCellCounts, and plotDist have been added 
+- Removed readCPout function

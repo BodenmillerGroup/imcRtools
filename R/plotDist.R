@@ -12,16 +12,18 @@
 #'  This feature will be used to facet wrap the plots.
 #' @param exprs_values character string indicating from which \code{assays(x)} slot the intensity values can be extracted.
 #'  Default: exprs_values = "counts".
-#' @param ... further parameters for the \code{\link[geom_density_ridges]{geom_density_ridges}} function.
+#' @param ... further parameters for the \code{\link[ggridges]{ggridges}} function.
 #'
 #' @return Returns a \code{ggplot} object that can be further modified following the \code{ggplot2} syntax.
 #'
 #' @examples
-#' TODO
+#' # TODO
 #'
 #' @author Nils Eling \email{nils.eling@@uzh.ch}
 #'
-#' @import ggplot2 ggridges
+#' @import ggplot2 
+#' @importFrom ggridges geom_density_ridges
+#' @importFrom SummarizedExperiment assay
 #' @importFrom SingleCellExperiment colData
 #' @importFrom reshape2 melt
 #' @export
@@ -67,11 +69,12 @@ plotDist <- function(x, y = "rows", split_by = NULL, exprs_values = "counts", ..
       cur_df$split <- as.factor(colData(x)[match(cur_df$Var2, colnames(x)),split_by])
     }
 
-    ggplot(cur_df) + geom_density_ridges(aes(value, y, fill = y), ...) + facet_wrap(. ~ split)
+    ggplot(cur_df) + geom_density_ridges(aes_string(x="value", y="y", fill = "y"), ...) + 
+      facet_wrap(. ~ split)
 
   }
   else{
-    ggplot(cur_df) + geom_density_ridges(aes(value, y, fill = y), ...)
+    ggplot(cur_df) + geom_density_ridges(aes_string(x="value", y="y", fill = "y"), ...)
 
   }
 

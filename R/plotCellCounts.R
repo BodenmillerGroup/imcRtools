@@ -12,12 +12,12 @@
 #' @return Returns a \code{ggplot} barplot object that can be further modified following the \code{ggplot2} syntax.
 #'
 #' @examples
-#' TODO
+#' # TODO
 #'
 #' @author Nils Eling \email{nils.eling@@uzh.ch}
 #'
 #' @import ggplot2
-#' @importFrom SingleCellExperiment colDatat
+#' @importFrom SingleCellExperiment colData
 #' @importFrom reshape2 melt
 #' @export
 
@@ -38,12 +38,12 @@ plotCellCounts <- function(x, colour_by = NULL, split_by = NULL){
 
   # Plot the counts
   if(!is.null(split_by)){
-    cur_df <- data.frame(split_by = as.factor(colData(sce)[,split_by]),
-                         colour_by = as.factor(colData(sce)[,colour_by]))
+    cur_df <- data.frame(split_by = as.factor(colData(x)[,split_by]),
+                         colour_by = as.factor(colData(x)[,colour_by]))
   }
   else{
     cur_df <- data.frame(split_by = as.factor(rep("All", ncol(x))),
-                         colour_by = as.factor(colData(sce)[,colour_by]))
+                         colour_by = as.factor(colData(x)[,colour_by]))
   }
 
   ggplot(cur_df) + geom_bar(aes(x = split_by, fill = colour_by)) +

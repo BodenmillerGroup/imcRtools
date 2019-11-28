@@ -16,14 +16,15 @@
 #'    \item varCounts stores the variance of intensity values per factor level/ combination of levels
 #'  }
 #'
-#' @examples
-#' TODO
+#' @examples 
+#' # TODO
 #'
 #' @author Nils Eling \email{nils.eling@@uzh.ch}
 #'
-#' @import SingleCellExperiment
+#' @import SingleCellExperiment SummarizedExperiment
 #' @importFrom matrixStats rowMedians rowVars
-#' @importFrom S4Vectors DataFrame
+#' @importFrom S4Vectors DataFrame SimpleList
+#' @importFrom stats aggregate median var
 #' @export
 
 calculateSummary <- function(x, split_by = NULL, exprs_values = "counts"){
