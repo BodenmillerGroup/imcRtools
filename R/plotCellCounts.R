@@ -40,11 +40,18 @@ plotCellCounts <- function(x, colour_by = NULL, split_by = NULL){
   if(!is.null(split_by)){
     cur_df <- data.frame(split_by = colData(sce)[,split_by],
                          colour_by = colData(sce)[,colour_by])
-    ggplot(cur_df) + geom_bar(aes(x = split_by, fill = colour_by))
   }
   else{
     cur_df <- data.frame(split_by = rep("All", ncol(x)),
                          colour_by = colData(sce)[,colour_by])
-    ggplot(cur_df) + geom_bar(aes(x = split_by, fill = colour_by))
   }
+
+  ggplot(cur_df) + geom_bar(aes(x = split_by, fill = colour_by)) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1),
+          axis.title.x = element_blank(),
+          panel.background = element_blank(),
+          panel.grid.minor=element_blank(),
+          panel.grid.major.x=element_blank(),
+          panel.grid.major.y=element_line(color="grey", size=.3)) +
+    ylab("Cell counts") + scale_fill_discrete(name = colour_by)
 }
