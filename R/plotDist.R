@@ -6,7 +6,8 @@
 #'  By default, the intensity distributions for each marker will be displayed.
 #'
 #' @param x a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.
-#' @param y a character string indicating which factor to plot on the y-axis. Default: y = "rows", which plots a density for each feature.
+#' @param colour_by a character string indicating which factor to use for separating the counts.
+#'  Default: colour_by = "rows", which plots a density for each feature.
 #'  Valid arguments are "rows" or any entry in the \code{colData(sce)} slot.
 #' @param split_by character string corresponding to a \code{colData(x)} or \code{color_by = "rows"}, calling the rownames for \code{x}.
 #'  This feature will be used to facet wrap the plots.
@@ -21,47 +22,52 @@
 #'
 #' @author Nils Eling \email{nils.eling@@uzh.ch}
 #'
-#' @import ggplot2 
+#' @import ggplot2
 #' @importFrom ggridges geom_density_ridges
 #' @importFrom SummarizedExperiment assay
 #' @importFrom SingleCellExperiment colData
 #' @importFrom reshape2 melt
 #' @export
 
-plotDist <- function(x, y = "rows", split_by = NULL, exprs_values = "counts", ...){
+plotDist <- function(x, colour_by = "rows", split_by = NULL,
+                     exprs_values = "counts", plot_type = c("ridges", "boxplot"), ...){
 
   # Check if x is SingleCellExpriment
   .sceCheck(x)
-  
+
   # Check if assay entry exits
   .assayCheck(x, exprs_values)
-  
-  # The y aesthetic has to be defined
-  if(is.null(y)){
-    stop("y cannot be empty. Please specify which aesthetic to plot on the y-axis.")
+
+  # Select plot type
+  plot_type <- match.arg(plot_type)
+
+  # The colour_by aesthetic has to be defined
+  if(is.null(colour_by)){
+    stop("colour_by cannot be empty. Please specify by which colData entry the counts are separated.")
   }
 
   # Check if selected variable exists
   entries <- c("rows", colnames(colData(x)))
-  if(!is.null(y) & !(y %in% entries)){
-    stop("The entry for y is not the rownames of colData slots of the object.")
-  }
-
-  if(!is.null(split_by) & !(split_by %in% entries)){
-    stop("The entry for split_by is not the rownames of colData slots of the object.")
+  if(!is.null(colour_by) & !(colour_by %in% entries)){
+    stop("The entry for colour_by is not the rownames of colData slots of the object.")
   }
 
   # Build the data.frame for plotting
   cur_df <- reshape2::melt(assay(x, exprs_values))
 
-  if(y == "rows"){
-    cur_df$y <- as.factor(cur_df$Var1)
+  if(colour_by == "rows"){
+    cur_df$colour_by <- as.factor(cur_df$Var1)
   }
   else{
-    cur_df$y <- as.factor(colData(x)[match(cur_df$Var2, colnames(x)),y])
+    cur_df$colour_by <- as.factor(colData(x)[match(cur_df$Var2, colnames(x)),colour_by])
   }
 
   if(!is.null(split_by)){
+
+    if(!(split_by %in% entries)){
+      stop("The entry for split_by is not the rownames of colData slots of the object.")
+    }
+
     if(split_by == "rows"){
       cur_df$split <- as.factor(cur_df$Var1)
     }
@@ -69,13 +75,23 @@ plotDist <- function(x, y = "rows", split_by = NULL, exprs_values = "counts", ..
       cur_df$split <- as.factor(colData(x)[match(cur_df$Var2, colnames(x)),split_by])
     }
 
-    ggplot(cur_df) + geom_density_ridges(aes_string(x="value", y="y", fill = "y"), ...) + 
-      facet_wrap(. ~ split)
+    if(plot_type == "ridges"){
+      ggplot(cur_df) + geom_density_ridges(aes_string(x="value", y="colour_by", fill = "colour_by"), ...) +
+        facet_wrap(. ~ split)
+    }
+    else{
+      ggplot(cur_df) + geom_boxplot(aes_string(x="colour_by", y="value", fill = "colour_by"), ...) +
+        facet_wrap(. ~ split)
+    }
 
   }
   else{
-    ggplot(cur_df) + geom_density_ridges(aes_string(x="value", y="y", fill = "y"), ...)
-
+    if(plot_type == "ridges"){
+      ggplot(cur_df) + geom_density_ridges(aes_string(x="value", y="colour_by", fill = "colour_by"), ...)
+    }
+    else{
+      ggplot(cur_df) + geom_boxplot(aes_string(x="colour_by", y="value", fill = "colour_by"), ...)
+    }
   }
 
 }
