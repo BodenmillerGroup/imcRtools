@@ -76,21 +76,37 @@ plotDist <- function(x, colour_by = "rows", split_by = NULL,
     }
 
     if(plot_type == "ridges"){
-      ggplot(cur_df) + geom_density_ridges(aes_string(x="value", y="colour_by", fill = "colour_by"), ...) +
-        facet_wrap(. ~ split)
+      ggplot(cur_df) +
+        geom_density_ridges(aes_string(x="value", y="colour_by", fill = "colour_by"), ...) +
+        facet_wrap(. ~ split) +
+        theme(panel.background = element_blank(),
+              panel.grid.major = element_blank(),
+              axis.text.x = element_text(angle = 45, hjust = 1))
     }
     else{
-      ggplot(cur_df) + geom_boxplot(aes_string(x="colour_by", y="value", fill = "colour_by"), ...) +
-        facet_wrap(. ~ split)
+      ggplot(cur_df) +
+        geom_boxplot(aes_string(x="colour_by", y="value", fill = "colour_by"), ...) +
+        facet_wrap(. ~ split) +
+        theme(panel.background = element_blank(),
+              panel.grid.major = element_blank(),
+              axis.text.x = element_text(angle = 45, hjust = 1))
     }
 
   }
   else{
     if(plot_type == "ridges"){
-      ggplot(cur_df) + geom_density_ridges(aes_string(x="value", y="colour_by", fill = "colour_by"), ...)
+      ggplot(cur_df) +
+        geom_density_ridges(aes_string(x="value", y="colour_by", fill = "colour_by"), ...) +
+      theme(panel.background = element_blank(),
+            panel.grid.major = element_blank(),
+            axis.text.x = element_text(angle = 45, hjust = 1))
     }
     else{
-      ggplot(cur_df) + geom_boxplot(aes_string(x="colour_by", y="value", fill = "colour_by"), ...)
+      ggplot(cur_df) +
+        geom_boxplot(aes_string(x="colour_by", y="value", fill = "colour_by"), ...) +
+        theme(panel.background = element_blank(),
+              panel.grid.major = element_blank(),
+              axis.text.x = element_text(angle = 45, hjust = 1))
     }
   }
 
