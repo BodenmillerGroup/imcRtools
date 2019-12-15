@@ -31,21 +31,28 @@ plotCellCounts <- function(x, colour_by = NULL, split_by = NULL, proportion = FA
 
   # Check if selected variable exists
   entries <- colnames(colData(x))
-  if(!is.null(colour_by) & !(colour_by %in% entries)){
-    stop("The entry for colour_by is not a colData slot of the object.")
+  if(!is.null(colour_by)){
+    if(!(colour_by %in% entries)){
+      stop("The entry for colour_by is not a colData slot of the object.")
+    }
   }
-
-  if(!is.null(split_by) & !(split_by %in% entries)){
-    stop("The entry for split_by is not a colData slot of the object.")
+  if(!is.null(split_by)){
+    if(!(split_by %in% entries)){
+      stop("The entry for split_by is not a colData slot of the object.")
+    }
   }
 
   # Plot the counts
   if(!is.null(split_by)){
-    cur_df <- data.frame(split_by = as.factor(colData(x)[,split_by]),
-                         colour_by = as.factor(colData(x)[,colour_by]))
+    cur_df <- data.frame(split_by = as.factor(colData(x)[,split_by]))
   } else {
-    cur_df <- data.frame(split_by = as.factor(rep("All", ncol(x))),
-                         colour_by = as.factor(colData(x)[,colour_by]))
+    cur_df <- data.frame(split_by = as.factor(rep("All", ncol(x))))
+  }
+  
+  if(!is.null(colour_by)){
+    cur_df$colour_by <- as.factor(colData(x)[,colour_by])
+  } else {
+    cur_df$colour_by <- as.factor(rep("All", ncol(x)))
   }
 
   if(proportion){
