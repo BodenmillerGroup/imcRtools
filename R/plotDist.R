@@ -53,12 +53,11 @@ plotDist <- function(x, colour_by = "rows", split_by = NULL,
   }
 
   # Build the data.frame for plotting
-  cur_df <- reshape2::melt(assay(x, exprs_values))
+  cur_df <- reshape2::melt(as.matrix(assay(x, exprs_values)))
 
   if(colour_by == "rows"){
     cur_df$colour_by <- as.factor(cur_df$Var1)
-  }
-  else{
+  } else {
     cur_df$colour_by <- as.factor(colData(x)[match(cur_df$Var2, colnames(x)),colour_by])
   }
 
