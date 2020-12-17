@@ -15,9 +15,8 @@
 #'   panel
 #' @param metal_tag \code{colnames} of metal tag column in `panel_meta` (default
 #'   = "Metal.Tag")
-#' @param target_names \code{colnames} of column that contains the antibody/target name
-#' @param channel_order \code{data.frame} containing the metal tag associated
-#'   with the channels
+#' @param channel_number \code{colnames} of column that contains the channel number in `panel_meta` (default = "channel")
+#' @param target_names \code{colnames} of column that contains the antibody/target name in `panel_meta` 
 #' @param imageNumber name of column containing an sample identifier present in
 #'   all provided input
 #' @param objectNumber name of column containing an object number for individual
@@ -33,7 +32,17 @@
 #' @return returns SCE object
 #'
 #' @examples
-#' # TODO
+#' sce <- generateSCE(cells = cells,
+#'        cell_meta = c("ImageNumber", "ObjectNumber"),
+#'        image_meta = image_mat,
+#'        panel_meta = panel_mat,
+#'        metal_tag = "Metal.Tag",
+#'        channel_number = "channel", 
+#'        target_names = "clean_target",
+#'        imageNumber = "ImageNumber",
+#'        objectNumber = "ObjectNumber",
+#'        measurement_column = "Intensity_MeanIntensityComp_FullStackFiltered",
+#'        scaling_column = "Scaling_FullStack")
 #'
 #' @import SingleCellExperiment
 #' @import S4Vectors
@@ -44,8 +53,8 @@ generateSCE <- function(cells = NULL,
                         image_meta = NULL,
                         panel_meta = NULL,
                         metal_tag = "Metal.Tag",
+                        channel_number = "channel", 
                         target_names = NULL,
-                        channel_order = NULL,
                         imageNumber = "ImageNumber",
                         objectNumber = "ObjectNumber",
                         measurement_column = NULL,
@@ -70,18 +79,13 @@ generateSCE <- function(cells = NULL,
   rownames(cell_meta) <- cell_meta$cellID
 
   # order both metadata and cell_meta according to imageNumber
-  metadata <- metadata[order(metadata[[imageNumber]]),]
-  cell_meta <- cell_meta[order(cell_meta[[imageNumber]]),]
-
-  # the channel numbers are the rownumbers in the "tags" file that we create above
-  channel_order$channel <- as.numeric(rownames(channel_order))
-  colnames(channel_order) <- c(metal_tag,"channel")
-
-  # include the channel information in the panel metadata (panel_meta)
-  panel_meta <- merge(panel_meta,channel_order,by=metal_tag)
-
+  if(is.null(metadata) == FALSE){
+    metadata <- metadata[order(metadata[[imageNumber]]),]
+    cell_meta <- cell_meta[order(cell_meta[[imageNumber]]),]
+  }
+  
   # order the panel metadata by channel and add target column as rowname
-  panel_meta <- panel_meta[order(panel_meta$channel,decreasing = FALSE),]
+  panel_meta <- panel_meta[order(panel_meta[,channel_number],decreasing = FALSE),]
   rownames(panel_meta) <- panel_meta[[target_names]]
 
   # create the SCE data container
@@ -96,9 +100,10 @@ generateSCE <- function(cells = NULL,
   rowData(sce) <- DataFrame(panel_meta)
 
   # order metadata according to imageNumber and add to metadata slot
-  metadata <- metadata[order(metadata[[imageNumber]]),]
-  metadata(sce) <- as.list(metadata)
-
+  if(is.null(metadata) == FALSE){
+    metadata <- metadata[order(metadata[[imageNumber]]),]
+    metadata(sce) <- as.list(metadata)
+  }
   #return SCE object
   return(sce)
 }
