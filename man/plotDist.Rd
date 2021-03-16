@@ -4,12 +4,20 @@
 \alias{plotDist}
 \title{Visualizes distributions of marker intensities}
 \usage{
-plotDist(x, y = "rows", split_by = NULL, exprs_values = "counts", ...)
+plotDist(
+  x,
+  colour_by = "rows",
+  split_by = NULL,
+  exprs_values = "counts",
+  plot_type = c("ridges", "boxplot"),
+  ...
+)
 }
 \arguments{
 \item{x}{a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.}
 
-\item{y}{a character string indicating which factor to plot on the y-axis. Default: y = "rows", which plots a density for each feature.
+\item{colour_by}{a character string indicating which factor to use for separating the counts.
+Default: colour_by = "rows", which plots a density for each feature.
 Valid arguments are "rows" or any entry in the \code{colData(sce)} slot.}
 
 \item{split_by}{character string corresponding to a \code{colData(x)} or \code{color_by = "rows"}, calling the rownames for \code{x}.
@@ -17,6 +25,8 @@ This feature will be used to facet wrap the plots.}
 
 \item{exprs_values}{character string indicating from which \code{assays(x)} slot the intensity values can be extracted.
 Default: exprs_values = "counts".}
+
+\item{plot_type}{plot type}
 
 \item{...}{further parameters for the \code{\link[ggridges]{ggridges}} function.}
 }

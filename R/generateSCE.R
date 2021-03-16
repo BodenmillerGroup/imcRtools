@@ -21,7 +21,7 @@
 #'   all provided input
 #' @param objectNumber name of column containing an object number for individual
 #'   cells
-#' @param measurement_column shared \code{colnames} pattern of \code}{cells}
+#' @param measurement_column shared \code{colnames} pattern of \code{cells}
 #'   columns storing channel measurement (e.g.
 #'   Intensity_MeanIntensityCorrected_FullStackFiltered)
 #' @param scaling_column \code{colnames} of scaling column storing the applied
@@ -32,20 +32,20 @@
 #' @return returns SCE object
 #'
 #' @examples
-#' sce <- generateSCE(cells = cells,
-#'        cell_meta = c("ImageNumber", "ObjectNumber"),
-#'        image_meta = image_mat,
-#'        panel_meta = panel_mat,
-#'        metal_tag = "Metal.Tag",
-#'        channel_number = "channel", 
-#'        target_names = "clean_target",
-#'        imageNumber = "ImageNumber",
-#'        objectNumber = "ObjectNumber",
-#'        measurement_column = "Intensity_MeanIntensityComp_FullStackFiltered",
-#'        scaling_column = "Scaling_FullStack")
+#' #sce <- generateSCE(cells = cells,
+#' #       cell_meta = c("ImageNumber", "ObjectNumber"),
+#' #       image_meta = image_mat,
+#' #       panel_meta = panel_mat,
+#' #       metal_tag = "Metal.Tag",
+#' #       channel_number = "channel", 
+#' #       target_names = "clean_target",
+#' #       imageNumber = "ImageNumber",
+#' #       objectNumber = "ObjectNumber",
+#' #       measurement_column = "Intensity_MeanIntensityComp_FullStackFiltered",
+#' #       scaling_column = "Scaling_FullStack")
 #'
 #' @import SingleCellExperiment
-#' @import S4Vectors
+#' @importFrom S4Vectors DataFrame
 #' @export
 
 generateSCE <- function(cells = NULL,

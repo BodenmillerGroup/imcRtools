@@ -13,6 +13,7 @@
 #'  This feature will be used to facet wrap the plots.
 #' @param exprs_values character string indicating from which \code{assays(x)} slot the intensity values can be extracted.
 #'  Default: exprs_values = "counts".
+#' @param plot_type plot type
 #' @param ... further parameters for the \code{\link[ggridges]{ggridges}} function.
 #'
 #' @return Returns a \code{ggplot} object that can be further modified following the \code{ggplot2} syntax.

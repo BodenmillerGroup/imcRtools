@@ -19,7 +19,6 @@
 #' @author Nils Eling \email{nils.eling@@uzh.ch}
 #'
 #' @import ggplot2
-#' @import dplyr
 #' @importFrom SingleCellExperiment colData
 #' @importFrom reshape2 melt
 #' @export
@@ -58,7 +57,7 @@ plotCellCounts <- function(x, colour_by = NULL, split_by = NULL, proportion = FA
   if(proportion){
     df_sum <- melt(table(cur_df)/rowSums(table(cur_df)))
 
-    ggplot(df_sum) + geom_bar(aes(x = split_by, y = value, fill = colour_by), stat = "identity") +
+    ggplot(df_sum) + geom_bar(aes_string(x = "split_by", y = "value", fill = "colour_by"), stat = "identity") +
       theme(axis.text.x = element_text(angle = 45, hjust = 1),
             axis.title.x = element_blank(),
             panel.background = element_blank(),

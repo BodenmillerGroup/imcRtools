@@ -19,6 +19,7 @@ Imports:
     SummarizedExperiment,
     reshape2
 Suggests:
+    data.table,
     BiocStyle,
     knitr,
     rmarkdown,
@@ -27,5 +28,5 @@ biocViews: ImmunoOncology, Software, SingleCell,
 VignetteBuilder: knitr
 URL: https://github.com/BodenmillerGroup/imcRtools
 BugReports: https://github.com/BodenmillerGroup/imcRtools/issues
-RoxygenNote: 7.0.1
+RoxygenNote: 7.1.1
 Encoding: UTF-8

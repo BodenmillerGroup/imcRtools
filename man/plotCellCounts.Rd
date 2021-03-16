@@ -4,7 +4,7 @@
 \alias{plotCellCounts}
 \title{Visualizes number of cells per factor level}
 \usage{
-plotCellCounts(x, colour_by = NULL, split_by = NULL)
+plotCellCounts(x, colour_by = NULL, split_by = NULL, proportion = FALSE)
 }
 \arguments{
 \item{x}{a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.}
@@ -14,6 +14,9 @@ The resulting bar plot will be coloured by this factor.}
 
 \item{split_by}{character string corresponding to a \code{colData(x)} slot.
 Defines what will be plotted on the x-axis.}
+
+\item{proportion}{logical if number of cells per \code{split_by} factor should be scaled to 1.
+Default \code{FALSE}.}
 }
 \value{
 Returns a \code{ggplot} barplot object that can be further modified following the \code{ggplot2} syntax.
