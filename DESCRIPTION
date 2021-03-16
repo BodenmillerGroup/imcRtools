@@ -1,29 +1,29 @@
-Package: imcRtools
-Version: 0.1.0
-Date: 2019-11-28
+Package: balagan
+Version: 0.1.1
+Date: 2021-03-16
 Title: Methods for imaging mass cytometry data analysis
 Description: 
     This package contains functions for the low level and spatial analysis of IMC data.  
 Authors@R: 
-    c(person("Nils", "Eling", role = c("aut", "cre"), email = "nils.eling@uzh.ch"))
+    c(person("Nils", "Eling", role = c("aut", "ctb"), email = "nils.eling@uzh.ch"),
+       person("Pierre", "Bost", role = c("aut", "cre"), email = "pierre.bost@uzh.ch"))
 License: GPL (>= 2)
 Depends:
-    R (>= 3.6),
+    R (>= 4.0.3),
     SingleCellExperiment
 Imports:
-    ggplot2,
-    matrixStats,
-    S4Vectors,
-    ggridges,
-    methods,
-    SummarizedExperiment,
-    reshape2
+    N2R,
+    doParallel,
+    foreach,
+    igraph,
+    readr,
+    geometry,
+    dbscan,
+    uwot,
+    FactoMineR,
 Suggests:
-    data.table,
-    BiocStyle,
-    knitr,
-    rmarkdown,
-    testthat
+    Matrix,
+    colorRamp
 biocViews: ImmunoOncology, Software, SingleCell, 
 VignetteBuilder: knitr
 URL: https://github.com/BodenmillerGroup/imcRtools
