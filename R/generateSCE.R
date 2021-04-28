@@ -60,6 +60,8 @@ generateSCE <- function(cells = NULL,
                         measurement_column = NULL,
                         scaling_column = NULL,
                         metadata = NULL){
+    
+    stop("This function is under development!")
 
   # validity checks - TO DO (is scaling factor numeric, is measurement_column present for all entries of channel_order, are provided colnames present,...)
 

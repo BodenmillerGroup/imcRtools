@@ -14,6 +14,8 @@
 #'
 #' @export
 neighborhoodPermTest <- function(object, method = c("histocat", "classic")){
+    
+    stop("This function is under development!")
   # Check if x is SingleCellExpriment
   .sceCheck(object)
 
