@@ -32,7 +32,7 @@
 }
 
 # Check function for SCE from TXT function
-#' @importFrom stringr str_match
+#' @importFrom stringr str_extract
 .validSCEtoTXTinput <- function(txt_list, metadata_cols, verbose){
     
     # Check if input is a named list
@@ -47,6 +47,8 @@
     # Check if names are all of the format Mt123 where Mt is the metal name
     # and 123 is the mass
     cur_names <- names(txt_list)
+    cur_mass <- str_extract(cur_names, "[0-9]{2,3}$")
+    cur_names <- cur_names[order(as.numeric(cur_mass))]
     
     if (!all(grepl("^[A-Za-z]{2}[0-9]{2,3}$", cur_names))) {
         stop("Not all names match the pattern (mt)(mass).")
@@ -57,13 +59,12 @@
         all(metadata_cols %in% colnames(x))
     })
     
-    if (!all(cur_check)) {
+    if (!all(unlist(cur_check))) {
         stop("Not all 'metadata_cols' are present in entries to 'txt_list'")
     }
     
     # Check if spotted channel is also open
-    cur_channels <- str_match(colnames(txt_list[[1]]), "[A-Za-z]{2}[0-9]{2,3}")
-    cur_channels <- as.character(cur_channels)
+    cur_channels <- str_extract(colnames(txt_list[[1]]), "[A-Za-z]{1,2}[0-9]{2,3}")
     cur_channels <- cur_channels[!is.na(cur_channels)]
     
     # Verbose option will print possible missmatched between acquired and open

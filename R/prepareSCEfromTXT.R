@@ -6,7 +6,8 @@
 #'   slide". Here, each .txt file contains the measurements of multiple pixels
 #'   for a single stain across all open channels.
 #'
-#' @param txt_list a named list containing the read-in txt files for each spot
+#' @param txt_list a named list containing the read-in txt files for each spot. 
+#' Entries to \code{txt_list} need to be coercible to \code{data.frame} objects.
 #' @param metadata_cols character vector indicating which column entries of the
 #' .txt files should be saved in the \code{colData(sce)} slot.
 #' @param verbose logical indicating if additional information regarding the
@@ -16,7 +17,7 @@
 #'
 #' @examples
 #'
-#' @import SingleCellExperiment
+#' @importFrom SingleCellExperiment SingleCellExperiment
 #' @importFrom S4Vectors DataFrame
 #' @export
 
@@ -29,19 +30,28 @@ prepareSCEfromTXT <- function(txt_list,
     .validSCEtoTXTinput(txt_list, 
                         metadata_cols,
                         verbose)
-    
-    if (!is.null(names(txt_list))) {
-        txt_list <- lapply(names(txt_list), function(x){
-            cur_txt <- txt_list[[x]]
-            cur_txt$metal_name <- as.character(str_match(x, "[A-Za-z]{2}[0-9]{2,3}"))
-            cur_txt$mass <- as.character(str_match(cur_txt$metal_name, "[0-9]{2,3}"))
-            return(cur_txt)
-        })
-    }
    
+    # Coerce to data.frame
+    txt_list <- lapply(txt_list, as.data.frame)
+    
     cur_out <- do.call(rbind, txt_list)
     
     # Construct SCE object
-    cur_col <- 
-   
+    cell_meta <- DataFrame(cur_out[metadata_cols]) 
+    cell_meta$sample_id <- str_extract(rownames(cell_meta), "^[A-Za-z]{1,2}[0-9]{2,3}")
+    cell_meta$sample_metal <- str_extract(cell_meta$sample_id, "^[A-Za-z]{1,2}")
+    cell_meta$sample_mass <- str_extract(cell_meta$sample_id, "[0-9]{2,3}$")
+    
+    cur_counts <- cur_out[grepl("[A-Za-z]{1,2}[0-9]{2,3}", colnames(cur_out))]
+    cur_counts <- t(cur_counts)
+    
+    channel_meta <- DataFrame(channel_name = str_extract(rownames(cur_counts), "[A-Za-z]{1,2}[0-9]{2,3}Di"),
+                              marker_name = str_extract(rownames(cur_counts), "[A-Za-z]{1,2}[0-9]{2,3}"))
+    
+    sce <- SingleCellExperiment(assays = list(counts = cur_counts))
+    colData(sce) <- cell_meta
+    rowData(sce) <- channel_meta
+    
+    return(sce)
+       
 }
