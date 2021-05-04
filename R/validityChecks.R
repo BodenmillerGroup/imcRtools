@@ -95,6 +95,9 @@
                                    threshold, order_metals){
     
     # Check sce object
+    if (!is(object, "SingleCellExperiment")) {
+        stop("'object' needs to be a SingleCellExperiment object.")
+    }
     if (!spot_id %in% names(colData(object))) {
         stop("'spot_id' not in 'colData(object)'.")
     }
@@ -115,5 +118,25 @@
     
     if (!all(is.logical(order_metals)) || length(order_metals) != 1) {
         stop("'order_metals' needs to be logical.")
+    }
+}
+
+# Check inputs for SCE from TXT function
+#' @importFrom SummarizedExperiment colData
+.validbinAcrossPixelsInput <- function(object, bin_size, spot_id, assay_type){
+    
+    # Check sce object
+    if (!is(object, "SingleCellExperiment")) {
+        stop("'object' needs to be a SingleCellExperiment object.")
+    }
+    if (!spot_id %in% names(colData(object))) {
+        stop("'spot_id' not in 'colData(object)'.")
+    }
+    if (!assay_type %in% assayNames(object)) {
+        stop("'assay_type' not in 'assayNames(object)'.")
+    }
+    
+    if (!all(is.numeric(bin_size)) || length(bin_size) != 1) {
+        stop("'bin_size' needs to be single numeric.")
     }
 }
