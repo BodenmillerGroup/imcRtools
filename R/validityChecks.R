@@ -88,3 +88,32 @@
     }
     
 }
+
+# Check inputs for SCE from TXT function
+#' @importFrom SummarizedExperiment colData
+.validSpotHeatmapInput <- function(object, spot_id, channel_id, assay_type, log, 
+                                   threshold, order_metals){
+    
+    # Check sce object
+    if (!spot_id %in% names(colData(object))) {
+        stop("'spot_id' not in 'colData(object)'.")
+    }
+    if (!channel_id %in% names(rowData(object))) {
+        stop("'channel_id' not in 'rowData(object)'.")
+    }
+    if (!assay_type %in% assayNames(object)) {
+        stop("'assay_type' not in 'assayNames(object)'.")
+    }
+    
+    if (!all(is.logical(log)) || length(log) != 1) {
+        stop("'log' needs to be logical.")
+    }
+    
+    if (!is.null(threshold) & (length(threshold) != 1 || !all(is.numeric(threshold)))) {
+        stop("'threshold' needs to be a single numeric.")
+    }
+    
+    if (!all(is.logical(order_metals)) || length(order_metals) != 1) {
+        stop("'order_metals' needs to be logical.")
+    }
+}
