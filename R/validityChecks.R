@@ -89,7 +89,6 @@
     
 }
 
-# Check inputs for SCE from TXT function
 #' @importFrom SummarizedExperiment colData
 .validSpotHeatmapInput <- function(object, spot_id, channel_id, assay_type, log, 
                                    threshold, order_metals){
@@ -121,7 +120,6 @@
     }
 }
 
-# Check inputs for SCE from TXT function
 #' @importFrom SummarizedExperiment colData
 .validbinAcrossPixelsInput <- function(object, bin_size, spot_id, assay_type){
     
@@ -138,5 +136,28 @@
     
     if (!all(is.numeric(bin_size)) || length(bin_size) != 1) {
         stop("'bin_size' needs to be single numeric.")
+    }
+}
+
+.validfilterPixelsInput <- function(object, bc_id, spot_mass, 
+                                    minevents, correct_pixels){
+    
+    # Check sce object
+    if (!is(object, "SingleCellExperiment")) {
+        stop("'object' needs to be a SingleCellExperiment object.")
+    }
+    if (!bc_id %in% names(colData(object))) {
+        stop("'bc_id' not in 'colData(object)'.")
+    }
+    if (!spot_mass %in% names(colData(object))) {
+        stop("'spot_mass' not in 'colData(object)'.")
+    }
+
+    
+    if (!all(is.numeric(minevents)) || length(minevents) != 1) {
+        stop("'minevents' needs to be single numeric.")
+    }
+    if (!all(is.logical(correct_pixels)) || length(correct_pixels) != 1) {
+        stop("'correct_pixels' needs to be single logical.")
     }
 }

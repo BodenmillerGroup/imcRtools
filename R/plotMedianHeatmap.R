@@ -1,8 +1,8 @@
 #' @title Visualizes the median pixel intensities per spot and channel
 #'
 #' @description Helper function for estimating the spillover matrix. This
-#' function visualizes the median pixel intensities per spot (columns) and per
-#' channel (rows).
+#' function visualizes the median pixel intensities per spot (rows) and per
+#' channel (columns).
 #'
 #' @param object a \code{SingleCellExperiment} object containing pixel
 #' intensities per channel. Individual pixels are stored as columns and
@@ -21,7 +21,7 @@
 #' @param order_metals should the metals be ordered based on spotted mass?
 #' @param ... arguments passed to \code{pheatmap}.
 #'
-#' @return returns a SCE object
+#' @return 
 #'
 #' @examples
 #'
@@ -91,7 +91,8 @@ plotSpotHeatmap <- function(object,
         cur_cluster_rows <- ifelse("cluster_rows" %in% names(args), args$cluster_rows, TRUE)
     }
     
-    pheatmap(cur_mat, color = cur_col, 
+    # Transposed to match the CATALYST visualization
+    pheatmap(t(cur_mat), color = cur_col, 
              cluster_cols = cur_cluster_cols,
              cluster_rows = cur_cluster_rows)
 }
