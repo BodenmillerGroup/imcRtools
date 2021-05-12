@@ -23,6 +23,7 @@ Suggests:
     BiocStyle,
     knitr,
     rmarkdown,
+    markdown,
     testthat
 biocViews: ImmunoOncology, Software, SingleCell, 
 VignetteBuilder: knitr

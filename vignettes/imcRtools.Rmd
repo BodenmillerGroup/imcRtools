@@ -3,12 +3,15 @@ title: "R Tools for IMC Data"
 date: "`r BiocStyle::doc_date()`"
 package: "`r BiocStyle::pkg_ver('imcRtools')`"
 author:
-- name: Tobias Hoch
-  affiliation: Department for Quantitative Biomedicine, University of Zurich
-  email: tobias.hoch@bluewin.ch
 - name: Nils Eling
-  affiliation: Department for Quantitative Biomedicine, University of Zurich
+  affiliation: 
+  - Department for Quantitative Biomedicine, University of Zurich
+  - Institute for Molecular Health Sciences, ETH Zurich
   email: nils.eling@dqbm.uzh.ch
+- name: Tobias Hoch
+  affiliation: 
+  - Department for Quantitative Biomedicine, University of Zurich
+  - Institute for Molecular Health Sciences, ETH Zurich
 output:
     BiocStyle::html_document:
         toc_float: yes
@@ -34,73 +37,6 @@ library(imcRtools)
 # Introduction
 
 This vignette gives an introduction to .....
-
-IMC [@giesen2014imc] is a multiplexed imaging cytometry approach to measure spatial
-protein abundance. In IMC, tissue sections are stained with a mix of
-around 40 metal-conjugated antibodies prior to laser ablation with $1\mu{}m$
-resolution. The ablated material is transferred to a mass cytometer for
-time-of-flight detection of the metal ions [@giesen2014imc][@mavropoulosimc]. In
-that way, hundreds of images (usually with an image size of around 1mm x 1mm)
-can be generated in a reasonable amount of time [@damond2019pancreas].
-
-Raw IMC data are computationally processed using a segmentation pipeline
-(available at
-[https://github.com/BodenmillerGroup/ImcSegmentationPipeline](https://github.com/BodenmillerGroup/ImcSegmentationPipeline)).
-This pipeline produces image stacks containing the raw pixel values for up to 40
-channels, segmentation masks containing the segmented cells, cell-level
-expression and metadata information as well as a number of image-level meta
-information.
-
-Cell-level expression and metadata can be processed and read into a
-`SingleCellExperiment` class object. 
-
-The `cytomapper` package provides a new `CytoImageList` class as a container for
-multiplexed images or segmentation masks. For more information on this class,
-refer to the [CytoImageList](#CytoImageList) section.
-
-The main functions of this package include `plotCells` and `plotPixels`. The
-`plotCells` function requires the following object inputs to display cell-level
-information (expression and metadata):
-
-1. a `SingleCellExperiment` object, which contains the cells' counts and metadata
-2. a `CytoImageList` object containing the segmentation masks
-
-The `plotPixels` function requires the following object inputs to display
-pixel-level expression information:
-
-1. a `CytoImageList` object containing the pixel-level information per channel
-2. (optionally) a `SingleCellExperiment` object, which contains the cells'
-counts and metadata 
-3. (optionally) a `CytoImageList` object containing the segmentation masks
-
-# Quick start {#QuickStart}
-
-The following section provides a quick example highlighting the functionality of
-`cytomapper`. For detailed information on reading in the data, refer to the
-[Reading in data](#ReadingData) section. More information on the required data
-format is provided in the [Data formats](#DataFormats) section. In the first
-step, we will read in the provided [toy dataset](#ToyData)
-
-```{r quickstart-load-data}
-#library(data.table)
-# load the single cell data
-#cells <- as.data.frame(fread(file = "data/hubmap_processed_v2/cell.csv",stringsAsFactors = FALSE))
-
-# load the image level metadata
-#image_mat <- as.data.frame(read.csv(file = "data/hubmap_processed_v2/Image.csv",stringsAsFactors = FALSE))
-
-# load the panel information
-#panel_mat <- read.csv(file = "data/hubmap_processed_v2/panel.csv", sep= ",",  stringsAsFactors = FALSE )
-
-# get an example file that contains the channel order
-#tags <- read.csv( "data/protein/20191021_ZTMA256.1_slide3_TH_s0_p9_r1_a1_ac_full.csv", header = FALSE)
-
-# load acqusition meta data
-#acquisition_meta <- read.csv(file = "data/hubmap_processed_v2/Experiment.csv", stringsAsFactors = FALSE)
-
-# load the clinical data. this is a clinical datatable that already contains the ImageNumbers. It has been prepared in the clinical metadata preparation.Rmd script (prepared for RNA and protein dataset separately)
-#clinical_mat <- read.csv("data/protein/clinical_data_protein.csv",stringsAsFactors = FALSE)
-```
 
 # Create a SingleCellExperiment Data Container
 
