@@ -63,6 +63,8 @@ generateSCE <- function(cells = NULL,
 
   # validity checks - TO DO (is scaling factor numeric, is measurement_column present for all entries of channel_order, are provided colnames present,...)
 
+    stop("Function is under development")
+    
   # extract counts and scale counts with scaling factor
   cur_counts <- cells[,grepl(measurement_column,colnames(cells))]
   cur_counts <- cur_counts * image_meta[[scaling_column]][1]
