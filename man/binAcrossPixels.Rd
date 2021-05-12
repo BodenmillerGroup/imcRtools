@@ -26,10 +26,10 @@ stores the isotope names of the spotted metal.}
 
 \item{assay_type}{character string indicating which assay to use.}
 
-\item{...}{additional arguments passed to \code{aggregateAcrossCells}}
-
-\item{statistics}{character string indicating the statistic to use for
+\item{statistic}{character string indicating the statistic to use for
 aggregating consecutive pixels.}
+
+\item{...}{additional arguments passed to \code{aggregateAcrossCells}}
 }
 \value{
 returns a SCE object

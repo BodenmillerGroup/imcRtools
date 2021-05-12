@@ -46,6 +46,7 @@
 #'
 #' @import SingleCellExperiment
 #' @importFrom S4Vectors DataFrame
+#' @importFrom SummarizedExperiment colData<- rowData<- metadata<-
 #' @export
 
 generateSCE <- function(cells = NULL,

@@ -11,7 +11,7 @@
 #' @param spot_id character string indicating which \code{colData(object)} entry
 #' stores the isotope names of the spotted metal. 
 #' @param assay_type character string indicating which assay to use.
-#' @param statistics character string indicating the statistic to use for
+#' @param statistic character string indicating the statistic to use for
 #' aggregating consecutive pixels.
 #' @param ... additional arguments passed to \code{aggregateAcrossCells}
 #'
@@ -28,7 +28,7 @@ binAcrossPixels <- function(object,
                             statistic = "sum",
                             ...){
     
-    .validbinAcrossPixelsInput(object, bin_size, spot_id, assay_type)
+    .valid.binAcrossPixels.input(object, bin_size, spot_id, assay_type)
     
     cur_split <- split(object[[spot_id]], f = object[[spot_id]])
     cur_split <- lapply(cur_split, function(x){ceiling(seq_along(x)/bin_size)})

@@ -20,6 +20,7 @@
 #'
 #' @examples
 #'
+#' @importFrom SummarizedExperiment colData<-
 #' @export
 filterPixels <- function(object, 
                             bc_id = "bc_id",
@@ -27,7 +28,7 @@ filterPixels <- function(object,
                             minevents = 40,
                             correct_pixels = TRUE){
     
-    .validfilterPixelsInput(object, bc_id, spot_mass, minevents, correct_pixels)
+    .valid.filterPixels.input(object, bc_id, spot_mass, minevents, correct_pixels)
 
     cur_bcs <- as.character(colData(object)[[bc_id]])    
     cur_mass <- as.character(colData(object)[[spot_mass]])   

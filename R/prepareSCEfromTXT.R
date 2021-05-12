@@ -19,6 +19,7 @@
 #'
 #' @importFrom SingleCellExperiment SingleCellExperiment
 #' @importFrom S4Vectors DataFrame
+#' @importFrom SummarizedExperiment colData<- rowData<-
 #' @export
 
 prepareSCEfromTXT <- function(txt_list, 
@@ -27,7 +28,7 @@ prepareSCEfromTXT <- function(txt_list,
                                                 "Y", "Z"),
                               verbose = TRUE){
     
-    .validSCEtoTXTinput(txt_list, 
+    .valid.prepareSCEfromTXT.input(txt_list, 
                         metadata_cols,
                         verbose)
    

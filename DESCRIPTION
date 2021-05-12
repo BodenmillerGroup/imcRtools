@@ -4,19 +4,20 @@ Title: Methods for imaging mass cytometry data analysis
 Description: 
     This package contains functions for the low level and spatial analysis of IMC data.  
 Authors@R: 
-    c(person("Nils", "Eling", role = c("aut", "cre"), email = "nils.eling@uzh.ch"))
+    c(person("Nils", "Eling", role = c("aut", "cre"), email = "nils.eling@uzh.ch"),
+      person("Tobias", "Hoch", role = "ctb"))
 License: GPL (>= 2)
 Depends:
-    R (>= 3.6),
+    R (>= 4.0),
     SingleCellExperiment
 Imports:
-    ggplot2,
-    matrixStats,
     S4Vectors,
-    ggridges,
-    methods,
     SummarizedExperiment,
-    reshape2
+    methods,
+    pheatmap,
+    scuttle,
+    stringr,
+    viridis
 Suggests:
     data.table,
     BiocStyle,

@@ -33,7 +33,7 @@
 
 # Check function for SCE from TXT function
 #' @importFrom stringr str_extract
-.validSCEtoTXTinput <- function(txt_list, metadata_cols, verbose){
+.valid.prepareSCEfromTXT.input <- function(txt_list, metadata_cols, verbose){
     
     # Check if input is a named list
     if (!is.list(txt_list)) {
@@ -89,8 +89,9 @@
     
 }
 
-#' @importFrom SummarizedExperiment colData
-.validSpotHeatmapInput <- function(object, spot_id, channel_id, assay_type, log, 
+#' @importFrom SummarizedExperiment colData assayNames
+.valid.plotSpotHeatmap.input <- function(object, spot_id, channel_id, 
+                                         assay_type, log, 
                                    threshold, order_metals){
     
     # Check sce object
@@ -120,8 +121,8 @@
     }
 }
 
-#' @importFrom SummarizedExperiment colData
-.validbinAcrossPixelsInput <- function(object, bin_size, spot_id, assay_type){
+#' @importFrom SummarizedExperiment colData assayNames
+.valid.binAcrossPixels.input <- function(object, bin_size, spot_id, assay_type){
     
     # Check sce object
     if (!is(object, "SingleCellExperiment")) {
@@ -139,7 +140,7 @@
     }
 }
 
-.validfilterPixelsInput <- function(object, bc_id, spot_mass, 
+.valid.filterPixels.input <- function(object, bc_id, spot_mass, 
                                     minevents, correct_pixels){
     
     # Check sce object

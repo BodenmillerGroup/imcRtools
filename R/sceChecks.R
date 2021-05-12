@@ -6,6 +6,7 @@
   }
 }
 
+#' @importFrom SummarizedExperiment assays
 .assayCheck <- function(x, exprs_values){
   .sceCheck(x)
   if(!(exprs_values %in% names(assays(x)))){
