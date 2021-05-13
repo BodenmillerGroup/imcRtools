@@ -1,0 +1,73 @@
+---
+title: "Download example spillover data"
+author: "Nils Eling"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This script downloads and re-formats example data for spillover correction.
+As test data, we use the files that are provided by the following publication:
+
+[Chevrier, Stéphane, Helena L. Crowell, Vito R. T. Zanotelli, Stefanie Engler, Mark D. Robinson, and Bernd Bodenmiller. 2017. “Compensation of Signal Spillover in Suspension and Imaging Mass Cytometry.” Cell Systems 6: 612–20.](https://www.cell.com/cell-systems/fulltext/S2405-4712(18)30063-2)
+
+They can be accessed from [https://data.mendeley.com/datasets/v58yj49pfr/1](https://data.mendeley.com/datasets/v58yj49pfr/1).
+
+More specificaly, the spillover files are part of `Figure S5`.
+
+## Download the data
+
+Here, we will first download the data.
+
+```{r download-data}
+sm_url <- "https://data.mendeley.com/public-files/datasets/v58yj49pfr/files/b39223d2-2825-4e79-9875-86fa0e1c55d2/file_downloaded?dl=1"
+
+download.file(sm_url, "Figure_S5.zip")
+unzip("Figure_S5.zip", overwrite=TRUE)
+unlink("Figure_S5.zip")
+```
+
+## Read in and subset the data
+
+We will now prepare a subsample of the data for testing purposes:
+
+```{r subset-data, message=FALSE}
+library(readr)
+full_txt <- list.files("Figure_S5/Spillover_Matrix_1/", pattern = "Dy161|Dy162|Dy163|Dy164", full.names = TRUE)
+full_txt_names <- list.files("Figure_S5/Spillover_Matrix_1/", pattern = "Dy161|Dy162|Dy163|Dy164")
+
+full_txt <- lapply(full_txt, read_delim, delim = "\t")
+
+## Subset to first 100 rows
+full_txt <- lapply(full_txt, function(x){x[seq_len(100),]})
+
+## Subset to specific channels
+full_txt <- lapply(full_txt, function(x){x[,colnames(x) %in% 
+                                               c("Start_push", "End_push", "Pushes_duration",
+                                                 "X", "Y", "Z", "161Dy(Dy161Di)", 
+                                                 "162Dy(Dy162Di)", "163Dy(Dy163Di)", "164Dy(Dy164Di)")]})
+```
+
+## Write out files
+
+We will now save the processed files.
+
+```{r save-files}
+dir.create("../extdata/spillover")
+for (i in seq_len(length(full_txt))) {
+    write_delim(full_txt[[i]], 
+                file = paste0("../extdata/spillover/", full_txt_names[i]),
+                delim = "\t")
+}
+```
+
+## Remove unnecessary files
+
+Finally, we remove all unneeded files:
+
+```{r remove-files}
+unlink("Figure_S5/", recursive = TRUE)
+```
