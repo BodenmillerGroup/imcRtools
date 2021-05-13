@@ -36,8 +36,10 @@ We will now prepare a subsample of the data for testing purposes:
 
 ```{r subset-data, message=FALSE}
 library(readr)
+library(stringr)
 full_txt <- list.files("Figure_S5/Spillover_Matrix_1/", pattern = "Dy161|Dy162|Dy163|Dy164", full.names = TRUE)
 full_txt_names <- list.files("Figure_S5/Spillover_Matrix_1/", pattern = "Dy161|Dy162|Dy163|Dy164")
+full_txt_names <- str_extract(full_txt_names, "^Dy[1-9]{3}")
 
 full_txt <- lapply(full_txt, read_delim, delim = "\t")
 
@@ -59,7 +61,7 @@ We will now save the processed files.
 dir.create("../extdata/spillover")
 for (i in seq_len(length(full_txt))) {
     write_delim(full_txt[[i]], 
-                file = paste0("../extdata/spillover/", full_txt_names[i]),
+                file = paste0("../extdata/spillover/", full_txt_names[i], ".txt"),
                 delim = "\t")
 }
 ```
