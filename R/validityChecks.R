@@ -33,16 +33,7 @@
 
 # Check function for SCE from TXT function
 #' @importFrom stringr str_extract
-.valid.prepareSCEfromTXT.input <- function(txt_list, metadata_cols, verbose){
-    
-    # Check if input is a named list
-    if (!is.list(txt_list)) {
-        stop("'txt_list' needs to be a list.")
-    }
-    
-    if (is.null(names(txt_list))) {
-        stop("Each entry in 'txt_list' needs to be named.")
-    }
+.valid.prepareSCEfromTXT.input <- function(path, metadata_cols, verbose){
     
     # Check if names are all of the format Mt123 where Mt is the metal name
     # and 123 is the mass

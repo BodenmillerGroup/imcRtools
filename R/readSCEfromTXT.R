@@ -6,14 +6,22 @@
 #'   slide". Here, each .txt file contains the measurements of multiple pixels
 #'   for a single stain across all open channels.
 #'
-#' @param txt_list a named list containing the read-in txt files for each spot. 
-#' Entries to \code{txt_list} need to be coercible to \code{data.frame} objects.
+#' @param path path to where the .txt files are located
+#' @param pattern pattern to select which files should be read in (default \code{".txt$"})
 #' @param metadata_cols character vector indicating which column entries of the
 #' .txt files should be saved in the \code{colData(sce)} slot.
 #' @param verbose logical indicating if additional information regarding the
 #' spotted and acquired masses should be shown.
 
 #' @return returns a SCE object
+#' 
+#' @section Reading in .txt files:
+#' 
+#' As part of the mcd folder
+#' 
+#' This function will try to automatically read in the metal names from the file names
+#' For this, the first occurrence of the metal name in form {mt}{123} will be used.
+#' The filenames will also be stored in the SingeCellExperiment object
 #'
 #' @examples
 #'
@@ -21,19 +29,25 @@
 #' @importFrom S4Vectors DataFrame
 #' @importFrom SummarizedExperiment colData<- rowData<-
 #' @export
-
-prepareSCEfromTXT <- function(txt_list, 
-                              metadata_cols = c("Start_push", "End_push", 
+readSCEfromTXT <- function(path, 
+                           pattern = ".txt$",
+                           metadata_cols = c("Start_push", "End_push", 
                                                 "Pushes_duration", "X", 
                                                 "Y", "Z"),
-                              verbose = TRUE){
+                           verbose = TRUE){
     
-    .valid.prepareSCEfromTXT.input(txt_list, 
+    txt_list_names <- list.files(path, pattern = pattern, full.names = FALSE)
+    cur_names <- 
+    
+    .valid.prepareSCEfromTXT.input(path
                         metadata_cols,
                         verbose)
    
     # Coerce to data.frame
+    txt_list <- list.files(path, pattern = pattern, full.names = TRUE)
+    txt_list <- suppressMessages(lapply(txt_list, read_delim, delim = "\t"))
     txt_list <- lapply(txt_list, as.data.frame)
+    names(txt_list) <- str_extract(txt_list_names, "[A-Za-z]{1,2}[0-9]{2,3}")
     
     cur_out <- do.call(rbind, txt_list)
     
