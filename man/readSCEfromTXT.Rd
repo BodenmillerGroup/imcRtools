@@ -5,14 +5,23 @@
 \title{Generates a SingleCellExperiment from .txt files}
 \usage{
 readSCEfromTXT(
-  txt_list,
+  x,
+  pattern = ".txt$",
   metadata_cols = c("Start_push", "End_push", "Pushes_duration", "X", "Y", "Z"),
   verbose = TRUE
 )
 }
 \arguments{
-\item{txt_list}{a named list containing the read-in txt files for each spot. 
-Entries to \code{txt_list} need to be coercible to \code{data.frame} objects.}
+\item{x}{input can be of different types:
+\describe{
+\item{A path}{Full path to where the single stain .txt files are located.}
+\item{A list object}{A named list object where each entry is a
+\code{data.frame} or coercible to one. The names of each entry indicate the
+spotted metals (see details).}
+}}
+
+\item{pattern}{pattern to select which files should be read in (default
+\code{".txt$"}). Only used when \code{x} is a path.}
 
 \item{metadata_cols}{character vector indicating which column entries of the
 .txt files should be saved in the \code{colData(sce)} slot.}
@@ -21,15 +30,67 @@ Entries to \code{txt_list} need to be coercible to \code{data.frame} objects.}
 spotted and acquired masses should be shown.}
 }
 \value{
-returns a SCE object
+returns a SCE object where pixels are stored as columns and acquired
+channels are stored as rows.
 }
 \description{
 Helper function to process raw .txt files acquired by the
-  Hyperion system into a \code{\linkS4class{SingleCellExperiment}} container.
-  This function is mainly used to read-in data generated from a "spillover
-  slide". Here, each .txt file contains the measurements of multiple pixels
-  for a single stain across all open channels.
+Hyperion system into a \code{\linkS4class{SingleCellExperiment}} object.
+This function is mainly used to read-in data generated from a "spillover
+slide". Here, each .txt file contains the measurements of multiple pixels
+for a single stain across all open channels.
 }
-\examples{
+\section{Reading in .txt files for spillover correction}{
 
+
+As described in the original publication, single metal spots are acquired
+using the Hyperion imaging system. Each acquisition corresponds to one spot.
+All acquisitions are stored in a single .mcd file and individual acquisitions
+are stored in single .txt files.
+
+This function aggregates these measurements into a single \code{SingleCellExperiment} object.
+For this, two inputs are possible:
+
+\enumerate{
+\item \code{x} is a path:
+By default all .txt files are read in from the specified path. Here, the path
+should indicate the location of the spillover slide measurement. The file
+names of the .txt file must contain the spotted metal isotope name in the
+format \code{(mt)(mass)} (e.g. \code{Sm152} for Samarium isotope with the
+atomic mass 152). Internally, the first occurrence of such a pattern is read
+in as the metal isotope name and stored in the \code{colData(sce)$sample_id}
+slot.
+
+\item \code{x} is a named list:
+If there are issues with reading in the metal isotope names from the .txt
+file names, the user can provide a list in which each entry contains the
+contents of a single .txt file. The names of the list must indicate the
+spotted metal in the format \code{(mt)(mass)}. These names will be stored in
+the \code{colData(sce)$sample_id} slot.
+}
+}
+
+\examples{
+# Read files from path
+path <- system.file("extdata/spillover", package = "imcRtools")
+
+sce <- readSCEfromTXT(path) 
+sce
+
+# Read files as list
+cur_files_names <- list.files(path, pattern = ".txt")
+cur_files <- lapply(cur_files, read_delim, delim = "\t")
+names(cur_files) <- str_extract(cur_files_names, "[A-Za-z]{1,2}[0-9]{2,3}")
+
+sce <- readSCEfromTXT(cur_files) 
+sce
+
+}
+\references{
+\href{https://www.sciencedirect.com/science/article/pii/S1550413118306910}{Chevrier,
+S. et al. 2017. “Compensation of Signal Spillover in Suspension and Imaging
+Mass Cytometry.” Cell Systems 6: 612–20.}
+}
+\author{
+Nils Eling (\email{nils.eling@dqbm.uzh.ch})
 }

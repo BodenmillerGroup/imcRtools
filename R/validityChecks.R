@@ -33,11 +33,11 @@
 
 # Check function for SCE from TXT function
 #' @importFrom stringr str_extract
-.valid.prepareSCEfromTXT.input <- function(path, metadata_cols, verbose){
+.valid.readSCEfromTXT.input <- function(txt_list, cur_names, 
+                                        metadata_cols, verbose){
     
     # Check if names are all of the format Mt123 where Mt is the metal name
     # and 123 is the mass
-    cur_names <- names(txt_list)
     cur_mass <- str_extract(cur_names, "[0-9]{2,3}$")
     cur_names <- cur_names[order(as.numeric(cur_mass))]
     
