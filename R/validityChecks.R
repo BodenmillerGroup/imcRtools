@@ -55,8 +55,10 @@
     }
     
     # Check if spotted channel is also open
-    cur_channels <- str_extract(colnames(txt_list[[1]]), "[A-Za-z]{1,2}[0-9]{2,3}")
+    cur_channels <- str_extract(colnames(txt_list[[1]]), 
+                                "[A-Za-z]{1,2}[0-9]{2,3}Di")
     cur_channels <- cur_channels[!is.na(cur_channels)]
+    cur_channels <- sub("Di", "", cur_channels)
     
     # Verbose option will print possible missmatched between acquired and open
     # channels

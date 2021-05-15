@@ -10,3 +10,7 @@ Changes in version 0.3.0 (2021-05-07):
 
 + Added helper functions for spillover correction
 + Removed redundant functions
+
+Changes in version 0.3.1 (2021-05-15):
+
++ readSCEfromTXT accepts list and path

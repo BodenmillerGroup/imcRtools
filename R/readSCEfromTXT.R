@@ -59,9 +59,9 @@
 #' sce
 #' 
 #' # Read files as list
-#' cur_files_names <- list.files(path, pattern = ".txt")
-#' cur_files <- lapply(cur_files, read_delim, delim = "\t")
-#' names(cur_files) <- str_extract(cur_files_names, "[A-Za-z]{1,2}[0-9]{2,3}")
+#' cur_file_names <- list.files(path, pattern = ".txt", full.names = TRUE)
+#' cur_files <- lapply(cur_file_names, read.delim)
+#' names(cur_files) <- sub(".txt", "", basename(cur_file_names))
 #' 
 #' sce <- readSCEfromTXT(cur_files) 
 #' sce
@@ -133,10 +133,11 @@ readSCEfromTXT <- function(x,
     cur_counts <- cur_out[grepl("[A-Za-z]{1,2}[0-9]{2,3}", colnames(cur_out))]
     cur_counts <- t(cur_counts)
     
-    channel_meta <- DataFrame(channel_name = str_extract(rownames(cur_counts), 
-                                            "[A-Za-z]{1,2}[0-9]{2,3}Di"),
-                              marker_name = str_extract(rownames(cur_counts), 
-                                            "[A-Za-z]{1,2}[0-9]{2,3}"))
+    channel_name <- str_extract(rownames(cur_counts), 
+                                "[A-Za-z]{1,2}[0-9]{2,3}Di")
+    
+    channel_meta <- DataFrame(channel_name = channel_name,
+                              marker_name = sub("Di", "", channel_name))
     
     sce <- SingleCellExperiment(assays = list(counts = cur_counts))
     colData(sce) <- cell_meta

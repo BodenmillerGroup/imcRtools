@@ -78,9 +78,9 @@ sce <- readSCEfromTXT(path)
 sce
 
 # Read files as list
-cur_files_names <- list.files(path, pattern = ".txt")
-cur_files <- lapply(cur_files, read_delim, delim = "\t")
-names(cur_files) <- str_extract(cur_files_names, "[A-Za-z]{1,2}[0-9]{2,3}")
+cur_file_names <- list.files(path, pattern = ".txt", full.names = TRUE)
+cur_files <- lapply(cur_file_names, read.delim)
+names(cur_files) <- sub(".txt", "", basename(cur_file_names))
 
 sce <- readSCEfromTXT(cur_files) 
 sce
