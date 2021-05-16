@@ -14,3 +14,7 @@ Changes in version 0.3.0 (2021-05-07):
 Changes in version 0.3.1 (2021-05-15):
 
 + readSCEfromTXT accepts list and path
+
+Changes in version 0.3.2 (2021-05-16):
+
++ adjusted plotSpotHeatmap function and unit test
