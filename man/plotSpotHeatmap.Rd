@@ -46,11 +46,17 @@ transformed?}
 aggregation. All aggregated values larger than \code{threshold} will be
 labeled as \code{1}.}
 
-\item{order_metals}{should the metals be ordered based on spotted mass?
-\describe{
-\item{\code{color}, \code{breaks}, \code{legend_breaks}, \code{cluster_cols},
-\code{cluster_rows}}{parameters as defined in \code{\link[pheatmap]{pheatmap}}} 
-}}
+\item{order_metals}{should the metals be ordered based on spotted mass?}
+
+\item{color}{see parameter in \code{\link[pheatmap]{pheatmap}}}
+
+\item{breaks}{see parameter in \code{\link[pheatmap]{pheatmap}}}
+
+\item{legend_breaks}{see parameter in \code{\link[pheatmap]{pheatmap}}}
+
+\item{cluster_cols}{see parameter in \code{\link[pheatmap]{pheatmap}}}
+
+\item{cluster_rows}{see parameter in \code{\link[pheatmap]{pheatmap}}}
 
 \item{...}{other arguments passed to \code{pheatmap}.}
 }
@@ -81,7 +87,7 @@ where pixel intensities are too low for robust spillover estimation.
 
 \examples{
 path <- system.file("extdata/spillover", package = "imcRtools")
-Read in .txt
+# Read in .txt files
 sce <- readSCEfromTXT(path)
 
 # Visualizes heatmap

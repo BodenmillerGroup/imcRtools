@@ -94,7 +94,7 @@ test_that("plotSpotHeatmap function works.", {
                                              cluster_rows = TRUE))
     expect_silent(cur_out <- plotSpotHeatmap(cur_sce, order_metals = FALSE, 
                                              cluster_cols = TRUE))
-    expect_silent(cur_out <- plotSpotHeatmap(cur_sce, color = inferno(50)))
+    expect_silent(cur_out <- plotSpotHeatmap(cur_sce, color = viridis::inferno(50)))
     expect_silent(cur_out <- plotSpotHeatmap(cur_sce, color = c("red", "green", "blue", "yellow"),
                                              breaks = c(0, 1, 2, 3, 4)))
     expect_silent(cur_out <- plotSpotHeatmap(cur_sce, color = c("red", "green", "blue", "yellow"),
@@ -118,7 +118,7 @@ test_that("plotSpotHeatmap function works.", {
                  regexp = "'assay_type' not in 'assayNames(object)'.", 
                  fixed = TRUE)
     expect_error(plotSpotHeatmap(cur_sce, statistic = "test"), 
-                 regexp = "'arg' should be one of “median”, “mean”, “sum”", 
+                 regexp = "'arg' should be one of \"median\", \"mean\", \"sum\"", 
                  fixed = TRUE)
     expect_error(plotSpotHeatmap(cur_sce, log = 1), 
                  regexp = "'log' needs to be logical.", 

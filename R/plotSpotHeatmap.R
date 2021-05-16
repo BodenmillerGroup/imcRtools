@@ -22,10 +22,11 @@
 #' aggregation. All aggregated values larger than \code{threshold} will be
 #' labeled as \code{1}.
 #' @param order_metals should the metals be ordered based on spotted mass?
-#' \describe{
-#' \item{\code{color}, \code{breaks}, \code{legend_breaks}, \code{cluster_cols},
-#' \code{cluster_rows}}{parameters as defined in \code{\link[pheatmap]{pheatmap}}} 
-#' }
+#' @param color see parameter in \code{\link[pheatmap]{pheatmap}}
+#' @param breaks see parameter in \code{\link[pheatmap]{pheatmap}}
+#' @param legend_breaks see parameter in \code{\link[pheatmap]{pheatmap}}
+#' @param cluster_cols see parameter in \code{\link[pheatmap]{pheatmap}}
+#' @param cluster_rows see parameter in \code{\link[pheatmap]{pheatmap}}
 #' @param ... other arguments passed to \code{pheatmap}.
 #' 
 #' @section Quality control for spillover estimation:
@@ -47,7 +48,7 @@
 #'
 #' @examples
 #' path <- system.file("extdata/spillover", package = "imcRtools")
-#' Read in .txt
+#' # Read in .txt files
 #' sce <- readSCEfromTXT(path)
 #' 
 #' # Visualizes heatmap

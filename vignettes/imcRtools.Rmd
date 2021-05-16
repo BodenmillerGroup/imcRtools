@@ -49,7 +49,14 @@ overview of these files.
 ## For spillover correction
 
 To highlight the use of the `imcRtools` package for spillover correction, 
-we provied four .txt files containing pixel intensities of four spotted metals. 
+we provide four .txt files containing pixel intensities of four spotted metals.
+
+These files are accesible via:
+
+```{r access-spillover-files}
+path <- system.file("extdata/spillover", package = "imcRtools")
+path
+```
 
 # Read in single-cell features obtained from IMC data
 
@@ -86,7 +93,25 @@ Here, the example metal spot files are read in. The spot information are stored
 in the `colData(sce)` slot and channel information are stored in `rowData(sce)`.
 Each column represents a single pixel.
 
-## Perform quality checks
+## Quality control on single-spot acquisitions
+
+In the next step, it is crucial to identify potential mislabeled spots or spots 
+with low pixel intensities, the `imcRtools` package exports the `plotSpotHeatmap`
+function, which visualizes the aggregated (default `median`) pixel intensities
+per spot and per metal:
+
+```{r plotSpotHeatmap}
+plotSpotHeatmap(sce)
+```
+
+Here, high median pixel intensities can be observed in each spot an their 
+corresponding channels (visualized on the `log10` scale).
+To quickly identify spot/channel combinations with low signal, the `threshold`
+parameter can be set:
+
+```{r plotSpotHeatmap-2}
+plotSpotHeatmap(sce, log = FALSE, threshold = 200)
+```
 
 # Acknowledgements
 
