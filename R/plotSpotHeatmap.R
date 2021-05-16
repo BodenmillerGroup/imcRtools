@@ -87,7 +87,9 @@ plotSpotHeatmap <- function(object,
     .valid.plotSpotHeatmap.input(object, spot_id, channel_id, assay_type, 
                            log, threshold, order_metals)
     
-    statistic <- match.arg(statistic)
+    if (!statistic %in% c("median", "mean", "sum")) {
+        stop("'statistic' must be either 'median', 'mean' or 'sum'")
+    }
     
     cur_out <- aggregateAcrossCells(object, object[[spot_id]], 
                                     statistics = statistic,

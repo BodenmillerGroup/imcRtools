@@ -118,7 +118,7 @@ test_that("plotSpotHeatmap function works.", {
                  regexp = "'assay_type' not in 'assayNames(object)'.", 
                  fixed = TRUE)
     expect_error(plotSpotHeatmap(cur_sce, statistic = "test"), 
-                 regexp = "'arg' should be one of \"median\", \"mean\", \"sum\"", 
+                 regexp = "'statistic' must be either 'median', 'mean' or 'sum'", 
                  fixed = TRUE)
     expect_error(plotSpotHeatmap(cur_sce, log = 1), 
                  regexp = "'log' needs to be logical.", 
