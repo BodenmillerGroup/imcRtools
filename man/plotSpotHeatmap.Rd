@@ -9,7 +9,7 @@ plotSpotHeatmap(
   spot_id = "sample_id",
   channel_id = "channel_name",
   assay_type = "counts",
-  statistic = c("median", "mean", "sum"),
+  statistic = "median",
   log = TRUE,
   threshold = NULL,
   order_metals = TRUE,
