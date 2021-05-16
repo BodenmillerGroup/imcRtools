@@ -2,17 +2,22 @@
 % Please edit documentation in R/plotSpotHeatmap.R
 \name{plotSpotHeatmap}
 \alias{plotSpotHeatmap}
-\title{Visualizes the median pixel intensities per spot and channel}
+\title{Summarizes and visualizes the pixel intensities per spot and channel}
 \usage{
 plotSpotHeatmap(
   object,
   spot_id = "sample_id",
   channel_id = "channel_name",
   assay_type = "counts",
-  statistic = "median",
+  statistic = c("median", "mean", "sum"),
   log = TRUE,
   threshold = NULL,
   order_metals = TRUE,
+  color = viridis(100),
+  breaks = NA,
+  legend_breaks = NA,
+  cluster_cols = FALSE,
+  cluster_rows = FALSE,
   ...
 )
 }
@@ -28,25 +33,70 @@ form (mt)(mass) (e.g. Sm152 for Samarium isotope with the atomic mass 152).}
 \item{channel_id}{character string indicating which \code{rowData(object)} 
 entry contains the isotope names of the acquired channels.}
 
-\item{assay_type}{character string indicating which assay to use.}
+\item{assay_type}{character string indicating which assay to use (default
+\code{counts}).}
 
-\item{statistic}{the statistic to use when aggregating channels per spot}
+\item{statistic}{the statistic to use when aggregating channels per spot
+(default \code{median})}
 
 \item{log}{should the aggregated pixel intensities be \code{log10(x + 1)} 
 transformed?}
 
-\item{threshold}{single numeric indicating the aggregated pixel threshold.
-This facilitates the identification of spots with low aggregated intensities.}
+\item{threshold}{single numeric indicating a threshold after pixel
+aggregation. All aggregated values larger than \code{threshold} will be
+labeled as \code{1}.}
 
-\item{order_metals}{should the metals be ordered based on spotted mass?}
+\item{order_metals}{should the metals be ordered based on spotted mass?
+\describe{
+\item{\code{color}, \code{breaks}, \code{legend_breaks}, \code{cluster_cols},
+\code{cluster_rows}}{parameters as defined in \code{\link[pheatmap]{pheatmap}}} 
+}}
 
-\item{...}{arguments passed to \code{pheatmap}.}
+\item{...}{other arguments passed to \code{pheatmap}.}
+}
+\value{
+a \code{\link[pheatmap]{pheatmap}} object
 }
 \description{
 Helper function for estimating the spillover matrix. This
 function visualizes the median pixel intensities per spot (rows) and per
-channel (columns).
+channel (columns) in form of a heatmap.
 }
-\examples{
+\section{Quality control for spillover estimation}{
 
+Visualizing the aggregated pixel intensities serves two purposes:
+
+\enumerate{
+\item Small median pixel intensities (< 200 counts) might hinder the robust
+estimation of the channel spillover. In that case, consecutive pixels can be
+summed (see \code{\link{binAcrossPixels}}).
+\item Each spotted metal (row) should show the highest median pixel intensity
+in its corresponding channel (column). If this is not the case, either the
+naming of the .txt files was incorrect or the incorrect metal was spotted.
+}
+
+By setting the \code{threshold} parameter, the user can easily identify spots
+where pixel intensities are too low for robust spillover estimation.
+}
+
+\examples{
+path <- system.file("extdata/spillover", package = "imcRtools")
+Read in .txt
+sce <- readSCEfromTXT(path)
+
+# Visualizes heatmap
+plotSpotHeatmap(sce)
+
+# Visualizes thresholding results
+plotSpotHeatmap(sce, log = FALSE, threshold = 200)
+
+}
+\seealso{
+\code{\link[pheatmap]{pheatmap}} for visual modifications
+
+\code{\link[scuttle]{aggregateAcrossCells}} for the aggregation
+function
+}
+\author{
+Nils Eling (\email{nils.eling@dqbm.uzh.ch})
 }
