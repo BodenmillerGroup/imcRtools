@@ -100,7 +100,7 @@ with low pixel intensities, the `imcRtools` package exports the `plotSpotHeatmap
 function, which visualizes the aggregated (default `median`) pixel intensities
 per spot and per metal:
 
-```{r plotSpotHeatmap}
+```{r plotSpotHeatmap, fig.width=5, fig.height=5}
 plotSpotHeatmap(sce)
 ```
 
@@ -109,9 +109,25 @@ corresponding channels (visualized on the `log10` scale).
 To quickly identify spot/channel combinations with low signal, the `threshold`
 parameter can be set:
 
-```{r plotSpotHeatmap-2}
+```{r plotSpotHeatmap-2, fig.width=5, fig.height=5}
 plotSpotHeatmap(sce, log = FALSE, threshold = 200)
 ```
+
+## Consecutive pixel binning
+
+If pixel intensities are low, spillover estimation might not be robust. 
+Therefore, the `binAcrossPixels` function can be used to sum consecutive pixels
+and enhance the acquired signal. This step is optional for spillover estimation.
+
+```{r pixel-binning, fig.width=5, fig.height=5 }
+sce2 <- binAcrossPixels(sce, bin_size = 5)
+
+plotSpotHeatmap(sce2, log = FALSE, threshold = 200)
+```
+
+## Pixel filtering
+
+
 
 # Acknowledgements
 
