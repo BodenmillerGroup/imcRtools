@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.3</span>
       </span>
     </div>
 
@@ -77,7 +77,7 @@
       </address>
                               <h4 class="author">Tobias Hoch</h4>
             <address class="author_afil">
-      Department for Quantitative Biomedicine, University of Zurich<br><h4 class="date">16 May 2021</h4>
+      Department for Quantitative Biomedicine, University of Zurich<br><h4 class="date">17 May 2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BodenmillerGroup/imcRtools/blob/master/vignettes/imcRtools.Rmd"><code>vignettes/imcRtools.Rmd</code></a></small>
       <div class="hidden name"><code>imcRtools.Rmd</code></div>
@@ -159,11 +159,25 @@
 <p>In the next step, it is crucial to identify potential mislabeled spots or spots with low pixel intensities, the <code>imcRtools</code> package exports the <code>plotSpotHeatmap</code> function, which visualizes the aggregated (default <code>median</code>) pixel intensities per spot and per metal:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plotSpotHeatmap.html">plotSpotHeatmap</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></code></pre></div>
-<p><img src="imcRtools_files/figure-html/plotSpotHeatmap-1.png" width="700"></p>
+<p><img src="imcRtools_files/figure-html/plotSpotHeatmap-1.png" width="480"></p>
 <p>Here, high median pixel intensities can be observed in each spot an their corresponding channels (visualized on the <code>log10</code> scale). To quickly identify spot/channel combinations with low signal, the <code>threshold</code> parameter can be set:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plotSpotHeatmap.html">plotSpotHeatmap</a></span><span class="op">(</span><span class="va">sce</span>, log <span class="op">=</span> <span class="cn">FALSE</span>, threshold <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></code></pre></div>
-<p><img src="imcRtools_files/figure-html/plotSpotHeatmap-2-1.png" width="700"></p>
+<p><img src="imcRtools_files/figure-html/plotSpotHeatmap-2-1.png" width="480"></p>
+</div>
+<div id="consecutive-pixel-binning" class="section level2">
+<h2 class="hasAnchor">
+<a href="#consecutive-pixel-binning" class="anchor"></a>Consecutive pixel binning</h2>
+<p>If pixel intensities are low, spillover estimation might not be robust. Therefore, the <code>binAcrossPixels</code> function can be used to sum consecutive pixels and enhance the acquired signal. This step is optional for spillover estimation.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">sce2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/binAcrossPixels.html">binAcrossPixels</a></span><span class="op">(</span><span class="va">sce</span>, bin_size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
+
+<span class="fu"><a href="../reference/plotSpotHeatmap.html">plotSpotHeatmap</a></span><span class="op">(</span><span class="va">sce2</span>, log <span class="op">=</span> <span class="cn">FALSE</span>, threshold <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></code></pre></div>
+<p><img src="imcRtools_files/figure-html/pixel-binning-1.png" width="480"></p>
+</div>
+<div id="pixel-filtering" class="section level2">
+<h2 class="hasAnchor">
+<a href="#pixel-filtering" class="anchor"></a>Pixel filtering</h2>
 </div>
 </div>
 <div id="acknowledgements" class="section level1">
@@ -193,7 +207,7 @@
 ## [8] methods   base     
 ## 
 ## other attached packages:
-##  [1] imcRtools_0.3.2             SingleCellExperiment_1.12.0
+##  [1] imcRtools_0.3.3             SingleCellExperiment_1.12.0
 ##  [3] SummarizedExperiment_1.20.0 Biobase_2.50.0             
 ##  [5] GenomicRanges_1.42.0        GenomeInfoDb_1.26.7        
 ##  [7] IRanges_2.24.1              S4Vectors_0.28.1           
@@ -232,7 +246,7 @@
 ## [57] fastmap_1.1.0             utf8_1.2.1               
 ## [59] rprojroot_2.0.2           ragg_1.1.2               
 ## [61] readr_1.4.0               desc_1.3.0               
-## [63] stringi_1.6.1             Rcpp_1.0.6               
+## [63] stringi_1.6.2             Rcpp_1.0.6               
 ## [65] vctrs_0.3.8               xfun_0.23                
 ## [67] sparseMatrixStats_1.2.1</code></pre>
 </div>
