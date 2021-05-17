@@ -18,3 +18,7 @@ Changes in version 0.3.1 (2021-05-15):
 Changes in version 0.3.2 (2021-05-16):
 
 + adjusted plotSpotHeatmap function and unit test
+
+Changes in version 0.3.3 (2021-05-17):
+
++ unit tests for binAcrossPixels
