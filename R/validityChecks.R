@@ -155,3 +155,25 @@
         stop("'correct_pixels' needs to be single logical.")
     }
 }
+
+.valid.readImagefromTXT.input <- function(path, pattern){
+    # Check if input is character
+    if (!all(is.character(path)) | length(path) != 1) {
+        stop("Please provide a string input indicating a path.")
+    }
+    
+    if (!is.character(pattern) | length(pattern) != 1) {
+        stop("'pattern' must be indicated as single character")
+    }
+    
+    if (!dir.exists(path)) {
+        stop("The indicated path does not exist")
+    }
+            
+    out <- list.files(path, pattern = pattern, full.names = TRUE)
+    
+    if (length(out) == 0) {
+        stop("The pattern does not match any\n",
+             "of the files in the provided directory.")
+    }
+}

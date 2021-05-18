@@ -19,7 +19,7 @@ More specifically, we will use the `210308_ImcTestData` dataset.
 Here, we will first download the raw data in form of .txt files.
 For this, we an use the automatically generated Github assets.
 
-```{r download-data}
+```{r download-txt}
 cur_url <- "https://github.com/BodenmillerGroup/TestData/releases/download/v1.0.2/210308_ImcTestData_raw.tar.gz"
 
 download.file(cur_url, "210308_ImcTestData_raw.tar.gz")
@@ -31,9 +31,31 @@ unlink("210308_ImcTestData_raw.tar.gz")
 
 Here, we will move the .txt files of one raw data file to the `mockData` folder
 
-```{r subset-data, message=FALSE}
+```{r subset-txt, message=FALSE}
 file.copy(list.files("datasets/210308_ImcTestData/raw/20210305_NE_mockData2/", pattern = ".txt$", full.names = TRUE),
-          "../extdata/mockData/", overwrite = TRUE)
+          "../extdata/mockData/raw", overwrite = TRUE)
 unlink("datasets/", recursive = TRUE)
 ```
+
+## Download the corresponding tiff files
+
+Here, we will download the `.tiff` files asset.
+
+```{r download-tiff}
+cur_url <- "https://github.com/BodenmillerGroup/TestData/releases/download/v1.0.2/210308_ImcTestData_analysis_cpout_images.tar.gz"
+
+download.file(cur_url, "210308_ImcTestData_analysis_cpout_images.tar.gz")
+untar("210308_ImcTestData_analysis_cpout_images.tar.gz")
+unlink("210308_ImcTestData_analysis_cpout_images.tar.gz")
+```
+
+And copy them to the right location.
+
+```{r move-tiff}
+file.copy("datasets/210308_ImcTestData/analysis/cpout/images/20210305_NE_mockData2_s0_a1_ac_fullFiltered.tiff",
+          "../extdata/mockData/tiffs/", overwrite = TRUE)
+unlink("datasets/", recursive = TRUE)
+```
+
+
 
