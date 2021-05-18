@@ -1,0 +1,39 @@
+---
+title: "Download test  IMC data"
+author: "Nils Eling"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This script downloads and subsets test IMC data that were acquired for general purpose testing.
+The Github repository containing this data can be accessed [here](https://github.com/BodenmillerGroup/TestData).
+
+More specifically, we will use the `210308_ImcTestData` dataset.
+
+## Download the .txt files
+
+Here, we will first download the raw data in form of .txt files.
+For this, we an use the automatically generated Github assets.
+
+```{r download-data}
+cur_url <- "https://github.com/BodenmillerGroup/TestData/releases/download/v1.0.2/210308_ImcTestData_raw.tar.gz"
+
+download.file(cur_url, "210308_ImcTestData_raw.tar.gz")
+untar("210308_ImcTestData_raw.tar.gz")
+unlink("210308_ImcTestData_raw.tar.gz")
+```
+
+## Subset and move the data
+
+Here, we will move the .txt files of one raw data file to the `mockData` folder
+
+```{r subset-data, message=FALSE}
+file.copy(list.files("datasets/210308_ImcTestData/raw/20210305_NE_mockData2/", pattern = ".txt$", full.names = TRUE),
+          "../extdata/mockData/", overwrite = TRUE)
+unlink("datasets/", recursive = TRUE)
+```
+
