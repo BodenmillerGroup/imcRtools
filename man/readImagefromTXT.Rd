@@ -8,7 +8,7 @@ readImagefromTXT(
   path,
   pattern = ".txt$",
   channel_pattern = "[A-Za-z]{1,2}[0-9]{2,3}Di",
-  index_names = c("X", "Y", "Z"),
+  index_names = c("X", "Y"),
   BPPARAM = SerialParam()
 )
 }
@@ -35,8 +35,16 @@ in form of a \code{\linkS4class{CytoImageList}} container from .txt files.
 }
 \section{Imaging mass cytometry .txt files}{
 
+As part of the raw data folder, the Hyperion imaging system writes out
+one .txt file per acquisition. These files store the ion counts per
+pixel and channel. 
 
-Explain what they are
+This function reads these .txt files into a single
+\code{\linkS4class{CytoImageList}} object for downstream analysis. The
+\code{pattern} argument allows selection of all .txt files or a specific
+subset of files. The \code{\link[cytomapper]{channelNames}} of the
+\code{CytoImageList} object are determined by the \code{channel_pattern}
+argument.
 }
 
 \examples{
