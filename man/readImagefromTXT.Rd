@@ -22,6 +22,9 @@ usualy the path where the .mcd file is located.}
 \item{channel_pattern}{regular expression to select the channel names from
 the files.}
 
+\item{index_names}{exact names of the columns storing the x and y coordinates 
+of the image}
+
 \item{BPPARAM}{parameters for parallelised reading in of images. 
 This is only recommended for very large images.}
 }
@@ -48,6 +51,19 @@ argument.
 }
 
 \examples{
+path <- system.file("extdata/mockData/raw", package = "imcRtools")
+
+# Read in all images
+x <- readImagefromTXT(path)
+x
+
+# Read in specific files
+y <- readImagefromTXT(path, pattern = "ROI_002")
+y
+
+# Read in other channelNames
+z <- readImagefromTXT(path, channel_pattern = "[A-Za-z]{2}[0-9]{3}")
+z
 
 }
 \seealso{

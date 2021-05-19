@@ -93,7 +93,7 @@ test_that("readImagefromTXT function works.", {
                  fixed = TRUE)
     
     expect_error(cur_cil <- readImagefromTXT(path, pattern = 1),
-                 regexp = "'pattern' must belibrar indicated as single character",
+                 regexp = "'pattern' must be indicated as single character",
                  fixed = TRUE)
     
     expect_error(cur_cil <- readImagefromTXT(path, pattern = "test"),

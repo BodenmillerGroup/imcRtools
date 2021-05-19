@@ -1,5 +1,5 @@
 Package: imcRtools
-Version: 0.3.3
+Version: 0.3.4
 Title: Methods for imaging mass cytometry data analysis
 Description: 
     This package contains functions for the low level and spatial analysis of IMC data.  
@@ -18,6 +18,10 @@ Imports:
     scuttle,
     stringr,
     readr,
+    EBImage,
+    cytomapper,
+    abind,
+    BiocParallel,
     viridis
 Suggests:
     data.table,
