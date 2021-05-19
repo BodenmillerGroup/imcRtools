@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Aggregate consecutive pixels per single-metal spot — binAcrossPixels • imcRtools</title>
+<title>Reads one or multiple .txt files into a CytoImageList object — readImagefromTXT • imcRtools</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,9 @@
 
 
 
-<meta property="og:title" content="Aggregate consecutive pixels per single-metal spot — binAcrossPixels" />
-<meta property="og:description" content="Helper function for estimating the spillover matrix. Per metal 
-spot, consecutive pixels a aggregated (default: summed)." />
+<meta property="og:title" content="Reads one or multiple .txt files into a CytoImageList object — readImagefromTXT" />
+<meta property="og:description" content="Reader function to generate Image objects
+in form of a CytoImageList container from .txt files." />
 
 
 
@@ -112,86 +112,105 @@ spot, consecutive pixels a aggregated (default: summed)." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Aggregate consecutive pixels per single-metal spot</h1>
-    <small class="dont-index">Source: <a href='https://github.com/BodenmillerGroup/imcRtools/blob/master/R/binAcrossPixels.R'><code>R/binAcrossPixels.R</code></a></small>
-    <div class="hidden name"><code>binAcrossPixels.Rd</code></div>
+    <h1>Reads one or multiple .txt files into a CytoImageList object</h1>
+    <small class="dont-index">Source: <a href='https://github.com/BodenmillerGroup/imcRtools/blob/master/R/readImagefromTXT.R'><code>R/readImagefromTXT.R</code></a></small>
+    <div class="hidden name"><code>readImagefromTXT.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Helper function for estimating the spillover matrix. Per metal 
-spot, consecutive pixels a aggregated (default: summed).</p>
+    <p>Reader function to generate <code>Image</code> objects
+in form of a <code>CytoImageList</code> container from .txt files.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>binAcrossPixels</span><span class='op'>(</span>
-  <span class='va'>object</span>,
-  <span class='va'>bin_size</span>,
-  spot_id <span class='op'>=</span> <span class='st'>"sample_id"</span>,
-  assay_type <span class='op'>=</span> <span class='st'>"counts"</span>,
-  statistic <span class='op'>=</span> <span class='st'>"sum"</span>,
-  <span class='va'>...</span>
+    <pre class="usage"><span class='fu'>readImagefromTXT</span><span class='op'>(</span>
+  <span class='va'>path</span>,
+  pattern <span class='op'>=</span> <span class='st'>".txt$"</span>,
+  channel_pattern <span class='op'>=</span> <span class='st'>"[A-Za-z]{1,2}[0-9]{2,3}Di"</span>,
+  index_names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"X"</span>, <span class='st'>"Y"</span><span class='op'>)</span>,
+  BPPARAM <span class='op'>=</span> <span class='fu'>SerialParam</span><span class='op'>(</span><span class='op'>)</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>object</th>
-      <td><p>a <code>SingleCellExperiment</code> object containing pixel
-intensities for all channels. Individual pixels are stored as columns and
-channels are stored as rows.</p></td>
+      <th>path</th>
+      <td><p>Full path to where the individual .txt files are located. This is
+usualy the path where the .mcd file is located.</p></td>
     </tr>
     <tr>
-      <th>bin_size</th>
-      <td><p>single numeric indicating how many consecutive pixels per
-spot should be aggregated.</p></td>
+      <th>pattern</th>
+      <td><p>pattern to select which files should be read in (default
+<code>".txt$"</code>).</p></td>
     </tr>
     <tr>
-      <th>spot_id</th>
-      <td><p>character string indicating which <code>colData(object)</code> entry
-stores the isotope names of the spotted metal.</p></td>
+      <th>channel_pattern</th>
+      <td><p>regular expression to select the channel names from
+the files.</p></td>
     </tr>
     <tr>
-      <th>assay_type</th>
-      <td><p>character string indicating which assay to use.</p></td>
+      <th>index_names</th>
+      <td><p>exact names of the columns storing the x and y coordinates 
+of the image</p></td>
     </tr>
     <tr>
-      <th>statistic</th>
-      <td><p>character string indicating the statistic to use for
-aggregating consecutive pixels.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>additional arguments passed to <code>aggregateAcrossCells</code></p></td>
+      <th>BPPARAM</th>
+      <td><p>parameters for parallelised reading in of images. 
+This is only recommended for very large images.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>returns the binned pixel intensities in form of a SCE object</p>
+    <p>returns a <code>CytoImageList</code> object containing one
+<code>Image</code> object per .txt file.</p>
+    <h2 class="hasAnchor" id="imaging-mass-cytometry-txt-files"><a class="anchor" href="#imaging-mass-cytometry-txt-files"></a>Imaging mass cytometry .txt files</h2>
+
+    
+
+<p>As part of the raw data folder, the Hyperion imaging system writes out
+one .txt file per acquisition. These files store the ion counts per
+pixel and channel.</p>
+<p>This function reads these .txt files into a single
+<code>CytoImageList</code> object for downstream analysis. The
+<code>pattern</code> argument allows selection of all .txt files or a specific
+subset of files. The <code><a href='https://rdrr.io/pkg/cytomapper/man/CytoImageList-naming.html'>channelNames</a></code> of the
+<code>CytoImageList</code> object are determined by the <code>channel_pattern</code>
+argument.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='https://rdrr.io/pkg/scuttle/man/aggregateAcrossCells.html'>aggregateAcrossCells</a></code> for the aggregation
-function</p></div>
+    <div class='dont-index'><p><code>CytoImageList</code> for the container
+<code><a href='https://rdrr.io/pkg/BiocParallel/man/MulticoreParam-class.html'>MulticoreParam</a></code> for parallelised processing
+<code>Image</code> for the multi-channel image object
+<code>vignette("cytomapper")</code> for visualization of multi-channel images</p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Nils Eling (<a href='mailto:nils.eling@dqbm.uzh.ch'>nils.eling@dqbm.uzh.ch</a>)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>path</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata/spillover"</span>, package <span class='op'>=</span> <span class='st'>"imcRtools"</span><span class='op'>)</span>
-<span class='co'># Read in .txt files</span>
-<span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'><a href='readSCEfromTXT.html'>readSCEfromTXT</a></span><span class='op'>(</span><span class='va'>path</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Spotted channels: Dy161, Dy162, Dy163, Dy164</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>Acquired channels: Dy161, Dy162, Dy163, Dy164</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>Channels spotted but not acquired: </span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>Channels acquired but not spotted: </span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1]   4 400</div><div class='input'>
-<span class='co'># Visualizes heatmap before aggregation</span>
-<span class='fu'><a href='plotSpotHeatmap.html'>plotSpotHeatmap</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span>
-</div><div class='img'><img src='binAcrossPixels-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># Sum consecutive pixels</span>
-<span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'>binAcrossPixels</span><span class='op'>(</span><span class='va'>sce</span>, bin_size <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1]  4 40</div><div class='input'>
-<span class='co'># Visualizes heatmap after aggregation</span>
-<span class='fu'><a href='plotSpotHeatmap.html'>plotSpotHeatmap</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span>
-</div><div class='img'><img src='binAcrossPixels-2.png' alt='' width='700' height='433' /></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='va'>path</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata/mockData/raw"</span>, package <span class='op'>=</span> <span class='st'>"imcRtools"</span><span class='op'>)</span>
+
+<span class='co'># Read in all images</span>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>readImagefromTXT</span><span class='op'>(</span><span class='va'>path</span><span class='op'>)</span>
+<span class='va'>x</span>
+</div><div class='output co'>#&gt; CytoImageList containing 3 image(s)
+#&gt; names(3): 20210305_NE_mockData2_ROI_001_1 20210305_NE_mockData2_ROI_002_2 20210305_NE_mockData2_ROI_003_3 
+#&gt; Each image contains 5 channel(s)
+#&gt; channelNames(5): Ag107Di Pr141Di Sm147Di Eu153Di Yb172Di </div><div class='input'>
+<span class='co'># Read in specific files</span>
+<span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'>readImagefromTXT</span><span class='op'>(</span><span class='va'>path</span>, pattern <span class='op'>=</span> <span class='st'>"ROI_002"</span><span class='op'>)</span>
+<span class='va'>y</span>
+</div><div class='output co'>#&gt; CytoImageList containing 1 image(s)
+#&gt; names(1): 20210305_NE_mockData2_ROI_002_2 
+#&gt; Each image contains 5 channel(s)
+#&gt; channelNames(5): Ag107Di Pr141Di Sm147Di Eu153Di Yb172Di </div><div class='input'>
+<span class='co'># Read in other channelNames</span>
+<span class='va'>z</span> <span class='op'>&lt;-</span> <span class='fu'>readImagefromTXT</span><span class='op'>(</span><span class='va'>path</span>, channel_pattern <span class='op'>=</span> <span class='st'>"[A-Za-z]{2}[0-9]{3}"</span><span class='op'>)</span>
+<span class='va'>z</span>
+</div><div class='output co'>#&gt; CytoImageList containing 3 image(s)
+#&gt; names(3): 20210305_NE_mockData2_ROI_001_1 20210305_NE_mockData2_ROI_002_2 20210305_NE_mockData2_ROI_003_3 
+#&gt; Each image contains 5 channel(s)
+#&gt; channelNames(5): Ag107 Pr141 Sm147 Eu153 Yb172 </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
