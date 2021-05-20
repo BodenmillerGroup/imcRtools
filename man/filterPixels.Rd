@@ -18,10 +18,10 @@ intensities per channel. Individual pixels are stored as columns and
 channels are stored as rows.}
 
 \item{bc_id}{character string indicating which \code{colData(object)} entry
-stores the mass assigned to each pixel by thresholding.}
+stores the estimated mass}
 
 \item{spot_mass}{character string indicating which \code{colData(object)} entry
-stores the isotope mass of the spotted metal.}
+stores the true isotope mass of the spotted metal.}
 
 \item{minevents}{single numeric indicating the threshold under which pixel
 sets are excluded from spillover estimation.}
@@ -30,7 +30,8 @@ sets are excluded from spillover estimation.}
 be excluded from spillover estimation.}
 }
 \value{
-returns a SCE object
+returns a SCE object in which \code{colData(object)$bc_id} has been 
+adjusted based on the filter criteria.
 }
 \description{
 Helper function for estimating the spillover matrix. After
@@ -38,5 +39,23 @@ assigning each pixel to a spotted mass, this function will filter incorrectly
 assigned pixels and remove small pixel sets.
 }
 \examples{
+path <- system.file("extdata/spillover", package = "imcRtools")
+sce <- readSCEfromTXT(path)
+assay(sce, "exprs") <- asinh(counts(sce)/5)
 
+# Pre-process via CATALYST
+library(CATALYST)
+
+bc_key <- as.numeric(unique(sce$sample_mass))
+sce <- assignPrelim(sce, bc_key = bc_key)
+sce <- estCutoffs(sce)
+sce <- applyCutoffs(sce)
+
+sce <- filterPixels(sce)
+
+table(sce$sample_mass, sce$bc_id)
+
+}
+\author{
+Vito Zanotelli, adapted by Nils Eling (\email{nils.eling@uzh.ch})
 }

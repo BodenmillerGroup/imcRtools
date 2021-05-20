@@ -10,7 +10,7 @@
 #' @examples 
 #' # TODO
 #'
-#' @author Vito Zantonelli, adapted by Nils Eling \email{nils.eling@@uzh.ch}
+#' @author Vito Zanotelli, adapted by Nils Eling (\email{nils.eling@@uzh.ch})
 #'
 #' @export
 neighborhoodPermTest <- function(object, method = c("histocat", "classic")){

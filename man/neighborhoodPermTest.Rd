@@ -20,5 +20,5 @@ This function computes summary statistics (mean, median, and variance) within ea
 
 }
 \author{
-Vito Zantonelli, adapted by Nils Eling \email{nils.eling@uzh.ch}
+Vito Zanotelli, adapted by Nils Eling (\email{nils.eling@uzh.ch})
 }

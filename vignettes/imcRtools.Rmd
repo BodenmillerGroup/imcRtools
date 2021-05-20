@@ -154,13 +154,45 @@ plotSpotHeatmap(sce2, log = FALSE, threshold = 200)
 
 ## Pixel filtering
 
+Prior to spillover estimation, the `r BiocStyle::Biocpkg("CATALYST")` package
+provides the `assignPrelim`, `estCutoffs` and `applyCutoffs` functions to
+estimate the spotted mass for each pixel based on their channel intensities.
+For more information on the spillover estimation and correction, please refer
+to the [CATALYST vignette]().
 
+This estimation can be used to identify pixels that cannot be easily assigned
+to their spotted mass, potentially indicating pixels with weak signal. To remove
+these pixels, the `filterPixels` function can be used. This function further
+removes pixels assigned to masses, which only contain very few pixels.
+
+```{r assign-pixels}
+library(CATALYST)
+
+bc_key <- as.numeric(unique(sce$sample_mass))
+assay(sce, "exprs") <- asinh(counts(sce)/5)
+sce <- assignPrelim(sce, bc_key = bc_key)
+sce <- estCutoffs(sce)
+sce <- applyCutoffs(sce)
+
+# Filter out mislabelled pixels
+sce <- filterPixels(sce)
+
+table(sce$bc_id, sce$sample_mass)
+```
+
+## Estimating the spillover matrix
+
+Finally, the pre-processed `SiingleCellExperiment` object can be used to 
+generate the spillover matrix using the `CATALYST::computeSpillmat` function:
+
+```{r estimate-spillover}
+sce <- computeSpillmat(sce)
+metadata(sce)$spillover_matrix
+```
 
 # Acknowledgements
 
-
 # Contributions
-
 
 # Session info {.unnumbered}
 

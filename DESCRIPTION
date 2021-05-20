@@ -5,7 +5,8 @@ Description:
     This package contains functions for the low level and spatial analysis of IMC data.  
 Authors@R: 
     c(person("Nils", "Eling", role = c("aut", "cre"), email = "nils.eling@uzh.ch"),
-      person("Tobias", "Hoch", role = "ctb"))
+      person("Tobias", "Hoch", role = "ctb"),
+      person("Vito", "Zanotelli", role = "ctb"))
 License: GPL (>= 2)
 Depends:
     R (>= 4.0),
@@ -24,6 +25,7 @@ Imports:
     BiocParallel,
     viridis
 Suggests:
+    CATALYST,
     data.table,
     BiocStyle,
     knitr,
