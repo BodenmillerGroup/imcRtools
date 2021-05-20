@@ -7,7 +7,7 @@ test_that("filterPixels function works.", {
 
     bc_key <- as.numeric(unique(cur_sce$sample_mass))
     
-    expect_silent(cur_sce <- assignPrelim(cur_sce, bc_key = bc_key, 
+    expect_silent(cur_sce <- CATALYST::assignPrelim(cur_sce, bc_key = bc_key, 
                                           verbose = FALSE))
     
     expect_true(all(is.character(cur_sce$bc_id)))
@@ -17,13 +17,13 @@ test_that("filterPixels function works.", {
                  c(0.5496888, 0.5281406, 0.4944301, 0.4765845, 0.4958716),
                  tolerance = 0.000001)
     
-    cur_sce <- estCutoffs(cur_sce)
+    cur_sce <- CATALYST::estCutoffs(cur_sce)
     
     expect_equal(metadata(cur_sce)$sep_cutoffs, 
                  c("161" = 0.3900550, "162" = 0.2900170, "163" = 0.3900138, "164" = 0.3500177),
                  tolerance = 0.000001)
     
-    expect_silent(cur_sce <- applyCutoffs(cur_sce))
+    expect_silent(cur_sce <- CATALYST::applyCutoffs(cur_sce))
     expect_equal(sum(cur_sce$bc_id == "0"), 2)
     
     expect_true(all(is.character(cur_sce$bc_id)))
