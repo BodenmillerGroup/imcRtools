@@ -2,11 +2,17 @@
 
 <!-- badges: start -->
 [![codecov](https://codecov.io/gh/BodenmillerGroup/imcRtools/branch/master/graph/badge.svg)](https://codecov.io/gh/BodenmillerGroup/imcRtools)
-[![build-checks-release](https://github.com/BodenmillerGroup/imcRtools/actions/workflows/build-checks-release.yml/badge.svg?branch=master)](https://github.com/BodenmillerGroup/imcRtools/actions/workflows/build-checks-release.yml)
 [![docs](https://github.com/BodenmillerGroup/imcRtools/actions/workflows/docs.yml/badge.svg?branch=master)](https://github.com/BodenmillerGroup/imcRtools/actions/workflows/docs.yml)
 <!-- badges: end -->
 
 This R package contains helper functions to analyse IMC (or other multiplexed imaging) data.
+
+## Check status
+
+| Bioc branch | Checks |
+|:-----------:|:------:|
+| Release     |[![build-check-release](https://github.com/BodenmillerGroup/imcRtools/actions/workflows/build-checks-release.yml/badge.svg?branch=master)](https://github.com/BodenmillerGroup/imcRtools/actions/workflows/build-checks-release.yml)|
+| Devel       |[![build-check-devel](https://github.com/BodenmillerGroup/imcRtools/actions/workflows/build-checks-devel.yml/badge.svg?branch=master)](https://github.com/BodenmillerGroup/imcRtools/actions/workflows/build-checks-devel.yml)|
 
 ## Installation
 

@@ -1,4 +1,4 @@
-name: build-checks-release
+name: build-checks-devel
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 jobs:
   R-CMD-check:
     runs-on: ubuntu-latest
-    container: rocker/r-ver:4.1.0
+    container: bioconductor/bioconductor_docker:devel
 
     steps:
       - uses: actions/checkout@v2
@@ -31,25 +31,20 @@ jobs:
       - name: Install dependencies
         run: |
          install.packages("BiocManager")
+         BiocManager::install(version = "devel", update = TRUE, ask = FALSE, force = TRUE) 
          remotes::install_deps(dependencies = TRUE, repos = BiocManager::repositories(), Ncpu = 2L)
         shell: Rscript {0}
         
       - name: Check
         run: |
           install.packages("rcmdcheck")          
-          rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning")
+          rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")
         shell: Rscript {0}
         
       - name: BiocCheck
         run: |
           BiocManager::install("BiocCheck")
           BiocCheck::BiocCheck(".")
-        shell: Rscript {0}
-        
-      - name: Test coverage
-        run: |
-          remotes::install_cran(c("covr"))
-          covr::codecov()
         shell: Rscript {0}
 
       - name: Session info
