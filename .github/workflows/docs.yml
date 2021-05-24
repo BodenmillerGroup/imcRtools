@@ -32,7 +32,7 @@ jobs:
 
       - name: Install system dependecies
         run: |
-          brew install harfbuzz fribidi
+          brew install harfbuzz fribidi cairo
           
       - name: Install dependencies
         run: |
