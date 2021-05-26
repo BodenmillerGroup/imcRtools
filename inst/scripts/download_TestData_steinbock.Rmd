@@ -1,0 +1,54 @@
+---
+title: "Download test  IMC data - steinbock"
+author: "Nils Eling"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This script downloads the steinbock output of a small test dataset.
+The Github repository containing this data can be accessed [here](https://github.com/BodenmillerGroup/TestData).
+
+More specifically, we will use the `210308_ImcTestData` dataset.
+
+## Download the steinbock output
+
+Here, we will first download the output of the [steinbock](https://github.com/BodenmillerGroup/steinbock).
+For this, we an use the automatically generated Github assets.
+
+```{r download-cpout}
+cur_url <- "https://github.com/BodenmillerGroup/TestData/releases/download/v1.0.3/210308_ImcTestData_steinbock.tar.gz"
+
+download.file(cur_url, "210308_ImcTestData_steinbock.tar.gz")
+untar("210308_ImcTestData_steinbock.tar.gz")
+unlink("210308_ImcTestData_steinbock.tar.gz")
+```
+
+## Only copy the needed files
+
+For reading in the single-cell features, we will only need to copy the .csv files and the folders containing the individual measurements.
+
+```{r copy-files, message=FALSE}
+files_of_interest <- c("cell_intensities.csv", "cell_regionprops.csv",
+                       "cells.csv", "panel.csv", "steinbock.sh")
+
+folders_of_interest <- c("cell_graphs", "cell_intensities", "cell_regionprops")
+
+lapply(folders_of_interest, function(x){
+    dir.create(paste0("../extdata/mockData/steinbock/", x))
+    file.copy(list.files(paste0("datasets/210308_ImcTestData/steinbock/", x), full.names = TRUE),
+          paste0("../extdata/mockData/steinbock/", x), 
+          overwrite = TRUE)
+})
+
+file.copy(paste0("datasets/210308_ImcTestData/steinbock/", files_of_interest),
+          "../extdata/mockData/steinbock/", 
+          overwrite = TRUE)
+unlink("datasets/", recursive = TRUE)
+```
+
+
+
