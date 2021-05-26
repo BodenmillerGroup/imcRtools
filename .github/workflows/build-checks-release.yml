@@ -37,7 +37,7 @@ jobs:
       - name: Check
         run: |
           install.packages("rcmdcheck")          
-          rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning")
+          rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")
         shell: Rscript {0}
         
       - name: BiocCheck
