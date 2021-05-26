@@ -1,9 +1,0 @@
-Count_cell,FileName_CellImage,FileName_FullStack,FileName_ProbabStack,PathName_CellImage,PathName_FullStack,PathName_ProbabStack,Scaling_FullStack,Scaling_ProbabStack,Scaling_cellmask
-11,Image_1_Probabilities_mask.tiff,Image_1_full.tiff,Image_1_Probabilities.tiff,Path/to/cpout,Path/to/tiff,Path/to/tiff,65535,65535,65535
-18,Image_2_Probabilities_mask.tiff,Image_2_full.tiff,Image_2_Probabilities.tiff,Path/to/cpout,Path/to/tiff,Path/to/tiff,65535,65535,65535
-7,Image_3_Probabilities_mask.tiff,Image_3_full.tiff,Image_3_Probabilities.tiff,Path/to/cpout,Path/to/tiff,Path/to/tiff,65535,65535,65535
-14,Image_4_Probabilities_mask.tiff,Image_4_full.tiff,Image_4_Probabilities.tiff,Path/to/cpout,Path/to/tiff,Path/to/tiff,65535,65535,65535
-19,Image_5_Probabilities_mask.tiff,Image_5_full.tiff,Image_5_Probabilities.tiff,Path/to/cpout,Path/to/tiff,Path/to/tiff,65535,65535,65535
-7,Image_6_Probabilities_mask.tiff,Image_6_full.tiff,Image_6_Probabilities.tiff,Path/to/cpout,Path/to/tiff,Path/to/tiff,65535,65535,65535
-10,Image_7_Probabilities_mask.tiff,Image_7_full.tiff,Image_7_Probabilities.tiff,Path/to/cpout,Path/to/tiff,Path/to/tiff,65535,65535,65535
-14,Image_8_Probabilities_mask.tiff,Image_8_full.tiff,Image_8_Probabilities.tiff,Path/to/cpout,Path/to/tiff,Path/to/tiff,65535,65535,65535

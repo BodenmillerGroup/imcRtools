@@ -1,0 +1,41 @@
+---
+title: "Download test  IMC data - cp out"
+author: "Nils Eling"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This script downloads the CellProfiler output of a small test dataset.
+The Github repository containing this data can be accessed [here](https://github.com/BodenmillerGroup/TestData).
+
+More specifically, we will use the `210308_ImcTestData` dataset.
+
+## Download the CellProfiler output
+
+Here, we will first download the output of the standard [ImcSegmentationPipeline](https://github.com/BodenmillerGroup/ImcSegmentationPipeline).
+For this, we an use the automatically generated Github assets.
+
+```{r download-cpout}
+cur_url <- "https://github.com/BodenmillerGroup/TestData/releases/download/v1.0.2/210308_ImcTestData_analysis_cpout.tar.gz"
+
+download.file(cur_url, "210308_ImcTestData_analysis_cpout.tar.gz")
+untar("210308_ImcTestData_analysis_cpout.tar.gz")
+unlink("210308_ImcTestData_analysis_cpout.tar.gz")
+```
+
+## Only copy the .csv files
+
+For reading in the single-cell features, we will only need to copy the .csv files of the output folder. 
+
+```{r copy-csv, message=FALSE}
+file.copy(list.files("datasets/210308_ImcTestData/analysis/cpout/", pattern = ".csv$", full.names = TRUE),
+          "../extdata/mockData/cpout", overwrite = TRUE)
+unlink("datasets/", recursive = TRUE)
+```
+
+
+
