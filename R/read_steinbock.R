@@ -61,6 +61,16 @@ read_steinbock <- function(path,
                                          BPPARAM = BPPARAM)
     }
     
+    # Read grpahs
+    if (!is.null(graphs_folder)) {
+        cur_objects <- .read_graphs(x = cur_objects,
+                                    cur_path = file.path(path, graphs_folder),
+                                    return_as = return_as,
+                                    BPPARAM = BPPARAM)
+    }
+    
+    # Merge objects
+    cur_objects <- do.call("cbind", cur_objects)
     
     
     
@@ -86,7 +96,6 @@ read_steinbock <- function(path,
         
         rowData(object) <- cur_panel
     }
-    
     
     return(spe)
 }

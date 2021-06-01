@@ -65,3 +65,25 @@
         }, BPPARAM = BPPARAM)
     return(cur_out)
 }
+
+.read_graphs <- function(x, cur_path, return_as, BPPARAM){
+    
+    cur_out <-  bplapply(x,
+        function(y){
+            cur_sample <- unique(y$sample_id)
+            cur_graphs <- vroom(list.files(cur_path, pattern = cur_sample, full.names = TRUE), 
+                                progress = FALSE, 
+                                col_types = cols()) %>%
+                as.data.frame()
+            
+            cur_hits <- SelfHits(from = cur_graphs[,1],
+                                 to = cur_graphs[,2],
+                                 nnode = ncol(y))
+            
+            colPair(y, "neighbourhood") <- cur_hits
+
+            return(y)
+    }, BPPARAM = BPPARAM)
+    
+    return(cur_out)
+}
