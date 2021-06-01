@@ -33,6 +33,7 @@ read_steinbock <- function(path,
                            graphs_folder = "cell_graphs",
                            regionprops_folder = "cell_regionprops",
                            cell_id = "Object",
+                           coords = c("centroid-0", "centroid-1"),
                            panel = "panel.csv",
                            pattern = NULL,
                            return_as = c("spe", "sce"),
@@ -45,12 +46,21 @@ read_steinbock <- function(path,
     # Read intensities
     int_file_names <- list.files(file.path(path, intensities_folder),
                                  pattern = pattern, full.names = TRUE)
-    
     cur_objects <- .read_intensities(x = int_file_names,
-                                     path = path,
+                                     cell_id = cell_id,
                                      return_as = return_as,
-                                     panel = panel,
                                      BPPARAM = BPPARAM)
+    
+    # Read regionprobs
+    if (!is.null(regionprops_folder)) {
+        cur_objects <- .read_regionprobs(x = cur_objects,
+                                         cur_path = file.path(path, regionprops_folder),
+                                         cell_id = cell_id, 
+                                         coords = coords,
+                                         return_as = return_as,
+                                         BPPARAM = BPPARAM)
+    }
+    
     
     
     
