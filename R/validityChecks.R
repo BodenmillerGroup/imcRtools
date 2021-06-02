@@ -278,11 +278,9 @@
             cur_panel <- vroom(panel, 
                                progress = FALSE, 
                                col_types = cols())
-        } else {
-            next
-        }
+        } 
         
-        if (!name %in% colnames(cur_panel)) {
+        if (exists("cur_panel") & !name %in% colnames(cur_panel)) {
             stop("'extract_names_from' not in panel file.")
         }
     }

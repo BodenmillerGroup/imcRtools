@@ -64,7 +64,7 @@
 #' x
 #' 
 #' # Parallelisation
-#' x <- read_steinbock(path, BPPARAM = bpparam())
+#' x <- read_steinbock(path, BPPARAM = BiocParallel::bpparam())
 #' 
 #' @seealso 
 #' \url{https://github.com/BodenmillerGroup/steinbock} for the pipeline
@@ -80,7 +80,7 @@
 #' @export
 read_steinbock <- function(path,
                            intensities_folder = "cell_intensities",
-                           regionprops_folder = "cell_regionprops"
+                           regionprops_folder = "cell_regionprops",
                            graphs_folder = "cell_graphs",
                            pattern = NULL,
                            extract_cellid_from = "Object",

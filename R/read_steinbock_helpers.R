@@ -3,9 +3,10 @@
 #' @importFrom vroom vroom
 #' @importFrom BiocParallel bplapply
 #' @importFrom magrittr %>%
-#' @importFrom dplyr select
+#' @importFrom dplyr select all_of
 #' @importFrom SingleCellExperiment SingleCellExperiment
 #' @importFrom SpatialExperiment SpatialExperiment
+#' @importFrom readr cols
 .read_intensities <- function(x, cell_id, return_as, panel, BPPARAM){
     
     cur_out <-  bplapply(seq_along(x),
@@ -41,7 +42,7 @@
             
             cur_file <- list.files(cur_path, pattern = cur_sample, full.names = TRUE)
             
-            if (length(test) == 0) {
+            if (length(cur_file) == 0) {
                 return(y)
             }
             
@@ -73,6 +74,8 @@
     return(cur_out)
 }
 
+#' @importFrom S4Vectors SelfHits
+#' @importFrom SpatialExperiment spatialCoords<-
 .read_graphs <- function(x, cur_path, return_as, BPPARAM){
     
     cur_out <-  bplapply(x,
@@ -81,7 +84,7 @@
             
             cur_file <- list.files(cur_path, pattern = cur_sample, full.names = TRUE)
             
-            if (length(test) == 0) {
+            if (length(cur_file) == 0) {
                 return(y)
             }
             
