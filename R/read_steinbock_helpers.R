@@ -57,12 +57,12 @@
                                              cur_props[[coords[2]]]),
                                            ncol = 2, byrow = FALSE,
                                            dimnames = list(as.character(y$ObjectId),
-                                                           c("Pos_X", "Pos_y")))
+                                                           c("Pos_X", "Pos_Y")))
                 colData(y) <- cbind(colData(y),
                                     cur_props[,!colnames(cur_props) %in% c(cell_id, coords)])
             } else {
                 colData(y)$Pos_X <- cur_props[[coords[1]]]
-                colData(y)$Pos_X <- cur_props[[coords[1]]]
+                colData(y)$Pos_Y <- cur_props[[coords[2]]]
                 colData(y) <- cbind(colData(y),
                                     cur_props[,!colnames(cur_props) %in% c(cell_id, coords)])
             }
