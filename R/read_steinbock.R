@@ -32,70 +32,52 @@ read_steinbock <- function(path,
                            intensities_folder = "cell_intensities",
                            graphs_folder = "cell_graphs",
                            regionprops_folder = "cell_regionprops",
-                           cell_id = "Object",
-                           coords = c("centroid-0", "centroid-1"),
-                           panel = "panel.csv",
                            pattern = NULL,
+                           extract_cellid_from = "Object",
+                           extract_coords_from = c("centroid-0", "centroid-1"),
+                           panel = "panel.csv",
+                           extract_names_from = "name",
                            return_as = c("spe", "sce"),
                            BPPARAM = SerialParam()){
     
-    .valid.read_steinbock.input()
+    .valid.read_steinbock.input(path, intensities_folder, graphs_folder,
+                                regionprops_folder, extract_cellid_from, 
+                                extract_coords_from, panel, extract_names_from,
+                                pattern)
     
     return_as <- match.arg(return_as)
     
     # Read intensities
     int_file_names <- list.files(file.path(path, intensities_folder),
                                  pattern = pattern, full.names = TRUE)
-    cur_objects <- .read_intensities(x = int_file_names,
-                                     cell_id = cell_id,
+    object <- .read_intensities(x = int_file_names,
+                                     cell_id = extract_cellid_from,
                                      return_as = return_as,
                                      BPPARAM = BPPARAM)
     
     # Read regionprobs
     if (!is.null(regionprops_folder)) {
-        cur_objects <- .read_regionprobs(x = cur_objects,
-                                         cur_path = file.path(path, regionprops_folder),
-                                         cell_id = cell_id, 
-                                         coords = coords,
-                                         return_as = return_as,
-                                         BPPARAM = BPPARAM)
-    }
-    
-    # Read grpahs
-    if (!is.null(graphs_folder)) {
-        cur_objects <- .read_graphs(x = cur_objects,
-                                    cur_path = file.path(path, graphs_folder),
+        object <- .read_regionprobs(x = object,
+                                    cur_path = file.path(path, regionprops_folder),
+                                    cell_id = extract_cellid_from, 
+                                    coords = extract_coords_from,
                                     return_as = return_as,
                                     BPPARAM = BPPARAM)
     }
     
-    # Merge objects
-    cur_objects <- do.call("cbind", cur_objects)
-    
-    
-    
-    if (!is.null(panel)) {
-        if (file.exists(file.path(path, panel))) {
-            cur_panel <- vroom(file.path(path, panel), 
-                               progress = FALSE, 
-                               col_types = cols())
-        } else if (file.exists(panel)) {
-            cur_panel <- vroom(panel, 
-                               progress = FALSE, 
-                               col_types = cols())
-        } else {
-            warning("'panel' does not exist.")
-            next
-        }
-        
-        if ("keep" %in% colnames(cur_panel)) {
-            cur_panel <- cur_panel %>% filter(keep == 1)
-        }
-        
-        cur_panel <- cur_panel[match(rownames(object), cur_panel$name),]
-        
-        rowData(object) <- cur_panel
+    # Read grpahs
+    if (!is.null(graphs_folder)) {
+        object <- .read_graphs(x = object,
+                               cur_path = file.path(path, graphs_folder),
+                               return_as = return_as,
+                               BPPARAM = BPPARAM)
     }
     
-    return(spe)
+    # Merge objects
+    object <- do.call("cbind", object)
+    
+    # Add panel data
+    object <- .add_panel(object, path, panel, extract_names_from = "name")
+    
+    return(object)
 }

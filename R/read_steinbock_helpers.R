@@ -38,7 +38,14 @@
     cur_out <-  bplapply(x,
         function(y){
             cur_sample <- unique(y$sample_id)
-            cur_props <- vroom(list.files(cur_path, pattern = cur_sample, full.names = TRUE), 
+            
+            cur_file <- list.files(cur_path, pattern = cur_sample, full.names = TRUE)
+            
+            if (length(test) == 0) {
+                return(y)
+            }
+            
+            cur_props <- vroom(cur_file, 
                                progress = FALSE, 
                                col_types = cols()) %>%
                 as.data.frame()
@@ -71,7 +78,14 @@
     cur_out <-  bplapply(x,
         function(y){
             cur_sample <- unique(y$sample_id)
-            cur_graphs <- vroom(list.files(cur_path, pattern = cur_sample, full.names = TRUE), 
+            
+            cur_file <- list.files(cur_path, pattern = cur_sample, full.names = TRUE)
+            
+            if (length(test) == 0) {
+                return(y)
+            }
+            
+            cur_graphs <- vroom(cur_file, 
                                 progress = FALSE, 
                                 col_types = cols()) %>%
                 as.data.frame()
@@ -86,4 +100,32 @@
     }, BPPARAM = BPPARAM)
     
     return(cur_out)
+}
+
+.add_panel <- function(x, path, panel, extract_names_from) {
+    
+    if (!is.null(panel)) {
+        if (file.exists(file.path(path, panel))) {
+            cur_panel <- vroom(file.path(path, panel), 
+                               progress = FALSE, 
+                               col_types = cols())
+        } else if (file.exists(panel)) {
+            cur_panel <- vroom(panel, 
+                               progress = FALSE, 
+                               col_types = cols())
+        } else {
+            warning("'panel' does not exist.")
+            return(x)
+        }
+        
+        cur_panel <- as.data.frame(cur_panel)
+        rownames(cur_panel) <- cur_panel[,extract_names_from]
+        
+        cur_panel <- cur_panel[rownames(x),]
+        
+        rowData(x) <- cur_panel
+    }
+    
+    return(x)
+
 }
