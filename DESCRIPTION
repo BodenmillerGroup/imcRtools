@@ -10,7 +10,7 @@ Authors@R:
 License: GPL (>= 2)
 Depends:
     R (>= 4.0),
-    SingleCellExperiment
+    SpatialExperiment
 Imports:
     S4Vectors,
     SummarizedExperiment,
@@ -23,7 +23,11 @@ Imports:
     cytomapper,
     abind,
     BiocParallel,
-    viridis
+    viridis,
+    dplyr,
+    magrittr,
+    SingleCellExperiment,
+    vroom
 Suggests:
     CATALYST,
     data.table,

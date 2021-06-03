@@ -177,3 +177,118 @@
              "of the files in the provided directory.")
     }
 }
+
+
+.valid.read_steinbock.input <- function(path, intensities_folder, graphs_folder,
+                                        regionprops_folder, cell_id, coords,
+                                        panel, name, pattern) {
+    if (length(path) != 1 | !is.character(path)) {
+        stop("'path' must be a single string.")
+    }
+    
+    if (!dir.exists(path)) {
+        stop("'path' doesn't exist.")
+    }
+    
+    if (is.null(intensities_folder)) {
+        stop("'intensities_folder' must be specified.")
+    }
+    
+    if (length(intensities_folder) != 1 | !is.character(intensities_folder)) {
+        stop("'intensities_folder' must be a single string.")
+    }
+    
+    if (!dir.exists(file.path(path, intensities_folder))) {
+        stop("'intensities_folder' doesn't exist.")
+    }
+    
+    if (!is.null(graphs_folder)) {
+        
+        if (length(graphs_folder) != 1 | !is.character(graphs_folder)) {
+            stop("'graphs_folder' must be a single string.")
+        }
+        
+        if (!dir.exists(file.path(path, graphs_folder))) {
+            stop("'graphs_folder' doesn't exist.")
+        }
+        
+    }
+    
+    if (!is.null(regionprops_folder)) {
+        
+        if (length(regionprops_folder) != 1 | !is.character(regionprops_folder)) {
+            stop("'regionprops_folder' must be a single string.")
+        }
+        
+        if (!dir.exists(file.path(path, regionprops_folder))) {
+            stop("'regionprops_folder' doesn't exist.")
+        }
+        
+    }
+    
+    # Check if any files can be read in
+    all_files <- list.files(file.path(path, intensities_folder), 
+                            pattern =  pattern, full.names = TRUE)
+    
+    if (length(all_files) == 0) {
+        stop("No files were read in.")
+    }
+    
+    # Check cell_id
+    cur_file <- vroom(all_files[1],
+                      progress = FALSE, 
+                      col_types = cols())
+    
+    if (length(cell_id) != 1 | !is.character(cell_id)) {
+        stop("'extract_cellid_from' must be a single string.")
+    }
+    
+    if (!cell_id %in% colnames(cur_file)) {
+        stop("'extract_cellid_from' not in intensities files.")
+    }
+    
+    # Check coords    
+    if (!is.null(regionprops_folder)) {
+        all_files <- list.files(file.path(path, regionprops_folder), 
+                                pattern =  pattern, full.names = TRUE)
+        cur_file <- vroom(all_files[1],
+                          progress = FALSE, 
+                          col_types = cols())
+        
+        if (!all(is.character(coords))) {
+            stop("'extract_coords_from' must be characters.")
+        }
+        
+        if (!all(coords %in% colnames(cur_file))) {
+            stop("'coords' not in regionprops files.")
+        }
+    }
+    
+    # Check panel
+    if (!is.null(panel)) {
+        if (length(panel) != 1 | !is.character(panel)) {
+            stop("'panel' must be a single string.")
+        }
+        
+        if (file.exists(file.path(path, panel))) {
+            cur_panel <- vroom(file.path(path, panel), 
+                               progress = FALSE, 
+                               col_types = cols())
+        } else if (file.exists(panel)) {
+            cur_panel <- vroom(panel, 
+                               progress = FALSE, 
+                               col_types = cols())
+        } 
+        
+        if (exists("cur_panel")) {
+            
+            if (length(name) != 1 | !is.character(name)) {
+                stop("'extract_names_from' must be a single string.")
+            }
+            
+            if (!name %in% colnames(cur_panel)) {
+                stop("'extract_names_from' not in panel file.")
+            }
+        }
+    }
+}
