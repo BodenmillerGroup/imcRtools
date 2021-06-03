@@ -34,7 +34,7 @@
     return(cur_out)
 }
 
-.read_regionprobs <- function(x, cur_path, cell_id, coords, return_as, BPPARAM){
+.read_regionprops <- function(x, cur_path, cell_id, coords, return_as, BPPARAM){
     
     cur_out <-  bplapply(x,
         function(y){

@@ -18,7 +18,7 @@
 #' @param extract_cellid_from single character indicating which column entry in 
 #' the intensity files contain the integer cell id.
 #' @param extract_coords_from character vector indicating which column entries 
-#' in the regionprobs files contain the x and y coordinates.
+#' in the regionprops files contain the x and y coordinates.
 #' @param panel single character containing the name of the panel file. This can
 #' either be inside the steinbock path (recommended) or located somewhere else.
 #' @param extract_names_from single character indicating the column of the panel
@@ -106,9 +106,9 @@ read_steinbock <- function(path,
                                      return_as = return_as,
                                      BPPARAM = BPPARAM)
     
-    # Read regionprobs
+    # Read regionprops
     if (!is.null(regionprops_folder)) {
-        object <- .read_regionprobs(x = object,
+        object <- .read_regionprops(x = object,
                                     cur_path = file.path(path, regionprops_folder),
                                     cell_id = extract_cellid_from, 
                                     coords = extract_coords_from,

@@ -260,7 +260,7 @@
         }
         
         if (!all(coords %in% colnames(cur_file))) {
-            stop("'coords' not in regionprobs files.")
+            stop("'coords' not in regionprops files.")
         }
     }
     
