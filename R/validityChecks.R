@@ -255,8 +255,8 @@
                           progress = FALSE, 
                           col_types = cols())
         
-        if (!all(is.character(cell_id))) {
-            stop("'extract_coords_from' must be a single string.")
+        if (!all(is.character(coords))) {
+            stop("'extract_coords_from' must be characters.")
         }
         
         if (!all(coords %in% colnames(cur_file))) {
@@ -280,8 +280,15 @@
                                col_types = cols())
         } 
         
-        if (exists("cur_panel") & !name %in% colnames(cur_panel)) {
-            stop("'extract_names_from' not in panel file.")
+        if (exists("cur_panel")) {
+            
+            if (length(name) != 1 | !is.character(name)) {
+                stop("'extract_names_from' must be a single string.")
+            }
+            
+            if (!name %in% colnames(cur_panel)) {
+                stop("'extract_names_from' not in panel file.")
+            }
         }
     }
 }

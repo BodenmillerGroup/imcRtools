@@ -73,6 +73,7 @@
 #' \code{\link[SingleCellExperiment]{SingleCellExperiment}} and 
 #' \code{\link[SpatialExperiment]{SpatialExperiment}} for the constructor 
 #' functions.
+#' \code{\link[BiocParallel]{bpparam}} for the parallelised backend
 #' 
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #' 
@@ -127,7 +128,7 @@ read_steinbock <- function(path,
     object <- do.call("cbind", object)
     
     # Add panel data
-    object <- .add_panel(object, path, panel, extract_names_from = "name")
+    object <- .add_panel(object, path, panel, extract_names_from)
     
     return(object)
 }

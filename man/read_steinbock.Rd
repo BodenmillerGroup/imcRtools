@@ -107,6 +107,7 @@ ImcSegmentationPipeline
 \code{\link[SingleCellExperiment]{SingleCellExperiment}} and 
 \code{\link[SpatialExperiment]{SpatialExperiment}} for the constructor 
 functions.
+\code{\link[BiocParallel]{bpparam}} for the parallelised backend
 }
 \author{
 Nils Eling (\email{nils.eling@dqbm.uzh.ch})

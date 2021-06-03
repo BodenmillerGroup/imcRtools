@@ -1,5 +1,5 @@
 ---
-title: "R Tools for IMC Data"
+title: "R tools for IMC data analysis"
 date: "`r BiocStyle::doc_date()`"
 package: "`r BiocStyle::pkg_ver('imcRtools')`"
 author:
@@ -19,7 +19,7 @@ bibliography: library.bib
 abstract: |
     Abstract
 vignette: |
-    %\VignetteIndexEntry{"R Tools for IMC Data}
+    %\VignetteIndexEntry{"R tools for IMC data analysis"}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
 ---
@@ -51,7 +51,7 @@ overview of these files.
 To highlight the use of the `imcRtools` package for spillover correction, 
 we provide four .txt files containing pixel intensities of four spotted metals.
 
-These files are accesible via:
+These files are accessible via:
 
 ```{r access-spillover-files}
 path <- system.file("extdata/spillover", package = "imcRtools")
@@ -62,17 +62,61 @@ path
 
 To highlight reading in raw data in form of .txt files, the `imcRtools` contains
 3 sample acquisitions:
+
 ```{r access-txt-files}
 txt_files <- list.files(system.file("extdata/mockData/raw", 
                                     package = "imcRtools"))
 txt_files
 ```
 
-# Read in single-cell features obtained from IMC data
+## `steinbock` output data
+
+The [steinbock](https://github.com/BodenmillerGroup/steinbock) pipeline can be used
+to process, segment and extract features from IMC data. For more information,
+please refer to the [documentation](https://bodenmillergroup.github.io/steinbock/).
+
+To highlight the functionality of `imcRtools` to read in single-cell data generated
+by `steinbock`, we provide a small toy dataset available at:
+
+```{r steinbock-to-data}
+path <- system.file("extdata/mockData/steinbock", package = "imcRtools")
+
+list.files(path, recursive = TRUE)
+```
+
+# Read in IMC data
 
 ## Read in CellProfiler output
 
 ## Read in steinbock output
+
+Single-cell data and all associated metadata (e.g. spatial location, morphology
+and interaction graphs) as produced by the
+[steinbock](https://github.com/BodenmillerGroup/steinbock) pipeline can be read
+in using the `read_steinbock` function.
+
+By default, the single-cell data is read into a `r BiocStyle::Biocpkg("SpatialExperiment")` 
+object. Here, the extracted channel- and cell-specific intensities are stored in
+the `counts(spe)` slot. All morphological features are stored in `colData(spe)`
+and the spatial locations of the cells are stored in `spatialCoords(spe)`.
+The interaction graph is stored in `colPair(spe, "neighbourhood")`.
+
+Alternatively, the data can be read into a `r BiocStyle::Biocpkg("SingleCellExperiment")`
+object. The only difference is the lack of `spatialCoords(sce)`. Here, the 
+spatial coordinates are stored in `colData(spe)$Pos_X` and `colData(spe)$Pos_Y`.
+
+```{r read_steinbock}
+cur_path <- system.file("extdata/mockData/steinbock", package = "imcRtools")
+
+# Read as SpatialExperiment
+(spe <- read_steinbock(cur_path))
+
+# Read as SingleCellExperiment
+(sce <- read_steinbock(cur_path, return_as = "sce"))
+```
+
+For more information on the `read_steinbock` function, please refer to
+`?read_steinbock`.
 
 ## Read raw .txt files into `Image` objects
 
