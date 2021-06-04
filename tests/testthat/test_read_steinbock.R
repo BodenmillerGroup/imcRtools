@@ -517,72 +517,97 @@ test_that("read_steinbock function works", {
     
     # Error
     expect_error(cur_spe <- read_steinbock(path = "test"),
-                 "'path' doesn't exist.") 
+                 "'path' doesn't exist.", 
+                 fixed = TRUE) 
     expect_error(cur_spe <- read_steinbock(path = c("test", "test2")),
-                 "'path' must be a single string.") 
+                 "'path' must be a single string.", 
+                 fixed = TRUE) 
     expect_error(cur_spe <- read_steinbock(path = 1),
-                 "'path' must be a single string.") 
+                 "'path' must be a single string.", 
+                 fixed = TRUE) 
     
     
     expect_error(cur_spe <- read_steinbock(path, intensities_folder = NULL),
-                 "'intensities_folder' must be specified.")
+                 "'intensities_folder' must be specified.", 
+                 fixed = TRUE)
     expect_error(cur_spe <- read_steinbock(path, intensities_folder = "test"),
-                 "'intensities_folder' doesn't exist.")
+                 "'intensities_folder' doesn't exist.", 
+                 fixed = TRUE)
     
     expect_error(cur_spe <- read_steinbock(path, intensities_folder = c("test", "test2")),
-                 "'intensities_folder' must be a single string.")
+                 "'intensities_folder' must be a single string.", 
+                 fixed = TRUE)
     expect_error(cur_spe <- read_steinbock(path, intensities_folder = 1),
-                 "'intensities_folder' must be a single string.")
+                 "'intensities_folder' must be a single string.", 
+                 fixed = TRUE)
     
     expect_error(cur_spe <- read_steinbock(path, regionprops_folder = "test"),
-                 "'regionprops_folder' doesn't exist.")
+                 "'regionprops_folder' doesn't exist.", 
+                 fixed = TRUE)
     
     expect_error(cur_spe <- read_steinbock(path, regionprops_folder = c("test", "test2")),
-                 "'regionprops_folder' must be a single string.")
+                 "'regionprops_folder' must be a single string.", 
+                 fixed = TRUE)
     expect_error(cur_spe <- read_steinbock(path, regionprops_folder = 1),
-                 "'regionprops_folder' must be a single string.")
+                 "'regionprops_folder' must be a single string.", 
+                 fixed = TRUE)
     
     expect_error(cur_spe <- read_steinbock(path, graphs_folder = "test"),
-                 "'graphs_folder' doesn't exist.")
+                 "'graphs_folder' doesn't exist.", 
+                 fixed = TRUE)
     
     expect_error(cur_spe <- read_steinbock(path, graphs_folder = c("test", "test2")),
-                 "'graphs_folder' must be a single string.")
+                 "'graphs_folder' must be a single string.", 
+                 fixed = TRUE)
     expect_error(cur_spe <- read_steinbock(path, graphs_folder = 1),
-                 "'graphs_folder' must be a single string.")
+                 "'graphs_folder' must be a single string.", 
+                 fixed = TRUE)
     
     expect_error(cur_spe <- read_steinbock(path, pattern = "test"),
-                 "No files were read in.")
+                 "No files were read in.", 
+                 fixed = TRUE)
     
     expect_error(cur_spe <- read_steinbock(path, extract_cellid_from = "test"),
-                 "'extract_cellid_from' not in intensities files.")
+                 "'extract_cellid_from' not in intensities files.", 
+                 fixed = TRUE)
     
     expect_error(cur_spe <- read_steinbock(path, extract_cellid_from = c("test", "test2")),
-                 "'extract_cellid_from' must be a single string.")
+                 "'extract_cellid_from' must be a single string.", 
+                 fixed = TRUE)
     expect_error(cur_spe <- read_steinbock(path, extract_cellid_from = 1),
-                 "'extract_cellid_from' must be a single string.")
+                 "'extract_cellid_from' must be a single string.", 
+                 fixed = TRUE)
     
     expect_error(cur_spe <- read_steinbock(path, extract_coords_from =  "test"),
-                 "'coords' not in regionprobs files.")
+                 "'coords' not in regionprobs files.", 
+                 fixed = TRUE)
     expect_silent(cur_spe <- read_steinbock(path, extract_coords_from =  "test", regionprops_folder = NULL))
     
     expect_error(cur_spe <- read_steinbock(path, extract_coords_from =  1),
-                 "'extract_coords_from' must be characters.")
+                 "'extract_coords_from' must be characters.", 
+                 fixed = TRUE)
     
     expect_warning(cur_spe <- read_steinbock(path, panel = "test"),
-                 "'panel' does not exist.")
+                   "'panel' does not exist.", 
+                   fixed = TRUE)
     
     expect_error(cur_spe <- read_steinbock(path, panel = c("test", "test2")),
-                   "'panel' must be a single string.")
+                 "'panel' must be a single string.", 
+                 fixed = TRUE)
     
     expect_error(cur_spe <- read_steinbock(path, panel = 1),
-                 "'panel' must be a single string.")
+                 "'panel' must be a single string.", 
+                 fixed = TRUE)
     
     expect_error(cur_spe <- read_steinbock(path, extract_names_from = "test"),
-                 "'extract_names_from' not in panel file.")
+                 "'extract_names_from' not in panel file.", 
+                 fixed = TRUE)
     
     expect_error(cur_spe <- read_steinbock(path, extract_names_from = c("test", "test2")),
-                 "'extract_names_from' must be a single string.")
+                 "'extract_names_from' must be a single string.", 
+                 fixed = TRUE)
     
     expect_error(cur_spe <- read_steinbock(path, extract_names_from = 1),
-                 "'extract_names_from' must be a single string.")
+                 "'extract_names_from' must be a single string.", 
+                 fixed = TRUE)
 })
