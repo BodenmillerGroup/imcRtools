@@ -579,7 +579,7 @@ test_that("read_steinbock function works", {
                  fixed = TRUE)
     
     expect_error(cur_spe <- read_steinbock(path, extract_coords_from =  "test"),
-                 "'coords' not in regionprobs files.", 
+                 "'coords' not in regionprops files.", 
                  fixed = TRUE)
     expect_silent(cur_spe <- read_steinbock(path, extract_coords_from =  "test", regionprops_folder = NULL))
     
