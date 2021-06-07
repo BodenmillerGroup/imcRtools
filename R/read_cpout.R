@@ -54,7 +54,7 @@
 #' @export
 
 read_cpout <- function(path,
-                       intensities = ""
+                       intensities = "",
                         cell_meta = c("ImageNumber", "ObjectNumber"),
                         image_meta = NULL,
                         panel_meta = NULL,

@@ -88,6 +88,17 @@ list.files(path, recursive = TRUE)
 
 ## Read in CellProfiler output
 
+The [ImcSegmentationPipeline](https://github.com/BodenmillerGroup/ImcSegmentationPipeline)
+produces a number of output file. By default, all single-cell features are measured 
+and exported. To select the features of interest, the `imcRtools` package provides
+the `show_cpout_features` function. Here, the exported features can be interactively browsed:
+
+```{r show_cpout_features}
+path <- system.file("extdata/mockData/cpout", package = "imcRtools")
+
+show_cpout_features(path)
+```
+
 ## Read in steinbock output
 
 Single-cell data and all associated metadata (e.g. spatial location, morphology
