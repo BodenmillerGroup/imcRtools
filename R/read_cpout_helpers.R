@@ -20,7 +20,7 @@
     rownames(scaling_factor) <- as.character(scaling_factor[[extract_imgid_from]])
     
     # Scale counts
-    cur_counts <- split(cur_counts, img_id[[extract_imgid_from]])
+    cur_counts <- split(cur_counts, cur_counts[[extract_imgid_from]])
     scaling_factor <- scaling_factor[names(cur_counts),]
     
     cur_counts <- mapply(function(cells, s_factor) {
@@ -70,8 +70,22 @@
     cur_channels <- cur_channels[order(cur_channels$channel, decreasing = FALSE),]
     
     rownames(object) <- cur_channels$channel_id
+    
+    return(object)
 }
     
     
-.cpout_add_image_metadata <-
+.cpout_add_image_metadata <- function(object, path, image_file, 
+                                      extract_imgid_from,
+                                      extract_imagemetadata_from) {
+    
+    cur_img_meta <- vroom(file.path(path, image_file),
+                        col_select = all_of(c(extract_imgid_from,
+                                                extract_imagemetadata_from)))
+    colData(object) <- merge(x = colData(object), y = cur_img_meta, 
+                             by.x = "sample_id", by.y = extract_imgid_from, 
+                             sort = FALSE)
+    
+    return(object)
+}
     

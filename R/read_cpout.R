@@ -58,15 +58,21 @@ read_cpout <- function(path,
     
     return_as <- match.arg(return_as)
     
-    object <- .cpout_create_object(path, object_file, image_file, 
-                                   object_feature_file, 
-                             intensities, extract_imgid_from,
-                             extract_cellid_from, extract_coords_from,
-                             extract_cellmetadata_from, 
-                             scale_intensities, extract_scalingfactor_from)
+    object <- .cpout_create_object(path = path, 
+                                   object_file = object_file, 
+                                   image_file = image_file, 
+                                   object_feature_file = object_feature_file,
+                                   intensities = intensities, 
+                                   extract_imgid_from = extract_imgid_from,
+                                   extract_cellid_from = extract_cellid_from, 
+                                   extract_coords_from = extract_coords_from,
+                                   extract_cellmetadata_from = extract_cellmetadata_from, 
+                                   scale_intensities = scale_intensities, 
+                                   extract_scalingfactor_from = extract_scalingfactor_from)
     
     object <- .cpout_add_image_metadata(object, path, image_file, 
-                                  extract_imagemetadata_from)
+                                        extract_imgid_from, 
+                                        extract_imagemetadata_from)
     
     object <- .cpout_add_graph(object, path, graph_file)
     
