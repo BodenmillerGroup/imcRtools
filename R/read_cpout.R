@@ -7,43 +7,20 @@
 #' pipeline.
 #'
 #' @param path full path to the CellProfiler output folder
-#' @param cell_meta character vector containing column names of relevant meta
-#'   data stored in `cells`, must at least include a sort of `CellNumber` and
-#'   `ImageNumber`
-#' @param image_meta \code{data.frame} containing meta data for the acquired
-#'   samples (image.csv)
-#' @param panel_meta \code{data.frame} containing meta data for the applied
-#'   panel
-#' @param metal_tag \code{colnames} of metal tag column in `panel_meta` (default
-#'   = "Metal.Tag")
-#' @param channel_number \code{colnames} of column that contains the channel number in `panel_meta` (default = "channel")
-#' @param target_names \code{colnames} of column that contains the antibody/target name in `panel_meta` 
-#' @param imageNumber name of column containing an sample identifier present in
-#'   all provided input
-#' @param objectNumber name of column containing an object number for individual
-#'   cells
-#' @param measurement_column shared \code{colnames} pattern of \code{cells}
-#'   columns storing channel measurement (e.g.
-#'   Intensity_MeanIntensityCorrected_FullStackFiltered)
-#' @param scaling_column \code{colnames} of scaling column storing the applied
-#'   scaling factor (e.g. Scaling_FullStack)
-#' @param metadata (optional) \code{data.frame} containing further metadata
-#'   associated to cells, must include `imageID`
 
-#' @return returns SCE object
+#' @return returns a \code{SpatialExperiment} or \code{SingleCellExperiment}
+#' object markers in rows and cells in columns. 
 #'
 #' @examples
-#' #sce <- generateSCE(cells = cells,
-#' #       cell_meta = c("ImageNumber", "ObjectNumber"),
-#' #       image_meta = image_mat,
-#' #       panel_meta = panel_mat,
-#' #       metal_tag = "Metal.Tag",
-#' #       channel_number = "channel", 
-#' #       target_names = "clean_target",
-#' #       imageNumber = "ImageNumber",
-#' #       objectNumber = "ObjectNumber",
-#' #       measurement_column = "Intensity_MeanIntensityComp_FullStackFiltered",
-#' #       scaling_column = "Scaling_FullStack")
+#' path <- system.file("extdata/mockData/cpout", package = "imcRtools")
+#' 
+#' # Read in as SpatialExperiment object
+#' x <- read_cpout(path)
+#' x
+#' 
+#' # Read in as SingleCellExperiment object
+#' x <- read_cpout(path, return_as = "sce")
+#' x
 #' 
 #' @author Tobias Hoch
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
@@ -54,64 +31,47 @@
 #' @export
 
 read_cpout <- function(path,
-                       intensities = "",
-                        cell_meta = c("ImageNumber", "ObjectNumber"),
-                        image_meta = NULL,
-                        panel_meta = NULL,
-                        metal_tag = "Metal.Tag",
-                        channel_number = "channel", 
-                        target_names = NULL,
-                        imageNumber = "ImageNumber",
-                        objectNumber = "ObjectNumber",
-                        measurement_column = NULL,
-                        scaling_column = NULL,
-                        metadata = NULL){
+                       object_file = "cell.csv",
+                       image_file = "Image.csv",
+                       panel_file = "panel.csv",
+                       graph_file = "Object relationships.csv",
+                       object_feature_file = "var_cell.csv",
+                       intensities = "Intensity_MeanIntensity_FullStackFiltered",
+                       extract_imgid_from = "ImageNumber",
+                       extract_cellid_from = "ObjectNumber",
+                       extract_coords_from = c("Location_Center_X", "Location_Center_Y"),
+                       extract_cellmetadata_from = "Neighbors_NumberOfNeighbors_8",
+                       extract_imagemetadata_from = c("Metadata_acname", "Metadata_acid", "Metadata_description"),
+                       extract_metal_from = "Metal Tag",
+                       scale_intensities = TRUE,
+                       extract_scalingfactor_from = "Scaling_FullStack",
+                       return_as = c("spe", "sce")){
     
-    stop("This function is under development!")
+    .valid.read_cpout.input(path, object_file, image_file,
+                            panel_file, graph_file, object_feature_file,
+                            intensities, 
+                            extract_imgid_from, extract_cellid_from, 
+                            extract_names_from, extract_coords_from
+                            extract_cellmetadata_from, extract_imagemetadata_from,
+                            extract_metal_from, scale_intensities,
+                            extract_scalingfactor_from)
+    
+    return_as <- match.arg(return_as)
+    
+    object <- .cpout_create_object(path, object_file, image_file, 
+                                   object_feature_file, 
+                             intensities, extract_imgid_from,
+                             extract_cellid_from, extract_coords_from,
+                             extract_cellmetadata_from, 
+                             scale_intensities, extract_scalingfactor_from)
+    
+    object <- .cpout_add_image_metadata(object, path, image_file, 
+                                  extract_imagemetadata_from)
+    
+    object <- .cpout_add_graph(object, path, graph_file)
+    
+    object <- .add_panel(object, path, panel_file, extract_metal_from)
+    
+    return(object)
 
-  # validity checks - TO DO (is scaling factor numeric, is measurement_column present for all entries of channel_order, are provided colnames present,...)
-
-  # extract counts and scale counts with scaling factor
-  cur_counts <- cells[,grepl(measurement_column,colnames(cells))]
-  cur_counts <- cur_counts * image_meta[[scaling_column]][1]
-
-  # order the channels according to channel number
-  channelNumber <- as.numeric(sub("^.*_c", "", colnames(cur_counts)))
-  cur_counts <- cur_counts[,order(channelNumber,decreasing = FALSE)]
-
-  # create cell meta data
-  cell_meta <- cells[, cell_meta]
-
-  # add a unique cellID to each cell
-  cell_meta$cellID <- paste(cell_meta[[imageNumber]],cell_meta[[objectNumber]], sep="_")
-  rownames(cell_meta) <- cell_meta$cellID
-
-  # order both metadata and cell_meta according to imageNumber
-  if(is.null(metadata) == FALSE){
-    metadata <- metadata[order(metadata[[imageNumber]]),]
-    cell_meta <- cell_meta[order(cell_meta[[imageNumber]]),]
-  }
-  
-  # order the panel metadata by channel and add target column as rowname
-  panel_meta <- panel_meta[order(panel_meta[,channel_number],decreasing = FALSE),]
-  rownames(panel_meta) <- panel_meta[[target_names]]
-
-  # create the SCE data container
-  sce <- SingleCellExperiment(assays = list(counts = t(cur_counts)))
-
-  # set marker name as rownames and cellID as colnames
-  rownames(sce) <- rownames(panel_meta)
-  colnames(sce) <- rownames(cell_meta)
-
-  # add the column and row metadata
-  colData(sce) <- DataFrame(cell_meta)
-  rowData(sce) <- DataFrame(panel_meta)
-
-  # order metadata according to imageNumber and add to metadata slot
-  if(is.null(metadata) == FALSE){
-    metadata <- metadata[order(metadata[[imageNumber]]),]
-    metadata(sce) <- as.list(metadata)
-  }
-  #return SCE object
-  return(sce)
 }
