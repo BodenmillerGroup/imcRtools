@@ -42,6 +42,8 @@ read_cpout <- function(path,
                        extract_coords_from = c("Location_Center_X", "Location_Center_Y"),
                        extract_cellmetadata_from = "Neighbors_NumberOfNeighbors_8",
                        extract_imagemetadata_from = c("Metadata_acname", "Metadata_acid", "Metadata_description"),
+                       extract_graphimageid_from = "First Image Number",
+                       extract_graphcellids_from = c("First Object Number", "Second Object Number"),
                        extract_metal_from = "Metal Tag",
                        scale_intensities = TRUE,
                        extract_scalingfactor_from = "Scaling_FullStack",
@@ -74,7 +76,9 @@ read_cpout <- function(path,
                                         extract_imgid_from, 
                                         extract_imagemetadata_from)
     
-    object <- .cpout_add_graph(object, path, graph_file)
+    object <- .cpout_add_graph(object, path, graph_file, 
+                               extract_graphimageid_from, 
+                               extract_graphcellids_from)
     
     object <- .add_panel(object, path, panel_file, extract_metal_from)
     

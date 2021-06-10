@@ -20,13 +20,15 @@
     rownames(scaling_factor) <- as.character(scaling_factor[[extract_imgid_from]])
     
     # Scale counts
-    cur_counts <- split(cur_counts, cur_counts[[extract_imgid_from]])
-    scaling_factor <- scaling_factor[names(cur_counts),]
-    
-    cur_counts <- mapply(function(cells, s_factor) {
-        cells %>% mutate(across(contains(intensities), function(x){x * s_factor}))
-    }, cur_counts, as.list(scaling_factor[[extract_scalingfactor_from]]), 
-    SIMPLIFY = FALSE)
+    if (scale_intensities) {
+        cur_counts <- split(cur_counts, cur_counts[[extract_imgid_from]])
+        scaling_factor <- scaling_factor[names(cur_counts),]
+        
+        cur_counts <- mapply(function(cells, s_factor) {
+            cells %>% mutate(across(contains(intensities), function(x){x * s_factor}))
+        }, cur_counts, as.list(scaling_factor[[extract_scalingfactor_from]]), 
+        SIMPLIFY = FALSE)
+    }
     
     cur_counts <- do.call(rbind, cur_counts)
     
@@ -85,6 +87,27 @@
     colData(object) <- merge(x = colData(object), y = cur_img_meta, 
                              by.x = "sample_id", by.y = extract_imgid_from, 
                              sort = FALSE)
+    
+    return(object)
+}
+
+.cpout_add_graph <- function(object, path, graph_file,
+                             extract_graphimageid_from,
+                             extract_graphcellids_from) {
+    cur_graph <- vroom(file.path(path, graph_file), 
+                       col_select = all_of(c(extract_graphimageid_from,
+                                             extract_graphcellids_from)))
+    
+    cur_graph$firstid <- paste0(cur_graph[[extract_graphimageid_from]], "_",
+                                cur_graph[[extract_graphcellids_from[1]]])
+    cur_graph$secondid <- paste0(cur_graph[[extract_graphimageid_from]], "_",
+                                cur_graph[[extract_graphcellids_from[2]]])
+    
+    cur_objectids <- paste0(object$sample_id, "_", object$ObjectNumber)
+    
+    colPair(object, "neighbourhood") <- SelfHits(from = match(cur_graph$firstid, cur_objectids),
+                                                 to = match(cur_graph$secondid, cur_objectids),
+                                                 nnode = length(cur_objectids))
     
     return(object)
 }
