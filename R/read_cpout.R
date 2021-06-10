@@ -6,10 +6,67 @@
 #' obtained by the [ImcSegmentationPipeline](https://github.com/BodenmillerGroup/ImcSegmentationPipeline)
 #' pipeline.
 #'
-#' @param path full path to the CellProfiler output folder
-
+#' @param path full path to the CellProfiler output folder.
+#' @param object_file single character indicating the file name storing the
+#' object/cell specific intensities and metadata.
+#' @param image_file single character indicating the file name storing meta data
+#' per image (can be \code{NULL}).
+#' @param panel_file single character indicating the file name storing the panel
+#' information (can be \code{NULL}).
+#' @param graph_file single character indicating the file name storing the
+#' object/cell interaction information (can be \code{NULL}).
+#' @param object_feature_file single character indicating the file name storing
+#' object/cell feature information.
+#' @param intensities single character indicating which column entries of the
+#' \code{object_file} contain the intensity features of interest.
+#' @param extract_imgid_from single character indicating which column entries of
+#' the \code{object_file} and \code{image_file} contain the image integer ID.
+#' @param extract_cellid_from single character indicating which column entries
+#' of the \code{object_file} contain the object/cell integer ID.
+#' @param extract_coords_from character vector indicating which column entries
+#' of the \code{object_file} contain the x and y location of the
+#' objects/cells.
+#' @param extract_cellmetadata_from character vector indicating which additional
+#' object/cell specific metadata to extract from the \code{object_file}.
+#' @param extract_imagemetadata_from character vector indicating which
+#' additional image specific metadata to extract from the \code{image_file}.
+#' These will be stored in the \code{colData(x)} slot as object/cell-specific
+#' entries.
+#' @param extract_graphimageid_from single character indicating  which column
+#' entries of the \code{graph_file} contain the image integer ID.
+#' @param extract_graphcellids_from character vector indicating which column
+#' entries of the \code{graph_file} contain the first and second object/cell
+#' integer IDs. These will be stored as the \code{from} and \code{to} entry of
+#' the \code{SelfHits} object in colPair(x, "neighbourhood").
+#' @param extract_metal_from single character indicating which column entries of
+#' the \code{panel_file} contain the metal isotopes of the used antibodies.
+#' This entry is used to match the panel information to the acquired channel
+#' information.
+#' @param scale_intensities single logical. Should the measured intensity
+#' features be scaled by \code{extract_scalingfactor_from}.
+#' @param extract_scalingfactor_from single character indicating which column
+#' entries of the \code{image_file} contain the image specific scaling factor.
+#' @param return_as should the object be returned as
+#' \code{\linkS4class{SpatialExperiment}} (\code{return_as = "spe"}) or
+#' \code{\linkS4class{SingleCellExperiment}} (\code{return_as = "sce"}).
+#' 
 #' @return returns a \code{SpatialExperiment} or \code{SingleCellExperiment}
-#' object markers in rows and cells in columns. 
+#' object markers in rows and cells in columns.
+#' 
+#' @section The returned data container:
+#' In the case of __both__ containers \code{x}, intensity features (as selected
+#' by the \code{intensities} parameter) are stored in the \code{counts(x)} slot.
+#' Cell metadata (e.g morphological features) are stored in the
+#' \code{colData(x)} slot. The interaction graphs are stored as
+#' \code{\link[S4Vectors]{SelfHits}} in the \code{colPair(x, "neighbourhood")}
+#' slot.
+#' 
+#' In the case of a returned \code{SpatialExperiment} object, the cell coordinates
+#' are stored in the \code{spatialCoords(x)} slot.
+#' 
+#' In the case of a returned \code{SingleCellExperiment} object, the cell 
+#' coordinates are stored in the \code{colData(x)} slot named as \code{Pos_X}
+#' and \code{Pos_Y}.
 #'
 #' @examples
 #' path <- system.file("extdata/mockData/cpout", package = "imcRtools")
@@ -72,13 +129,17 @@ read_cpout <- function(path,
                                    scale_intensities = scale_intensities, 
                                    extract_scalingfactor_from = extract_scalingfactor_from)
     
-    object <- .cpout_add_image_metadata(object, path, image_file, 
-                                        extract_imgid_from, 
-                                        extract_imagemetadata_from)
+    if (!is.null(image_file)) {
+        object <- .cpout_add_image_metadata(object, path, image_file, 
+                                            extract_imgid_from, 
+                                            extract_imagemetadata_from)
+    }
     
-    object <- .cpout_add_graph(object, path, graph_file, 
-                               extract_graphimageid_from, 
-                               extract_graphcellids_from)
+    if (!is.null(graph_file)){
+        object <- .cpout_add_graph(object, path, graph_file, 
+                                   extract_graphimageid_from, 
+                                   extract_graphcellids_from)   
+    }
     
     object <- .add_panel(object, path, panel_file, extract_metal_from)
     
