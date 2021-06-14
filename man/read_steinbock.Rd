@@ -12,7 +12,7 @@ read_steinbock(
   pattern = NULL,
   extract_cellid_from = "Object",
   extract_coords_from = c("centroid-0", "centroid-1"),
-  panel = "panel.csv",
+  panel_file = "panel.csv",
   extract_names_from = "name",
   return_as = c("spe", "sce"),
   BPPARAM = SerialParam()
@@ -39,7 +39,7 @@ the intensity files contain the integer cell id.}
 \item{extract_coords_from}{character vector indicating which column entries 
 in the regionprops files contain the x and y coordinates.}
 
-\item{panel}{single character containing the name of the panel file. This can
+\item{panel_file}{single character containing the name of the panel file. This can
 either be inside the steinbock path (recommended) or located somewhere else.}
 
 \item{extract_names_from}{single character indicating the column of the panel

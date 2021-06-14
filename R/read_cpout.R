@@ -110,7 +110,7 @@ read_cpout <- function(path,
                             panel_file, graph_file, object_feature_file,
                             intensities, 
                             extract_imgid_from, extract_cellid_from, 
-                            extract_coords_from
+                            extract_coords_from,
                             extract_cellmetadata_from, extract_imagemetadata_from,
                             extract_graphimageid_from, extract_graphcellids_from,
                             extract_metal_from, scale_intensities,
@@ -128,7 +128,8 @@ read_cpout <- function(path,
                                    extract_coords_from = extract_coords_from,
                                    extract_cellmetadata_from = extract_cellmetadata_from, 
                                    scale_intensities = scale_intensities, 
-                                   extract_scalingfactor_from = extract_scalingfactor_from)
+                                   extract_scalingfactor_from = extract_scalingfactor_from,
+                                   return_as = return_as)
     
     if (!is.null(image_file)) {
         object <- .cpout_add_image_metadata(object, path, image_file, 

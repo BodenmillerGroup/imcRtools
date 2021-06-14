@@ -293,11 +293,12 @@
     }
 }
 
+#' @importFrom stringr str_count
 .valid.read_cpout.input <- function(path, object_file, image_file,
                                     panel_file, graph_file, object_feature_file,
                                     intensities, 
                                     extract_imgid_from, extract_cellid_from, 
-                                    extract_coords_from
+                                    extract_coords_from,
                                     extract_cellmetadata_from, extract_imagemetadata_from,
                                     extract_graphimageid_from, extract_graphcellids_from,
                                     extract_metal_from, scale_intensities,
@@ -327,11 +328,11 @@
         stop("'object_feature_file' must be a single string.")
     }
     
-    if (!dir.exists(file.path(path, object_file))) {
+    if (!file.exists(file.path(path, object_file))) {
         stop("'object_file' doesn't exist.")
     }
     
-    if (!dir.exists(file.path(path, object_feature_file))) {
+    if (!file.exists(file.path(path, object_feature_file))) {
         stop("'object_feature_file' doesn't exist.")
     }
     
@@ -341,7 +342,7 @@
             stop("'image_file' must be a single string.")
         }
         
-        if (!dir.exists(file.path(path, image_file))) {
+        if (!file.exists(file.path(path, image_file))) {
             stop("'image_file' doesn't exist.")
         }
         
@@ -353,7 +354,7 @@
             stop("'graph_file' must be a single string.")
         }
         
-        if (!dir.exists(file.path(path, graph_file))) {
+        if (!file.exists(file.path(path, graph_file))) {
             stop("'graph_file' doesn't exist.")
         }
         
@@ -366,11 +367,11 @@
         }
         
         if (file.exists(file.path(path, panel_file))) {
-            cur_panel <- vroom(file.path(path, panel), 
+            cur_panel <- vroom(file.path(path, panel_file), 
                                progress = FALSE, 
                                col_types = cols())
         } else if (file.exists(panel_file)) {
-            cur_panel <- vroom(panel, 
+            cur_panel <- vroom(panel_file, 
                                progress = FALSE, 
                                col_types = cols())
         } 
@@ -403,7 +404,7 @@
     if (feature_count == 0) {
         stop("No intensity features were read in. Please check the 'intensities' parameter.")
     } else {
-        message(paste("Reading in", feature_count, "intensity features.")
+        message(paste("Reading in", feature_count, "intensity features."))
     }
     
     if (is.null(extract_imgid_from)) {
@@ -484,7 +485,7 @@
             stop("'extract_graphimageid_from' must be a single string.")
         }
         
-        if (!extract_graphimageid_from %in% colnames(cur_file))) {
+        if (!extract_graphimageid_from %in% colnames(cur_file)) {
             stop("'extract_graphimageid_from' not in 'graph_file'.")
         }
         
