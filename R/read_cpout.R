@@ -110,8 +110,9 @@ read_cpout <- function(path,
                             panel_file, graph_file, object_feature_file,
                             intensities, 
                             extract_imgid_from, extract_cellid_from, 
-                            extract_names_from, extract_coords_from
+                            extract_coords_from
                             extract_cellmetadata_from, extract_imagemetadata_from,
+                            extract_graphimageid_from, extract_graphcellids_from,
                             extract_metal_from, scale_intensities,
                             extract_scalingfactor_from)
     

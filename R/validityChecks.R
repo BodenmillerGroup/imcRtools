@@ -292,3 +292,206 @@
         }
     }
 }
+
+.valid.read_cpout.input <- function(path, object_file, image_file,
+                                    panel_file, graph_file, object_feature_file,
+                                    intensities, 
+                                    extract_imgid_from, extract_cellid_from, 
+                                    extract_coords_from
+                                    extract_cellmetadata_from, extract_imagemetadata_from,
+                                    extract_graphimageid_from, extract_graphcellids_from,
+                                    extract_metal_from, scale_intensities,
+                                    extract_scalingfactor_from){
+    
+    if (length(path) != 1 | !is.character(path)) {
+        stop("'path' must be a single string.")
+    }
+    
+    if (!dir.exists(path)) {
+        stop("'path' doesn't exist.")
+    }
+    
+    if (is.null(object_file)) {
+        stop("'object_file' must be specified.")
+    }
+    
+    if (is.null(object_feature_file)) {
+        stop("'object_feature_file' must be specified.")
+    }
+    
+    if (length(object_file) != 1 | !is.character(object_file)) {
+        stop("'object_file' must be a single string.")
+    }
+    
+    if (length(object_feature_file) != 1 | !is.character(object_feature_file)) {
+        stop("'object_feature_file' must be a single string.")
+    }
+    
+    if (!dir.exists(file.path(path, object_file))) {
+        stop("'object_file' doesn't exist.")
+    }
+    
+    if (!dir.exists(file.path(path, object_feature_file))) {
+        stop("'object_feature_file' doesn't exist.")
+    }
+    
+    if (!is.null(image_file)) {
+        
+        if (length(image_file) != 1 | !is.character(image_file)) {
+            stop("'image_file' must be a single string.")
+        }
+        
+        if (!dir.exists(file.path(path, image_file))) {
+            stop("'image_file' doesn't exist.")
+        }
+        
+    }
+    
+    if (!is.null(graph_file)) {
+        
+        if (length(graph_file) != 1 | !is.character(graph_file)) {
+            stop("'graph_file' must be a single string.")
+        }
+        
+        if (!dir.exists(file.path(path, graph_file))) {
+            stop("'graph_file' doesn't exist.")
+        }
+        
+    }
+    
+    # Check panel
+    if (!is.null(panel_file)) {
+        if (length(panel_file) != 1 | !is.character(panel_file)) {
+            stop("'panel_file' must be a single string.")
+        }
+        
+        if (file.exists(file.path(path, panel_file))) {
+            cur_panel <- vroom(file.path(path, panel), 
+                               progress = FALSE, 
+                               col_types = cols())
+        } else if (file.exists(panel_file)) {
+            cur_panel <- vroom(panel, 
+                               progress = FALSE, 
+                               col_types = cols())
+        } 
+        
+        if (exists("cur_panel")) {
+            
+            if (length(extract_metal_from) != 1 | !is.character(extract_metal_from)) {
+                stop("'extract_metal_from' must be a single string.")
+            }
+            
+            if (!extract_metal_from %in% colnames(cur_panel)) {
+                stop("'extract_metal_from' not in panel file.")
+            }
+        }
+    }
+    
+    # Check object files
+    cur_file <- vroom(file.path(path, object_file), n_max = 1, col_types = cols())
+    
+    if (is.null(intensities)) {
+        stop("'intensities' must be specified.")
+    }
+    
+    if (length(intensities) != 1 | !is.character(intensities)) {
+        stop("'intensities' must be a single string.")
+    }
+    
+    feature_count <- sum(str_count(colnames(cur_file), intensities))
+    
+    if (feature_count == 0) {
+        stop("No intensity features were read in. Please check the 'intensities' parameter.")
+    } else {
+        message(paste("Reading in", feature_count, "intensity features.")
+    }
+    
+    if (is.null(extract_imgid_from)) {
+        stop("'extract_imgid_from' must be specified.")
+    }
+    
+    if (length(extract_imgid_from) != 1 | !is.character(extract_imgid_from)) {
+        stop("'extract_imgid_from' must be a single string.")
+    }
+    
+    if (!extract_imgid_from %in% colnames(cur_file)) {
+        stop("'extract_imgid_from' not in 'object_file'.")
+    }
+    
+    if (is.null(extract_cellid_from)) {
+        stop("'extract_cellid_from' must be specified.")
+    }
+    
+    if (length(extract_cellid_from) != 1 | !is.character(extract_cellid_from)) {
+        stop("'extract_cellid_from' must be a single string.")
+    }
+    
+    if (!extract_cellid_from %in% colnames(cur_file)) {
+        stop("'extract_cellid_from' not in 'object_file'.")
+    }
+    
+    if (!is.null(extract_coords_from)) {
+        if (!all(extract_coords_from %in% colnames(cur_file))) {
+            stop("'extract_coords_from' not in 'object_file'.")
+        }
+    }
+    
+    if (!is.null(extract_cellmetadata_from)) {
+        if (!all(extract_cellmetadata_from %in% colnames(cur_file))) {
+            stop("'extract_coords_from' not in 'object_file'.")
+        }
+    }
+    
+    
+    # Check image files
+    if (length(scale_intensities) != 1) {
+        stop("'scale_intensities' needs to be of length 1.")
+    } else {
+        if (!is.logical(scale_intensities)) {
+            stop("'scale_intensities' needs to be logical.")
+        }
+    }
+    
+    if (scale_intensities & is.null(image_file)) {
+        stop("When scaling the summarized object intensities, ",
+        "please supply the 'image_file'.")
+    }
+    
+    if (!is.null(image_file)) {
+        cur_file <- vroom(file.path(path, image_file), n_max = 1, col_types = cols())
+        
+        if (!is.null(extract_imagemetadata_from)) {
+            if (!all(extract_imagemetadata_from %in% colnames(cur_file))) {
+                stop("'extract_imagemetadata_from' not in 'image_file'.")
+            }
+        }
+        
+        if (length(extract_scalingfactor_from) != 1 | !is.character(extract_scalingfactor_from)) {
+            stop("'extract_scalingfactor_from' must be a single string.")
+        }
+        
+        if (scale_intensities & !extract_scalingfactor_from %in% colnames(cur_file)) {
+            stop("'extract_scalingfactor_from' not in 'image_file'.")
+        }
+        
+    }
+    
+    # Check graph file
+    if (!is.null(graph_file)) {
+        cur_file <- vroom(file.path(path, graph_file), n_max = 1, col_types = cols())
+        
+        if (length(extract_graphimageid_from) != 1 | !is.character(extract_graphimageid_from)) {
+            stop("'extract_graphimageid_from' must be a single string.")
+        }
+        
+        if (!extract_graphimageid_from %in% colnames(cur_file))) {
+            stop("'extract_graphimageid_from' not in 'graph_file'.")
+        }
+        
+        if (!all(extract_graphcellids_from %in% colnames(cur_file))) {
+            stop("'extract_graphcellids_from' not in 'graph_file'.")
+        }
+        
+    }
+    
+}
