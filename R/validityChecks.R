@@ -65,14 +65,14 @@
     spot_not_ac <- cur_names[!(cur_names %in% cur_channels)]
     ac_not_spot <- cur_channels[!(cur_channels %in% cur_names)]
     if (verbose) {
-        message("Spotted channels: ", paste(cur_names, collapse = ", "))
-        message("")
-        message("Acquired channels: ", paste(cur_channels, collapse = ", "))
-        message("")
-        message("Channels spotted but not acquired: ", 
+        cat("Spotted channels: ", paste(cur_names, collapse = ", "))
+        cat("")
+        cat("Acquired channels: ", paste(cur_channels, collapse = ", "))
+        cat("")
+        cat("Channels spotted but not acquired: ", 
                 paste(spot_not_ac, collapse = ", "))
-        message("")
-        message("Channels acquired but not spotted: ",
+        cat("")
+        cat("Channels acquired but not spotted: ",
                 paste(ac_not_spot, collapse = ", "))
     }
     
@@ -378,6 +378,10 @@
         
         if (exists("cur_panel")) {
             
+            if (is.null(extract_metal_from)) {
+                stop("'extract_metal_from' must be specified.")
+            }
+            
             if (length(extract_metal_from) != 1 | !is.character(extract_metal_from)) {
                 stop("'extract_metal_from' must be a single string.")
             }
@@ -404,7 +408,7 @@
     if (feature_count == 0) {
         stop("No intensity features were read in. Please check the 'intensities' parameter.")
     } else {
-        message(paste("Reading in", feature_count, "intensity features."))
+        cat(paste("Reading in", feature_count, "intensity features."))
     }
     
     if (is.null(extract_imgid_from)) {
@@ -439,7 +443,7 @@
     
     if (!is.null(extract_cellmetadata_from)) {
         if (!all(extract_cellmetadata_from %in% colnames(cur_file))) {
-            stop("'extract_coords_from' not in 'object_file'.")
+            stop("'extract_cellmetadata_from' not in 'object_file'.")
         }
     }
     
@@ -481,12 +485,20 @@
     if (!is.null(graph_file)) {
         cur_file <- vroom(file.path(path, graph_file), n_max = 1, col_types = cols())
         
+        if (is.null(extract_graphimageid_from)) {
+            stop("'extract_graphimageid_from' must be specified.")
+        }
+        
         if (length(extract_graphimageid_from) != 1 | !is.character(extract_graphimageid_from)) {
             stop("'extract_graphimageid_from' must be a single string.")
         }
         
         if (!extract_graphimageid_from %in% colnames(cur_file)) {
             stop("'extract_graphimageid_from' not in 'graph_file'.")
+        }
+        
+        if (is.null(extract_graphcellids_from)) {
+            stop("'extract_graphcellids_from' must be specified.")
         }
         
         if (!all(extract_graphcellids_from %in% colnames(cur_file))) {

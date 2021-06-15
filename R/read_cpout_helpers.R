@@ -31,9 +31,9 @@
             cells %>% mutate(across(contains(intensities), function(x){x * s_factor}))
         }, cur_counts, as.list(scaling_factor[[extract_scalingfactor_from]]), 
         SIMPLIFY = FALSE)
+        
+        cur_counts <- do.call(rbind, cur_counts)
     }
-    
-    cur_counts <- do.call(rbind, cur_counts)
     
     # Order channels 
     cur_channels <- colnames(cur_counts)[grepl(intensities, colnames(cur_counts))]
@@ -53,16 +53,22 @@
     
     # Build colData
     if (return_as == "spe") {
-        spatialCoords(object) <- matrix(c(cur_counts[[extract_coords_from[1]]],
-                                       cur_counts[[extract_coords_from[2]]]),
-                                     ncol = 2, byrow = FALSE,
-                                     dimnames = list(as.character(object$ObjectNumber),
-                                                     c("Pos_X", "Pos_Y")))
+        if (!is.null(extract_coords_from)) {
+            spatialCoords(object) <- matrix(c(cur_counts[[extract_coords_from[1]]],
+                                              cur_counts[[extract_coords_from[2]]]),
+                                            ncol = 2, byrow = FALSE,
+                                            dimnames = list(as.character(object$ObjectNumber),
+                                                            c("Pos_X", "Pos_Y")))
+        }
+        
         colData(object) <- cbind(colData(object),
                                  cur_counts[,extract_cellmetadata_from])
     } else {
-        object$Pos_X <- cur_counts[[extract_coords_from[1]]]
-        object$Pos_Y <- cur_counts[[extract_coords_from[2]]]
+        if (!is.null(extract_coords_from)) {
+            object$Pos_X <- cur_counts[[extract_coords_from[1]]]
+            object$Pos_Y <- cur_counts[[extract_coords_from[2]]]
+        }
+
         colData(object) <- cbind(colData(object),
                                  cur_counts[,extract_cellmetadata_from])
     }
