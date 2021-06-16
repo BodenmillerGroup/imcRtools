@@ -412,9 +412,23 @@ test_that("read_cpout function works.", {
     
     cur_spe <- read_cpout(path, extract_coords_from = NULL)
     
+    expect_equal(length(spatialCoordsNames(cur_spe)), 0)
+    
+    cur_sce <- read_cpout(path, extract_coords_from = NULL, return_as = "sce")   
+    
+    expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectNumber", "Neighbors_NumberOfNeighbors_8",
+                                            "Metadata_acname", "Metadata_acid", "Metadata_description"))
+    
     cur_spe <- read_cpout(path, extract_cellmetadata_from = NULL)
     
+    expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber",
+                                            "Metadata_acname", "Metadata_acid", "Metadata_description"))
+    
     cur_spe <- read_cpout(path, extract_imagemetadata_from = NULL)
+    
+    expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "Neighbors_NumberOfNeighbors_8"))
+    
+    # Fail
     
     
 })
