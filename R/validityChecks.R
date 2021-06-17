@@ -267,7 +267,7 @@
     # Check panel
     if (!is.null(panel)) {
         if (length(panel) != 1 | !is.character(panel)) {
-            stop("'panel' must be a single string.")
+            stop("'panel_file' must be a single string.")
         }
         
         if (file.exists(file.path(path, panel))) {
@@ -407,6 +407,14 @@
     
     if (feature_count == 0) {
         stop("No intensity features were read in. Please check the 'intensities' parameter.")
+    }
+    
+    cur_features <- cur_file %>% select(contains(intensities))
+    cur_channels <- str_extract(colnames(cur_features), "c[0-9]*$")
+    cur_channels <- as.numeric(table(cur_channels))
+    
+    if (any(cur_channels > 1)) {
+        stop("Some of the features set via 'intensities' cannot be uniquely accessed.")
     }
     
     if (is.null(extract_imgid_from)) {

@@ -588,15 +588,15 @@ test_that("read_steinbock function works", {
                  fixed = TRUE)
     
     expect_warning(cur_spe <- read_steinbock(path, panel = "test"),
-                   "'panel' does not exist.", 
+                   "'panel_file' does not exist.", 
                    fixed = TRUE)
     
     expect_error(cur_spe <- read_steinbock(path, panel = c("test", "test2")),
-                 "'panel' must be a single string.", 
+                 "'panel_file' must be a single string.", 
                  fixed = TRUE)
     
     expect_error(cur_spe <- read_steinbock(path, panel = 1),
-                 "'panel' must be a single string.", 
+                 "'panel_file' must be a single string.", 
                  fixed = TRUE)
     
     expect_error(cur_spe <- read_steinbock(path, extract_names_from = "test"),

@@ -116,7 +116,7 @@
                                progress = FALSE, 
                                col_types = cols())
         } else {
-            warning("'panel' does not exist.")
+            warning("'panel_file' does not exist.")
             return(x)
         }
         

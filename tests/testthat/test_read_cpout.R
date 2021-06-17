@@ -429,6 +429,129 @@ test_that("read_cpout function works.", {
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "Neighbors_NumberOfNeighbors_8"))
     
     # Fail
+    expect_error(read_cpout("test"), 
+                 regexp = "'path' doesn't exist.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(1), 
+                 regexp = "'path' must be a single string.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(c("test", "test")), 
+                 regexp = "'path' must be a single string.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, object_file = NULL), 
+                 regexp = "'object_file' must be specified.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, object_file = "test"), 
+                 regexp = "'object_file' doesn't exist.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, object_file = 1), 
+                 regexp = "'object_file' must be a single string.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, object_file = c("test", "test")), 
+                 regexp = "'object_file' must be a single string.", 
+                 fixed = TRUE)
+
+    expect_error(read_cpout(path, object_feature_file = NULL), 
+                 regexp = "'object_feature_file' must be specified.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, object_feature_file = "test"), 
+                 regexp = "'object_feature_file' doesn't exist.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, object_feature_file = 1), 
+                 regexp = "'object_feature_file' must be a single string.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, object_feature_file = c("test", "test")), 
+                 regexp = "'object_feature_file' must be a single string.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, image_file = NULL), 
+                 regexp = "When scaling the summarized object intensities, please supply the 'image_file'.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, image_file = "test"), 
+                 regexp = "'image_file' doesn't exist.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, image_file = 1), 
+                 regexp = "'image_file' must be a single string.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, image_file = c("test", "test")), 
+                 regexp = "'image_file' must be a single string.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, graph_file = "test"), 
+                 regexp = "'graph_file' doesn't exist.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, graph_file = 1), 
+                 regexp = "'graph_file' must be a single string.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, graph_file = c("test", "test")), 
+                 regexp = "'graph_file' must be a single string.", 
+                 fixed = TRUE)
+    
+    expect_warning(read_cpout(path, panel_file = "test"), 
+                 regexp = "'panel_file' does not exist.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, panel_file = 1), 
+                 regexp = "'panel_file' must be a single string.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, panel_file = c("test", "test")), 
+                 regexp = "'panel_file' must be a single string.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, extract_metal_from = NULL), 
+                 regexp = "'extract_metal_from' must be specified.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, extract_metal_from = "test"), 
+                 regexp = "'extract_metal_from' not in panel file.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, extract_metal_from = 1), 
+                 regexp = "'extract_metal_from' must be a single string.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, extract_metal_from = c("test", "test")), 
+                 regexp = "'extract_metal_from' must be a single string.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, intensities =  NULL), 
+                 regexp = "'intensities' must be specified.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, intensities =  "test"), 
+                 regexp = "No intensity features were read in. Please check the 'intensities' parameter.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, intensities =  "MeanIntensity"), 
+                 regexp = "Some of the features set via 'intensities' cannot be uniquely accessed.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, intensities =  c("MeanIntensity", "MedianIntensity")), 
+                 regexp = "'intensities' must be a single string.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, intensities =  1), 
+                 regexp = "'intensities' must be a single string.", 
+                 fixed = TRUE)
+
+    
+    
+    
     
     
 })
