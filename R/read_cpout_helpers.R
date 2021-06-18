@@ -15,11 +15,13 @@
                                        all_of(c(extract_imgid_from,
                                                 extract_cellid_from,
                                                 extract_coords_from,
-                                                extract_cellmetadata_from))))
+                                                extract_cellmetadata_from))),
+                        show_col_types = FALSE)
 
     scaling_factor <- as.data.frame(vroom(file.path(path, image_file),
                             col_select = all_of(c(extract_imgid_from,
-                                                  extract_scalingfactor_from))))
+                                                  extract_scalingfactor_from)),
+                            show_col_types = FALSE))
     rownames(scaling_factor) <- as.character(scaling_factor[[extract_imgid_from]])
     
     # Scale counts
@@ -75,7 +77,8 @@
     
     # Set correct metal names
     cur_channels <- vroom(file.path(path, object_feature_file),
-                        col_select = c("channel", "channel_id"))
+                        col_select = c("channel", "channel_id"),
+                        show_col_types = FALSE)
     cur_channels <- unique(cur_channels)
     cur_channels <- cur_channels[grepl("[a-zA-Z]{1,2}[0-9]{2,3}", cur_channels[["channel_id"]]),]
     cur_channels <- cur_channels[order(cur_channels[["channel"]], decreasing = FALSE),]
@@ -92,7 +95,8 @@
     
     cur_img_meta <- vroom(file.path(path, image_file),
                         col_select = all_of(c(extract_imgid_from,
-                                                extract_imagemetadata_from)))
+                                                extract_imagemetadata_from)),
+                        show_col_types = FALSE)
     colData(object) <- as(merge(x = colData(object), y = cur_img_meta, 
                              by.x = "sample_id", by.y = extract_imgid_from, 
                              sort = FALSE), "DataFrame")
@@ -105,7 +109,8 @@
                              extract_graphcellids_from) {
     cur_graph <- vroom(file.path(path, graph_file), 
                        col_select = all_of(c(extract_graphimageid_from,
-                                             extract_graphcellids_from)))
+                                             extract_graphcellids_from)),
+                       show_col_types = FALSE)
     
     cur_graph$firstid <- paste0(cur_graph[[extract_graphimageid_from]], "_",
                                 cur_graph[[extract_graphcellids_from[1]]])
