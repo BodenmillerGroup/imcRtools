@@ -35,11 +35,8 @@ test_that("readSCEfromTXT function reads in correct objects.", {
     expect_equal(dim(cur_sce), c(4, 400))
     
     # Verbose output
-    cur_out <- capture_messages(cur_sce <- readSCEfromTXT(path))
-    expect_equal(cur_out, c("Spotted channels: Dy161, Dy162, Dy163, Dy164\n", "\n",                                             
-                 "Acquired channels: Dy161, Dy162, Dy163, Dy164\n", "\n",                                             
-                 "Channels spotted but not acquired: \n", "\n",                                             
-                 "Channels acquired but not spotted: \n"))
+    cur_out <- capture_output(cur_sce <- readSCEfromTXT(path))
+    expect_equal(cur_out, "Spotted channels:  Dy161, Dy162, Dy163, Dy164\nAcquired channels:  Dy161, Dy162, Dy163, Dy164\nChannels spotted but not acquired:  \nChannels acquired but not spotted:  ")
     
     # Other parameters
     expect_silent(cur_sce_2 <- readSCEfromTXT(path, pattern = "Dy162", verbose = FALSE))

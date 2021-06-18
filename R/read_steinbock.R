@@ -3,7 +3,7 @@
 #' @description Reader function to generate a
 #' \code{\linkS4class{SpatialExperiment}} or
 #' \code{\linkS4class{SingleCellExperiment}} object from single-cell data
-#' obtained by the [steinbock](https://github.com/BodenmillerGroup/steinbock)
+#' obtained by the \href{https://github.com/BodenmillerGroup/steinbock}{steinbock}
 #' pipeline.
 #'
 #' @param path full path to the steinbock output folder
@@ -19,7 +19,7 @@
 #' the intensity files contain the integer cell id.
 #' @param extract_coords_from character vector indicating which column entries 
 #' in the regionprops files contain the x and y coordinates.
-#' @param panel single character containing the name of the panel file. This can
+#' @param panel_file single character containing the name of the panel file. This can
 #' either be inside the steinbock path (recommended) or located somewhere else.
 #' @param extract_names_from single character indicating the column of the panel
 #' file containing the channel names.
@@ -32,7 +32,7 @@
 #' object markers in rows and cells in columns. 
 #'
 #' @section The returned data container:
-#' In the case of __both__ containers \code{x}, intensity features are stored in
+#' In the case of **both** containers \code{x}, intensity features are stored in
 #' the \code{counts(x)} slot. Morphological features are stored in the
 #' \code{colData(x)} slot. The graphs are stored as \code{\link[S4Vectors]{SelfHits}}
 #' in the \code{colPair(x, "neighbourhood")} slot.
@@ -68,11 +68,17 @@
 #' 
 #' @seealso 
 #' \url{https://github.com/BodenmillerGroup/steinbock} for the pipeline
+#' 
 #' \code{\link{read_cpout}} for reading in single-cell data as produced by the
 #' ImcSegmentationPipeline
+#' 
 #' \code{\link[SingleCellExperiment]{SingleCellExperiment}} and 
 #' \code{\link[SpatialExperiment]{SpatialExperiment}} for the constructor 
 #' functions.
+#' 
+#' \code{\link[SingleCellExperiment]{colPair}} for information on how to work
+#' with the cell-cell interaction graphs
+#' 
 #' \code{\link[BiocParallel]{bpparam}} for the parallelised backend
 #' 
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
@@ -86,14 +92,14 @@ read_steinbock <- function(path,
                            pattern = NULL,
                            extract_cellid_from = "Object",
                            extract_coords_from = c("centroid-0", "centroid-1"),
-                           panel = "panel.csv",
+                           panel_file = "panel.csv",
                            extract_names_from = "name",
                            return_as = c("spe", "sce"),
                            BPPARAM = SerialParam()){
     
     .valid.read_steinbock.input(path, intensities_folder, graphs_folder,
                                 regionprops_folder, extract_cellid_from, 
-                                extract_coords_from, panel, extract_names_from,
+                                extract_coords_from, panel_file, extract_names_from,
                                 pattern)
     
     return_as <- match.arg(return_as)
@@ -101,14 +107,14 @@ read_steinbock <- function(path,
     # Read intensities
     int_file_names <- list.files(file.path(path, intensities_folder),
                                  pattern = pattern, full.names = TRUE)
-    object <- .read_intensities(x = int_file_names,
+    object <- .steinbock_read_intensities(x = int_file_names,
                                      cell_id = extract_cellid_from,
                                      return_as = return_as,
                                      BPPARAM = BPPARAM)
     
     # Read regionprops
     if (!is.null(regionprops_folder)) {
-        object <- .read_regionprops(x = object,
+        object <- .steinbock_read_regionprops(x = object,
                                     cur_path = file.path(path, regionprops_folder),
                                     cell_id = extract_cellid_from, 
                                     coords = extract_coords_from,
@@ -118,7 +124,7 @@ read_steinbock <- function(path,
     
     # Read graphs
     if (!is.null(graphs_folder)) {
-        object <- .read_graphs(x = object,
+        object <- .steinbock_read_graphs(x = object,
                                cur_path = file.path(path, graphs_folder),
                                return_as = return_as,
                                BPPARAM = BPPARAM)
@@ -128,7 +134,7 @@ read_steinbock <- function(path,
     object <- do.call("cbind", object)
     
     # Add panel data
-    object <- .add_panel(object, path, panel, extract_names_from)
+    object <- .add_panel(object, path, panel_file, extract_names_from)
     
     return(object)
 }

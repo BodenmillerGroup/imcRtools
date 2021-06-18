@@ -12,7 +12,7 @@ test_that("read_steinbock function works", {
     expect_equal(dim(cur_spe), c(5, 348))
     expect_equal(names(rowData(cur_spe)), 
                  c("channel", "name", "keep", "ilastik", "Tube.Number"))
-    expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectId", "area", 
+    expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "area", 
                                             "major_axis_length", 
                                             "minor_axis_length", "eccentricity"))
     expect_equal(spatialCoordsNames(cur_spe), c("Pos_X", "Pos_Y"))
@@ -72,7 +72,7 @@ test_that("read_steinbock function works", {
     expect_equal(dim(cur_sce), c(5, 348))
     expect_equal(names(rowData(cur_sce)), 
                  c("channel", "name", "keep", "ilastik", "Tube.Number"))
-    expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectId", "Pos_X", "Pos_Y", "area", 
+    expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectNumber", "Pos_X", "Pos_Y", "area", 
                                             "major_axis_length", 
                                             "minor_axis_length", "eccentricity"))
     
@@ -129,7 +129,7 @@ test_that("read_steinbock function works", {
     expect_equal(dim(cur_spe), c(5, 348))
     expect_equal(names(rowData(cur_spe)), 
                  c("channel", "name", "keep", "ilastik", "Tube.Number"))
-    expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectId"))
+    expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber"))
     expect_null(spatialCoordsNames(cur_spe))
     
     cur_files <- list.files(file.path(path, "cell_intensities"), full.names = TRUE)
@@ -177,7 +177,7 @@ test_that("read_steinbock function works", {
     expect_equal(dim(cur_sce), c(5, 348))
     expect_equal(names(rowData(cur_sce)), 
                  c("channel", "name", "keep", "ilastik", "Tube.Number"))
-    expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectId"))
+    expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectNumber"))
     
     cur_files <- list.files(file.path(path, "cell_intensities"), full.names = TRUE)
     cur_counts <- lapply(cur_files, readr::read_csv)
@@ -225,7 +225,7 @@ test_that("read_steinbock function works", {
     expect_equal(dim(cur_spe), c(5, 348))
     expect_equal(names(rowData(cur_spe)), 
                  c("channel", "name", "keep", "ilastik", "Tube.Number"))
-    expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectId", "area", 
+    expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "area", 
                                             "major_axis_length", 
                                             "minor_axis_length", "eccentricity"))
     expect_equal(spatialCoordsNames(cur_spe), c("Pos_X", "Pos_Y"))
@@ -268,7 +268,7 @@ test_that("read_steinbock function works", {
     expect_equal(dim(cur_sce), c(5, 348))
     expect_equal(names(rowData(cur_sce)), 
                  c("channel", "name", "keep", "ilastik", "Tube.Number"))
-    expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectId", "Pos_X", "Pos_Y", "area", 
+    expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectNumber", "Pos_X", "Pos_Y", "area", 
                                             "major_axis_length", 
                                             "minor_axis_length", "eccentricity"))
     
@@ -308,7 +308,7 @@ test_that("read_steinbock function works", {
     expect_equal(dim(cur_spe), c(5, 348))
     expect_equal(names(rowData(cur_spe)), 
                  c("channel", "name", "keep", "ilastik", "Tube.Number"))
-    expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectId"))
+    expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber"))
     expect_null(spatialCoordsNames(cur_spe))
     
     cur_files <- list.files(file.path(path, "cell_intensities"), full.names = TRUE)
@@ -342,7 +342,7 @@ test_that("read_steinbock function works", {
     expect_equal(dim(cur_sce), c(5, 348))
     expect_equal(names(rowData(cur_sce)), 
                  c("channel", "name", "keep", "ilastik", "Tube.Number"))
-    expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectId"))
+    expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectNumber"))
     
     cur_files <- list.files(file.path(path, "cell_intensities"), full.names = TRUE)
     cur_counts <- lapply(cur_files, readr::read_csv)
@@ -375,7 +375,7 @@ test_that("read_steinbock function works", {
     expect_equal(dim(cur_spe), c(5, 57))
     expect_equal(names(rowData(cur_spe)), 
                  c("channel", "name", "keep", "ilastik", "Tube.Number"))
-    expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectId", "area", 
+    expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "area", 
                                             "major_axis_length", 
                                             "minor_axis_length", "eccentricity"))
     expect_equal(spatialCoordsNames(cur_spe), c("Pos_X", "Pos_Y"))
@@ -425,7 +425,7 @@ test_that("read_steinbock function works", {
     expect_equal(dim(cur_sce), c(5, 57))
     expect_equal(names(rowData(cur_sce)), 
                  c("channel", "name", "keep", "ilastik", "Tube.Number"))
-    expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectId", "Pos_X", "Pos_Y", "area", 
+    expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectNumber", "Pos_X", "Pos_Y", "area", 
                                             "major_axis_length", 
                                             "minor_axis_length", "eccentricity"))
     
@@ -474,7 +474,7 @@ test_that("read_steinbock function works", {
     
     cur_spe <- read_steinbock(path, extract_coords_from = c("area", "major_axis_length"))
     
-    expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectId", "centroid-0",
+    expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "centroid-0",
                                             "centroid-1", "minor_axis_length", "eccentricity"))
     expect_equal(spatialCoordsNames(cur_spe), c("Pos_X", "Pos_Y"))
     
@@ -491,7 +491,7 @@ test_that("read_steinbock function works", {
     
     cur_sce <- read_steinbock(path, return_as = "sce", extract_coords_from = c("area", "major_axis_length"))
     
-    expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectId", "Pos_X", "Pos_Y",
+    expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectNumber", "Pos_X", "Pos_Y",
                                             "centroid-0", "centroid-1", "minor_axis_length", 
                                             "eccentricity"))
     
@@ -588,15 +588,15 @@ test_that("read_steinbock function works", {
                  fixed = TRUE)
     
     expect_warning(cur_spe <- read_steinbock(path, panel = "test"),
-                   "'panel' does not exist.", 
+                   "'panel_file' does not exist.", 
                    fixed = TRUE)
     
     expect_error(cur_spe <- read_steinbock(path, panel = c("test", "test2")),
-                 "'panel' must be a single string.", 
+                 "'panel_file' must be a single string.", 
                  fixed = TRUE)
     
     expect_error(cur_spe <- read_steinbock(path, panel = 1),
-                 "'panel' must be a single string.", 
+                 "'panel_file' must be a single string.", 
                  fixed = TRUE)
     
     expect_error(cur_spe <- read_steinbock(path, extract_names_from = "test"),

@@ -34,3 +34,7 @@ Changes in version 0.3.5 (2021-05-20):
 Changes in version 0.3.6 (2021-06-04):
 
 + added read_steinbock function, docs and tests
+
+Changes in version 0.3.7 (2021-06-14):
+
++ added read_cpout function, docs and tests
