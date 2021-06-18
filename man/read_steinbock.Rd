@@ -59,12 +59,12 @@ object markers in rows and cells in columns.
 Reader function to generate a
 \code{\linkS4class{SpatialExperiment}} or
 \code{\linkS4class{SingleCellExperiment}} object from single-cell data
-obtained by the [steinbock](https://github.com/BodenmillerGroup/steinbock)
+obtained by the \href{https://github.com/BodenmillerGroup/steinbock}{steinbock}
 pipeline.
 }
 \section{The returned data container}{
 
-In the case of __both__ containers \code{x}, intensity features are stored in
+In the case of **both** containers \code{x}, intensity features are stored in
 the \code{counts(x)} slot. Morphological features are stored in the
 \code{colData(x)} slot. The graphs are stored as \code{\link[S4Vectors]{SelfHits}}
 in the \code{colPair(x, "neighbourhood")} slot.
@@ -102,11 +102,17 @@ x <- read_steinbock(path, BPPARAM = BiocParallel::bpparam())
 }
 \seealso{
 \url{https://github.com/BodenmillerGroup/steinbock} for the pipeline
+
 \code{\link{read_cpout}} for reading in single-cell data as produced by the
 ImcSegmentationPipeline
+
 \code{\link[SingleCellExperiment]{SingleCellExperiment}} and 
 \code{\link[SpatialExperiment]{SpatialExperiment}} for the constructor 
 functions.
+
+\code{\link[SingleCellExperiment]{colPair}} for information on how to work
+with the cell-cell interaction graphs
+
 \code{\link[BiocParallel]{bpparam}} for the parallelised backend
 }
 \author{

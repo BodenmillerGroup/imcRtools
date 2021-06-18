@@ -548,10 +548,101 @@ test_that("read_cpout function works.", {
     expect_error(read_cpout(path, intensities =  1), 
                  regexp = "'intensities' must be a single string.", 
                  fixed = TRUE)
+    
+    expect_error(read_cpout(path, extract_imgid_from = NULL), 
+                 regexp = "'extract_imgid_from' must be specified.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, extract_imgid_from = 1), 
+                 regexp = "'extract_imgid_from' must be a single string.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, extract_imgid_from = c("test", "test")), 
+                 regexp = "'extract_imgid_from' must be a single string.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, extract_imgid_from = "test"), 
+                 regexp = "'extract_imgid_from' not in 'object_file'.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, extract_cellid_from = NULL), 
+                 regexp = "'extract_cellid_from' must be specified.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, extract_cellid_from = 1), 
+                 regexp = "'extract_cellid_from' must be a single string.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, extract_cellid_from = c("test", "test")), 
+                 regexp = "'extract_cellid_from' must be a single string.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, extract_cellid_from = "test"), 
+                 regexp = "'extract_cellid_from' not in 'object_file'.", 
+                 fixed = TRUE)
 
+    expect_error(read_cpout(path, extract_coords_from = 1), 
+                 regexp = "'extract_coords_from' not in 'object_file'.", 
+                 fixed = TRUE)
     
+    expect_error(read_cpout(path, extract_coords_from = c("test1", "Location_X")), 
+                 regexp = "'extract_coords_from' not in 'object_file'.", 
+                 fixed = TRUE)
     
+    expect_error(read_cpout(path, extract_cellmetadata_from = 1), 
+                 regexp = "'extract_cellmetadata_from' not in 'object_file'.", 
+                 fixed = TRUE)
     
+    expect_error(read_cpout(path, extract_cellmetadata_from = c("test1", "Location_X")), 
+                 regexp = "'extract_cellmetadata_from' not in 'object_file'.", 
+                 fixed = TRUE)
     
+    expect_error(read_cpout(path, scale_intensities = NULL), 
+                 regexp = "'scale_intensities' needs to be logical.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, scale_intensities = c(1,2)), 
+                 regexp = "'scale_intensities' needs to be of length 1.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, scale_intensities = "test"), 
+                 regexp = "'scale_intensities' needs to be logical.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, image_file = NULL), 
+                 regexp = "When scaling the summarized object intensities, please supply the 'image_file'.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, extract_imagemetadata_from = "test"), 
+                 regexp = "'extract_imagemetadata_from' not in 'image_file'.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, extract_scalingfactor_from = c(1,2)), 
+                 regexp = "'extract_scalingfactor_from' must be a single string.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, extract_scalingfactor_from = "test"), 
+                 regexp = "'extract_scalingfactor_from' not in 'image_file'.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, extract_graphimageid_from = NULL), 
+                 regexp = "'extract_graphimageid_from' must be specified.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, extract_graphimageid_from = c(1,2)), 
+                 regexp = "'extract_graphimageid_from' must be a single string.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, extract_graphimageid_from = "test"), 
+                 regexp = "'extract_graphimageid_from' not in 'graph_file'.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, extract_graphcellids_from = NULL), 
+                 regexp = "'extract_graphcellids_from' must be specified.", 
+                 fixed = TRUE)
+    
+    expect_error(read_cpout(path, extract_graphcellids_from = c("test", "Second Object Number")), 
+                 regexp = "'extract_graphcellids_from' not in 'graph_file'.", 
+                 fixed = TRUE)
     
 })

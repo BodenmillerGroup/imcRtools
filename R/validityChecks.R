@@ -455,6 +455,10 @@
     
     
     # Check image files
+    if (is.null(scale_intensities)) {
+        stop("'scale_intensities' needs to be logical.")
+    }
+    
     if (length(scale_intensities) != 1) {
         stop("'scale_intensities' needs to be of length 1.")
     } else {

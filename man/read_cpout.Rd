@@ -30,7 +30,7 @@ read_cpout(
 \item{path}{full path to the CellProfiler output folder.}
 
 \item{object_file}{single character indicating the file name storing the
-object/cell specific intensities and metadata.}
+object/cell-specific intensities and metadata.}
 
 \item{image_file}{single character indicating the file name storing meta data
 per image (can be \code{NULL}).}
@@ -45,7 +45,7 @@ object/cell interaction information (can be \code{NULL}).}
 object/cell feature information.}
 
 \item{intensities}{single character indicating which column entries of the
-\code{object_file} contain the intensity features of interest.}
+\code{object_file} contain the intensity features of interest. See details.}
 
 \item{extract_imgid_from}{single character indicating which column entries of
 the \code{object_file} and \code{image_file} contain the image integer ID.}
@@ -96,17 +96,22 @@ object markers in rows and cells in columns.
 Reader function to generate a
 \code{\linkS4class{SpatialExperiment}} or
 \code{\linkS4class{SingleCellExperiment}} object from single-cell data
-obtained by the [ImcSegmentationPipeline](https://github.com/BodenmillerGroup/ImcSegmentationPipeline)
+obtained by the \href{https://github.com/BodenmillerGroup/ImcSegmentationPipeline}{ImcSegmentationPipeline}
 pipeline.
 }
 \section{The returned data container}{
 
-In the case of __both__ containers \code{x}, intensity features (as selected
+In the case of **both** containers \code{x}, intensity features (as selected
 by the \code{intensities} parameter) are stored in the \code{counts(x)} slot.
 Cell metadata (e.g morphological features) are stored in the
 \code{colData(x)} slot. The interaction graphs are stored as
 \code{\link[S4Vectors]{SelfHits}} in the \code{colPair(x, "neighbourhood")}
 slot.
+
+Intensity features are extracted via partial string matching. Internally, the 
+\code{read_cpout} function checks if per channel a single intensity feature
+is read in (by checking the \code{_cXY} ending where \code{XY} is the 
+channel number).
 
 In the case of a returned \code{SpatialExperiment} object, the cell coordinates
 are stored in the \code{spatialCoords(x)} slot.
@@ -127,6 +132,15 @@ x
 x <- read_cpout(path, return_as = "sce")
 x
 
+}
+\seealso{
+\url{https://github.com/BodenmillerGroup/ImcSegmentationPipeline} for the pipeline
+
+\code{\link{read_steinbock}} for reading in single-cell data as produced by the
+steinbock pipeline
+
+\code{\link[SingleCellExperiment]{colPair}} for information on how to work
+with the cell-cell interaction graphs
 }
 \author{
 Tobias Hoch
