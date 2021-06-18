@@ -43,7 +43,7 @@
 <meta property="og:description" content="Reader function to generate a
 SpatialExperiment or
 SingleCellExperiment object from single-cell data
-obtained by the [steinbock](https://github.com/BodenmillerGroup/steinbock)
+obtained by the steinbock
 pipeline." />
 
 
@@ -76,7 +76,7 @@ pipeline." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.7</span>
       </span>
     </div>
 
@@ -124,7 +124,7 @@ pipeline." />
     <p>Reader function to generate a
 <code>SpatialExperiment</code> or
 <code>SingleCellExperiment</code> object from single-cell data
-obtained by the [steinbock](https://github.com/BodenmillerGroup/steinbock)
+obtained by the <a href='https://github.com/BodenmillerGroup/steinbock'>steinbock</a>
 pipeline.</p>
     </div>
 
@@ -136,7 +136,7 @@ pipeline.</p>
   pattern <span class='op'>=</span> <span class='cn'>NULL</span>,
   extract_cellid_from <span class='op'>=</span> <span class='st'>"Object"</span>,
   extract_coords_from <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"centroid-0"</span>, <span class='st'>"centroid-1"</span><span class='op'>)</span>,
-  panel <span class='op'>=</span> <span class='st'>"panel.csv"</span>,
+  panel_file <span class='op'>=</span> <span class='st'>"panel.csv"</span>,
   extract_names_from <span class='op'>=</span> <span class='st'>"name"</span>,
   return_as <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"spe"</span>, <span class='st'>"sce"</span><span class='op'>)</span>,
   BPPARAM <span class='op'>=</span> <span class='fu'>SerialParam</span><span class='op'>(</span><span class='op'>)</span>
@@ -180,7 +180,7 @@ the intensity files contain the integer cell id.</p></td>
 in the regionprops files contain the x and y coordinates.</p></td>
     </tr>
     <tr>
-      <th>panel</th>
+      <th>panel_file</th>
       <td><p>single character containing the name of the panel file. This can
 either be inside the steinbock path (recommended) or located somewhere else.</p></td>
     </tr>
@@ -209,7 +209,7 @@ object markers in rows and cells in columns.</p>
 
     
 
-<p>In the case of __both__ containers <code>x</code>, intensity features are stored in
+<p>In the case of **both** containers <code>x</code>, intensity features are stored in
 the <code>counts(x)</code> slot. Morphological features are stored in the
 <code>colData(x)</code> slot. The graphs are stored as <code><a href='https://rdrr.io/pkg/S4Vectors/man/Hits-class.html'>SelfHits</a></code>
 in the <code>colPair(x, "neighbourhood")</code> slot.</p>
@@ -220,13 +220,15 @@ coordinates are stored in the <code>colData(x)</code> slot named as <code>Pos_X<
 and <code>Pos_Y</code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='https://github.com/BodenmillerGroup/steinbock'>https://github.com/BodenmillerGroup/steinbock</a> for the pipeline
-<code><a href='read_cpout.html'>read_cpout</a></code> for reading in single-cell data as produced by the
-ImcSegmentationPipeline
-<code><a href='https://rdrr.io/pkg/SingleCellExperiment/man/SingleCellExperiment.html'>SingleCellExperiment</a></code> and 
+    <div class='dont-index'><p><a href='https://github.com/BodenmillerGroup/steinbock'>https://github.com/BodenmillerGroup/steinbock</a> for the pipeline</p>
+<p><code><a href='read_cpout.html'>read_cpout</a></code> for reading in single-cell data as produced by the
+ImcSegmentationPipeline</p>
+<p><code><a href='https://rdrr.io/pkg/SingleCellExperiment/man/SingleCellExperiment.html'>SingleCellExperiment</a></code> and 
 <code><a href='https://rdrr.io/pkg/SpatialExperiment/man/SpatialExperiment.html'>SpatialExperiment</a></code> for the constructor 
-functions.
-<code><a href='https://rdrr.io/pkg/BiocParallel/man/register.html'>bpparam</a></code> for the parallelised backend</p></div>
+functions.</p>
+<p><code><a href='https://rdrr.io/pkg/SingleCellExperiment/man/colPairs.html'>colPair</a></code> for information on how to work
+with the cell-cell interaction graphs</p>
+<p><code><a href='https://rdrr.io/pkg/BiocParallel/man/register.html'>bpparam</a></code> for the parallelised backend</p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Nils Eling (<a href='mailto:nils.eling@dqbm.uzh.ch'>nils.eling@dqbm.uzh.ch</a>)</p>
@@ -244,7 +246,8 @@ functions.
 #&gt; rownames(5): Ag107 Cytokeratin 5 Laminin YBX1 H3K27Ac
 #&gt; rowData names(5): channel name keep ilastik Tube.Number
 #&gt; colnames: NULL
-#&gt; colData names(6): sample_id ObjectId ... minor_axis_length eccentricity
+#&gt; colData names(6): sample_id ObjectNumber ... minor_axis_length
+#&gt;   eccentricity
 #&gt; reducedDimNames(0):
 #&gt; mainExpName: NULL
 #&gt; altExpNames(0):
@@ -261,7 +264,8 @@ functions.
 #&gt; rownames(5): Ag107 Cytokeratin 5 Laminin YBX1 H3K27Ac
 #&gt; rowData names(5): channel name keep ilastik Tube.Number
 #&gt; colnames: NULL
-#&gt; colData names(8): sample_id ObjectId ... minor_axis_length eccentricity
+#&gt; colData names(8): sample_id ObjectNumber ... minor_axis_length
+#&gt;   eccentricity
 #&gt; reducedDimNames(0):
 #&gt; mainExpName: NULL
 #&gt; altExpNames(0):</div><div class='input'>
@@ -275,7 +279,8 @@ functions.
 #&gt; rownames(5): Ag107 Cytokeratin 5 Laminin YBX1 H3K27Ac
 #&gt; rowData names(5): channel name keep ilastik Tube.Number
 #&gt; colnames: NULL
-#&gt; colData names(6): sample_id ObjectId ... minor_axis_length eccentricity
+#&gt; colData names(6): sample_id ObjectNumber ... minor_axis_length
+#&gt;   eccentricity
 #&gt; reducedDimNames(0):
 #&gt; mainExpName: NULL
 #&gt; altExpNames(0):
@@ -292,7 +297,7 @@ functions.
 #&gt; rownames(5): Ag107 Cytokeratin 5 Laminin YBX1 H3K27Ac
 #&gt; rowData names(5): channel name keep ilastik Tube.Number
 #&gt; colnames: NULL
-#&gt; colData names(2): sample_id ObjectId
+#&gt; colData names(2): sample_id ObjectNumber
 #&gt; reducedDimNames(0):
 #&gt; mainExpName: NULL
 #&gt; altExpNames(0):
