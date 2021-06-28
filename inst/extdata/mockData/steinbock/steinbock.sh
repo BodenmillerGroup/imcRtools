@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 base_dir=$(cd -- "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)
-steinbock="docker run -v ${base_dir}:/data -v /tmp/.X11-unix:/tmp/.X11-unix -v ${HOME}/.Xauthority:/home/steinbock/.Xauthority:ro -e DISPLAY jwindhager/steinbock:0.5.3"
+steinbock="docker run -v ${base_dir}:/data -v /tmp/.X11-unix:/tmp/.X11-unix -v ${HOME}/.Xauthority:/home/steinbock/.Xauthority:ro -e DISPLAY jwindhager/steinbock:0.5.4"
 
 cd "${base_dir}"
 
@@ -12,7 +12,7 @@ $steinbock preprocess imc images --hpf 50
 
 $steinbock classify ilastik prepare --cropsize 50 --seed 123
 cp ../ilastik.ilp pixel_classifier.ilp
-rm -r ilastik_crops && cp -r ../analysis/ilastik ilastik_crops
+rm -r ilastik_crops && mkdir ilastik_crops && cp -r ../analysis/ilastik/*.h5 ilastik_crops
 $steinbock classify ilastik fix --no-backup
 $steinbock classify ilastik run
 

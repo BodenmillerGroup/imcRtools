@@ -11,21 +11,22 @@ test_that("read_steinbock function works", {
     expect_equal(assayNames(cur_spe), "counts")
     expect_equal(dim(cur_spe), c(5, 348))
     expect_equal(names(rowData(cur_spe)), 
-                 c("channel", "name", "keep", "ilastik", "Tube.Number"))
+                 c("channel", "name", "keep", "ilastik", "deepcell", "Tube.Number"))
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "area", 
                                             "major_axis_length", 
                                             "minor_axis_length", "eccentricity"))
     expect_equal(spatialCoordsNames(cur_spe), c("Pos_X", "Pos_Y"))
     
-    cur_files <- list.files(file.path(path, "cell_intensities"), full.names = TRUE)
+    cur_files <- list.files(file.path(path, "intensities"), full.names = TRUE)
     cur_counts <- lapply(cur_files, readr::read_csv)
     cur_counts <- do.call("rbind", cur_counts)
     
     expect_equal(counts(cur_spe), t(cur_counts[,-1]))
     expect_equal(counts(cur_spe)[1:10], c(0.19277269, 0.10526316, 0.10526316, 0.33692434, 0.53972906,
-                                          0.05992229, 0.05633803, 0.04225352, 0.09859155, 0.72663587))
+                                          0.05992229, 0.05633803, 0.04225352, 0.09859155, 0.72663587), 
+                 tolerance = 10e-6)
     
-    cur_files <- list.files(file.path(path, "cell_regionprops"), full.names = TRUE)
+    cur_files <- list.files(file.path(path, "regionprops"), full.names = TRUE)
     cur_morph <- lapply(cur_files, readr::read_csv)
     cur_morph <- do.call("rbind", cur_morph)
     
@@ -40,13 +41,14 @@ test_that("read_steinbock function works", {
     expect_equal(rowData(cur_spe)$name, cur_panel$name)
     expect_equal(rowData(cur_spe)$channel, cur_panel$channel)
     expect_equal(rowData(cur_spe)$keep, cur_panel$keep)
+    expect_equal(rowData(cur_spe)$deepcell, cur_panel$deepcell)
     expect_equal(rowData(cur_spe)$ilastik, cur_panel$ilastik)
     expect_equal(rowData(cur_spe)$Tube.Number, cur_panel$`Tube Number`)
     
     expect_equal(colPairNames(cur_spe), "neighbourhood")
     
     expect_silent(cur_graphs <- colPair(cur_spe, "neighbourhood"))
-    cur_test <- readr::read_csv(file.path(path, "cell_graphs", "20210305_NE_mockData1_3.csv"))
+    cur_test <- readr::read_csv(file.path(path, "graphs", "20210305_NE_mockData1_3.csv"))
     
     expect_equal(cur_test$Object1 + sum(cur_spe$sample_id %in% c("20210305_NE_mockData1_1", "20210305_NE_mockData1_2")), 
                  from(cur_graphs)[from(cur_graphs) %in% which(cur_spe$sample_id == "20210305_NE_mockData1_3")])
@@ -54,7 +56,7 @@ test_that("read_steinbock function works", {
                  to(cur_graphs)[to(cur_graphs) %in% which(cur_spe$sample_id == "20210305_NE_mockData1_3")])
     
     expect_silent(cur_graphs <- colPair(cur_spe, "neighbourhood"))
-    cur_test <- readr::read_csv(file.path(path, "cell_graphs", "20210305_NE_mockData2_1.csv"))
+    cur_test <- readr::read_csv(file.path(path, "graphs", "20210305_NE_mockData2_1.csv"))
     
     expect_equal(cur_test$Object1 + sum(cur_spe$sample_id %in% c("20210305_NE_mockData1_1", "20210305_NE_mockData1_2", "20210305_NE_mockData1_3")), 
                  from(cur_graphs)[from(cur_graphs) %in% which(cur_spe$sample_id == "20210305_NE_mockData2_1")])
@@ -71,20 +73,21 @@ test_that("read_steinbock function works", {
     expect_equal(assayNames(cur_sce), "counts")
     expect_equal(dim(cur_sce), c(5, 348))
     expect_equal(names(rowData(cur_sce)), 
-                 c("channel", "name", "keep", "ilastik", "Tube.Number"))
+                 c("channel", "name", "keep", "ilastik", "deepcell", "Tube.Number"))
     expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectNumber", "Pos_X", "Pos_Y", "area", 
                                             "major_axis_length", 
                                             "minor_axis_length", "eccentricity"))
     
-    cur_files <- list.files(file.path(path, "cell_intensities"), full.names = TRUE)
+    cur_files <- list.files(file.path(path, "intensities"), full.names = TRUE)
     cur_counts <- lapply(cur_files, readr::read_csv)
     cur_counts <- do.call("rbind", cur_counts)
     
     expect_equal(counts(cur_sce), t(cur_counts[,-1]))
     expect_equal(counts(cur_sce)[1:10], c(0.19277269, 0.10526316, 0.10526316, 0.33692434, 0.53972906,
-                                          0.05992229, 0.05633803, 0.04225352, 0.09859155, 0.72663587))
+                                          0.05992229, 0.05633803, 0.04225352, 0.09859155, 0.72663587), 
+                 tolerance = 10e-6)
     
-    cur_files <- list.files(file.path(path, "cell_regionprops"), full.names = TRUE)
+    cur_files <- list.files(file.path(path, "regionprops"), full.names = TRUE)
     cur_morph <- lapply(cur_files, readr::read_csv)
     cur_morph <- do.call("rbind", cur_morph)
     
@@ -100,12 +103,13 @@ test_that("read_steinbock function works", {
     expect_equal(rowData(cur_sce)$channel, cur_panel$channel)
     expect_equal(rowData(cur_sce)$keep, cur_panel$keep)
     expect_equal(rowData(cur_sce)$ilastik, cur_panel$ilastik)
+    expect_equal(rowData(cur_sce)$deepcell, cur_panel$deepcell)    
     expect_equal(rowData(cur_sce)$Tube.Number, cur_panel$`Tube Number`)
     
     expect_equal(colPairNames(cur_sce), "neighbourhood")
     
     expect_silent(cur_graphs <- colPair(cur_sce, "neighbourhood"))
-    cur_test <- readr::read_csv(file.path(path, "cell_graphs", "20210305_NE_mockData1_3.csv"))
+    cur_test <- readr::read_csv(file.path(path, "graphs", "20210305_NE_mockData1_3.csv"))
     
     expect_equal(cur_test$Object1 + sum(cur_sce$sample_id %in% c("20210305_NE_mockData1_1", "20210305_NE_mockData1_2")), 
                  from(cur_graphs)[from(cur_graphs) %in% which(cur_sce$sample_id == "20210305_NE_mockData1_3")])
@@ -113,7 +117,7 @@ test_that("read_steinbock function works", {
                  to(cur_graphs)[to(cur_graphs) %in% which(cur_sce$sample_id == "20210305_NE_mockData1_3")])
     
     expect_silent(cur_graphs <- colPair(cur_sce, "neighbourhood"))
-    cur_test <- readr::read_csv(file.path(path, "cell_graphs", "20210305_NE_mockData2_1.csv"))
+    cur_test <- readr::read_csv(file.path(path, "graphs", "20210305_NE_mockData2_1.csv"))
     
     expect_equal(cur_test$Object1 + sum(cur_sce$sample_id %in% c("20210305_NE_mockData1_1", "20210305_NE_mockData1_2", "20210305_NE_mockData1_3")), 
                  from(cur_graphs)[from(cur_graphs) %in% which(cur_sce$sample_id == "20210305_NE_mockData2_1")])
@@ -128,19 +132,20 @@ test_that("read_steinbock function works", {
     expect_equal(assayNames(cur_spe), "counts")
     expect_equal(dim(cur_spe), c(5, 348))
     expect_equal(names(rowData(cur_spe)), 
-                 c("channel", "name", "keep", "ilastik", "Tube.Number"))
+                 c("channel", "name", "keep", "ilastik", "deepcell", "Tube.Number"))
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber"))
     expect_null(spatialCoordsNames(cur_spe))
     
-    cur_files <- list.files(file.path(path, "cell_intensities"), full.names = TRUE)
+    cur_files <- list.files(file.path(path, "intensities"), full.names = TRUE)
     cur_counts <- lapply(cur_files, readr::read_csv)
     cur_counts <- do.call("rbind", cur_counts)
     
     expect_equal(counts(cur_spe), t(cur_counts[,-1]))
     expect_equal(counts(cur_spe)[1:10], c(0.19277269, 0.10526316, 0.10526316, 0.33692434, 0.53972906,
-                                          0.05992229, 0.05633803, 0.04225352, 0.09859155, 0.72663587))
+                                          0.05992229, 0.05633803, 0.04225352, 0.09859155, 0.72663587), 
+                 tolerance = 10e-6)
     
-    cur_files <- list.files(file.path(path, "cell_regionprops"), full.names = TRUE)
+    cur_files <- list.files(file.path(path, "regionprops"), full.names = TRUE)
     cur_morph <- lapply(cur_files, readr::read_csv)
     cur_morph <- do.call("rbind", cur_morph)
     
@@ -149,12 +154,13 @@ test_that("read_steinbock function works", {
     expect_equal(rowData(cur_spe)$channel, cur_panel$channel)
     expect_equal(rowData(cur_spe)$keep, cur_panel$keep)
     expect_equal(rowData(cur_spe)$ilastik, cur_panel$ilastik)
+    expect_equal(rowData(cur_spe)$deepcell, cur_panel$deepcell)
     expect_equal(rowData(cur_spe)$Tube.Number, cur_panel$`Tube Number`)
     
     expect_equal(colPairNames(cur_sce), "neighbourhood")
     
     expect_silent(cur_graphs <- colPair(cur_spe, "neighbourhood"))
-    cur_test <- readr::read_csv(file.path(path, "cell_graphs", "20210305_NE_mockData1_3.csv"))
+    cur_test <- readr::read_csv(file.path(path, "graphs", "20210305_NE_mockData1_3.csv"))
     
     expect_equal(cur_test$Object1 + sum(cur_spe$sample_id %in% c("20210305_NE_mockData1_1", "20210305_NE_mockData1_2")), 
                  from(cur_graphs)[from(cur_graphs) %in% which(cur_spe$sample_id == "20210305_NE_mockData1_3")])
@@ -162,7 +168,7 @@ test_that("read_steinbock function works", {
                  to(cur_graphs)[to(cur_graphs) %in% which(cur_spe$sample_id == "20210305_NE_mockData1_3")])
     
     expect_silent(cur_graphs <- colPair(cur_spe, "neighbourhood"))
-    cur_test <- readr::read_csv(file.path(path, "cell_graphs", "20210305_NE_mockData2_1.csv"))
+    cur_test <- readr::read_csv(file.path(path, "graphs", "20210305_NE_mockData2_1.csv"))
     
     expect_equal(cur_test$Object1 + sum(cur_spe$sample_id %in% c("20210305_NE_mockData1_1", "20210305_NE_mockData1_2", "20210305_NE_mockData1_3")), 
                  from(cur_graphs)[from(cur_graphs) %in% which(cur_spe$sample_id == "20210305_NE_mockData2_1")])
@@ -176,18 +182,19 @@ test_that("read_steinbock function works", {
     expect_equal(assayNames(cur_sce), "counts")
     expect_equal(dim(cur_sce), c(5, 348))
     expect_equal(names(rowData(cur_sce)), 
-                 c("channel", "name", "keep", "ilastik", "Tube.Number"))
+                 c("channel", "name", "keep", "ilastik", "deepcell", "Tube.Number"))
     expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectNumber"))
     
-    cur_files <- list.files(file.path(path, "cell_intensities"), full.names = TRUE)
+    cur_files <- list.files(file.path(path, "intensities"), full.names = TRUE)
     cur_counts <- lapply(cur_files, readr::read_csv)
     cur_counts <- do.call("rbind", cur_counts)
     
     expect_equal(counts(cur_sce), t(cur_counts[,-1]))
     expect_equal(counts(cur_sce)[1:10], c(0.19277269, 0.10526316, 0.10526316, 0.33692434, 0.53972906,
-                                          0.05992229, 0.05633803, 0.04225352, 0.09859155, 0.72663587))
+                                          0.05992229, 0.05633803, 0.04225352, 0.09859155, 0.72663587), 
+                 tolerance = 10e-6)
     
-    cur_files <- list.files(file.path(path, "cell_regionprops"), full.names = TRUE)
+    cur_files <- list.files(file.path(path, "regionprops"), full.names = TRUE)
     cur_morph <- lapply(cur_files, readr::read_csv)
     cur_morph <- do.call("rbind", cur_morph)
     
@@ -196,12 +203,13 @@ test_that("read_steinbock function works", {
     expect_equal(rowData(cur_sce)$channel, cur_panel$channel)
     expect_equal(rowData(cur_sce)$keep, cur_panel$keep)
     expect_equal(rowData(cur_sce)$ilastik, cur_panel$ilastik)
+    expect_equal(rowData(cur_sce)$deepcell, cur_panel$deepcell)
     expect_equal(rowData(cur_sce)$Tube.Number, cur_panel$`Tube Number`)
     
     expect_equal(colPairNames(cur_sce), "neighbourhood")
     
     expect_silent(cur_graphs <- colPair(cur_sce, "neighbourhood"))
-    cur_test <- readr::read_csv(file.path(path, "cell_graphs", "20210305_NE_mockData1_3.csv"))
+    cur_test <- readr::read_csv(file.path(path, "graphs", "20210305_NE_mockData1_3.csv"))
     
     expect_equal(cur_test$Object1 + sum(cur_sce$sample_id %in% c("20210305_NE_mockData1_1", "20210305_NE_mockData1_2")), 
                  from(cur_graphs)[from(cur_graphs) %in% which(cur_sce$sample_id == "20210305_NE_mockData1_3")])
@@ -209,7 +217,7 @@ test_that("read_steinbock function works", {
                  to(cur_graphs)[to(cur_graphs) %in% which(cur_sce$sample_id == "20210305_NE_mockData1_3")])
     
     expect_silent(cur_graphs <- colPair(cur_sce, "neighbourhood"))
-    cur_test <- readr::read_csv(file.path(path, "cell_graphs", "20210305_NE_mockData2_1.csv"))
+    cur_test <- readr::read_csv(file.path(path, "graphs", "20210305_NE_mockData2_1.csv"))
     
     expect_equal(cur_test$Object1 + sum(cur_sce$sample_id %in% c("20210305_NE_mockData1_1", "20210305_NE_mockData1_2", "20210305_NE_mockData1_3")), 
                  from(cur_graphs)[from(cur_graphs) %in% which(cur_sce$sample_id == "20210305_NE_mockData2_1")])
@@ -224,21 +232,22 @@ test_that("read_steinbock function works", {
     expect_equal(assayNames(cur_spe), "counts")
     expect_equal(dim(cur_spe), c(5, 348))
     expect_equal(names(rowData(cur_spe)), 
-                 c("channel", "name", "keep", "ilastik", "Tube.Number"))
+                 c("channel", "name", "keep", "ilastik", "deepcell", "Tube.Number"))
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "area", 
                                             "major_axis_length", 
                                             "minor_axis_length", "eccentricity"))
     expect_equal(spatialCoordsNames(cur_spe), c("Pos_X", "Pos_Y"))
     
-    cur_files <- list.files(file.path(path, "cell_intensities"), full.names = TRUE)
+    cur_files <- list.files(file.path(path, "intensities"), full.names = TRUE)
     cur_counts <- lapply(cur_files, readr::read_csv)
     cur_counts <- do.call("rbind", cur_counts)
     
     expect_equal(counts(cur_spe), t(cur_counts[,-1]))
     expect_equal(counts(cur_spe)[1:10], c(0.19277269, 0.10526316, 0.10526316, 0.33692434, 0.53972906,
-                                          0.05992229, 0.05633803, 0.04225352, 0.09859155, 0.72663587))
+                                          0.05992229, 0.05633803, 0.04225352, 0.09859155, 0.72663587), 
+                 tolerance = 10e-6)
     
-    cur_files <- list.files(file.path(path, "cell_regionprops"), full.names = TRUE)
+    cur_files <- list.files(file.path(path, "regionprops"), full.names = TRUE)
     cur_morph <- lapply(cur_files, readr::read_csv)
     cur_morph <- do.call("rbind", cur_morph)
     
@@ -253,6 +262,7 @@ test_that("read_steinbock function works", {
     expect_equal(rowData(cur_spe)$name, cur_panel$name)
     expect_equal(rowData(cur_spe)$channel, cur_panel$channel)
     expect_equal(rowData(cur_spe)$keep, cur_panel$keep)
+    expect_equal(rowData(cur_spe)$deepcell, cur_panel$deepcell)
     expect_equal(rowData(cur_spe)$ilastik, cur_panel$ilastik)
     expect_equal(rowData(cur_spe)$Tube.Number, cur_panel$`Tube Number`)
     
@@ -267,20 +277,21 @@ test_that("read_steinbock function works", {
     expect_equal(assayNames(cur_sce), "counts")
     expect_equal(dim(cur_sce), c(5, 348))
     expect_equal(names(rowData(cur_sce)), 
-                 c("channel", "name", "keep", "ilastik", "Tube.Number"))
+                 c("channel", "name", "keep", "ilastik", "deepcell", "Tube.Number"))
     expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectNumber", "Pos_X", "Pos_Y", "area", 
                                             "major_axis_length", 
                                             "minor_axis_length", "eccentricity"))
     
-    cur_files <- list.files(file.path(path, "cell_intensities"), full.names = TRUE)
+    cur_files <- list.files(file.path(path, "intensities"), full.names = TRUE)
     cur_counts <- lapply(cur_files, readr::read_csv)
     cur_counts <- do.call("rbind", cur_counts)
     
     expect_equal(counts(cur_sce), t(cur_counts[,-1]))
     expect_equal(counts(cur_sce)[1:10], c(0.19277269, 0.10526316, 0.10526316, 0.33692434, 0.53972906,
-                                          0.05992229, 0.05633803, 0.04225352, 0.09859155, 0.72663587))
+                                          0.05992229, 0.05633803, 0.04225352, 0.09859155, 0.72663587),
+                 tolerance = 10e-6)
     
-    cur_files <- list.files(file.path(path, "cell_regionprops"), full.names = TRUE)
+    cur_files <- list.files(file.path(path, "regionprops"), full.names = TRUE)
     cur_morph <- lapply(cur_files, readr::read_csv)
     cur_morph <- do.call("rbind", cur_morph)
     
@@ -295,6 +306,7 @@ test_that("read_steinbock function works", {
     expect_equal(rowData(cur_sce)$name, cur_panel$name)
     expect_equal(rowData(cur_sce)$channel, cur_panel$channel)
     expect_equal(rowData(cur_sce)$keep, cur_panel$keep)
+    expect_equal(rowData(cur_sce)$deepcell, cur_panel$deepcell)
     expect_equal(rowData(cur_sce)$ilastik, cur_panel$ilastik)
     expect_equal(rowData(cur_sce)$Tube.Number, cur_panel$`Tube Number`)
     
@@ -307,19 +319,20 @@ test_that("read_steinbock function works", {
     expect_equal(assayNames(cur_spe), "counts")
     expect_equal(dim(cur_spe), c(5, 348))
     expect_equal(names(rowData(cur_spe)), 
-                 c("channel", "name", "keep", "ilastik", "Tube.Number"))
+                 c("channel", "name", "keep", "ilastik", "deepcell", "Tube.Number"))
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber"))
     expect_null(spatialCoordsNames(cur_spe))
     
-    cur_files <- list.files(file.path(path, "cell_intensities"), full.names = TRUE)
+    cur_files <- list.files(file.path(path, "intensities"), full.names = TRUE)
     cur_counts <- lapply(cur_files, readr::read_csv)
     cur_counts <- do.call("rbind", cur_counts)
     
     expect_equal(counts(cur_spe), t(cur_counts[,-1]))
     expect_equal(counts(cur_spe)[1:10], c(0.19277269, 0.10526316, 0.10526316, 0.33692434, 0.53972906,
-                                          0.05992229, 0.05633803, 0.04225352, 0.09859155, 0.72663587))
+                                          0.05992229, 0.05633803, 0.04225352, 0.09859155, 0.72663587),
+                 tolerance = 10e-6)
     
-    cur_files <- list.files(file.path(path, "cell_regionprops"), full.names = TRUE)
+    cur_files <- list.files(file.path(path, "regionprops"), full.names = TRUE)
     cur_morph <- lapply(cur_files, readr::read_csv)
     cur_morph <- do.call("rbind", cur_morph)
     
@@ -327,6 +340,7 @@ test_that("read_steinbock function works", {
     expect_equal(rowData(cur_spe)$name, cur_panel$name)
     expect_equal(rowData(cur_spe)$channel, cur_panel$channel)
     expect_equal(rowData(cur_spe)$keep, cur_panel$keep)
+    expect_equal(rowData(cur_spe)$deepcell, cur_panel$deepcell)
     expect_equal(rowData(cur_spe)$ilastik, cur_panel$ilastik)
     expect_equal(rowData(cur_spe)$Tube.Number, cur_panel$`Tube Number`)
     
@@ -341,18 +355,19 @@ test_that("read_steinbock function works", {
     expect_equal(assayNames(cur_sce), "counts")
     expect_equal(dim(cur_sce), c(5, 348))
     expect_equal(names(rowData(cur_sce)), 
-                 c("channel", "name", "keep", "ilastik", "Tube.Number"))
+                 c("channel", "name", "keep", "ilastik", "deepcell", "Tube.Number"))
     expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectNumber"))
     
-    cur_files <- list.files(file.path(path, "cell_intensities"), full.names = TRUE)
+    cur_files <- list.files(file.path(path, "intensities"), full.names = TRUE)
     cur_counts <- lapply(cur_files, readr::read_csv)
     cur_counts <- do.call("rbind", cur_counts)
     
     expect_equal(counts(cur_sce), t(cur_counts[,-1]))
     expect_equal(counts(cur_sce)[1:10], c(0.19277269, 0.10526316, 0.10526316, 0.33692434, 0.53972906,
-                                          0.05992229, 0.05633803, 0.04225352, 0.09859155, 0.72663587))
+                                          0.05992229, 0.05633803, 0.04225352, 0.09859155, 0.72663587),
+                 tolerance = 10e-6)
     
-    cur_files <- list.files(file.path(path, "cell_regionprops"), full.names = TRUE)
+    cur_files <- list.files(file.path(path, "regionprops"), full.names = TRUE)
     cur_morph <- lapply(cur_files, readr::read_csv)
     cur_morph <- do.call("rbind", cur_morph)
     
@@ -361,6 +376,7 @@ test_that("read_steinbock function works", {
     expect_equal(rowData(cur_sce)$channel, cur_panel$channel)
     expect_equal(rowData(cur_sce)$keep, cur_panel$keep)
     expect_equal(rowData(cur_sce)$ilastik, cur_panel$ilastik)
+    expect_equal(rowData(cur_sce)$deepcell, cur_panel$deepcell)
     expect_equal(rowData(cur_sce)$Tube.Number, cur_panel$`Tube Number`)
     
     expect_equal(length(colPairs(cur_sce)), 0)
@@ -374,20 +390,22 @@ test_that("read_steinbock function works", {
     expect_equal(assayNames(cur_spe), "counts")
     expect_equal(dim(cur_spe), c(5, 57))
     expect_equal(names(rowData(cur_spe)), 
-                 c("channel", "name", "keep", "ilastik", "Tube.Number"))
+                 c("channel", "name", "keep", "ilastik", "deepcell", "Tube.Number"))
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "area", 
                                             "major_axis_length", 
                                             "minor_axis_length", "eccentricity"))
     expect_equal(spatialCoordsNames(cur_spe), c("Pos_X", "Pos_Y"))
     
-    cur_files <- list.files(file.path(path, "cell_intensities"), full.names = TRUE, pattern = "mockData2")
+    cur_files <- list.files(file.path(path, "intensities"), full.names = TRUE, pattern = "mockData2")
     cur_counts <- lapply(cur_files, readr::read_csv)
     cur_counts <- do.call("rbind", cur_counts)
     
     expect_equal(counts(cur_spe), t(cur_counts[,-1]))
-    expect_equal(counts(cur_spe)[1:10], c(0.33853000, 0.02150538, 4.72502756, 6.03739691, 2.66533828, 0.59153968, 0.09774116, 5.78268576, 8.84805489, 3.64737082))
+    expect_equal(counts(cur_spe)[1:10], c(0.33853000, 0.02150538, 4.72502756, 6.03739691, 2.66533828, 
+                                          0.59153968, 0.09774116, 5.78268576, 8.84805489, 3.64737082),
+                 tolerance = 10e-6)
     
-    cur_files <- list.files(file.path(path, "cell_regionprops"), full.names = TRUE, pattern = "mockData2")
+    cur_files <- list.files(file.path(path, "regionprops"), full.names = TRUE, pattern = "mockData2")
     cur_morph <- lapply(cur_files, readr::read_csv)
     cur_morph <- do.call("rbind", cur_morph)
     
@@ -402,13 +420,14 @@ test_that("read_steinbock function works", {
     expect_equal(rowData(cur_spe)$name, cur_panel$name)
     expect_equal(rowData(cur_spe)$channel, cur_panel$channel)
     expect_equal(rowData(cur_spe)$keep, cur_panel$keep)
+    expect_equal(rowData(cur_spe)$deepcell, cur_panel$deepcell)
     expect_equal(rowData(cur_spe)$ilastik, cur_panel$ilastik)
     expect_equal(rowData(cur_spe)$Tube.Number, cur_panel$`Tube Number`)
     
     expect_equal(colPairNames(cur_spe), "neighbourhood")
     
     expect_silent(cur_graphs <- colPair(cur_spe, "neighbourhood"))
-    cur_test <- readr::read_csv(file.path(path, "cell_graphs", "20210305_NE_mockData2_3.csv"))
+    cur_test <- readr::read_csv(file.path(path, "graphs", "20210305_NE_mockData2_3.csv"))
     
     expect_equal(cur_test$Object1 + sum(cur_spe$sample_id %in% c("20210305_NE_mockData2_1", "20210305_NE_mockData2_2")), 
                  from(cur_graphs)[from(cur_graphs) %in% which(cur_spe$sample_id == "20210305_NE_mockData2_3")])
@@ -424,19 +443,21 @@ test_that("read_steinbock function works", {
     expect_equal(assayNames(cur_sce), "counts")
     expect_equal(dim(cur_sce), c(5, 57))
     expect_equal(names(rowData(cur_sce)), 
-                 c("channel", "name", "keep", "ilastik", "Tube.Number"))
+                 c("channel", "name", "keep", "ilastik", "deepcell", "Tube.Number"))
     expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectNumber", "Pos_X", "Pos_Y", "area", 
                                             "major_axis_length", 
                                             "minor_axis_length", "eccentricity"))
     
-    cur_files <- list.files(file.path(path, "cell_intensities"), full.names = TRUE, pattern = "mockData2")
+    cur_files <- list.files(file.path(path, "intensities"), full.names = TRUE, pattern = "mockData2")
     cur_counts <- lapply(cur_files, readr::read_csv)
     cur_counts <- do.call("rbind", cur_counts)
     
     expect_equal(counts(cur_sce), t(cur_counts[,-1]))
-    expect_equal(counts(cur_sce)[1:10], c(0.33853000, 0.02150538, 4.72502756, 6.03739691, 2.66533828, 0.59153968, 0.09774116, 5.78268576, 8.84805489, 3.64737082))
+    expect_equal(counts(cur_sce)[1:10], c(0.33853000, 0.02150538, 4.72502756, 6.03739691, 
+                                          2.66533828, 0.59153968, 0.09774116, 5.78268576, 8.84805489, 3.64737082),
+                 tolerance = 10e-6)
     
-    cur_files <- list.files(file.path(path, "cell_regionprops"), full.names = TRUE, pattern = "mockData2")
+    cur_files <- list.files(file.path(path, "regionprops"), full.names = TRUE, pattern = "mockData2")
     cur_morph <- lapply(cur_files, readr::read_csv)
     cur_morph <- do.call("rbind", cur_morph)
     
@@ -451,13 +472,14 @@ test_that("read_steinbock function works", {
     expect_equal(rowData(cur_sce)$name, cur_panel$name)
     expect_equal(rowData(cur_sce)$channel, cur_panel$channel)
     expect_equal(rowData(cur_sce)$keep, cur_panel$keep)
+    expect_equal(rowData(cur_sce)$deepcell, cur_panel$deepcell)
     expect_equal(rowData(cur_sce)$ilastik, cur_panel$ilastik)
     expect_equal(rowData(cur_sce)$Tube.Number, cur_panel$`Tube Number`)
     
     expect_equal(colPairNames(cur_sce), "neighbourhood")
     
     expect_silent(cur_graphs <- colPair(cur_sce, "neighbourhood"))
-    cur_test <- readr::read_csv(file.path(path, "cell_graphs", "20210305_NE_mockData2_3.csv"))
+    cur_test <- readr::read_csv(file.path(path, "graphs", "20210305_NE_mockData2_3.csv"))
     
     expect_equal(cur_test$Object1 + sum(cur_sce$sample_id %in% c("20210305_NE_mockData2_1", "20210305_NE_mockData2_2")), 
                  from(cur_graphs)[from(cur_graphs) %in% which(cur_sce$sample_id == "20210305_NE_mockData2_3")])
@@ -478,7 +500,7 @@ test_that("read_steinbock function works", {
                                             "centroid-1", "minor_axis_length", "eccentricity"))
     expect_equal(spatialCoordsNames(cur_spe), c("Pos_X", "Pos_Y"))
     
-    cur_files <- list.files(file.path(path, "cell_regionprops"), full.names = TRUE)
+    cur_files <- list.files(file.path(path, "regionprops"), full.names = TRUE)
     cur_morph <- lapply(cur_files, readr::read_csv)
     cur_morph <- do.call("rbind", cur_morph)
     
@@ -495,7 +517,7 @@ test_that("read_steinbock function works", {
                                             "centroid-0", "centroid-1", "minor_axis_length", 
                                             "eccentricity"))
     
-    cur_files <- list.files(file.path(path, "cell_regionprops"), full.names = TRUE)
+    cur_files <- list.files(file.path(path, "regionprops"), full.names = TRUE)
     cur_morph <- lapply(cur_files, readr::read_csv)
     cur_morph <- do.call("rbind", cur_morph)
     
@@ -510,7 +532,7 @@ test_that("read_steinbock function works", {
     
     expect_true(all(is.na(rowData(cur_spe)["Laminin",])))
     expect_equal(as.character(as.matrix(rowData(cur_spe)["Ag107",])), 
-                 c("Ag107", "Ag107", "1", "1", NA))    
+                 c("Ag107", "Ag107", "1", "1", NA, NA))    
     
     # Parallelisation
     cur_spe <- read_steinbock(path, BPPARAM = BiocParallel::bpparam())

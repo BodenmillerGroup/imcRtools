@@ -86,9 +86,9 @@
 #' @importFrom SpatialExperiment SpatialExperiment
 #' @export
 read_steinbock <- function(path,
-                           intensities_folder = "cell_intensities",
-                           regionprops_folder = "cell_regionprops",
-                           graphs_folder = "cell_graphs",
+                           intensities_folder = "intensities",
+                           regionprops_folder = "regionprops",
+                           graphs_folder = "graphs",
                            pattern = NULL,
                            extract_cellid_from = "Object",
                            extract_coords_from = c("centroid-0", "centroid-1"),
