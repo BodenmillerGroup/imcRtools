@@ -4,7 +4,7 @@ test_that("read_cpout function works.", {
     # SpatialExperiment
     cur_spe <- read_cpout(path)
     
-    expect_s4_class(cur_spe, "SpatialExperiment")
+    lexpect_s4_class(cur_spe, "SpatialExperiment")
     
     expect_equal(rownames(cur_spe), c("Ag107", "Pr141", "Sm147", 
                                       "Eu153", "Yb172"))
