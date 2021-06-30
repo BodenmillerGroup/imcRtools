@@ -9,7 +9,7 @@ test_that("read_steinbock function works", {
     expect_equal(rownames(cur_spe), c("Ag107", "Cytokeratin 5", "Laminin", 
                                       "YBX1", "H3K27Ac"))
     expect_equal(assayNames(cur_spe), "counts")
-    expect_equal(dim(cur_spe), c(5, 348))
+    expect_equal(dim(cur_spe), c(5, 215))
     expect_equal(names(rowData(cur_spe)), 
                  c("channel", "name", "keep", "ilastik", "deepcell", "Tube.Number"))
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "area", 
@@ -22,8 +22,8 @@ test_that("read_steinbock function works", {
     cur_counts <- do.call("rbind", cur_counts)
     
     expect_equal(counts(cur_spe), t(cur_counts[,-1]))
-    expect_equal(counts(cur_spe)[1:10], c(0.19277269, 0.10526316, 0.10526316, 0.33692434, 0.53972906,
-                                          0.05992229, 0.05633803, 0.04225352, 0.09859155, 0.72663587), 
+    expect_equal(counts(cur_spe)[1:10], c(0.07674068, 0.05332846, 0.03358362, 0.07208360, 0.69119298, 
+                                          0.12487200, 0.10397285, 0.03341719, 0.04314627, 0.77199066), 
                  tolerance = 10e-6)
     
     cur_files <- list.files(file.path(path, "regionprops"), full.names = TRUE)
@@ -71,7 +71,7 @@ test_that("read_steinbock function works", {
     expect_equal(rownames(cur_sce), c("Ag107", "Cytokeratin 5", "Laminin", 
                                       "YBX1", "H3K27Ac"))
     expect_equal(assayNames(cur_sce), "counts")
-    expect_equal(dim(cur_sce), c(5, 348))
+    expect_equal(dim(cur_sce), c(5, 215))
     expect_equal(names(rowData(cur_sce)), 
                  c("channel", "name", "keep", "ilastik", "deepcell", "Tube.Number"))
     expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectNumber", "Pos_X", "Pos_Y", "area", 
@@ -83,8 +83,8 @@ test_that("read_steinbock function works", {
     cur_counts <- do.call("rbind", cur_counts)
     
     expect_equal(counts(cur_sce), t(cur_counts[,-1]))
-    expect_equal(counts(cur_sce)[1:10], c(0.19277269, 0.10526316, 0.10526316, 0.33692434, 0.53972906,
-                                          0.05992229, 0.05633803, 0.04225352, 0.09859155, 0.72663587), 
+    expect_equal(counts(cur_sce)[1:10], c(0.07674068, 0.05332846, 0.03358362, 0.07208360, 0.69119298, 
+                                          0.12487200, 0.10397285, 0.03341719, 0.04314627, 0.77199066), 
                  tolerance = 10e-6)
     
     cur_files <- list.files(file.path(path, "regionprops"), full.names = TRUE)
@@ -130,7 +130,7 @@ test_that("read_steinbock function works", {
     expect_equal(rownames(cur_spe), c("Ag107", "Cytokeratin 5", "Laminin", 
                                       "YBX1", "H3K27Ac"))
     expect_equal(assayNames(cur_spe), "counts")
-    expect_equal(dim(cur_spe), c(5, 348))
+    expect_equal(dim(cur_spe), c(5, 215))
     expect_equal(names(rowData(cur_spe)), 
                  c("channel", "name", "keep", "ilastik", "deepcell", "Tube.Number"))
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber"))
@@ -141,8 +141,8 @@ test_that("read_steinbock function works", {
     cur_counts <- do.call("rbind", cur_counts)
     
     expect_equal(counts(cur_spe), t(cur_counts[,-1]))
-    expect_equal(counts(cur_spe)[1:10], c(0.19277269, 0.10526316, 0.10526316, 0.33692434, 0.53972906,
-                                          0.05992229, 0.05633803, 0.04225352, 0.09859155, 0.72663587), 
+    expect_equal(counts(cur_spe)[1:10], c(0.07674068, 0.05332846, 0.03358362, 0.07208360, 0.69119298, 
+                                          0.12487200, 0.10397285, 0.03341719, 0.04314627, 0.77199066), 
                  tolerance = 10e-6)
     
     cur_files <- list.files(file.path(path, "regionprops"), full.names = TRUE)
@@ -180,7 +180,7 @@ test_that("read_steinbock function works", {
     expect_equal(rownames(cur_sce), c("Ag107", "Cytokeratin 5", "Laminin", 
                                       "YBX1", "H3K27Ac"))
     expect_equal(assayNames(cur_sce), "counts")
-    expect_equal(dim(cur_sce), c(5, 348))
+    expect_equal(dim(cur_sce), c(5, 215))
     expect_equal(names(rowData(cur_sce)), 
                  c("channel", "name", "keep", "ilastik", "deepcell", "Tube.Number"))
     expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectNumber"))
@@ -190,8 +190,8 @@ test_that("read_steinbock function works", {
     cur_counts <- do.call("rbind", cur_counts)
     
     expect_equal(counts(cur_sce), t(cur_counts[,-1]))
-    expect_equal(counts(cur_sce)[1:10], c(0.19277269, 0.10526316, 0.10526316, 0.33692434, 0.53972906,
-                                          0.05992229, 0.05633803, 0.04225352, 0.09859155, 0.72663587), 
+    expect_equal(counts(cur_sce)[1:10], c(0.07674068, 0.05332846, 0.03358362, 0.07208360, 0.69119298, 
+                                          0.12487200, 0.10397285, 0.03341719, 0.04314627, 0.77199066), 
                  tolerance = 10e-6)
     
     cur_files <- list.files(file.path(path, "regionprops"), full.names = TRUE)
@@ -230,7 +230,7 @@ test_that("read_steinbock function works", {
     expect_equal(rownames(cur_spe), c("Ag107", "Cytokeratin 5", "Laminin", 
                                       "YBX1", "H3K27Ac"))
     expect_equal(assayNames(cur_spe), "counts")
-    expect_equal(dim(cur_spe), c(5, 348))
+    expect_equal(dim(cur_spe), c(5, 215))
     expect_equal(names(rowData(cur_spe)), 
                  c("channel", "name", "keep", "ilastik", "deepcell", "Tube.Number"))
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "area", 
@@ -243,8 +243,8 @@ test_that("read_steinbock function works", {
     cur_counts <- do.call("rbind", cur_counts)
     
     expect_equal(counts(cur_spe), t(cur_counts[,-1]))
-    expect_equal(counts(cur_spe)[1:10], c(0.19277269, 0.10526316, 0.10526316, 0.33692434, 0.53972906,
-                                          0.05992229, 0.05633803, 0.04225352, 0.09859155, 0.72663587), 
+    expect_equal(counts(cur_spe)[1:10], c(0.07674068, 0.05332846, 0.03358362, 0.07208360, 0.69119298, 
+                                          0.12487200, 0.10397285, 0.03341719, 0.04314627, 0.77199066), 
                  tolerance = 10e-6)
     
     cur_files <- list.files(file.path(path, "regionprops"), full.names = TRUE)
@@ -275,7 +275,7 @@ test_that("read_steinbock function works", {
     expect_equal(rownames(cur_sce), c("Ag107", "Cytokeratin 5", "Laminin", 
                                       "YBX1", "H3K27Ac"))
     expect_equal(assayNames(cur_sce), "counts")
-    expect_equal(dim(cur_sce), c(5, 348))
+    expect_equal(dim(cur_sce), c(5, 215))
     expect_equal(names(rowData(cur_sce)), 
                  c("channel", "name", "keep", "ilastik", "deepcell", "Tube.Number"))
     expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectNumber", "Pos_X", "Pos_Y", "area", 
@@ -287,8 +287,8 @@ test_that("read_steinbock function works", {
     cur_counts <- do.call("rbind", cur_counts)
     
     expect_equal(counts(cur_sce), t(cur_counts[,-1]))
-    expect_equal(counts(cur_sce)[1:10], c(0.19277269, 0.10526316, 0.10526316, 0.33692434, 0.53972906,
-                                          0.05992229, 0.05633803, 0.04225352, 0.09859155, 0.72663587),
+    expect_equal(counts(cur_sce)[1:10], c(0.07674068, 0.05332846, 0.03358362, 0.07208360, 0.69119298, 
+                                          0.12487200, 0.10397285, 0.03341719, 0.04314627, 0.77199066),
                  tolerance = 10e-6)
     
     cur_files <- list.files(file.path(path, "regionprops"), full.names = TRUE)
@@ -317,7 +317,7 @@ test_that("read_steinbock function works", {
     expect_equal(rownames(cur_spe), c("Ag107", "Cytokeratin 5", "Laminin", 
                                       "YBX1", "H3K27Ac"))
     expect_equal(assayNames(cur_spe), "counts")
-    expect_equal(dim(cur_spe), c(5, 348))
+    expect_equal(dim(cur_spe), c(5, 215))
     expect_equal(names(rowData(cur_spe)), 
                  c("channel", "name", "keep", "ilastik", "deepcell", "Tube.Number"))
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber"))
@@ -328,8 +328,8 @@ test_that("read_steinbock function works", {
     cur_counts <- do.call("rbind", cur_counts)
     
     expect_equal(counts(cur_spe), t(cur_counts[,-1]))
-    expect_equal(counts(cur_spe)[1:10], c(0.19277269, 0.10526316, 0.10526316, 0.33692434, 0.53972906,
-                                          0.05992229, 0.05633803, 0.04225352, 0.09859155, 0.72663587),
+    expect_equal(counts(cur_spe)[1:10], c(0.07674068, 0.05332846, 0.03358362, 0.07208360, 0.69119298, 
+                                          0.12487200, 0.10397285, 0.03341719, 0.04314627, 0.77199066),
                  tolerance = 10e-6)
     
     cur_files <- list.files(file.path(path, "regionprops"), full.names = TRUE)
@@ -353,7 +353,7 @@ test_that("read_steinbock function works", {
     expect_equal(rownames(cur_sce), c("Ag107", "Cytokeratin 5", "Laminin", 
                                       "YBX1", "H3K27Ac"))
     expect_equal(assayNames(cur_sce), "counts")
-    expect_equal(dim(cur_sce), c(5, 348))
+    expect_equal(dim(cur_sce), c(5, 215))
     expect_equal(names(rowData(cur_sce)), 
                  c("channel", "name", "keep", "ilastik", "deepcell", "Tube.Number"))
     expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectNumber"))
@@ -363,8 +363,8 @@ test_that("read_steinbock function works", {
     cur_counts <- do.call("rbind", cur_counts)
     
     expect_equal(counts(cur_sce), t(cur_counts[,-1]))
-    expect_equal(counts(cur_sce)[1:10], c(0.19277269, 0.10526316, 0.10526316, 0.33692434, 0.53972906,
-                                          0.05992229, 0.05633803, 0.04225352, 0.09859155, 0.72663587),
+    expect_equal(counts(cur_sce)[1:10], c(0.07674068, 0.05332846, 0.03358362, 0.07208360, 0.69119298, 
+                                          0.12487200, 0.10397285, 0.03341719, 0.04314627, 0.77199066),
                  tolerance = 10e-6)
     
     cur_files <- list.files(file.path(path, "regionprops"), full.names = TRUE)
@@ -388,7 +388,7 @@ test_that("read_steinbock function works", {
     expect_equal(rownames(cur_spe), c("Ag107", "Cytokeratin 5", "Laminin", 
                                       "YBX1", "H3K27Ac"))
     expect_equal(assayNames(cur_spe), "counts")
-    expect_equal(dim(cur_spe), c(5, 57))
+    expect_equal(dim(cur_spe), c(5, 36))
     expect_equal(names(rowData(cur_spe)), 
                  c("channel", "name", "keep", "ilastik", "deepcell", "Tube.Number"))
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "area", 
@@ -401,8 +401,8 @@ test_that("read_steinbock function works", {
     cur_counts <- do.call("rbind", cur_counts)
     
     expect_equal(counts(cur_spe), t(cur_counts[,-1]))
-    expect_equal(counts(cur_spe)[1:10], c(0.33853000, 0.02150538, 4.72502756, 6.03739691, 2.66533828, 
-                                          0.59153968, 0.09774116, 5.78268576, 8.84805489, 3.64737082),
+    expect_equal(counts(cur_spe)[1:10], c(0.33492669, 0.04151090, 5.09042379, 5.50085076, 2.39848252, 
+                                         0.58894863, 0.09319553, 2.83758989, 8.75104804, 3.68968805),
                  tolerance = 10e-6)
     
     cur_files <- list.files(file.path(path, "regionprops"), full.names = TRUE, pattern = "mockData2")
@@ -441,7 +441,7 @@ test_that("read_steinbock function works", {
     expect_equal(rownames(cur_sce), c("Ag107", "Cytokeratin 5", "Laminin", 
                                       "YBX1", "H3K27Ac"))
     expect_equal(assayNames(cur_sce), "counts")
-    expect_equal(dim(cur_sce), c(5, 57))
+    expect_equal(dim(cur_sce), c(5, 36))
     expect_equal(names(rowData(cur_sce)), 
                  c("channel", "name", "keep", "ilastik", "deepcell", "Tube.Number"))
     expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectNumber", "Pos_X", "Pos_Y", "area", 
@@ -453,8 +453,8 @@ test_that("read_steinbock function works", {
     cur_counts <- do.call("rbind", cur_counts)
     
     expect_equal(counts(cur_sce), t(cur_counts[,-1]))
-    expect_equal(counts(cur_sce)[1:10], c(0.33853000, 0.02150538, 4.72502756, 6.03739691, 
-                                          2.66533828, 0.59153968, 0.09774116, 5.78268576, 8.84805489, 3.64737082),
+    expect_equal(counts(cur_sce)[1:10], c(0.33492669, 0.04151090, 5.09042379, 5.50085076, 2.39848252, 
+                                          0.58894863, 0.09319553, 2.83758989, 8.75104804, 3.68968805),
                  tolerance = 10e-6)
     
     cur_files <- list.files(file.path(path, "regionprops"), full.names = TRUE, pattern = "mockData2")
@@ -547,7 +547,6 @@ test_that("read_steinbock function works", {
     expect_error(cur_spe <- read_steinbock(path = 1),
                  "'path' must be a single string.", 
                  fixed = TRUE) 
-    
     
     expect_error(cur_spe <- read_steinbock(path, intensities_folder = NULL),
                  "'intensities_folder' must be specified.", 
