@@ -5,15 +5,21 @@
 #'  When multiple entries are provided, summary statistics are calculated for eachcombination of factor entries.
 #'
 #' @param object a \code{\link[SingleCellExperiment]{SingleCellExperiment}}.
-#' @param method which aggregation method to use
 #'
 #' @examples 
 #' # TODO
 #'
-#' @author Vito Zanotelli, adapted by Nils Eling (\email{nils.eling@@uzh.ch})
+#' @author Vito Zanotelli
+#' @author Jana Fischer
+#' @author adapted by Nils Eling (\email{nils.eling@@uzh.ch})
 #'
 #' @export
-neighborhoodPermTest <- function(object, method = c("histocat", "classic")){
+neighborhoodPermTest <- function(object, 
+                                 img_id,
+                                 label,
+                                 colpair_name = "neighbourhood",
+                                 iter = 1000,
+                                 min_neighbours = 0){
     
     stop("This function is under development!")
 
