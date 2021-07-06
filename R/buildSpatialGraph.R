@@ -35,10 +35,12 @@ buildSpatialGraph <- function(object,
     
     type <- match.arg(type)
     
-    # Define name
+
     name <- ifelse(is.null(name), paste0(type, "_interaction_graph"), name)
     
-    cur_out <- bplapply(unique(as.character(colData(object)[[img_id]])),
+    cur_ind <- unique(as.character(colData(object)[[img_id]]))
+    
+    cur_out <- bplapply(cur_ind,
                         function(x){
                             
                             cur_obj <- object[,as.character(colData(object)[[img_id]]) == x]
@@ -54,18 +56,16 @@ buildSpatialGraph <- function(object,
                                 cur_graph <- findNeighbors(cur_coords, 
                                                            threshold = threshold, 
                                                            get.distance = FALSE,
-                                                           BNPARAM = BNPARAM,
-                                                           ...)
+                                                           BNPARAM = BNPARAM)
                                 cur_graph <- graph_from_adj_list(cur_graph$index)
                             } else if (type == "delauney") {
-                                cur_graph <- deldir(cur_coords[,1], cur_coords[,2], ...)
+                                cur_graph <- deldir(cur_coords[,1], cur_coords[,2])
                                 cur_graph <- graph_from_edgelist(as.matrix(cur_graph$delsgs[,c("ind1", "ind2")]))
                             } else {
                                 cur_graph <- findKNN(cur_coords,
                                                      k = k,
                                                      BNPARAM = BNPARAM,
-                                                     get.distance = FALSE,
-                                                     ...)
+                                                     get.distance = FALSE)
                                 cur_graph <- graph_from_adj_list(as.list(as.data.frame(t(cur_graph$index))))
                             }
                             
@@ -81,6 +81,7 @@ buildSpatialGraph <- function(object,
                                                   nnode = nrow(cur_coords))
                             colPair(cur_obj, name) <- cur_graph
                             
+                            return(cur_obj)
                             
                         }, BPPARAM = BPPARAM)
     
