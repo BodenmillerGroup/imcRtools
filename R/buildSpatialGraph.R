@@ -32,6 +32,7 @@ buildSpatialGraph <- function(object,
                               ...){
     
     #.valid.buildSpatialGraph.input()
+    
     type <- match.arg(type)
     
     # Define name
@@ -56,17 +57,9 @@ buildSpatialGraph <- function(object,
                                                            BNPARAM = BNPARAM,
                                                            ...)
                                 cur_graph <- graph_from_adj_list(cur_graph$index)
-                                cur_graph <- as_edgelist(cur_graph)
-                                cur_graph <- SelfHits(from = cur_graph[,1],
-                                                      to = cur_graph[,2], 
-                                                      nnode = nrow(cur_coords))
-                                colPair(cur_obj, name) <- cur_graph
                             } else if (type == "delauney") {
                                 cur_graph <- deldir(cur_coords[,1], cur_coords[,2], ...)
-                                cur_graph <- SelfHits(from = cur_graph$delsgs$ind1,
-                                                      to = cur_graph$delsgs$ind2, 
-                                                      nnode = nrow(cur_coords))
-                                colPair(cur_obj, name) <- cur_graph
+                                cur_graph <- graph_from_edgelist(as.matrix(cur_graph$delsgs[,c("ind1", "ind2")]))
                             } else {
                                 cur_graph <- findKNN(cur_coords,
                                                      k = k,
@@ -74,15 +67,22 @@ buildSpatialGraph <- function(object,
                                                      get.distance = FALSE,
                                                      ...)
                                 cur_graph <- graph_from_adj_list(as.list(as.data.frame(t(cur_graph$index))))
-                                cur_graph <- as_edgelist(cur_graph)
-                                cur_graph <- SelfHits(from = cur_graph[,1],
-                                                      to = cur_graph[,2], 
-                                                      nnode = nrow(cur_coords))
-                                colPair(cur_obj, name) <- cur_graph
                             }
                             
-                        }, BPPARAM = BPPARAM
-                )
+                            if (!directed) {
+                                cur_graph <- as.undirected(cur_graph, mode = "collapse")
+                            } 
+                            
+                            cur_graph <- simplify(cur_graph)
+                            
+                            cur_graph <- as_edgelist(cur_graph)
+                            cur_graph <- SelfHits(from = cur_graph[,1],
+                                                  to = cur_graph[,2], 
+                                                  nnode = nrow(cur_coords))
+                            colPair(cur_obj, name) <- cur_graph
+                            
+                            
+                        }, BPPARAM = BPPARAM)
     
     cur_out <- do.call("cbind", cur_out)
                                
