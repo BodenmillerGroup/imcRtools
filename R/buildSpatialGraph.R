@@ -26,6 +26,7 @@ buildSpatialGraph <- function(object,
                               Pos_X = "Pos_X",
                               Pos_Y = "Pos_Y",
                               name = NULL,
+                              directed = TRUE,
                               BNPARAM = KmknnParam(),
                               BPPARAM = SerialParam(),
                               ...){
@@ -61,13 +62,23 @@ buildSpatialGraph <- function(object,
                                                       nnode = nrow(cur_coords))
                                 colPair(cur_obj, name) <- cur_graph
                             } else if (type == "delauney") {
-                                cur_graph <- deldir(cur_coords[,1], cur_coords[,2])
+                                cur_graph <- deldir(cur_coords[,1], cur_coords[,2], ...)
                                 cur_graph <- SelfHits(from = cur_graph$delsgs$ind1,
                                                       to = cur_graph$delsgs$ind2, 
                                                       nnode = nrow(cur_coords))
                                 colPair(cur_obj, name) <- cur_graph
                             } else {
-                                
+                                cur_graph <- findKNN(cur_coords,
+                                                     k = k,
+                                                     BNPARAM = BNPARAM,
+                                                     get.distance = FALSE,
+                                                     ...)
+                                cur_graph <- graph_from_adj_list(as.list(as.data.frame(t(cur_graph$index))))
+                                cur_graph <- as_edgelist(cur_graph)
+                                cur_graph <- SelfHits(from = cur_graph[,1],
+                                                      to = cur_graph[,2], 
+                                                      nnode = nrow(cur_coords))
+                                colPair(cur_obj, name) <- cur_graph
                             }
                             
                         }, BPPARAM = BPPARAM
