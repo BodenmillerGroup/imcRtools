@@ -1,12 +1,44 @@
 #' @title Builds an interaction graph based on the cells' locations
 #'
-#' @description 
+#' @description Function to define cell-cell interactions via distance-based
+#' expansion, delauney triangulation or k nearest neighbour detection.
 #'
-#' @param 
+#' @param object a \code{SingleCellExperiment} or \code{SpatialExperiment}
+#' object
+#' @param img_id single character indicating the \code{colData(object)} entry
+#' containing the unique image identifiers.
+#' @param type single character specifying the type of graph to be build.
+#' Supported entries are \code{"expansion"} (default) to find interacting
+#' cells via distance thresholding; \code{"delauney"} to find interactions via
+#' delauney triangulation; \code{"knn"} to find the k nearest neighbouring
+#' cells.
+#' @param threshold (when \code{type = "expansion"}) single numeric specifying
+#' the maximum distance for considering neighbours
+#' @param k (when \code{type = "knn"}) single numeric integer defining the
+#' number of nearest neighbours to search for.
+#' @param coords character vector of length 2 specifying the names of the
+#' \code{colData} (for a \code{SingleCellExperiment} object) or the
+#' \code{spatialCoords} entries of the cells' x and y locations.
+#' @param name single character specifying the name of the graph.
+#' @param directed should the returned graph be directed? Only effects the k
+#' nearest neighbour graph.
+#' @param BNPARAM a \code{\link[BiocNeighbors]{BiocNeighborParam} object
+#' defining the algorithm to use.}
+#' @param BPPARAM a \code{\link[BiocParallel]{BiocParallelParam-class}} object
+#' defining how to parallelise computations.
 #' 
 #' @return returns a \code{SpatialExperiment} or \code{SingleCellExperiment}
-#' containing the graph in form of a \code{SelfHits} object in colPair(object, name).
+#' containing the graph in form of a \code{SelfHits} object in
+#' \code{colPair(object, name)}.
 #'
+#'
+#' @section Building an interaction graph
+#'
+#' accessing by name
+#'
+#' @section Choosing the graph construction method
+#'
+#' Default euclidean distance but manhattan and cosine supported via ...
 #'
 #' @examples
 #' #TODO
@@ -15,16 +47,15 @@
 #' 
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #' 
-#' @importFrom BiocNeighbours findNeighbours
-#' @importFrom geometry delauneyn
+#' @importFrom BiocNeighbours findNeighbours findKNN
+#' @importFrom deldir deldir
 #' @export
 buildSpatialGraph <- function(object,
                               img_id,
                               type = c("expansion", "delauney", "knn"),
                               k = NULL,
                               threshold = NULL,
-                              Pos_X = "Pos_X",
-                              Pos_Y = "Pos_Y",
+                              coords = c("Pos_X", "Pos_Y"),
                               name = NULL,
                               directed = TRUE,
                               BNPARAM = KmknnParam(),
@@ -35,7 +66,6 @@ buildSpatialGraph <- function(object,
     
     type <- match.arg(type)
     
-
     name <- ifelse(is.null(name), paste0(type, "_interaction_graph"), name)
     
     cur_ind <- unique(as.character(colData(object)[[img_id]]))
@@ -47,9 +77,9 @@ buildSpatialGraph <- function(object,
                             
                             # Create coords matrix
                             if (is(cur_obj, "SpatialExperiment")) {
-                                cur_coords <- spatialCoords(cur_obj)[,c(Pos_X, Pos_Y)]
+                                cur_coords <- spatialCoords(cur_obj)[,coords]
                             } else {
-                                cur_coords <- colData(cur_obj)[,c(Pos_X, Pos_Y)]
+                                cur_coords <- colData(cur_obj)[,coords]
                             }
                             
                             if (type == "expansion") {
