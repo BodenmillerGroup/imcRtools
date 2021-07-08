@@ -518,3 +518,59 @@
     }
     
 }
+
+.valid.read_cpout.input <- function(object, type, img_id, k, threshold, coords,
+                                    name, directed){
+    
+    if (!is(object, "SingleCellExperiment")) {
+        stop("'object' not of type 'SingleCellExperiment'.")
+    }
+    
+    if (length(img_id) != 1 | !is.character(img_id)) {
+        stop("'img_id' must be a single string.")
+    }
+    
+    if (!img_id %in% names(colData(object))) {
+        stop("'img_id' not in colData(object).")
+    }
+    
+    if (type == "expansion") {
+        
+        if (length(threshold) != 1) {
+            stop("'threshold' must be a single numeric")
+        }
+        
+        if (is.null(threshold)) {
+            stop("When constructing a graph via expansion, please specify 'threshold'.")
+        }
+    }
+    
+    if (type == "knn") {
+        
+        if (length(k) != 1) {
+            stop("'k' must be a single numeric")
+        }
+        
+        if (is.null(k)) {
+            stop("When constructing a graph via nearest neighbour detection, ",
+                 "please specify 'k'.")
+        }
+    }
+    
+    if (length(coords) != 2 | !all(is.character(coords))) {
+        stop("'coords' must be a character vector of length 2.")
+    }
+    
+    if (!all(img_id %in% names(colData(object)))) {
+        stop("'coords' not in colData(object).")
+    }
+    
+    if (length(name) != 1 | !is.character(name)) {
+        stop("'name' must be a single string.")
+    }
+    
+    if (length(directed) != 1 | !is.logical(directed)) {
+        stop("'directed' must be a single logical.")
+    }
+    
+}

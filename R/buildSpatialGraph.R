@@ -26,11 +26,15 @@
 #' defining the algorithm to use.}
 #' @param BPPARAM a \code{\link[BiocParallel]{BiocParallelParam-class}} object
 #' defining how to parallelise computations.
+#' @param ... additional parameters passed to the
+#' \code{\link[BiocNeighbors]{findNeighbors}} function (\code{type =
+#' "expansion"}), the \code{\link[RTriangle]{triangulate}} function
+#' (\code{type = "delauney"}) or the \code{\link[BiocNeighbors]{findKNN}}
+#' function (\code{type = "knn"})).
 #' 
 #' @return returns a \code{SpatialExperiment} or \code{SingleCellExperiment}
 #' containing the graph in form of a \code{SelfHits} object in
 #' \code{colPair(object, name)}.
-#'
 #'
 #' @section Building an interaction graph
 #'
@@ -48,7 +52,7 @@
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #' 
 #' @importFrom BiocNeighbours findNeighbours findKNN
-#' @importFrom deldir deldir
+#' @importFrom RTriangle triangulate
 #' @export
 buildSpatialGraph <- function(object,
                               img_id,
@@ -61,10 +65,10 @@ buildSpatialGraph <- function(object,
                               BNPARAM = KmknnParam(),
                               BPPARAM = SerialParam(),
                               ...){
-    
-    #.valid.buildSpatialGraph.input()
-    
     type <- match.arg(type)
+    
+    .valid.buildSpatialGraph.input(object, type, img_id, k, threshold, coords,
+                                   name, directed)
     
     name <- ifelse(is.null(name), paste0(type, "_interaction_graph"), name)
     
@@ -86,21 +90,26 @@ buildSpatialGraph <- function(object,
                                 cur_graph <- findNeighbors(cur_coords, 
                                                            threshold = threshold, 
                                                            get.distance = FALSE,
-                                                           BNPARAM = BNPARAM)
+                                                           BNPARAM = BNPARAM,
+                                                           ...)
                                 cur_graph <- graph_from_adj_list(cur_graph$index)
                             } else if (type == "delauney") {
-                                cur_graph <- deldir(cur_coords[,1], cur_coords[,2])
-                                cur_graph <- graph_from_edgelist(as.matrix(cur_graph$delsgs[,c("ind1", "ind2")]))
+                                cur_graph <- triangulate(pslg(P = cur_coords),
+                                                    ...)
+                                cur_graph <- graph_from_edgelist(cur_graph$E)
                             } else {
                                 cur_graph <- findKNN(cur_coords,
                                                      k = k,
                                                      BNPARAM = BNPARAM,
-                                                     get.distance = FALSE)
-                                cur_graph <- graph_from_adj_list(as.list(as.data.frame(t(cur_graph$index))))
+                                                     get.distance = FALSE,
+                                                     ...)
+                                cur_graph <- as.list(as.data.frame(t(cur_graph$index)))
+                                cur_graph <- graph_from_adj_list(cur_graph)
                             }
                             
                             if (!directed) {
-                                cur_graph <- as.undirected(cur_graph, mode = "collapse")
+                                cur_graph <- as.undirected(cur_graph, 
+                                                           mode = "collapse")
                             } 
                             
                             cur_graph <- simplify(cur_graph)
