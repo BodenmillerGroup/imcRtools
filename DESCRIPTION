@@ -1,5 +1,5 @@
 Package: imcRtools
-Version: 0.3.8
+Version: 0.3.9
 Title: Methods for imaging mass cytometry data analysis
 Description: 
     This package contains functions for the low level and spatial analysis of IMC data.  
@@ -27,8 +27,11 @@ Imports:
     dplyr,
     magrittr,
     DT,
+    igraph,
     SingleCellExperiment,
-    vroom
+    vroom,
+    BiocNeighbors,
+    RTriangle
 Suggests:
     CATALYST,
     data.table,
