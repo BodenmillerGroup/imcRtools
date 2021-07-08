@@ -519,7 +519,7 @@
     
 }
 
-.valid.read_cpout.input <- function(object, type, img_id, k, threshold, coords,
+.valid.buildSpatialGraph.input <- function(object, type, img_id, k, threshold, coords,
                                     name, directed){
     
     if (!is(object, "SingleCellExperiment")) {
@@ -565,8 +565,10 @@
         stop("'coords' not in colData(object).")
     }
     
-    if (length(name) != 1 | !is.character(name)) {
-        stop("'name' must be a single string.")
+    if (!is.null(name)) {
+        if (length(name) != 1 | !is.character(name)) {
+            stop("'name' must be a single string.")
+        }
     }
     
     if (length(directed) != 1 | !is.logical(directed)) {

@@ -36,11 +36,11 @@
 #' containing the graph in form of a \code{SelfHits} object in
 #' \code{colPair(object, name)}.
 #'
-#' @section Building an interaction graph
+#' @section Building an interaction graph:
 #'
 #' accessing by name
 #'
-#' @section Choosing the graph construction method
+#' @section Choosing the graph construction method:
 #'
 #' Default euclidean distance but manhattan and cosine supported via ...
 #'
@@ -51,8 +51,11 @@
 #' 
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #' 
-#' @importFrom BiocNeighbours findNeighbours findKNN
-#' @importFrom RTriangle triangulate
+#' @importFrom BiocNeighbors findNeighbors findKNN KmknnParam
+#' @importFrom SpatialExperiment spatialCoords
+#' @importFrom igraph graph_from_adj_list graph_from_edgelist as.undirected
+#' simplify as_edgelist
+#' @importFrom RTriangle triangulate pslg
 #' @export
 buildSpatialGraph <- function(object,
                               img_id,

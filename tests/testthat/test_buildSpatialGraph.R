@@ -1,10 +1,7 @@
 test_that("buildSpatialGraph function works", {
     library(cytomapper)
+    data("pancreasSCE")
     
-    data("pancreasImages")
-    data("pancreasMasks")
-
-    cur_sce <- measureObjects(pancreasMasks, pancreasImages, img_id = "ImageNb")
-    
-    buildSpatialGraph(cur_sce, img_id = "ImageNb", type = "expansion", threshold = 10)
+    cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                 type = "expansion", threshold = 10)
 })
