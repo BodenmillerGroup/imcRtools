@@ -146,7 +146,8 @@ buildSpatialGraph <- function(object,
                             } else if (type == "delauney") {
                                 cur_graph <- triangulate(pslg(P = cur_coords),
                                                     ...)
-                                cur_graph <- graph_from_edgelist(cur_graph$E)
+                                cur_graph <- graph_from_edgelist(cur_graph$E,
+                                                                 directed = directed)
                             } else {
                                 cur_graph <- findKNN(cur_coords,
                                                      k = k,
