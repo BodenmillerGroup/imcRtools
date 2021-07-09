@@ -37,17 +37,64 @@
 #' \code{colPair(object, name)}.
 #'
 #' @section Building an interaction graph:
-#'
-#' accessing by name
+#' This function defines interacting cells in different ways. They are based 
+#' on the cells' centroids and do not incorporate cell shape or area.
+#' 
+#' 1. When \code{type = "expansion"}, all cells within the radius 
+#' \code{threshold} are considered interacting cells. 
+#' 
+#' 2. When \code{type = "delauney"}, interacting cells are found via a delauney
+#' triangulation of the cells centroids.
+#' 
+#' 3. When \code{type = "knn"}, interacting cells are defined as the \code{k}
+#' nearest neighbors in the 2D spatial plane. When \code{directed = FALSE},
+#' the adjacency matrix of the graph is symmetric and edges between cells are
+#' undirected. 
+#' 
+#' The graph is stored in form of a \code{SelfHits} object in
+#' \code{colPair(object, name)}. This object can be regarded as an edgelist
+#' and coerced to an \code{igraph} object via 
+#' \code{graph_from_edgelist(as.matrix(colPair(object, name)))}.
 #'
 #' @section Choosing the graph construction method:
-#'
-#' Default euclidean distance but manhattan and cosine supported via ...
+#' When finding interactions via \code{expansion} of \code{knn}, the 
+#' \code{\link[BiocNeighbors]{findNeighbors}} or 
+#' \code{\link[BiocNeighbors]{findKNN}} functions are used. Both functions
+#' accept the \code{BNPARAM} via which the graph construction method can be 
+#' defined (default \code{\link[BiocNeighbors]{KmknnParam}}). For an overview
+#' on the different algorithms, see 
+#' \code{\link[BiocNeighbors]{BiocNeighborParam}}. Within the 
+#' \code{BiocNeighborParam} object, \code{distance} can be set to
+#' \code{"Euclidean"} (default), \code{"Manhattan"} or \code{"Cosine"}.
 #'
 #' @examples
-#' #TODO
+#' path <- system.file("extdata/mockData/steinbock", package = "imcRtools")
+#' spe <- read_steinbock(path)
+#' 
+#' # Constructing a graph via expansion
+#' spe <- buildSpatialGraph(spe, img_id = "sample_id", 
+#'                          type = "expansion", threshold = 10)
+#' colPair(spe, "expansion_interaction_graph")
+#' 
+#' # Constructing a graph via delauney triangulation
+#' spe <- buildSpatialGraph(spe, img_id = "sample_id", 
+#'                          type = "delauney")
+#' colPair(spe, "delauney_interaction_graph")
+#' 
+#' # Constructing a graph via k nearest neighbor search
+#' spe <- buildSpatialGraph(spe, img_id = "sample_id", 
+#'                          type = "knn", k = 5)
+#' colPair(spe, "knn_interaction_graph")
 #' 
 #' @seealso 
+#' \code{\link[BiocNeighbors]{findNeighbors}} for the function finding interactions
+#' via expansion
+#' 
+#' \code{\link[BiocNeighbors]{findKNN}} for the function finding interactions
+#' via nearest neighbor search
+#' 
+#' \code{\link[RTriangle]{triangulate}} for the function finding interactions
+#' via delauney triangulation
 #' 
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #' 
