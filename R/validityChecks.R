@@ -561,7 +561,7 @@
         stop("'coords' must be a character vector of length 2.")
     }
     
-    if (!all(img_id %in% names(colData(object)))) {
+    if (!all(coords %in% names(colData(object)))) {
         stop("'coords' not in colData(object).")
     }
     
@@ -579,7 +579,115 @@
 
 .valid.plotSpatial.input <- function(object, img_id, coords, node_color_by, 
                                      node_shape_by, node_size_by, edge_color_by,
-                                     edge_size_by, draw_edges, arrow, colPairName,
-                                     ncols, nrows){
+                                     edge_size_by, draw_edges, arrow, 
+                                     colPairName, ncols, nrows){
     
+    if (!is(object, "SingleCellExperiment")) {
+        stop("'object' not of type 'SingleCellExperiment'.")
+    }
+    
+    if (length(img_id) != 1 | !is.character(img_id)) {
+        stop("'img_id' must be a single string.")
+    }
+    
+    if (!img_id %in% names(colData(object))) {
+        stop("'img_id' not in colData(object).")
+    }
+    
+    if (length(coords) != 2 | !all(is.character(coords))) {
+        stop("'coords' must be a character vector of length 2.")
+    }
+    
+    if (!all(coords %in% names(colData(object)))) {
+        stop("'coords' not in colData(object).")
+    }
+    
+    if (!is.null(node_color_by) && (length(node_color_by) != 1 | 
+        !is.character(node_color_by))) {
+        stop("'node_color_by' must be a single string.")
+    }
+    
+    if (!is.null(node_color_by) &&
+        (!node_color_by %in% names(colData(object)))) {
+        stop("'node_color_by' not in colData(object).")
+    }
+    
+    if (!is.null(node_shape_by) && 
+        (length(node_shape_by) != 1 | !is.character(node_shape_by))) {
+        stop("'node_shape_by' must be a single string.")
+    }
+    
+    if (!is.null(node_shape_by) && 
+        (!node_shape_by %in% names(colData(object)))) {
+        stop("'node_shape_by' not in colData(object).")
+    }
+    
+    if (!is.null(node_size_by) &&
+        (length(node_size_by) != 1 | !is.character(node_size_by))) {
+        stop("'node_size_by' must be a single string.")
+    }
+    
+    if (!is.null(node_size_by) &&
+        (!node_size_by %in% names(colData(object)))) {
+        stop("'node_size_by' not in colData(object).")
+    }
+    
+    if (length(draw_edges) != 1 | !is.logical(draw_edges)) {
+        stop("'draw_edges' must be a single logical")
+    }
+    
+    if (draw_edges) {
+        if (is.null(colPairName)) {
+            stop("Please specify the name of the", 
+                 " column pairing via 'colPairName'.")
+        }
+        
+        if (length(colPairName) != 1 | !is.character(colPairName)) {
+            stop("'colPairName' must be a single string.")
+        }
+        
+        if (!colPairName %in% colPairNames(object)) {
+            stop("No column pairing with name ", colPairName, " found.")
+        }
+        
+        if (!is.null(node_size_by) && 
+            (length(edge_color_by) != 1 | !is.character(edge_color_by))) {
+            stop("'edge_color_by' must be a single string.")
+        }
+        
+        if (!is.null(node_size_by) &&
+            (!edge_color_by %in% names(colData(object)) ||
+            !edge_color_by %in% names(mcols(colPair(object, colPairName))))) {
+            stop("'edge_color_by' not in 'colData(object)'", 
+                 " or in 'mcols(colPair(object, colPairName))'.")
+        }
+        
+        if (!is.null(edge_size_by) && 
+            (length(edge_size_by) != 1 | !is.character(edge_size_by))) {
+            stop("'edge_size_by' must be a single string.")
+        }
+        
+        if (!is.null(edge_size_by) && 
+            (!edge_size_by %in% names(colData(object)) ||
+            !edge_size_by %in% names(mcols(colPair(object, colPairName))))) {
+            stop("'edge_size_by' not in 'colData(object)'", 
+                 " or in 'mcols(colPair(object, colPairName))'.")
+        }
+        
+        if (length(draw_edges) != 1 | !is.logical(draw_edges)) {
+            stop("'draw_edges' must be a single logical")
+        }
+        
+        if (!is.null(arrow) && !is(arrow, "arrow")) {
+            stop("'arrow' must be of class grid::arrow.")
+        }
+    }
+    
+    if (!is.null(ncols) && (length(ncols) != 1 | !is.numeric(ncols))) {
+        stop("'ncols' must be a single numeric")
+    }
+    
+    if (!is.null(nrows) && (length(nrows) != 1 | !is.numeric(nrows))) {
+        stop("'nrows' must be a single numeric")
+    }
 }
