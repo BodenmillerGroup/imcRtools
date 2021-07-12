@@ -576,3 +576,10 @@
     }
     
 }
+
+.valid.plotSpatial.input <- function(object, img_id, coords, node_color_by, 
+                                     node_shape_by, node_size_by, edge_color_by,
+                                     edge_size_by, draw_edges, arrow, colPairName,
+                                     ncols, nrows){
+    
+}

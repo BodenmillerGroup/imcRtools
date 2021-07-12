@@ -26,15 +26,36 @@ plotSpatial <- function(object,
                         edge_color_by = NULL,
                         edge_size_by = NULL,
                         draw_edges = FALSE,
-                        colPairName = NULL){
+                        arrow = NULL,
+                        colPairName = NULL,
+                        ncols = NULL,
+                        nrows = NULL){
     
-    #.valid.plotSpatial.input()
-    nodes <- colData(object)[,c(img_id,color_by, shape_by, size_by),drop=FALSE]
-    nodes[,shape_by] <- as.character(nodes[,shape_by])
+    .valid.plotSpatial.input(object, img_id, coords, node_color_by, 
+                             node_shape_by, node_size_by, edge_color_by,
+                             edge_size_by, draw_edges, arrow, colPairName,
+                             ncols, nrows)
+    
+    nodes <- colData(object)[,c(img_id,node_color_by, node_shape_by, 
+                                node_size_by),
+                             drop=FALSE]
+    nodes[,node_shape_by] <- as.character(nodes[,node_shape_by])
     
     if (draw_edges) {
+        edges <- as.data.frame(as(colPair(object, colPairName), "DataFrame"))
+        
+        if (!is.null(edge_color_by) && 
+            edge_color_by %in% colnames(colData(object))) {
+            edges[,edge_color_by] <- colData(object)[[edge_color_by]][edges$from]
+        }
+        
+        if (!is.null(edge_size_by) && 
+            edge_size_by %in% colnames(colData(object))) {
+            edges[,edge_size_by] <- colData(object)[[edge_size_by]][edges$from]
+        }
+        
         cur_graph <- tbl_graph(nodes = nodes,
-                               edges = as.data.frame(colPair(object, colPairName)))
+                               edges = edges)
     } else {
         cur_graph <- tbl_graph(nodes = nodes)
     }
@@ -43,21 +64,42 @@ plotSpatial <- function(object,
                             x = colData(object)[[coords[1]]],
                             y = colData(object)[[coords[2]]])
     
+    # Define column and row number
+    if (is.null(ncols) && is.null(nrows)) {
+        ni <- length(unique(colData(object)[[img_id]]))
+        ncols <- ceiling(sqrt(ni))
+        nrows <- ceiling(ncol)
+    }
+    
     if (draw_edges) {
-        p <- ggraph(layout) +
-            geom_node_point(aes_string(color = node_color_by,
-                                       size = node_size_by,
-                                       shape = node_shape_by)) +
-            geom_edge_link(aes()) +
-            facet_nodes(img_id, scale = "free") 
+        if (!is.null(arrow)) {
+            p <- ggraph(layout) +
+                geom_node_point(aes_string(color = node_color_by,
+                                           size = node_size_by,
+                                           shape = node_shape_by)) +
+                geom_edge_link(aes_string(color = edge_color_by, 
+                                          size = edge_size_by),
+                               arrow = arrow) +
+                facet_nodes(img_id, scale = "free",
+                            nrow = nrows, ncol = ncols) 
+        } else {
+            p <- ggraph(layout) +
+                geom_node_point(aes_string(color = node_color_by,
+                                           size = node_size_by,
+                                           shape = node_shape_by)) +
+                geom_edge_link(aes_string(color = edge_color_by, 
+                                          size = edge_size_by)) +
+                facet_nodes(img_id, scale = "free",
+                            nrow = nrows, ncol = ncols) 
+        }
     } else {
         p <- ggraph(layout) +
             geom_node_point(aes_string(color = node_color_by,
                                        size = node_size_by,
                                        shape = node_shape_by)) +
-            facet_nodes(img_id, scale = "free")    
+            facet_nodes(img_id, scale = "free", 
+                        nrow = nrows, ncol = ncols)    
     }
         
-  
     return(p)
 }
