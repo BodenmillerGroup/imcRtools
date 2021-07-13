@@ -519,6 +519,7 @@
     
 }
 
+#' @importFrom SpatialExperiment spatialCoordsNames
 .valid.buildSpatialGraph.input <- function(object, type, img_id, k, threshold, coords,
                                     name, directed){
     
@@ -561,8 +562,14 @@
         stop("'coords' must be a character vector of length 2.")
     }
     
-    if (!all(coords %in% names(colData(object)))) {
-        stop("'coords' not in colData(object).")
+    if (is(object, "SpatialExperiment")) {
+        if (!all(coords %in% spatialCoordsNames(object))) {
+            stop("'coords' not in spatialCoords(object).")
+        }
+    } else {
+        if (!all(coords %in% names(colData(object)))) {
+            stop("'coords' not in colData(object).")
+        }
     }
     
     if (!is.null(name)) {
@@ -577,9 +584,10 @@
     
 }
 
+#' @importFrom S4Vectors mcols
 .valid.plotSpatial.input <- function(object, img_id, coords, node_color_by, 
                                      node_shape_by, node_size_by, edge_color_by,
-                                     edge_size_by, draw_edges, arrow, 
+                                     edge_size_by, draw_edges, directed, arrow, 
                                      colPairName, ncols, nrows){
     
     if (!is(object, "SingleCellExperiment")) {
@@ -656,7 +664,7 @@
         }
         
         if (!is.null(node_size_by) &&
-            (!edge_color_by %in% names(colData(object)) ||
+            (!edge_color_by %in% names(colData(object)) &&
             !edge_color_by %in% names(mcols(colPair(object, colPairName))))) {
             stop("'edge_color_by' not in 'colData(object)'", 
                  " or in 'mcols(colPair(object, colPairName))'.")
@@ -668,14 +676,14 @@
         }
         
         if (!is.null(edge_size_by) && 
-            (!edge_size_by %in% names(colData(object)) ||
+            (!edge_size_by %in% names(colData(object)) &&
             !edge_size_by %in% names(mcols(colPair(object, colPairName))))) {
             stop("'edge_size_by' not in 'colData(object)'", 
                  " or in 'mcols(colPair(object, colPairName))'.")
         }
         
-        if (length(draw_edges) != 1 | !is.logical(draw_edges)) {
-            stop("'draw_edges' must be a single logical")
+        if (length(directed) != 1 | !is.logical(directed)) {
+            stop("'directed' must be a single logical")
         }
         
         if (!is.null(arrow) && !is(arrow, "arrow")) {

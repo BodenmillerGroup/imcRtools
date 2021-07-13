@@ -31,9 +31,13 @@ Imports:
     SingleCellExperiment,
     vroom,
     BiocNeighbors,
-    RTriangle
+    RTriangle,
+    ggraph,
+    tidygraph,
+    ggplot2
 Suggests:
     CATALYST,
+    grid,
     data.table,
     BiocStyle,
     knitr,

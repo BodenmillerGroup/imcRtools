@@ -19,6 +19,7 @@
 #' entry by which the size of the nodes are defined. 
 #' @param draw_edges should cell-cell interactions be drawn as edges between
 #' nodes? 
+#' @param directed should cell-cell interactions be handled a directed graph?
 #' @param colPairName single character specifying from which 
 #' \code{colPair(object)} slot to retrieve the cell-cell pairings.
 #' @param edge_color_by single character indicating by which to color the edges.
@@ -58,17 +59,42 @@
 #' data(pancreasSCE)
 #' 
 #' sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-#'                          type = "knn", k = 3)
+#'                          type = "knn", k = 3, directed = FALSE)
 #'
+#' # Only nodes
 #' plotSpatial(sce, img_id = "ImageNb",
 #'             node_color_by = "CellType",
 #'             node_shape_by = "ImageNb",
 #'             node_size_by = "Area")
 #'   
+#' # With edges
+#' plotSpatial(sce, img_id = "ImageNb",
+#'             node_color_by = "CellType",
+#'             node_shape_by = "ImageNb",
+#'             node_size_by = "Area",
+#'             draw_edges = TRUE,
+#'             colPairName = "knn_interaction_graph",
+#'             edge_color_by = "Pattern")
+#'             
+#' # With arrows
+#' plotSpatial(sce, img_id = "ImageNb",
+#'             node_color_by = "CellType",
+#'             node_shape_by = "ImageNb",
+#'             node_size_by = "Area",
+#'             draw_edges = TRUE,
+#'             colPairName = "knn_interaction_graph",
+#'             edge_color_by = "Pattern",
+#'             arrow = grid::arrow(length = unit(0.1, "inch")))
+#'   
 #' @seealso 
+#' \code{\link{buildSpatialGraph}} for constructing interaction graphs
 #' 
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #' 
+#' @importFrom tidygraph tbl_graph 
+#' @importFrom ggraph create_layout ggraph geom_node_point geom_edge_link 
+#' facet_nodes  
+#' @importFrom ggplot2 aes_string theme element_text element_blank 
 #' @export
 plotSpatial <- function(object,
                         img_id,
@@ -79,6 +105,7 @@ plotSpatial <- function(object,
                         edge_color_by = NULL,
                         edge_size_by = NULL,
                         draw_edges = FALSE,
+                        directed = TRUE,
                         arrow = NULL,
                         colPairName = NULL,
                         ncols = NULL,
@@ -86,13 +113,16 @@ plotSpatial <- function(object,
     
     .valid.plotSpatial.input(object, img_id, coords, node_color_by, 
                              node_shape_by, node_size_by, edge_color_by,
-                             edge_size_by, draw_edges, arrow, colPairName,
+                             edge_size_by, draw_edges, directed, arrow, colPairName,
                              ncols, nrows)
     
     nodes <- colData(object)[,c(img_id,node_color_by, node_shape_by, 
                                 node_size_by),
                              drop=FALSE]
-    nodes[,node_shape_by] <- as.character(nodes[,node_shape_by])
+    
+    if (!is.null(node_shape_by)) {
+        nodes[,node_shape_by] <- as.character(nodes[,node_shape_by])
+    }
     
     if (draw_edges) {
         edges <- as.data.frame(as(colPair(object, colPairName), "DataFrame"))
@@ -108,9 +138,11 @@ plotSpatial <- function(object,
         }
         
         cur_graph <- tbl_graph(nodes = nodes,
-                               edges = edges)
+                               edges = edges,
+                               directed = directed)
     } else {
-        cur_graph <- tbl_graph(nodes = nodes)
+        cur_graph <- tbl_graph(nodes = nodes,
+                               directed = directed)
     }
     
     if (is(object, "SpatialExperiment")) {
@@ -138,29 +170,26 @@ plotSpatial <- function(object,
                                            shape = node_shape_by)) +
                 geom_edge_link(aes_string(color = edge_color_by, 
                                           size = edge_size_by),
-                               arrow = arrow) +
-                facet_nodes(img_id, scale = "free",
-                            nrow = nrows, ncol = ncols) + 
-                theme(axis.text = element_text(),
-                      panel.background = element_blank())
+                               arrow = arrow)
         } else {
             p <- ggraph(layout) +
                 geom_node_point(aes_string(color = node_color_by,
                                            size = node_size_by,
                                            shape = node_shape_by)) +
                 geom_edge_link(aes_string(color = edge_color_by, 
-                                          size = edge_size_by)) +
-                facet_nodes(img_id, scale = "free",
-                            nrow = nrows, ncol = ncols) 
+                                          size = edge_size_by)) 
         }
     } else {
         p <- ggraph(layout) +
             geom_node_point(aes_string(color = node_color_by,
                                        size = node_size_by,
-                                       shape = node_shape_by)) +
-            facet_nodes(img_id, scale = "free", 
-                        nrow = nrows, ncol = ncols)    
+                                       shape = node_shape_by))   
     }
+    
+    p <- p + facet_nodes(img_id, scales = "free",
+                    nrow = nrows, ncol = ncols) + 
+        theme(axis.text = element_text(),
+              panel.background = element_blank())
         
     return(p)
 }

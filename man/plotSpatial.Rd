@@ -97,14 +97,34 @@ data(pancreasSCE)
 sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
                          type = "knn", k = 3)
 
-plotSpatial(sce, 
+# Only nodes
+plotSpatial(sce, img_id = "ImageNb",
             node_color_by = "CellType",
             node_shape_by = "ImageNb",
             node_size_by = "Area")
   
+# With edges
+plotSpatial(sce, img_id = "ImageNb",
+            node_color_by = "CellType",
+            node_shape_by = "ImageNb",
+            node_size_by = "Area",
+            draw_edges = TRUE,
+            colPairName = "knn_interaction_graph",
+            edge_color_by = "Pattern")
+            
+# With arrows
+plotSpatial(sce, img_id = "ImageNb",
+            node_color_by = "CellType",
+            node_shape_by = "ImageNb",
+            node_size_by = "Area",
+            draw_edges = TRUE,
+            colPairName = "knn_interaction_graph",
+            edge_color_by = "Pattern",
+            arrow = grid::arrow(length = 0.1))
+  
 }
 \seealso{
-
+\code{\link{buildSpatialGraph}} for constructing interaction graphs
 }
 \author{
 Nils Eling (\email{nils.eling@dqbm.uzh.ch})
