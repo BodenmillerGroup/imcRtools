@@ -84,17 +84,16 @@
 #'             draw_edges = TRUE,
 #'             colPairName = "knn_interaction_graph",
 #'             edge_color_by = "Pattern",
-#'             arrow = grid::arrow(length = unit(0.1, "inch")))
+#'             arrow = grid::arrow(length = grid::unit(0.1, "inch")))
 #'   
 #' @seealso 
 #' \code{\link{buildSpatialGraph}} for constructing interaction graphs
 #' 
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #' 
-#' @importFrom tidygraph tbl_graph 
-#' @importFrom ggraph create_layout ggraph geom_node_point geom_edge_link 
-#' facet_nodes  
-#' @importFrom ggplot2 aes_ theme element_text element_blank 
+#' @import ggraph
+#' @importFrom tidygraph tbl_graph  
+#' @importFrom ggplot2 aes_ theme element_text element_blank
 #' @export
 plotSpatial <- function(object,
                         img_id,
@@ -124,7 +123,7 @@ plotSpatial <- function(object,
         nodes[,node_shape_by] <- as.character(nodes[,node_shape_by])
     }
     
-    cur_graph <- .generateGraph(object, colPairName, draw_edges, 
+    cur_graph <- .generateGraph(object, nodes, colPairName, draw_edges, 
                                 edge_color_by, edge_size_by, directed)
     
     if (is(object, "SpatialExperiment")) {

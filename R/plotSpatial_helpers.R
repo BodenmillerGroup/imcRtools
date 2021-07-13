@@ -1,5 +1,5 @@
 # Function to generate the tidygraph
-.generateGraph <- function(object, colPairName, draw_edges, 
+.generateGraph <- function(object, nodes, colPairName, draw_edges, 
                            edge_color_by, edge_size_by, directed){
     if (draw_edges) {
         edges <- as.data.frame(as(colPair(object, colPairName), "DataFrame"))

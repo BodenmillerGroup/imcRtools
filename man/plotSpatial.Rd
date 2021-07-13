@@ -123,7 +123,7 @@ plotSpatial(sce, img_id = "ImageNb",
             draw_edges = TRUE,
             colPairName = "knn_interaction_graph",
             edge_color_by = "Pattern",
-            arrow = grid::arrow(length = unit(0.1, "inch")))
+            arrow = grid::arrow(length = grid::unit(0.1, "inch")))
   
 }
 \seealso{
