@@ -14,6 +14,7 @@ plotSpatial(
   edge_color_by = NULL,
   edge_size_by = NULL,
   draw_edges = FALSE,
+  directed = TRUE,
   arrow = NULL,
   colPairName = NULL,
   ncols = NULL,
@@ -48,6 +49,8 @@ See details for more information.}
 
 \item{draw_edges}{should cell-cell interactions be drawn as edges between
 nodes?}
+
+\item{directed}{should cell-cell interactions be handled a directed graph?}
 
 \item{arrow}{a \code{\link[grid]{arrow}} object specifying how to draw arrows
 between cells.}
@@ -95,7 +98,7 @@ library(cytomapper)
 data(pancreasSCE)
 
 sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-                         type = "knn", k = 3)
+                         type = "knn", k = 3, directed = FALSE)
 
 # Only nodes
 plotSpatial(sce, img_id = "ImageNb",
@@ -120,7 +123,7 @@ plotSpatial(sce, img_id = "ImageNb",
             draw_edges = TRUE,
             colPairName = "knn_interaction_graph",
             edge_color_by = "Pattern",
-            arrow = grid::arrow(length = 0.1))
+            arrow = grid::arrow(length = unit(0.1, "inch")))
   
 }
 \seealso{

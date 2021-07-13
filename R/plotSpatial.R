@@ -94,7 +94,7 @@
 #' @importFrom tidygraph tbl_graph 
 #' @importFrom ggraph create_layout ggraph geom_node_point geom_edge_link 
 #' facet_nodes  
-#' @importFrom ggplot2 aes_string theme element_text element_blank 
+#' @importFrom ggplot2 aes_ theme element_text element_blank 
 #' @export
 plotSpatial <- function(object,
                         img_id,
@@ -124,26 +124,8 @@ plotSpatial <- function(object,
         nodes[,node_shape_by] <- as.character(nodes[,node_shape_by])
     }
     
-    if (draw_edges) {
-        edges <- as.data.frame(as(colPair(object, colPairName), "DataFrame"))
-        
-        if (!is.null(edge_color_by) && 
-            edge_color_by %in% colnames(colData(object))) {
-            edges[,edge_color_by] <- colData(object)[[edge_color_by]][edges$from]
-        }
-        
-        if (!is.null(edge_size_by) && 
-            edge_size_by %in% colnames(colData(object))) {
-            edges[,edge_size_by] <- colData(object)[[edge_size_by]][edges$from]
-        }
-        
-        cur_graph <- tbl_graph(nodes = nodes,
-                               edges = edges,
-                               directed = directed)
-    } else {
-        cur_graph <- tbl_graph(nodes = nodes,
-                               directed = directed)
-    }
+    cur_graph <- .generateGraph(object, colPairName, draw_edges, 
+                                edge_color_by, edge_size_by, directed)
     
     if (is(object, "SpatialExperiment")) {
         layout <- create_layout(cur_graph, layout = "manual",
@@ -162,29 +144,9 @@ plotSpatial <- function(object,
         nrows <- ceiling(ncols)
     }
     
-    if (draw_edges) {
-        if (!is.null(arrow)) {
-            p <- ggraph(layout) +
-                geom_node_point(aes_string(color = node_color_by,
-                                           size = node_size_by,
-                                           shape = node_shape_by)) +
-                geom_edge_link(aes_string(color = edge_color_by, 
-                                          size = edge_size_by),
-                               arrow = arrow)
-        } else {
-            p <- ggraph(layout) +
-                geom_node_point(aes_string(color = node_color_by,
-                                           size = node_size_by,
-                                           shape = node_shape_by)) +
-                geom_edge_link(aes_string(color = edge_color_by, 
-                                          size = edge_size_by)) 
-        }
-    } else {
-        p <- ggraph(layout) +
-            geom_node_point(aes_string(color = node_color_by,
-                                       size = node_size_by,
-                                       shape = node_shape_by))   
-    }
+    p <- .generatePlot(layout, draw_edges, arrow, node_color_by,
+                       node_size_by, node_shape_by, edge_color_by,
+                       edge_size_by)
     
     p <- p + facet_nodes(img_id, scales = "free",
                     nrow = nrows, ncol = ncols) + 
