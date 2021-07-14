@@ -11,6 +11,7 @@
 #' @param group if selecting "celltypes" in \code{summarize_by} a single character specifying the \code{colData(object)} entry containing the
 #' cellular features that should be summarized in the neighborhood.
 #' Supported entries are of type character.
+#' @param assay_type if selecting "expression" in \code{summarize_by} name of the assay from the \code{SingleCellExperiment} to use.
 #' @param subset_row if selecting "expression" in \code{summarize_by} a character vector specifying the entries from \code{rownames(object)}
 #' to use for the summary statistics.
 #' @param summaryStats if selecting "expression" in \code{summarize_by} then a single character specifying the summary statistics should be provided.
@@ -24,10 +25,11 @@
 #'
 #' @author Daniel Schulz (\email{daniel.schulz@@uzh.ch})
 #'
-#' @importFrom dplyr as_tibble group_by count select summarise across
-#' @importFrom tidyr pivot_wider
+#' @importFrom data.table as.data.table dcast melt
 #' @importFrom S4Vectors DataFrame
 #' @importFrom SummarizedExperiment assay
+#' @importFrom SingleCellExperiment colPair colData
+#' @importFrom stats median sd var
 #' @export
 
 summarizeNeighbors <- function(object,
@@ -44,19 +46,13 @@ summarizeNeighbors <- function(object,
   .valid.summarizeNeighbors.input(object, colPairName, summarize_by, group, assay_type, subset_row, summaryStats)
 
 
-  cur_dat <- as_tibble(colPair(object,colPairName))
-
   if (summarize_by == "celltypes") {
 
-    cur_out <- cur_dat %>%
-      mutate(celltype = colData(object)[[group]][cur_dat$to]) %>%
-      group_by(from,.drop=FALSE) %>%
-      count(celltype) %>%
-      pivot_wider(names_from = celltype,values_from = n, values_fill = 0) %>%
-      ungroup() %>%
-      select(unique(colData(object)[[group]]))
+    cur_dat <- as.data.table(colPair(object,colPairName))
 
-    # add the dataframe to the object
+    cur_dat[,celltype := colData(object)[[group]][cur_dat$to]]
+
+    cur_out <- DataFrame(dcast(cur_dat,formula = "from ~ celltype", fun.aggregate = length)[,-1])
 
     name <- ifelse(is.null(name), "summarizedNeighbors", name)
 
@@ -68,21 +64,26 @@ summarizeNeighbors <- function(object,
 
   else if (summarize_by == "expression") {
 
-    exp_dat <- cbind(cur_dat,as_tibble(t(assay(object,assay_type)))[cur_dat$to,])
+    cur_dat <- as.data.table(colPair(object,colPairName))
 
-    marker_list <- list(mean = mean, median = median, sd = sd , var = var)
+    cur_dat <- cbind(cur_dat,t(assay(object,assay_type))[cur_dat$to,])
 
+    stat_list <- list(median = median, sd = sd , var = var)
 
-
-    cur_out <- exp_dat %>%
-      select(c(from,to,subset_row)) %>%
-      group_by(from,.drop=FALSE) %>%
-      summarise(across(.cols = all_of(cur_markers),marker_list[summaryStats])) %>%
-      select(! from)
+    cur_dat <- cur_dat[,c("from","to",..subset_row)]
+    cur_dat <- melt(cur_dat,measure.vars = subset_row)
+    if (summaryStats == "mean"){
+      cur_dat[, x := mean(value),by=c("from","variable")]
+    }
+    if (summaryStats %in% c("median","sd","var")) {
+      cur_dat[, x := stat_list[[summaryStats]](value),by=c("from","variable")]
+    }
+    cur_dat <- unique(cur_dat[,c("from","variable","x")])
+    cur_out <- dcast(cur_dat,formula = "from ~ variable",value.var = "x")
 
     name <- ifelse(is.null(name), paste0(summaryStats,"_summarizedExpression"), name)
 
-    colData(object)[[name]] <- DataFrame(cur_out)
+    colData(object)[[name]] <- DataFrame(cur_out[,-1])
 
     return(object)
 

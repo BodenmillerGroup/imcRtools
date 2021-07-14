@@ -34,7 +34,8 @@ Imports:
     RTriangle,
     ggraph,
     tidygraph,
-    ggplot2
+    ggplot2,
+    tidyr
 Suggests:
     CATALYST,
     grid,
