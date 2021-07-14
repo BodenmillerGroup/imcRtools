@@ -139,13 +139,13 @@ from "hot pixel" filtered image stacks specified via
 `intensities = "Intensity_MeanIntensity_FullStackFiltered"`:
 
 ```{r read_cpout}
-cur_path <- system.file("extdata/mockData/cpout", package = "imcRtools")
+#cur_path <- system.file("extdata/mockData/cpout", package = "imcRtools")
 
 # Read as SpatialExperiment
-(spe <- read_cpout(cur_path))
+#(spe <- read_cpout(cur_path))
 
 # Read as SingleCellExperiment
-(sce <- read_cpout(cur_path, return_as = "sce"))
+#(sce <- read_cpout(cur_path, return_as = "sce"))
 ```
 
 ## Read in steinbock output
@@ -156,13 +156,13 @@ and interaction graphs) as produced by the
 in using the `read_steinbock` function:
 
 ```{r read_steinbock}
-cur_path <- system.file("extdata/mockData/steinbock", package = "imcRtools")
+#cur_path <- system.file("extdata/mockData/steinbock", package = "imcRtools")
 
 # Read as SpatialExperiment
-(spe <- read_steinbock(cur_path))
+#(spe <- read_steinbock(cur_path))
 
 # Read as SingleCellExperiment
-(sce <- read_steinbock(cur_path, return_as = "sce"))
+#(sce <- read_steinbock(cur_path, return_as = "sce"))
 ```
 
 For more information on the `read_steinbock` function, please refer to
@@ -179,10 +179,10 @@ by `cytomapper`.
 The user needs to provide a path from which all .txt files will be read in:
 
 ```{r read-txt-1}
-path <- system.file("extdata/mockData/raw", package = "imcRtools")
+#path <- system.file("extdata/mockData/raw", package = "imcRtools")
 
-cur_CytoImageList <- readImagefromTXT(path)
-cur_CytoImageList
+#cur_CytoImageList <- readImagefromTXT(path)
+#cur_CytoImageList
 ```
 
 # Spillover correction for IMC data
@@ -205,9 +205,9 @@ be read into a `SingleCellExperiment` container for downstream use with the
 `CATALYST` package. For this, the `readSCEfromTXT` function can be used:
 
 ```{r read-single-metals}
-path <- system.file("extdata/spillover", package = "imcRtools")
-sce <- readSCEfromTXT(path) 
-sce
+#path <- system.file("extdata/spillover", package = "imcRtools")
+#sce <- readSCEfromTXT(path) 
+#sce
 ```
 
 Here, the example metal spot files are read in. The spot information are stored
@@ -222,7 +222,7 @@ function, which visualizes the aggregated (default `median`) pixel intensities
 per spot and per metal:
 
 ```{r plotSpotHeatmap, fig.width=5, fig.height=5}
-plotSpotHeatmap(sce)
+#plotSpotHeatmap(sce)
 ```
 
 Here, high median pixel intensities can be observed in each spot an their 
@@ -231,7 +231,7 @@ To quickly identify spot/channel combinations with low signal, the `threshold`
 parameter can be set:
 
 ```{r plotSpotHeatmap-2, fig.width=5, fig.height=5}
-plotSpotHeatmap(sce, log = FALSE, threshold = 200)
+#plotSpotHeatmap(sce, log = FALSE, threshold = 200)
 ```
 
 ## Consecutive pixel binning
@@ -241,9 +241,9 @@ Therefore, the `binAcrossPixels` function can be used to sum consecutive pixels
 and enhance the acquired signal. This step is optional for spillover estimation.
 
 ```{r pixel-binning, fig.width=5, fig.height=5 }
-sce2 <- binAcrossPixels(sce, bin_size = 5)
+#sce2 <- binAcrossPixels(sce, bin_size = 5)
 
-plotSpotHeatmap(sce2, log = FALSE, threshold = 200)
+#plotSpotHeatmap(sce2, log = FALSE, threshold = 200)
 ```
 
 ## Pixel filtering
@@ -260,18 +260,18 @@ these pixels, the `filterPixels` function can be used. This function further
 removes pixels assigned to masses, which only contain very few pixels.
 
 ```{r assign-pixels}
-library(CATALYST)
+#library(CATALYST)
 
-bc_key <- as.numeric(unique(sce$sample_mass))
-assay(sce, "exprs") <- asinh(counts(sce)/5)
-sce <- assignPrelim(sce, bc_key = bc_key)
-sce <- estCutoffs(sce)
-sce <- applyCutoffs(sce)
+#bc_key <- as.numeric(unique(sce$sample_mass))
+#assay(sce, "exprs") <- asinh(counts(sce)/5)
+#sce <- assignPrelim(sce, bc_key = bc_key)
+#sce <- estCutoffs(sce)
+#sce <- applyCutoffs(sce)
 
 # Filter out mislabelled pixels
-sce <- filterPixels(sce)
+#sce <- filterPixels(sce)
 
-table(sce$bc_id, sce$sample_mass)
+#table(sce$bc_id, sce$sample_mass)
 ```
 
 ## Estimating the spillover matrix
@@ -280,8 +280,8 @@ Finally, the pre-processed `SiingleCellExperiment` object can be used to
 generate the spillover matrix using the `CATALYST::computeSpillmat` function:
 
 ```{r estimate-spillover}
-sce <- computeSpillmat(sce)
-metadata(sce)$spillover_matrix
+#sce <- computeSpillmat(sce)
+#metadata(sce)$spillover_matrix
 ```
 
 # Spatial analysis
