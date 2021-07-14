@@ -3,5 +3,5 @@ test_that("buildSpatialGraph function works", {
     data("pancreasSCE")
     
     cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-                                 type = "expansion", threshold = 10)
+                                 type = "delauney")
 })
