@@ -10,7 +10,7 @@
 #' features from the \code{colData(object)} or by the marker expression of the neighboring cells.
 #' @param group if selecting "celltypes" in \code{summarize_by} a single character specifying the \code{colData(object)} entry containing the
 #' cellular features that should be summarized in the neighborhood.
-#' Supported entries are of type character.
+#' Supported entries are of type character. Defaults to celltypes.
 #' @param assay_type if selecting "expression" in \code{summarize_by} name of the assay from the \code{SingleCellExperiment} to use.
 #' @param subset_row if selecting "expression" in \code{summarize_by} a character vector specifying the entries from \code{rownames(object)}
 #' to use for the summary statistics.
@@ -50,7 +50,7 @@ summarizeNeighbors <- function(object,
 
     cur_dat <- as.data.table(colPair(object,colPairName))
 
-    cur_dat[,celltype := colData(object)[[group]][cur_dat$to]]
+    cur_dat$celltype <- colData(object)[[group]][cur_dat$to]
 
     cur_out <- DataFrame(dcast(cur_dat,formula = "from ~ celltype", fun.aggregate = length)[,-1])
 

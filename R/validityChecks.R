@@ -593,11 +593,19 @@
   }
 
   if (! colPairName %in% colPairNames(object)) {
-    stop("colPairName is not a graph in the current object.")
+    stop("colPairName is not part of colPairs in this object.")
+  }
+
+  if (is.null(summarize_by)) {
+    stop("please specify whether to summarize the neighborhood by celltypes or expression")
   }
 
 
   if (summarize_by == "celltypes") {
+
+    if (is.null(group)) {
+      stop("provide a colData entry to summarize by")
+    }
 
     if (! group %in% colnames(colData(object))) {
       stop("group is not a valid colData entry in the current object.")
@@ -618,8 +626,8 @@
       stop("provide rownames to calculate summary on")
     }
 
-    if (! subset_row %in% rownames(object)) {
-      stop("excluded markers are not found in this object.")
+    if (! all(subset_row %in% rownames(object))) {
+      stop("selected markers are not part of the object.")
     }
 
     if (is.null(summaryStats)) {

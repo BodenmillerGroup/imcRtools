@@ -35,7 +35,7 @@ Imports:
     ggraph,
     tidygraph,
     ggplot2,
-    tidyr
+    data.table
 Suggests:
     CATALYST,
     grid,

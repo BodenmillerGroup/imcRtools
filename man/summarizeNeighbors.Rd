@@ -26,7 +26,9 @@ features from the \code{colData(object)} or by the marker expression of the neig
 
 \item{group}{if selecting "celltypes" in \code{summarize_by} a single character specifying the \code{colData(object)} entry containing the
 cellular features that should be summarized in the neighborhood.
-Supported entries are of type character.}
+Supported entries are of type character. Defaults to celltypes.}
+
+\item{assay_type}{if selecting "expression" in \code{summarize_by} name of the assay from the \code{SingleCellExperiment} to use.}
 
 \item{subset_row}{if selecting "expression" in \code{summarize_by} a character vector specifying the entries from \code{rownames(object)}
 to use for the summary statistics.}
