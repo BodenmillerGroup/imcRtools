@@ -658,12 +658,12 @@
             stop("No column pairing with name ", colPairName, " found.")
         }
         
-        if (!is.null(node_size_by) && 
+        if (!is.null(edge_color_by) && 
             (length(edge_color_by) != 1 | !is.character(edge_color_by))) {
             stop("'edge_color_by' must be a single string.")
         }
         
-        if (!is.null(node_size_by) &&
+        if (!is.null(edge_color_by) &&
             (!edge_color_by %in% names(colData(object)) &&
             !edge_color_by %in% names(mcols(colPair(object, colPairName))))) {
             stop("'edge_color_by' not in 'colData(object)'", 

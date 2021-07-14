@@ -11,8 +11,13 @@ plotSpatial(
   node_color_by = NULL,
   node_shape_by = NULL,
   node_size_by = NULL,
+  node_color_fix = NULL,
+  node_shape_fix = NULL,
+  node_size_fix = NULL,
   edge_color_by = NULL,
   edge_size_by = NULL,
+  edge_color_fix = NULL,
+  edge_size_fix = NULL,
   draw_edges = FALSE,
   directed = TRUE,
   arrow = NULL,
@@ -41,11 +46,24 @@ entry by which the shape of the nodes are defined.}
 \item{node_size_by}{single character indicating the \code{colData(object)}
 entry by which the size of the nodes are defined.}
 
+\item{node_color_fix}{single character or numeric specifying the color of the 
+nodes.}
+
+\item{node_shape_fix}{single numeric or character specifying the shape of the 
+nodes}
+
+\item{node_size_fix}{single numeric specifying the size of the nodes}
+
 \item{edge_color_by}{single character indicating by which to color the edges.
 See details for more information.}
 
 \item{edge_size_by}{single character determining the size of the edges.
 See details for more information.}
+
+\item{edge_color_fix}{single character or numeric specifying the color of the 
+edges.}
+
+\item{edge_size_fix}{single numeric specifying the size of the edges.}
 
 \item{draw_edges}{should cell-cell interactions be drawn as edges between
 nodes?}
@@ -122,7 +140,7 @@ plotSpatial(sce, img_id = "ImageNb",
             node_size_by = "Area",
             draw_edges = TRUE,
             colPairName = "knn_interaction_graph",
-            edge_color_by = "Pattern",
+            edge_color_fix = "green",
             arrow = grid::arrow(length = grid::unit(0.1, "inch")))
   
 }

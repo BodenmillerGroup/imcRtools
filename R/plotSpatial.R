@@ -17,6 +17,11 @@
 #' entry by which the shape of the nodes are defined. 
 #' @param node_size_by single character indicating the \code{colData(object)}
 #' entry by which the size of the nodes are defined. 
+#' @param node_color_fix single character or numeric specifying the color of the 
+#' nodes.
+#' @param node_size_fix single numeric specifying the size of the nodes
+#' @param node_shape_fix single numeric or character specifying the shape of the 
+#' nodes
 #' @param draw_edges should cell-cell interactions be drawn as edges between
 #' nodes? 
 #' @param directed should cell-cell interactions be handled a directed graph?
@@ -24,8 +29,11 @@
 #' \code{colPair(object)} slot to retrieve the cell-cell pairings.
 #' @param edge_color_by single character indicating by which to color the edges.
 #' See details for more information.
-#' @param edge_size_by single character determining the size of the edges.
+#' @param edge_width_by single character determining the size of the edges.
 #' See details for more information.
+#' @param edge_color_fix single character or numeric specifying the color of the 
+#' edges.
+#' @param edge_width_fix single numeric specifying the size of the edges.
 #' @param arrow a \code{\link[grid]{arrow}} object specifying how to draw arrows
 #' between cells.
 #' @param ncols number of columns of the grid to arrange individual images.
@@ -83,7 +91,7 @@
 #'             node_size_by = "Area",
 #'             draw_edges = TRUE,
 #'             colPairName = "knn_interaction_graph",
-#'             edge_color_by = "Pattern",
+#'             edge_color_fix = "green",
 #'             arrow = grid::arrow(length = grid::unit(0.1, "inch")))
 #'   
 #' @seealso 
@@ -93,7 +101,8 @@
 #' 
 #' @import ggraph
 #' @importFrom tidygraph tbl_graph  
-#' @importFrom ggplot2 aes_ theme element_text element_blank
+#' @importFrom ggplot2 aes_ theme element_text element_blank scale_color_manual
+#' scale_size_manual scale_shape_manual
 #' @export
 plotSpatial <- function(object,
                         img_id,
@@ -101,18 +110,24 @@ plotSpatial <- function(object,
                         node_color_by = NULL,
                         node_shape_by = NULL,
                         node_size_by = NULL,
+                        node_color_fix = NULL,
+                        node_shape_fix = NULL,
+                        node_size_fix = NULL,
                         edge_color_by = NULL,
-                        edge_size_by = NULL,
+                        edge_width_by = NULL,
+                        edge_color_fix = NULL,
+                        edge_width_fix = NULL,
                         draw_edges = FALSE,
                         directed = TRUE,
                         arrow = NULL,
+                        end_cap = NULL,
                         colPairName = NULL,
                         ncols = NULL,
                         nrows = NULL){
     
     .valid.plotSpatial.input(object, img_id, coords, node_color_by, 
                              node_shape_by, node_size_by, edge_color_by,
-                             edge_size_by, draw_edges, directed, arrow, colPairName,
+                             edge_width_by, draw_edges, directed, arrow, colPairName,
                              ncols, nrows)
     
     nodes <- colData(object)[,c(img_id,node_color_by, node_shape_by, 
@@ -124,7 +139,7 @@ plotSpatial <- function(object,
     }
     
     cur_graph <- .generateGraph(object, nodes, colPairName, draw_edges, 
-                                edge_color_by, edge_size_by, directed)
+                                edge_color_by, edge_width_by, directed)
     
     if (is(object, "SpatialExperiment")) {
         layout <- create_layout(cur_graph, layout = "manual",
@@ -143,14 +158,14 @@ plotSpatial <- function(object,
         nrows <- ceiling(ncols)
     }
     
-    p <- .generatePlot(layout, draw_edges, arrow, node_color_by,
-                       node_size_by, node_shape_by, edge_color_by,
-                       edge_size_by)
+    p <- .generatePlot(layout, draw_edges, directed, arrow, end_cap, node_color_by,
+                       node_size_by, node_shape_by, node_color_fix, node_size_fix, 
+                       node_shape_fix, edge_color_by, edge_width_by, edge_color_fix, 
+                       edge_width_fix)
     
-    p <- p + facet_nodes(img_id, scales = "free",
-                    nrow = nrows, ncol = ncols) + 
-        theme(axis.text = element_text(),
-              panel.background = element_blank())
+    p <- .postProcessPlot(p, img_id, nrows, ncols, node_color_fix,
+                          node_shape_fix, node_size_fix, edge_color_fix, 
+                          edge_width_fix)
         
     return(p)
 }
