@@ -13,9 +13,9 @@
 #' Supported entries are of type character. Defaults to celltypes.
 #' @param assay_type if selecting "expression" in \code{summarize_by} name of the assay from the \code{SingleCellExperiment} to use.
 #' @param subset_row if selecting "expression" in \code{summarize_by} a character vector specifying the entries from \code{rownames(object)}
-#' to use for the summary statistics.
+#' to use for the summary statistics. If not specified will use all entries of \code{rownames(object)}.
 #' @param summaryStats if selecting "expression" in \code{summarize_by} then a single character specifying the summary statistics should be provided.
-#' Supported entries are "mean", "median", "sd", "var".
+#' Supported entries are "mean", "median", "sd", "var". Defaults to mean if not specified.
 #' @param name single character specifying the name of the data frame to be saved in the \code{colData(object)}.
 #'
 #' @return returns a \code{SingleCellExperiment}
@@ -38,10 +38,12 @@ summarizeNeighbors <- function(object,
                                group = NULL,
                                assay_type = NULL,
                                subset_row = NULL,
-                               summaryStats = NULL,
+                               summaryStats = c("mean","median","sd","var"),
                                name = NULL){
 
   summarize_by = match.arg(summarize_by)
+  
+  summaryStats = match.arg(summaryStats)
 
   .valid.summarizeNeighbors.input(object, colPairName, summarize_by, group, assay_type, subset_row, summaryStats)
 
@@ -69,6 +71,10 @@ summarizeNeighbors <- function(object,
     cur_dat <- cbind(cur_dat,t(assay(object,assay_type))[cur_dat$to,])
 
     stat_list <- list(median = median, sd = sd , var = var)
+    
+    if (is.null(subset_row)) {
+      subset_row <- rownames(object)
+    }
 
     cur_dat <- cur_dat[,c("from","to",..subset_row)]
     cur_dat <- melt(cur_dat,measure.vars = subset_row)

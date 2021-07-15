@@ -39,7 +39,6 @@ Imports:
 Suggests:
     CATALYST,
     grid,
-    data.table,
     BiocStyle,
     knitr,
     rmarkdown,

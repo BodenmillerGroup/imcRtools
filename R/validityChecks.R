@@ -593,13 +593,8 @@
   }
 
   if (! colPairName %in% colPairNames(object)) {
-    stop("colPairName is not part of colPairs in this object.")
+    stop("'colPairName' not in colPair(object).")
   }
-
-  if (is.null(summarize_by)) {
-    stop("please specify whether to summarize the neighborhood by celltypes or expression")
-  }
-
 
   if (summarize_by == "celltypes") {
 
@@ -608,36 +603,23 @@
     }
 
     if (! group %in% colnames(colData(object))) {
-      stop("group is not a valid colData entry in the current object.")
+      stop("'group' is not a valid enty of colData(object).")
     }
   }
 
   if (summarize_by == "expression") {
 
     if (is.null(assay_type)) {
-      stop("assay_type not provided")
+      stop("'assay_type' not provided")
     }
 
     if (! assay_type %in% assayNames(object)) {
-      stop("assay does not exist.")
-    }
-
-    if (is.null(subset_row)) {
-      stop("provide rownames to calculate summary on")
+      stop("'assay_type' not an assay in the 'object'.")
     }
 
     if (! all(subset_row %in% rownames(object))) {
-      stop("selected markers are not part of the object.")
+      stop("subset_row not in rownames(object).")
     }
-
-    if (is.null(summaryStats)) {
-      stop("provide summary statistics")
-    }
-
-    if (! summaryStats %in% c("mean","median","sd","var")) {
-      stop("please provide a valid summary statistic function as character")
-    }
-
   }
 }
 
