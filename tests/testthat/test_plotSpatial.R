@@ -206,7 +206,7 @@ have 121. Consider specifying shapes manually if you must have them.")
     
     p <- plotSpatial(cur_sce, img_id = "ImageNb", 
                      draw_edges = TRUE, colPairName = "knn_interaction_graph",
-                     edge_width_by = "Area",)
+                     edge_width_by = "Area")
     expect_s3_class(p, "ggraph")
     expect_silent(print(p))
     
@@ -224,7 +224,7 @@ have 121. Consider specifying shapes manually if you must have them.")
     
     p <- plotSpatial(cur_sce, img_id = "ImageNb", 
                      draw_edges = TRUE, colPairName = "knn_interaction_graph",
-                     edge_width_by = "test_2",)
+                     edge_width_by = "test_2")
     expect_s3_class(p, "ggraph")
     expect_silent(print(p))
     
@@ -249,8 +249,153 @@ have 121. Consider specifying shapes manually if you must have them.")
     expect_s3_class(p, "ggraph")
     expect_silent(print(p))
     
-    p <- plotSpatial(cur_sce, img_id = "ImageName", draw_edges = TRUE, colPairName = "knn_interaction_graph",
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", 
+                     draw_edges = TRUE, colPairName = "knn_interaction_graph",
                      directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    expect_equal(p$data$x, pancreasSCE$Pos_X)
+    expect_equal(p$data$y, pancreasSCE$Pos_Y)
+    expect_equal(p$data$ImageNb, pancreasSCE$ImageNb)
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", 
+                     draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_color_by = "CellType",
+                     directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", 
+                     draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_color_by = "CellType", node_color_by = "CellType",
+                     directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", 
+                     draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_color_by = "Pattern", node_color_by = "Pattern",
+                     directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", 
+                     draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_color_by = "Area", node_color_by = "Area",
+                     directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", 
+                     draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_width_by = "CellType",
+                     directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", 
+                     draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_width_by = "Pattern",
+                     directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", 
+                     draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_width_by = "Area",
+                     directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", 
+                     draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_width_by = "test",
+                     directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", 
+                     draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_width_by = "test_2",
+                     directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_color_by = "CellType",
+                     edge_color_fix = "red",
+                     directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_color_fix = "red",
+                     directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_width_fix = 0.1, edge_width_by = "Area",
+                     directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_width_fix = 0.1,
+                     directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_width_by = "CellType", edge_color_by = "Area", node_color_by = "CellType",
+                     node_shape_by = "ImageNb", node_size_by = "Area",
+                     directed = TRUE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     arrow = arrow(),
+                     directed = TRUE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     arrow = arrow(angle = 10, length = unit(0.1, "inch"), type = "closed"),
+                     directed = TRUE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     arrow = arrow(angle = 10, length = unit(0.1, "inch"), type = "closed"),
+                     end_cap = circle(0.3, "cm"),
+                     directed = TRUE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     arrow = arrow(angle = 10, length = unit(0.1, "inch"), type = "closed"),
+                     end_cap = circle(0.3, "cm"),
+                     directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    ## Subsetting
+    cur_sce2 <- cur_sce[,cur_sce$Pattern]
+    
+    p <- plotSpatial(cur_sce2, img_id = "ImageNb", draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     arrow = arrow(angle = 10, length = unit(0.05, "inch"), type = "closed"),
+                     end_cap = circle(0.3, "cm"),
+                     directed = TRUE, scales = "fixed", node_size_fix = 0.1, edge_width_fix = 0.5)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce2[,cur_sce2$ImageNb == 2], img_id = "ImageNb", draw_edges = TRUE, 
+                     colPairName = "knn_interaction_graph",
+                     arrow = arrow(angle = 10, length = unit(0.05, "inch"), type = "closed"),
+                     end_cap = circle(0.3, "cm"),
+                     directed = TRUE, scales = "fixed", node_size_fix = 0.1, 
+                     edge_width_fix = 0.5)
     expect_s3_class(p, "ggraph")
     expect_silent(print(p))
     

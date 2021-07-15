@@ -113,17 +113,18 @@ plotSpatial <- function(object,
                         node_color_fix = NULL,
                         node_shape_fix = NULL,
                         node_size_fix = NULL,
+                        draw_edges = FALSE,
+                        directed = TRUE,
                         edge_color_by = NULL,
                         edge_width_by = NULL,
                         edge_color_fix = NULL,
                         edge_width_fix = NULL,
-                        draw_edges = FALSE,
-                        directed = TRUE,
                         arrow = NULL,
                         end_cap = NULL,
                         colPairName = NULL,
                         ncols = NULL,
-                        nrows = NULL){
+                        nrows = NULL,
+                        scales = "free"){
     
     .valid.plotSpatial.input(object, img_id, coords, node_color_by, 
                              node_shape_by, node_size_by, edge_color_by,
@@ -163,9 +164,9 @@ plotSpatial <- function(object,
                        node_shape_fix, edge_color_by, edge_width_by, edge_color_fix, 
                        edge_width_fix)
     
-    p <- .postProcessPlot(p, img_id, nrows, ncols, node_color_fix,
+    p <- .postProcessPlot(p, object, img_id, nrows, ncols, node_color_fix,
                           node_shape_fix, node_size_fix, edge_color_fix, 
-                          edge_width_fix)
+                          edge_width_fix, scales)
         
     return(p)
 }

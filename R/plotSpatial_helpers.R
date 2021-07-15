@@ -88,9 +88,9 @@
 }
 
 # Post process the plots
-.postProcessPlot <- function(p, img_id, nrows, ncols, node_color_fix,
+.postProcessPlot <- function(p, object, img_id, nrows, ncols, node_color_fix,
                              node_shape_fix, node_size_fix, edge_color_fix, 
-                             edge_width_fix){
+                             edge_width_fix, scales){
     
     if (!is.null(node_color_fix)) {
         names(node_color_fix) <- as.character(node_color_fix)
@@ -118,9 +118,15 @@
                                     guide = "none") 
     }
     
-    p <- p + facet_nodes(img_id, scales = "free",
-                         nrow = nrows, ncol = ncols) + 
-        theme(axis.text = element_text(),
-              panel.background = element_blank()) 
+    if (length(unique(colData(object))[[img_id]]) > 1) {
+        p <- p + facet_nodes(img_id, scales = scales,
+                             nrow = nrows, ncol = ncols) + 
+            theme(axis.text = element_text(),
+                  panel.background = element_blank()) 
+    } else {
+        p <- p + theme(axis.text = element_text(),
+                  panel.background = element_blank()) +
+            ggtitle(unique(colData(object))[[img_id]])
+    }
     
 }
