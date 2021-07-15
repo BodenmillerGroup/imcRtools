@@ -106,3 +106,4 @@ test_that("summarizeNeighbors function works", {
   
 })
 
+#blabbla
