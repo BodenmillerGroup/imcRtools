@@ -390,6 +390,13 @@ have 121. Consider specifying shapes manually if you must have them.")
     expect_s3_class(p, "ggraph")
     expect_silent(print(p))
     
+    p <- plotSpatial(cur_sce2, img_id = "ImageNb", draw_edges = TRUE, 
+                     colPairName = "knn_interaction_graph", edge_width_by = "CellType", 
+                     edge_color_by = "Area", node_color_by = "CellType",
+                     node_shape_by = "ImageNb", node_size_by = "Area",)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
     p <- plotSpatial(cur_sce2[,cur_sce2$ImageNb == 2], img_id = "ImageNb", draw_edges = TRUE, 
                      colPairName = "knn_interaction_graph",
                      arrow = arrow(angle = 10, length = unit(0.05, "inch"), type = "closed"),
