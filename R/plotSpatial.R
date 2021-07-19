@@ -36,8 +36,14 @@
 #' @param edge_width_fix single numeric specifying the size of the edges.
 #' @param arrow a \code{\link[grid]{arrow}} object specifying how to draw arrows
 #' between cells.
+#' @param end_cap \code{\link[ggraph]{geometry}} object specifying how long the 
+#' edges are. This only takes effect when drawing arrows. 
+#' Default: \code{end_cap = circle(0.1, 'cm')}
 #' @param ncols number of columns of the grid to arrange individual images.
 #' @param nrows number of rows of the grid to arrange individual images.
+#' @param scales one of \code{"free"}, \code{"fixed"}, \code{"free_x"} or 
+#' \code{"free_y"} indicating if x- and y-axis ranges should be fixed across
+#' all images. 
 #' 
 #' @return returns a \code{ggplot} object.
 #' 
@@ -48,7 +54,10 @@
 #' \code{SingleCellExperiment} input object) or from the
 #' \code{spatialCoords(object)} slot (for a \code{SpatialExperiment} input
 #' object). Node aesthetics are controlled by setting \code{node_color_by}, 
-#' \code{node_shape_by} and \code{node_size_by}. 
+#' \code{node_shape_by} and \code{node_size_by}.for associating the aesthetics
+#' with variables. If node aesthetics should be the same for all nodes,  
+#' \code{node_color_fix}, \code{node_shape_fix} and \code{node_size_fix} can 
+#' be set.
 #' 
 #' When \code{draw_edges = TRUE}, cell-cell interactions are visualized in form
 #' of edges between nodes. For this, \code{object} needs to contain 
@@ -56,11 +65,15 @@
 #' can be set by specifying either an entry in 
 #' \code{mcols(colPair(object, colPairName))} (edge attributes) or in 
 #' \code{colData(object)}. In the latter case, edges are colored by attributes 
-#' associated to the "from" node. 
+#' associated to the "from" node. Variable aesthetics can be set using 
+#' \code{edge_color_by} and \code{edge_width_by}. If all edges should have 
+#' the same width or color, \code{edge_color_fix} and \code{edge_width_fix}
+#' can be set.
 #' 
 #' Arrows for displaying directed graphs can be drawn by supplying a 
 #' \code{\link[grid]{arrow}} object. Arrow attributes can be set within this 
-#' class.
+#' class. To cap the edge before it reaches the next node, the \code{end_cap}
+#' parameter can be used. 
 #' 
 #' @examples
 #' library(cytomapper)
@@ -92,7 +105,8 @@
 #'             draw_edges = TRUE,
 #'             colPairName = "knn_interaction_graph",
 #'             edge_color_fix = "green",
-#'             arrow = grid::arrow(length = grid::unit(0.1, "inch")))
+#'             arrow = grid::arrow(length = grid::unit(0.1, "inch")),
+#'             end_cap = ggraph::circle(0.2, "cm"))
 #'   
 #' @seealso 
 #' \code{\link{buildSpatialGraph}} for constructing interaction graphs
@@ -128,8 +142,9 @@ plotSpatial <- function(object,
     
     .valid.plotSpatial.input(object, img_id, coords, node_color_by, 
                              node_shape_by, node_size_by, edge_color_by,
-                             edge_width_by, draw_edges, directed, arrow, colPairName,
-                             ncols, nrows)
+                             edge_width_by, draw_edges, directed, arrow, 
+                             end_cap, colPairName,
+                             ncols, nrows, scales)
     
     nodes <- colData(object)[,c(img_id,node_color_by, node_shape_by, 
                                 node_size_by),
@@ -144,8 +159,8 @@ plotSpatial <- function(object,
     
     if (is(object, "SpatialExperiment")) {
         layout <- create_layout(cur_graph, layout = "manual",
-                                x = spatialCoords(object)[[coords[1]]],
-                                y = spatialCoords(object)[[coords[2]]])
+                                x = spatialCoords(object)[,coords[1]],
+                                y = spatialCoords(object)[,coords[2]])
     } else {
         layout <- create_layout(cur_graph, layout = "manual",
                                 x = colData(object)[[coords[1]]],

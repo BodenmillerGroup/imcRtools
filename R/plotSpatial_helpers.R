@@ -88,6 +88,7 @@
 }
 
 # Post process the plots
+#' @importFrom ggplot2 ggtitle
 .postProcessPlot <- function(p, object, img_id, nrows, ncols, node_color_fix,
                              node_shape_fix, node_size_fix, edge_color_fix, 
                              edge_width_fix, scales){
