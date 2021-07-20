@@ -7,12 +7,14 @@
 buildSpatialGraph(
   object,
   img_id,
-  type = c("expansion", "delauney", "knn"),
+  type = c("expansion", "delaunay", "knn"),
   k = NULL,
   threshold = NULL,
   coords = c("Pos_X", "Pos_Y"),
   name = NULL,
   directed = TRUE,
+  mode = "collapse",
+  mutual_edges = TRUE,
   BNPARAM = KmknnParam(),
   BPPARAM = SerialParam(),
   ...
@@ -27,8 +29,8 @@ containing the unique image identifiers.}
 
 \item{type}{single character specifying the type of graph to be build.
 Supported entries are \code{"expansion"} (default) to find interacting
-cells via distance thresholding; \code{"delauney"} to find interactions via
-delauney triangulation; \code{"knn"} to find the k nearest neighbouring
+cells via distance thresholding; \code{"delaunay"} to find interactions via
+delaunay triangulation; \code{"knn"} to find the k nearest neighbouring
 cells.}
 
 \item{k}{(when \code{type = "knn"}) single numeric integer defining the
@@ -55,7 +57,7 @@ defining how to parallelise computations.}
 \item{...}{additional parameters passed to the
 \code{\link[BiocNeighbors]{findNeighbors}} function (\code{type =
 "expansion"}), the \code{\link[RTriangle]{triangulate}} function
-(\code{type = "delauney"}) or the \code{\link[BiocNeighbors]{findKNN}}
+(\code{type = "delaunay"}) or the \code{\link[BiocNeighbors]{findKNN}}
 function (\code{type = "knn"})).}
 }
 \value{
@@ -65,7 +67,7 @@ containing the graph in form of a \code{SelfHits} object in
 }
 \description{
 Function to define cell-cell interactions via distance-based
-expansion, delauney triangulation or k nearest neighbour detection.
+expansion, delaunay triangulation or k nearest neighbour detection.
 }
 \section{Building an interaction graph}{
 
@@ -75,7 +77,7 @@ on the cells' centroids and do not incorporate cell shape or area.
 1. When \code{type = "expansion"}, all cells within the radius 
 \code{threshold} are considered interacting cells. 
 
-2. When \code{type = "delauney"}, interacting cells are found via a delauney
+2. When \code{type = "delaunay"}, interacting cells are found via a delaunay
 triangulation of the cells centroids.
 
 3. When \code{type = "knn"}, interacting cells are defined as the \code{k}
@@ -111,10 +113,10 @@ spe <- buildSpatialGraph(spe, img_id = "sample_id",
                          type = "expansion", threshold = 10)
 colPair(spe, "expansion_interaction_graph")
 
-# Constructing a graph via delauney triangulation
+# Constructing a graph via delaunay triangulation
 spe <- buildSpatialGraph(spe, img_id = "sample_id", 
-                         type = "delauney")
-colPair(spe, "delauney_interaction_graph")
+                         type = "delaunay")
+colPair(spe, "delaunay_interaction_graph")
 
 # Constructing a graph via k nearest neighbor search
 spe <- buildSpatialGraph(spe, img_id = "sample_id", 
@@ -130,7 +132,7 @@ via expansion
 via nearest neighbor search
 
 \code{\link[RTriangle]{triangulate}} for the function finding interactions
-via delauney triangulation
+via delaunay triangulation
 }
 \author{
 Nils Eling (\email{nils.eling@dqbm.uzh.ch})

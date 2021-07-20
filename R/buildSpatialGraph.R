@@ -1,7 +1,7 @@
 #' @title Builds an interaction graph based on the cells' locations
 #'
 #' @description Function to define cell-cell interactions via distance-based
-#' expansion, delauney triangulation or k nearest neighbour detection.
+#' expansion, delaunay triangulation or k nearest neighbour detection.
 #'
 #' @param object a \code{SingleCellExperiment} or \code{SpatialExperiment}
 #' object
@@ -9,8 +9,8 @@
 #' containing the unique image identifiers.
 #' @param type single character specifying the type of graph to be build.
 #' Supported entries are \code{"expansion"} (default) to find interacting
-#' cells via distance thresholding; \code{"delauney"} to find interactions via
-#' delauney triangulation; \code{"knn"} to find the k nearest neighbouring
+#' cells via distance thresholding; \code{"delaunay"} to find interactions via
+#' delaunay triangulation; \code{"knn"} to find the k nearest neighbouring
 #' cells.
 #' @param threshold (when \code{type = "expansion"}) single numeric specifying
 #' the maximum distance for considering neighbours
@@ -29,7 +29,7 @@
 #' @param ... additional parameters passed to the
 #' \code{\link[BiocNeighbors]{findNeighbors}} function (\code{type =
 #' "expansion"}), the \code{\link[RTriangle]{triangulate}} function
-#' (\code{type = "delauney"}) or the \code{\link[BiocNeighbors]{findKNN}}
+#' (\code{type = "delaunay"}) or the \code{\link[BiocNeighbors]{findKNN}}
 #' function (\code{type = "knn"})).
 #' 
 #' @return returns a \code{SpatialExperiment} or \code{SingleCellExperiment}
@@ -43,7 +43,7 @@
 #' 1. When \code{type = "expansion"}, all cells within the radius 
 #' \code{threshold} are considered interacting cells. 
 #' 
-#' 2. When \code{type = "delauney"}, interacting cells are found via a delauney
+#' 2. When \code{type = "delaunay"}, interacting cells are found via a delaunay
 #' triangulation of the cells centroids.
 #' 
 #' 3. When \code{type = "knn"}, interacting cells are defined as the \code{k}
@@ -76,10 +76,10 @@
 #'                          type = "expansion", threshold = 10)
 #' colPair(spe, "expansion_interaction_graph")
 #' 
-#' # Constructing a graph via delauney triangulation
+#' # Constructing a graph via delaunay triangulation
 #' spe <- buildSpatialGraph(spe, img_id = "sample_id", 
-#'                          type = "delauney")
-#' colPair(spe, "delauney_interaction_graph")
+#'                          type = "delaunay")
+#' colPair(spe, "delaunay_interaction_graph")
 #' 
 #' # Constructing a graph via k nearest neighbor search
 #' spe <- buildSpatialGraph(spe, img_id = "sample_id", 
@@ -94,19 +94,19 @@
 #' via nearest neighbor search
 #' 
 #' \code{\link[RTriangle]{triangulate}} for the function finding interactions
-#' via delauney triangulation
+#' via delaunay triangulation
 #' 
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #' 
 #' @importFrom BiocNeighbors findNeighbors findKNN KmknnParam
 #' @importFrom SpatialExperiment spatialCoords
 #' @importFrom igraph graph_from_adj_list graph_from_edgelist as.undirected
-#' simplify as_edgelist
+#' simplify as_edgelist as.directed
 #' @importFrom RTriangle triangulate pslg
 #' @export
 buildSpatialGraph <- function(object,
                               img_id,
-                              type = c("expansion", "delauney", "knn"),
+                              type = c("expansion", "knn", "delaunay"),
                               k = NULL,
                               threshold = NULL,
                               coords = c("Pos_X", "Pos_Y"),
@@ -143,11 +143,15 @@ buildSpatialGraph <- function(object,
                                                            BNPARAM = BNPARAM,
                                                            ...)
                                 cur_graph <- graph_from_adj_list(cur_graph$index)
-                            } else if (type == "delauney") {
+                            } else if (type == "delaunay") {
                                 cur_graph <- triangulate(pslg(P = cur_coords),
                                                     ...)
-                                cur_graph <- graph_from_edgelist(cur_graph$E,
-                                                                 directed = directed)
+                                
+                                cur_graph <- graph_from_edgelist(cur_graph$E, 
+                                                                 directed = FALSE)
+                                cur_graph <- as.directed(cur_graph,
+                                                         mode = "mutual")
+                                
                             } else {
                                 cur_graph <- findKNN(cur_coords,
                                                      k = k,
@@ -156,12 +160,14 @@ buildSpatialGraph <- function(object,
                                                      ...)
                                 cur_graph <- as.list(as.data.frame(t(cur_graph$index)))
                                 cur_graph <- graph_from_adj_list(cur_graph)
+                                
+                                if (!directed) {
+                                    cur_graph <- as.undirected(cur_graph, 
+                                                               mode = mode)
+                                    cur_graph <- as.directed(cur_graph,
+                                                             mode = "mutual")
+                                }
                             }
-                            
-                            if (!directed) {
-                                cur_graph <- as.undirected(cur_graph, 
-                                                           mode = "collapse")
-                            } 
                             
                             cur_graph <- simplify(cur_graph)
                             
