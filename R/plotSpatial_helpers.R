@@ -1,4 +1,5 @@
 # Function to generate the tidygraph
+#' @importFrom S4Vectors isRedundantHit
 .generateGraph <- function(object, nodes, colPairName, draw_edges, 
                            edge_color_by, edge_width_by, directed){
     if (draw_edges) {

@@ -257,10 +257,10 @@ test_that("buildSpatialGraph function works", {
                                  BNPARAM = BiocNeighbors::VptreeParam()))
     expect_silent(cur_sce <- buildSpatialGraph(cur_sce, img_id = "ImageNb", 
                                  type = "knn", k = 10, name = "annoy",
-                                 BNPARAM = AnnoyParam()))
+                                 BNPARAM = BiocNeighbors::AnnoyParam()))
     expect_silent(cur_sce <- buildSpatialGraph(cur_sce, img_id = "ImageNb", 
                                  type = "knn", k = 10, name = "hnsw",
-                                 BNPARAM = HnswParam()))
+                                 BNPARAM = BiocNeighbors::HnswParam()))
     
     expect_equal(colPairNames(cur_sce), 
                  c("knn_interaction_graph", "vptree", "annoy", "hnsw"))
