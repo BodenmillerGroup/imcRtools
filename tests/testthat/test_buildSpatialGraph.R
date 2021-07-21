@@ -3,8 +3,8 @@ test_that("buildSpatialGraph function works", {
     data("pancreasSCE")
     
     # Delauney
-    cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-                                 type = "delaunay")
+    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                 type = "delaunay"))
     expect_equal(colPairNames(cur_sce), "delaunay_interaction_graph")
     expect_true(!is.null(colPair(cur_sce)))
     expect_equal(length(colPair(cur_sce)), 2082)
@@ -38,8 +38,8 @@ test_that("buildSpatialGraph function works", {
     expect_equal(sum(isRedundantHit(colPair(cur_sce))), length(colPair(cur_sce))/2)
     
     # KNN
-    cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-                                 type = "knn", k = 5)
+    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                 type = "knn", k = 5))
     expect_equal(colPairNames(cur_sce), "knn_interaction_graph")
     expect_true(!is.null(colPair(cur_sce)))
     expect_equal(length(colPair(cur_sce)), 1810)
@@ -84,8 +84,8 @@ test_that("buildSpatialGraph function works", {
     
     expect_equal(cur_ind_real, cur_ind_test, check.attributes = FALSE)
     
-    cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-                                 type = "knn", k = 5, directed = FALSE)
+    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                 type = "knn", k = 5, directed = FALSE))
     expect_equal(colPairNames(cur_sce), "knn_interaction_graph")
     expect_true(!is.null(colPair(cur_sce)))
     expect_equal(length(colPair(cur_sce)), 2068)
@@ -146,8 +146,8 @@ test_that("buildSpatialGraph function works", {
     expect_equal(cur_ind_real, cur_ind_test, check.attributes = FALSE)
     
     # Other ks
-    cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-                                 type = "knn", k = 10)
+    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                 type = "knn", k = 10))
     expect_equal(colPairNames(cur_sce), "knn_interaction_graph")
     expect_true(!is.null(colPair(cur_sce)))
     expect_equal(length(colPair(cur_sce)), 3620)
@@ -190,8 +190,8 @@ test_that("buildSpatialGraph function works", {
     
     expect_equal(cur_ind_real, cur_ind_test, check.attributes = FALSE)
     
-    cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-                                 type = "knn", k = 10, directed = FALSE)
+    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                 type = "knn", k = 10, directed = FALSE))
     expect_equal(colPairNames(cur_sce), "knn_interaction_graph")
     expect_true(!is.null(colPair(cur_sce)))
     expect_equal(length(colPair(cur_sce)), 4124)
@@ -250,17 +250,17 @@ test_that("buildSpatialGraph function works", {
     expect_equal(cur_ind_real, cur_ind_test, check.attributes = FALSE)
     
     # Other algorithm
-    cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-                                 type = "knn", k = 10)
-    cur_sce <- buildSpatialGraph(cur_sce, img_id = "ImageNb", 
+    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                 type = "knn", k = 10))
+    expect_silent(cur_sce <- buildSpatialGraph(cur_sce, img_id = "ImageNb", 
                                  type = "knn", k = 10, name = "vptree",
-                                 BNPARAM = BiocNeighbors::VptreeParam())
-    cur_sce <- buildSpatialGraph(cur_sce, img_id = "ImageNb", 
+                                 BNPARAM = BiocNeighbors::VptreeParam()))
+    expect_silent(cur_sce <- buildSpatialGraph(cur_sce, img_id = "ImageNb", 
                                  type = "knn", k = 10, name = "annoy",
-                                 BNPARAM = AnnoyParam())
-    cur_sce <- buildSpatialGraph(cur_sce, img_id = "ImageNb", 
+                                 BNPARAM = AnnoyParam()))
+    expect_silent(cur_sce <- buildSpatialGraph(cur_sce, img_id = "ImageNb", 
                                  type = "knn", k = 10, name = "hnsw",
-                                 BNPARAM = HnswParam())
+                                 BNPARAM = HnswParam()))
     
     expect_equal(colPairNames(cur_sce), 
                  c("knn_interaction_graph", "vptree", "annoy", "hnsw"))
@@ -268,8 +268,8 @@ test_that("buildSpatialGraph function works", {
                  colPair(cur_sce, "vptree"))
     
     # Expansion
-    cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-                                 type = "expansion", threshold = 15)
+    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                 type = "expansion", threshold = 15))
     expect_equal(colPairNames(cur_sce), "expansion_interaction_graph")
     expect_true(!is.null(colPair(cur_sce)))
     expect_equal(length(colPair(cur_sce)), 2042)
@@ -290,8 +290,8 @@ test_that("buildSpatialGraph function works", {
     
     expect_equal(sum(isRedundantHit(colPair(cur_sce))), length(colPair(cur_sce))/2)
     
-    cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-                                 type = "expansion", threshold = 15, directed = FALSE)
+    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                 type = "expansion", threshold = 15, directed = FALSE))
     expect_equal(colPairNames(cur_sce), "expansion_interaction_graph")
     expect_true(!is.null(colPair(cur_sce)))
     expect_equal(length(colPair(cur_sce)), 2042)
@@ -348,11 +348,110 @@ test_that("buildSpatialGraph function works", {
     
     expect_equal(cur_ind_real, cur_ind_test, check.attributes = FALSE)
     
+    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                               type = "expansion", threshold = 1))
+    expect_equal(colPairNames(cur_sce), "expansion_interaction_graph")
+    expect_true(!is.null(colPair(cur_sce)))
+    expect_equal(length(colPair(cur_sce)), 0)
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", draw_edges = TRUE,
+                     colPairName = "expansion_interaction_graph")
+    expect_silent(print(p))
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", draw_edges = TRUE,
+                     colPairName = "expansion_interaction_graph", 
+                     directed = FALSE)
+    expect_silent(print(p))
+    
     # Parallelisation
+    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                               type = "expansion", threshold = 15,
+                                               BPPARAM = BiocParallel::bpparam()))
+    expect_equal(colPairNames(cur_sce), "expansion_interaction_graph")
+    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                               type = "delaunay",
+                                               BPPARAM = BiocParallel::bpparam()))
+    expect_equal(colPairNames(cur_sce), "delaunay_interaction_graph")
+    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                               type = "knn", k = 5,
+                                               BPPARAM = BiocParallel::bpparam()))
+    expect_equal(colPairNames(cur_sce), "knn_interaction_graph")
     
     # SpatialExperiment
+    library(SpatialExperiment)
+    pancreasSPE <- SpatialExperiment(assays = list(counts = counts(pancreasSCE)),
+                                 sample_id = pancreasSCE$ImageName) 
+    colData(pancreasSPE) <- colData(pancreasSCE)
+    colPairs(pancreasSPE) <- colPairs(pancreasSCE)
+    
+    expect_error(cur_sce <- buildSpatialGraph(pancreasSPE, img_id = "ImageNb", 
+                                               type = "expansion", threshold = 15),
+                 regexp = "'coords' not in spatialCoords(object).",
+                 fixed = TRUE)
+    
+    spatialCoords(pancreasSPE) <- as.matrix(colData(pancreasSCE)[,c("Pos_X", "Pos_Y")])
+    
+    expect_silent(cur_spe <- buildSpatialGraph(pancreasSPE, img_id = "ImageNb", 
+                                               type = "expansion", threshold = 15))
+    
+    expect_equal(colPairNames(cur_spe), "expansion_interaction_graph")
+    expect_silent(cur_spe <- buildSpatialGraph(pancreasSPE, img_id = "ImageNb", 
+                                               type = "delaunay"))
+    expect_equal(colPairNames(cur_spe), "delaunay_interaction_graph")
+    expect_silent(cur_spe <- buildSpatialGraph(pancreasSPE, img_id = "ImageNb", 
+                                               type = "knn", k = 5))
+    expect_equal(colPairNames(cur_spe), "knn_interaction_graph")
     
     # Fail
-    
-    
+    expect_error(buildSpatialGraph("test"),
+                 regexp = "'object' not of type 'SingleCellExperiment'.",
+                 fixed = TRUE)
+    expect_error(buildSpatialGraph(pancreasSCE),
+                 regexp = "argument \"img_id\" is missing, with no default",
+                 fixed = TRUE)
+    expect_error(buildSpatialGraph(pancreasSCE, img_id = 1),
+                 regexp = "'img_id' must be a single string.",
+                 fixed = TRUE)
+    expect_error(buildSpatialGraph(pancreasSCE, img_id = "test"),
+                 regexp = "'img_id' not in colData(object).",
+                 fixed = TRUE)
+    expect_error(buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "expansion"),
+                 regexp = "When constructing a graph via expansion, please specify 'threshold'.",
+                 fixed = TRUE)
+    expect_error(buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "expansion"),
+                 regexp = "When constructing a graph via expansion, please specify 'threshold'.",
+                 fixed = TRUE)
+    expect_error(buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "expansion",
+                                   threshold = "test"),
+                 regexp = "'threshold' must be a single numeric",
+                 fixed = TRUE)
+    expect_error(buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn"),
+                 regexp = "When constructing a graph via nearest neighbour detection, please specify 'k'.",
+                 fixed = TRUE)
+    expect_error(buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn",
+                                   k = "test"),
+                 regexp = "'k' must be a single numeric",
+                 fixed = TRUE)
+    expect_error(buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "delaunay",
+                                   coords = "test"),
+                 regexp = "'coords' must be a character vector of length 2.",
+                 fixed = TRUE)
+    expect_error(buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "delaunay",
+                                   coords = c(2, 1)),
+                 regexp = "'coords' must be a character vector of length 2.",
+                 fixed = TRUE)
+    expect_error(buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "delaunay",
+                                   coords = c("Pos_X", "test")),
+                 regexp = "'coords' not in colData(object).",
+                 fixed = TRUE)
+    expect_error(buildSpatialGraph(pancreasSPE, img_id = "ImageNb", type = "delaunay",
+                                   coords = c("Pos_X", "test")),
+                 regexp = "'coords' not in spatialCoords(object).",
+                 fixed = TRUE)
+    expect_error(buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "delaunay",
+                                   name = 1),
+                 regexp = "'name' must be a single string.",
+                 fixed = TRUE)
+    expect_error(buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "delaunay",
+                                   directed = 1),
+                 regexp = "'directed' must be a single logical.",
+                 fixed = TRUE)
 })

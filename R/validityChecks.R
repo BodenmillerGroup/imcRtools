@@ -537,25 +537,27 @@
     
     if (type == "expansion") {
         
-        if (length(threshold) != 1) {
-            stop("'threshold' must be a single numeric")
-        }
-        
         if (is.null(threshold)) {
             stop("When constructing a graph via expansion, please specify 'threshold'.")
         }
+        
+        if (length(threshold) != 1 || !is.numeric(threshold)) {
+            stop("'threshold' must be a single numeric")
+        }
+        
     }
     
     if (type == "knn") {
-        
-        if (length(k) != 1) {
-            stop("'k' must be a single numeric")
-        }
         
         if (is.null(k)) {
             stop("When constructing a graph via nearest neighbour detection, ",
                  "please specify 'k'.")
         }
+        
+        if (length(k) != 1 || !is.numeric(k)) {
+            stop("'k' must be a single numeric")
+        }
+        
     }
     
     if (length(coords) != 2 | !all(is.character(coords))) {
