@@ -249,14 +249,26 @@ test_that("plotSpatial function works", {
     expect_s3_class(p, "ggraph")
     expect_silent(print(p))
     
-    p <- plotSpatial(cur_sce, img_id = "ImageNb", 
+    p2 <- plotSpatial(cur_sce, img_id = "ImageNb", 
                      draw_edges = TRUE, colPairName = "knn_interaction_graph",
                      directed = FALSE)
-    expect_s3_class(p, "ggraph")
-    expect_silent(print(p))
-    expect_equal(p$data$x, pancreasSCE$Pos_X)
-    expect_equal(p$data$y, pancreasSCE$Pos_Y)
-    expect_equal(p$data$ImageNb, pancreasSCE$ImageNb)
+    expect_s3_class(p2, "ggraph")
+    expect_silent(print(p2))
+    expect_equal(p2$data$x, pancreasSCE$Pos_X)
+    expect_equal(p2$data$y, pancreasSCE$Pos_Y)
+    expect_equal(p2$data$ImageNb, pancreasSCE$ImageNb)
+    
+    cur_graph <- igraph::as.igraph(attributes(p$data)$graph)
+    cur_graph <- as.undirected(cur_graph)
+    cur_graph_2 <- igraph::as.igraph(attributes(p2$data)$graph)
+    
+    cur_edges <- as_edgelist(cur_graph)
+    cur_edges_2 <- as_edgelist(cur_graph_2)
+
+    cur_edges <- cur_edges[order(paste(cur_edges[,1], cur_edges[,2])),]
+    cur_edges_2 <- cur_edges_2[order(paste(cur_edges_2[,1], cur_edges_2[,2])),]
+    
+    expect_equal(cur_edges, cur_edges_2)
     
     p <- plotSpatial(cur_sce, img_id = "ImageNb", 
                      draw_edges = TRUE, colPairName = "knn_interaction_graph",
