@@ -21,7 +21,7 @@
 #' \code{spatialCoords} entries of the cells' x and y locations.
 #' @param name single character specifying the name of the graph.
 #' @param directed should the returned graph be directed? Only effects the k
-#' nearest neighbour graph.
+#' nearest neighbour graph (see details).
 #' @param BNPARAM a \code{\link[BiocNeighbors]{BiocNeighborParam} object
 #' defining the algorithm to use.}
 #' @param BPPARAM a \code{\link[BiocParallel]{BiocParallelParam-class}} object
@@ -44,12 +44,16 @@
 #' \code{threshold} are considered interacting cells. 
 #' 
 #' 2. When \code{type = "delaunay"}, interacting cells are found via a delaunay
-#' triangulation of the cells centroids.
+#' triangulation of the cells' centroids.
 #' 
 #' 3. When \code{type = "knn"}, interacting cells are defined as the \code{k}
-#' nearest neighbors in the 2D spatial plane. When \code{directed = FALSE},
-#' the adjacency matrix of the graph is symmetric and edges between cells are
-#' undirected. 
+#' nearest neighbors in the 2D spatial plane. 
+#' 
+#' The \code{directed} parameter only affects graph construction via k nearest
+#' neighbour search. For \code{directed = FALSE}, each interaction will be
+#' stored as mutual edge (e.g. node 2 is connected to node 10 and vise versa).
+#' For \code{type = "expansion"} and \code{type = "delaunay"}, each edge is 
+#' stored as mutual edge by default.
 #' 
 #' The graph is stored in form of a \code{SelfHits} object in
 #' \code{colPair(object, name)}. This object can be regarded as an edgelist
@@ -96,6 +100,8 @@
 #' \code{\link[RTriangle]{triangulate}} for the function finding interactions
 #' via delaunay triangulation
 #' 
+#' \code{\link{plotSpatial}} for visualizing spatial graphs
+#' 
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #' 
 #' @importFrom BiocNeighbors findNeighbors findKNN KmknnParam
@@ -108,10 +114,10 @@ buildSpatialGraph <- function(object,
                               img_id,
                               type = c("expansion", "knn", "delaunay"),
                               k = NULL,
+                              directed = TRUE,
                               threshold = NULL,
                               coords = c("Pos_X", "Pos_Y"),
                               name = NULL,
-                              directed = TRUE,
                               BNPARAM = KmknnParam(),
                               BPPARAM = SerialParam(),
                               ...){
@@ -163,7 +169,7 @@ buildSpatialGraph <- function(object,
                                 
                                 if (!directed) {
                                     cur_graph <- as.undirected(cur_graph, 
-                                                               mode = mode)
+                                                               mode = "collapse")
                                     cur_graph <- as.directed(cur_graph,
                                                              mode = "mutual")
                                 }

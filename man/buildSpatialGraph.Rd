@@ -7,14 +7,12 @@
 buildSpatialGraph(
   object,
   img_id,
-  type = c("expansion", "delaunay", "knn"),
+  type = c("expansion", "knn", "delaunay"),
   k = NULL,
+  directed = TRUE,
   threshold = NULL,
   coords = c("Pos_X", "Pos_Y"),
   name = NULL,
-  directed = TRUE,
-  mode = "collapse",
-  mutual_edges = TRUE,
   BNPARAM = KmknnParam(),
   BPPARAM = SerialParam(),
   ...
@@ -36,6 +34,9 @@ cells.}
 \item{k}{(when \code{type = "knn"}) single numeric integer defining the
 number of nearest neighbours to search for.}
 
+\item{directed}{should the returned graph be directed? Only effects the k
+nearest neighbour graph (see details).}
+
 \item{threshold}{(when \code{type = "expansion"}) single numeric specifying
 the maximum distance for considering neighbours}
 
@@ -44,9 +45,6 @@ the maximum distance for considering neighbours}
 \code{spatialCoords} entries of the cells' x and y locations.}
 
 \item{name}{single character specifying the name of the graph.}
-
-\item{directed}{should the returned graph be directed? Only effects the k
-nearest neighbour graph.}
 
 \item{BNPARAM}{a \code{\link[BiocNeighbors]{BiocNeighborParam} object
 defining the algorithm to use.}}
@@ -78,12 +76,16 @@ on the cells' centroids and do not incorporate cell shape or area.
 \code{threshold} are considered interacting cells. 
 
 2. When \code{type = "delaunay"}, interacting cells are found via a delaunay
-triangulation of the cells centroids.
+triangulation of the cells' centroids.
 
 3. When \code{type = "knn"}, interacting cells are defined as the \code{k}
-nearest neighbors in the 2D spatial plane. When \code{directed = FALSE},
-the adjacency matrix of the graph is symmetric and edges between cells are
-undirected. 
+nearest neighbors in the 2D spatial plane. 
+
+The \code{directed} parameter only affects graph construction via k nearest
+neighbour search. For \code{directed = FALSE}, each interaction will be
+stored as mutual edge (e.g. node 2 is connected to node 10 and vise versa).
+For \code{type = "expansion"} and \code{type = "delaunay"}, each edge is 
+stored as mutual edge by default.
 
 The graph is stored in form of a \code{SelfHits} object in
 \code{colPair(object, name)}. This object can be regarded as an edgelist
@@ -133,6 +135,8 @@ via nearest neighbor search
 
 \code{\link[RTriangle]{triangulate}} for the function finding interactions
 via delaunay triangulation
+
+\code{\link{plotSpatial}} for visualizing spatial graphs
 }
 \author{
 Nils Eling (\email{nils.eling@dqbm.uzh.ch})
