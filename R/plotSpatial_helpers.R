@@ -2,7 +2,15 @@
 .generateGraph <- function(object, nodes, colPairName, draw_edges, 
                            edge_color_by, edge_width_by, directed){
     if (draw_edges) {
-        edges <- as.data.frame(as(colPair(object, colPairName), "DataFrame"))
+        
+        if (!directed) {
+            cur_SH <- colPair(object, colPairName)
+            cur_SH <- cur_SH[!isRedundantHit(cur_SH)]
+        } else {
+            cur_SH <- colPair(object, colPairName)
+        }
+        
+        edges <- as.data.frame(as(cur_SH, "DataFrame"))
         
         if (!is.null(edge_color_by) && 
             edge_color_by %in% colnames(colData(object))) {
