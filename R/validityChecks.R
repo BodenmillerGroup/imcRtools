@@ -537,25 +537,27 @@
 
     if (type == "expansion") {
 
-        if (length(threshold) != 1) {
-            stop("'threshold' must be a single numeric")
-        }
-
         if (is.null(threshold)) {
             stop("When constructing a graph via expansion, please specify 'threshold'.")
         }
+        
+        if (length(threshold) != 1 || !is.numeric(threshold)) {
+            stop("'threshold' must be a single numeric")
+        }
+        
     }
 
     if (type == "knn") {
-
-        if (length(k) != 1) {
-            stop("'k' must be a single numeric")
-        }
 
         if (is.null(k)) {
             stop("When constructing a graph via nearest neighbour detection, ",
                  "please specify 'k'.")
         }
+        
+        if (length(k) != 1 || !is.numeric(k)) {
+            stop("'k' must be a single numeric")
+        }
+        
     }
 
     if (length(coords) != 2 | !all(is.character(coords))) {
@@ -626,9 +628,9 @@
 #' @importFrom S4Vectors mcols
 .valid.plotSpatial.input <- function(object, img_id, coords, node_color_by,
                                      node_shape_by, node_size_by, edge_color_by,
-                                     edge_size_by, draw_edges, directed, arrow,
-                                     colPairName, ncols, nrows){
-
+                                     edge_width_by, draw_edges, directed, arrow, 
+                                     end_cap, colPairName, ncols, nrows, scales){
+    
     if (!is(object, "SingleCellExperiment")) {
         stop("'object' not of type 'SingleCellExperiment'.")
     }
@@ -644,9 +646,15 @@
     if (length(coords) != 2 | !all(is.character(coords))) {
         stop("'coords' must be a character vector of length 2.")
     }
-
-    if (!all(coords %in% names(colData(object)))) {
-        stop("'coords' not in colData(object).")
+    
+    if (is(object, "SpatialExperiment")) {
+        if (!all(coords %in% spatialCoordsNames(object))) {
+            stop("'coords' not in spatialCoords(object).")
+        }
+    } else {
+        if (!all(coords %in% names(colData(object)))) {
+            stop("'coords' not in colData(object).")
+        }
     }
 
     if (!is.null(node_color_by) && (length(node_color_by) != 1 |
@@ -708,16 +716,16 @@
             stop("'edge_color_by' not in 'colData(object)'",
                  " or in 'mcols(colPair(object, colPairName))'.")
         }
-
-        if (!is.null(edge_size_by) &&
-            (length(edge_size_by) != 1 | !is.character(edge_size_by))) {
-            stop("'edge_size_by' must be a single string.")
+        
+        if (!is.null(edge_width_by) && 
+            (length(edge_width_by) != 1 | !is.character(edge_width_by))) {
+            stop("'edge_width_by' must be a single string.")
         }
-
-        if (!is.null(edge_size_by) &&
-            (!edge_size_by %in% names(colData(object)) &&
-            !edge_size_by %in% names(mcols(colPair(object, colPairName))))) {
-            stop("'edge_size_by' not in 'colData(object)'",
+        
+        if (!is.null(edge_width_by) && 
+            (!edge_width_by %in% names(colData(object)) &&
+            !edge_width_by %in% names(mcols(colPair(object, colPairName))))) {
+            stop("'edge_width_by' not in 'colData(object)'", 
                  " or in 'mcols(colPair(object, colPairName))'.")
         }
 
@@ -728,6 +736,10 @@
         if (!is.null(arrow) && !is(arrow, "arrow")) {
             stop("'arrow' must be of class grid::arrow.")
         }
+        
+        if (!is.null(end_cap) && !is(end_cap, "geometry")) {
+            stop("'end_cap' must be of type 'geometry'.")
+        }
     }
 
     if (!is.null(ncols) && (length(ncols) != 1 | !is.numeric(ncols))) {
@@ -737,4 +749,10 @@
     if (!is.null(nrows) && (length(nrows) != 1 | !is.numeric(nrows))) {
         stop("'nrows' must be a single numeric")
     }
+    
+    if (!scales %in% c("fixed", "free_x", "free_y", "free")) {
+        stop("'scales' should be one of 'fixed', 'free_x', 'free_y', 'free'.")
+    }
+    
+    
 }
