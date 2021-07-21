@@ -34,11 +34,11 @@ Imports:
     RTriangle,
     ggraph,
     tidygraph,
-    ggplot2
+    ggplot2,
+    data.table
 Suggests:
     CATALYST,
     grid,
-    data.table,
     BiocStyle,
     knitr,
     rmarkdown,
