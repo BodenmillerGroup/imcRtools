@@ -604,7 +604,7 @@
         stop("'colPairName' not in 'colPairNames(object)'.")
     }
 
-    if (aggregate_by == "celltypes") {
+    if (aggregate_by == "metadata") {
 
         if (is.null(count_by)) {
             stop("Provide a 'colData(object)' entry to aggregate by.")
@@ -638,8 +638,8 @@
         }
         
         if (!is.null(subset_row)) {
-            if (!all(is.character(subset_row)) | !all(is.logical(subset_row)) |
-                !all(is.numeric(subset_row))) {
+            if (!(all(is.character(subset_row)) | all(is.logical(subset_row)) |
+                all(is.numeric(subset_row)))) {
                 stop("'subset_row' must be all 'logical', 'numeric' or 'character'.")
             }
             
@@ -653,7 +653,7 @@
         }
     }
     
-    if (length(name) != 1 | !is.character(name)) {
+    if (!is.null(name) & (length(name) != 1 | !is.character(name))) {
         stop("'name' must be a single string.")
     }
 }

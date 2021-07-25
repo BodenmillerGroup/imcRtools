@@ -74,12 +74,12 @@ test_that("aggregateNeighbors function works", {
     neighbors_cell_215 <- unclass(as.matrix(t(table(pancreasSCE[,cur_dat$to]$CellType))))
 
     
-    cur_sce <- aggregateNeighbors(object = pancreasSCE,colPairName = "knn_10",
+    cur_sce <- aggregateNeighbors(object = pancreasSCE, colPairName = "knn_10",
                                   aggregate_by = "metadata",
                                   count_by = "CellType")
     
-    expect_equal(as.data.frame(cur_sce$summarizedNeighbors[215,]),
-                 as.data.frame(neighbors_cell_215))
+    expect_equal(as.data.frame(cur_sce$aggregatedNeighbors[215,]),
+                 as.data.frame(neighbors_cell_215/sum(neighbors_cell_215)))
     
     
     # check for correct results of neighboring expression
@@ -122,15 +122,15 @@ test_that("aggregateNeighbors function works", {
                  regexp = "argument \"colPairName\" is missing, with no default",
                  fixed = TRUE)
     expect_error(aggregateNeighbors(object = pancreasSCE, colPairName =  "test"),
-                 regexp = "'colPairName' not in colPair(object).",
+                 regexp = "'colPairName' not in 'colPairNames(object)'.",
                  fixed = TRUE)
     expect_error(aggregateNeighbors(object = pancreasSCE, colPairName = "knn_10",
                                     aggregate_by = "metadata"),
-                 regexp = "provide a colData entry to summarize by",
+                 regexp = "Provide a 'colData(object)' entry to aggregate by.",
                  fixed = TRUE)
     expect_error(aggregateNeighbors(object = pancreasSCE, colPairName = "knn_10",
                                     aggregate_by = "metadata", count_by = "test"),
-                 regexp = "'count_by' is not a valid enty of colData(object).",
+                 regexp = "'count_by' is not a valid enty of 'colData(object)'.",
                  fixed = TRUE)
     expect_error(aggregateNeighbors(object = pancreasSCE, colPairName = "knn_10",
                                     aggregate_by = "expression"),

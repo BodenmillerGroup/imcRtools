@@ -38,6 +38,7 @@
 #'
 #' @importFrom data.table as.data.table dcast melt :=
 #' @importFrom S4Vectors DataFrame
+#' @importFrom utils globalVariables
 #' @importFrom SummarizedExperiment assay
 #' @importFrom SingleCellExperiment colPair colData
 #' @importFrom stats median sd var
@@ -52,9 +53,9 @@ aggregateNeighbors <- function(object,
                                statistic = c("mean", "median", "sd", "var"),
                                name = NULL){
 
-    summarize_by = match.arg(summarize_by)
+    summarize_by = match.arg(aggregate_by)
   
-    summaryStats = match.arg(summaryStats)
+    summaryStats = match.arg(statistic)
 
     .valid.summarizeNeighbors.input(object, colPairName, aggregate_by, count_by, 
                                     proportions, assay_type, subset_row,
@@ -70,6 +71,7 @@ aggregateNeighbors <- function(object,
                                fun.aggregate = length)[,-1]
 
         if (proportions) {
+            .SD <- NULL
             all_col <- names(cur_dat)
             row_sums <- rowSums(cur_dat)
             cur_dat[, (all_col) := lapply(.SD, function(x){x / row_sums}), 
