@@ -12,35 +12,61 @@ test_that("aggregateNeighbors function works", {
                                      threshold = 20,
                                      name = "exp_20")
     
-    # Works celltypes version on knn
-    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,colPairName = "knn_10",summarize_by = "celltypes",
-                                                    group = "CellType",name = "knn_10_nb"))
+    # Works metadata version on knn
+    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,
+                                                colPairName = "knn_10",
+                                                aggregate_by = "metadata",
+                                                count_by = "CellType",
+                                                name = "knn_10_nb"))
     
     expect_s4_class(cur_sce , class = "SingleCellExperiment")
     
     # Works expression version on knn
     cur_markers <- rownames(pancreasSCE)
-    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,colPairName = "knn_10",summarize_by = "expression",
-                                                    assay_type = "exprs",subset_row = cur_markers,name = "knn_10_expMean"))
-    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,colPairName = "knn_10",summarize_by = "expression",
-                                                    assay_type = "exprs",subset_row = cur_markers,name = "knn_10_expMedian",summaryStats = "median"))
+    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,
+                                                colPairName = "knn_10",
+                                                aggregate_by = "expression",
+                                                assay_type = "exprs",
+                                                subset_row = cur_markers,
+                                                name = "knn_10_expMean"))
+    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,
+                                                colPairName = "knn_10",
+                                                aggregate_by = "expression",
+                                                assay_type = "exprs",
+                                                subset_row = cur_markers,
+                                                name = "knn_10_expMedian",
+                                                statistic = "median"))
     
-    # Works celltypes version on expansion
-    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,colPairName = "exp_20",summarize_by = "celltypes",
-                                                    group = "CellType"))
-    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,colPairName = "exp_20",summarize_by = "celltypes",
-                                                    group = "CellType",name = "exp_20_nb"))
+    # Works metadata version on expansion
+    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,
+                                                colPairName = "exp_20",
+                                                aggregate_by = "metadata",
+                                                count_by = "CellType"))
+    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,
+                                                colPairName = "exp_20",
+                                                aggregate_by = "metadata",
+                                                count_by = "CellType",
+                                                name = "exp_20_nb"))
     
     expect_s4_class(cur_sce , class = "SingleCellExperiment")
     
     # Works expression version on expansion
     cur_markers <- rownames(pancreasSCE)
-    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,colPairName = "exp_20",summarize_by = "expression",
-                                                    assay_type = "exprs",subset_row = cur_markers,name = "exp_20_expMean"))
-    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,colPairName = "exp_20",summarize_by = "expression",
-                                                    assay_type = "exprs",subset_row = cur_markers,name = "exp_20_expMedian",summaryStats = "median"))
+    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,
+                                                colPairName = "exp_20",
+                                                aggregate_by = "expression",
+                                                assay_type = "exprs",
+                                                subset_row = cur_markers,
+                                                name = "exp_20_expMean"))
+    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,
+                                                colPairName = "exp_20",
+                                                aggregate_by = "expression",
+                                                assay_type = "exprs",
+                                                subset_row = cur_markers,
+                                                name = "exp_20_expMedian",
+                                                statistic = "median"))
     
-    # check for correct results of neighboring celltypes
+    # check for correct results of neighboring metadata
     cur_dat <- data.frame(colPair(pancreasSCE,"knn_10"))
     # our reference cell will be cell number 215
     cur_dat <- cur_dat[which(cur_dat$from == 215),]
@@ -48,10 +74,12 @@ test_that("aggregateNeighbors function works", {
     neighbors_cell_215 <- unclass(as.matrix(t(table(pancreasSCE[,cur_dat$to]$CellType))))
 
     
-    cur_sce <- aggregateNeighbors(object = pancreasSCE,colPairName = "knn_10",summarize_by = "celltypes",
-                       group = "CellType")
+    cur_sce <- aggregateNeighbors(object = pancreasSCE,colPairName = "knn_10",
+                                  aggregate_by = "metadata",
+                                  count_by = "CellType")
     
-    expect_equal(as.data.frame(cur_sce$summarizedNeighbors[215,]),as.data.frame(neighbors_cell_215))
+    expect_equal(as.data.frame(cur_sce$summarizedNeighbors[215,]),
+                 as.data.frame(neighbors_cell_215))
     
     
     # check for correct results of neighboring expression
@@ -63,18 +91,28 @@ test_that("aggregateNeighbors function works", {
     # calculate mean per marker for neighboring cells
     mean_exp <- apply(neighbors_cell_215,2,mean)
 
-    cur_sce <- aggregateNeighbors(object = pancreasSCE,colPairName = "knn_10",summarize_by = "expression",
-                                  assay_type = "exprs",subset_row = cur_markers,name = "knn_10_expMean")
+    cur_sce <- aggregateNeighbors(object = pancreasSCE,colPairName = "knn_10",
+                                  aggregate_by = "expression",
+                                  assay_type = "exprs",
+                                  subset_row = cur_markers,
+                                  name = "knn_10_expMean")
     
-    expect_equal(as.numeric(as.data.frame(cur_sce$knn_10_expMean[215,])),as.numeric(mean_exp))
+    expect_equal(as.numeric(as.data.frame(cur_sce$knn_10_expMean[215,])),
+                 as.numeric(mean_exp))
     
     # calculate median per marker for neighboring cells
     median_exp <- apply(neighbors_cell_215,2,median)
     
-    cur_sce <- aggregateNeighbors(object = pancreasSCE,colPairName = "knn_10",summarize_by = "expression",
-                                  assay_type = "exprs",subset_row = cur_markers,name = "knn_10_expMean",summaryStats = "median")
+    cur_sce <- aggregateNeighbors(object = pancreasSCE,
+                                  colPairName = "knn_10",
+                                  aggregate_by = "expression",
+                                  assay_type = "exprs",
+                                  subset_row = cur_markers,
+                                  name = "knn_10_expMean",
+                                  statistic = "median")
     
-    expect_equal(as.numeric(as.data.frame(cur_sce$knn_10_expMean[215,])),as.numeric(median_exp))
+    expect_equal(as.numeric(as.data.frame(cur_sce$knn_10_expMean[215,])),
+                 as.numeric(median_exp))
     
     # Error
     expect_error(aggregateNeighbors("test"),
@@ -86,19 +124,21 @@ test_that("aggregateNeighbors function works", {
     expect_error(aggregateNeighbors(object = pancreasSCE, colPairName =  "test"),
                  regexp = "'colPairName' not in colPair(object).",
                  fixed = TRUE)
-    expect_error(aggregateNeighbors(object = pancreasSCE, colPairName = "knn_10",summarize_by = "celltypes"),
+    expect_error(aggregateNeighbors(object = pancreasSCE, colPairName = "knn_10",
+                                    aggregate_by = "metadata"),
                  regexp = "provide a colData entry to summarize by",
                  fixed = TRUE)
-    expect_error(aggregateNeighbors(object = pancreasSCE, colPairName = "knn_10",summarize_by = "celltypes", group = "test"),
-                 regexp = "'group' is not a valid enty of colData(object).",
+    expect_error(aggregateNeighbors(object = pancreasSCE, colPairName = "knn_10",
+                                    aggregate_by = "metadata", count_by = "test"),
+                 regexp = "'count_by' is not a valid enty of colData(object).",
                  fixed = TRUE)
-    expect_error(aggregateNeighbors(object = pancreasSCE, colPairName = "knn_10",summarize_by = "expression"),
+    expect_error(aggregateNeighbors(object = pancreasSCE, colPairName = "knn_10",
+                                    aggregate_by = "expression"),
                  regexp = "'assay_type' not provided",
                  fixed = TRUE)
-    expect_error(aggregateNeighbors(object = pancreasSCE, colPairName = "knn_10",summarize_by = "expression", assay_type = "test"),
+    expect_error(aggregateNeighbors(object = pancreasSCE, colPairName = "knn_10",
+                                    aggregate_by = "expression", assay_type = "test"),
                  regexp = "'assay_type' not an assay in the 'object'.",
                  fixed = TRUE)
   
 })
-
-#blabbla

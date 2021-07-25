@@ -1,39 +1,42 @@
-#' @title Function to summarize the neighborhood from each cell.
+#' @title Function to aggregate across all neighbors of each cell.
 #'
-#' @description Function to generates a data frame that either summarized the
-#' count of cells of a specified type in the selected neighborhood of each
-#' cell or summarizes the marker expression of all cells in the selected
-#' neighborhood of each cell.
+#' @description Function to summarize categorical or expression values of all
+#' neighbors of each cell.
 #'
-#' @param object a \code{SingleCellExperiment} object
+#' @param object a \code{SingleCellExperiment} or \code{SpatialExperiment}
+#' object
 #' @param colPairName single character indicating the \code{colPair(object)}
-#' entry containing the the neighbor information.
-#' @param summarize_by character specifying whether the neighborhood should be
-#' summarized by cellular features from the \code{colData(object)} or by the
-#' marker expression of the neighboring cells.
-#' @param group if selecting "celltypes" in \code{summarize_by} a single
-#' character specifying the \code{colData(object)} entry containing the
-#' cellular features that should be summarized in the neighborhood. Supported
-#' entries are of type character. Defaults to celltypes.
-#' @param assay_type if selecting "expression" in \code{summarize_by} name of
-#' the assay from the \code{SingleCellExperiment} to use.
-#' @param subset_row if selecting "expression" in \code{summarize_by} a
-#' character vector specifying the entries from \code{rownames(object)} to use
-#' for the summary statistics. If not specified will use all entries of
-#' \code{rownames(object)}.
-#' @param summaryStats if selecting "expression" in \code{summarize_by} then a
-#' single character specifying the summary statistics should be provided.
-#' Supported entries are "mean", "median", "sd", "var". Defaults to mean if
-#' not specified.
+#' entry containing the neighbor information.
+#' @param aggregate_by character specifying whether the neighborhood should be
+#' summarized by cellular features stored in \code{colData(object)}
+#' (\code{aggregate_by = "metdata"}) or by the marker expression of the
+#' neighboring cells (\code{aggregate_by = "expression"}).
+#' @param count_by for \code{summarize_by = "metadata"}, a single character
+#' specifying the \code{colData(object)} entry containing the cellular
+#' metadata that should be summarized across each cell's neighborhood.
+#' @param proportions single logical indicating whether aggregated metadata
+#' should be returned in form of proportions instead of absolute counts.
+#' @param assay_type for \code{summarize_by = "expression"}, single character
+#' indicating the assay slot to use.
+#' @param subset_row for \code{summarize_by = "expression"}, an integer, logical
+#' or character vector specifying the features to use. If NULL, defaults to
+#' all features.
+#' @param statistic for \code{summarize_by = "expression"}, a single character
+#' specifying the statistic to be used for summarizing the expression values
+#' across all neighboring cells. Supported entries are "mean", "median", "sd",
+#' "var". Defaults to "mean" if not specified.
 #' @param name single character specifying the name of the data frame to be
-#' saved in the \code{colData(object)}.
+#' saved in the \code{colData(object)}. Defaults to "aggregatedNeighbors" when
+#' \code{summarize_by = "metadata"} or "{statistic}_aggregatedExpression" when
+#' \code{summarize_by = "expression"}.
 #'
-#' @return returns a \code{SingleCellExperiment} containing the data frame in
-#' form of a \code{DataFrame} object in \code{colData(object)}.
+#' @return returns an object of \code{class(object)} containing the aggregated
+#' values in form of a \code{DataFrame} object in
+#' \code{colData(object)[[name]]}.
 #'   
 #' @author Daniel Schulz (\email{daniel.schulz@@uzh.ch})
 #'
-#' @importFrom data.table as.data.table dcast melt := 
+#' @importFrom data.table as.data.table dcast melt :=
 #' @importFrom S4Vectors DataFrame
 #' @importFrom SummarizedExperiment assay
 #' @importFrom SingleCellExperiment colPair colData
@@ -41,65 +44,67 @@
 #' @export
 aggregateNeighbors <- function(object,
                                colPairName,
-                               summarize_by = c("celltypes","expression"),
-                               group = NULL,
+                               aggregate_by = c("metadata", "expression"),
+                               count_by = NULL,
+                               proportions = TRUE,
                                assay_type = NULL,
                                subset_row = NULL,
-                               summaryStats = c("mean","median","sd","var"),
+                               statistic = c("mean", "median", "sd", "var"),
                                name = NULL){
 
-  summarize_by = match.arg(summarize_by)
+    summarize_by = match.arg(summarize_by)
   
-  summaryStats = match.arg(summaryStats)
+    summaryStats = match.arg(summaryStats)
 
-  .valid.summarizeNeighbors.input(object, colPairName, summarize_by, group, assay_type, subset_row, summaryStats)
+    .valid.summarizeNeighbors.input(object, colPairName, aggregate_by, count_by, 
+                                    proportions, assay_type, subset_row,
+                                    name)
 
+    if (summarize_by == "metadata") {
 
-  if (summarize_by == "celltypes") {
+        cur_dat <- as.data.table(colPair(object, colPairName))
+        
+        cur_dat[, "celltype" := colData(object)[[count_by]][cur_dat$to]]
 
-    cur_dat <- as.data.table(colPair(object,colPairName))
+        cur_dat <- dcast(cur_dat, formula = "from ~ celltype", 
+                               fun.aggregate = length)[,-1]
 
-    cur_dat$celltype <- colData(object)[[group]][cur_dat$to]
-
-    cur_out <- DataFrame(dcast(cur_dat,formula = "from ~ celltype", fun.aggregate = length)[,-1])
-
-    name <- ifelse(is.null(name), "summarizedNeighbors", name)
-
-    colData(object)[[name]] <- DataFrame(cur_out)
-
-    return(object)
-
-  }
-
-  else if (summarize_by == "expression") {
-
-    cur_dat <- as.data.table(colPair(object,colPairName))
-
-    cur_dat <- cbind(cur_dat,t(assay(object,assay_type))[cur_dat$to,])
-
-    stat_list <- list(median = median, sd = sd , var = var)
+        if (proportions) {
+            all_col <- names(cur_dat)
+            row_sums <- rowSums(cur_dat)
+            cur_dat[, (all_col) := lapply(.SD, function(x){x / row_sums}), 
+                    .SDcols = all_col]
+        }
     
-    if (is.null(subset_row)) {
-      subset_row <- rownames(object)
+        name <- ifelse(is.null(name), "aggregatedNeighbors", name)
+
+        colData(object)[[name]] <- DataFrame(cur_dat)
+
+        return(object)
+
+    } else {
+      
+        if (is.null(subset_row)) {
+            subset_row <- rownames(object)
+        }
+
+        cur_dat <- as.data.table(colPair(object, colPairName))
+
+        cur_dat <- cbind(cur_dat,t(assay(object, assay_type))[cur_dat$to,
+                                                              subset_row])
+        
+        cur_dat <- melt(cur_dat, id.vars = c("from", "to"))
+        
+        cur_dat <- cur_dat[,eval(parse(text = paste0(statistic, "(value)"))), 
+                           by=c("from","variable")]
+        
+        cur_out <- dcast(cur_dat, formula = "from ~ variable", value.var = "V1")
+
+        name <- ifelse(is.null(name), 
+                       paste0(statistic,"_aggregatedExpression"), name)
+
+        colData(object)[[name]] <- DataFrame(cur_out[,-1])
+
+        return(object)
     }
-
-    cur_dat <- cur_dat[,c("from","to",as.name("..subset_row"))]
-    cur_dat <- melt(cur_dat,measure.vars = subset_row)
-    if (summaryStats == "mean"){
-      cur_dat[, x := mean(as.name("value")),by=c("from","variable")]
-    }
-    if (summaryStats %in% c("median","sd","var")) {
-      cur_dat[, x := stat_list[[summaryStats]](as.name("value")),by=c("from","variable")]
-    }
-    cur_dat <- unique(cur_dat[,c("from","variable","x")])
-    cur_out <- dcast(cur_dat,formula = "from ~ variable",value.var = "x")
-
-    name <- ifelse(is.null(name), paste0(summaryStats,"_summarizedExpression"), name)
-
-    colData(object)[[name]] <- DataFrame(cur_out[,-1])
-
-    return(object)
-
-  }
-
 }

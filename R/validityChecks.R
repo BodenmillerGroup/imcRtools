@@ -588,41 +588,74 @@
 
 }
 
-.valid.summarizeNeighbors.input <- function(object, colPairName, summarize_by, group, assay_type, subset_row, summaryStats){
+.valid.summarizeNeighbors.input <- function(object, colPairName, aggregate_by, count_by, 
+                                            proportions, assay_type, subset_row,
+                                            name){
 
-  if (!is(object, "SingleCellExperiment")) {
-    stop("'object' not of type 'SingleCellExperiment'.")
-  }
-
-  if (! colPairName %in% colPairNames(object)) {
-    stop("'colPairName' not in colPair(object).")
-  }
-
-  if (summarize_by == "celltypes") {
-
-    if (is.null(group)) {
-      stop("provide a colData entry to summarize by")
+    if (!is(object, "SingleCellExperiment")) {
+        stop("'object' not of type 'SingleCellExperiment'.")
+    }
+    
+    if (length(colPairName) != 1 | !is.character(colPairName)) {
+        stop("'colPairName' must be a single string.")
+    }
+    
+    if (! colPairName %in% colPairNames(object)) {
+        stop("'colPairName' not in 'colPairNames(object)'.")
     }
 
-    if (! group %in% colnames(colData(object))) {
-      stop("'group' is not a valid enty of colData(object).")
-    }
-  }
+    if (aggregate_by == "celltypes") {
 
-  if (summarize_by == "expression") {
+        if (is.null(count_by)) {
+            stop("Provide a 'colData(object)' entry to aggregate by.")
+        }
+        
+        if (length(count_by) != 1 | !is.character(count_by)) {
+            stop("'count_by' must be a single string.")
+        }
 
-    if (is.null(assay_type)) {
-      stop("'assay_type' not provided")
+        if (! count_by %in% colnames(colData(object))) {
+            stop("'count_by' is not a valid enty of 'colData(object)'.")
+        }
+      
+        if (length(proportions) != 1 | !is.logical(proportions)) {
+            stop("'proportions' must be a single logical")
+        }
     }
 
-    if (! assay_type %in% assayNames(object)) {
-      stop("'assay_type' not an assay in the 'object'.")
-    }
+    if (aggregate_by == "expression") {
 
-    if (! all(subset_row %in% rownames(object))) {
-      stop("subset_row not in rownames(object).")
+        if (is.null(assay_type)) {
+            stop("'assay_type' not provided")
+        }
+        
+        if (length(assay_type) != 1 | !is.character(assay_type)) {
+            stop("'assay_type' must be a single string.")
+        }
+
+        if (! assay_type %in% assayNames(object)) {
+            stop("'assay_type' not an assay in the 'object'.")
+        }
+        
+        if (!is.null(subset_row)) {
+            if (!all(is.character(subset_row)) | !all(is.logical(subset_row)) |
+                !all(is.numeric(subset_row))) {
+                stop("'subset_row' must be all 'logical', 'numeric' or 'character'.")
+            }
+            
+            if (all(is.character(subset_row)) & !all(subset_row %in% rownames(object))) {
+                stop("'subset_row' not in rownames(object).")
+            }
+            
+            if (all(is.logical(subset_row)) & length(subset_row) != nrow(object)) {
+                stop("'subset_row' logical entries must be as long as 'nrow(object)'.")
+            }
+        }
     }
-  }
+    
+    if (length(name) != 1 | !is.character(name)) {
+        stop("'name' must be a single string.")
+    }
 }
 
 #' @importFrom S4Vectors mcols
