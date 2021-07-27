@@ -57,7 +57,7 @@ aggregateNeighbors <- function(object,
   
     summaryStats = match.arg(statistic)
 
-    .valid.summarizeNeighbors.input(object, colPairName, aggregate_by, count_by, 
+    .valid.aggregateNeighbors.input(object, colPairName, aggregate_by, count_by, 
                                     proportions, assay_type, subset_row,
                                     name)
 
@@ -65,10 +65,12 @@ aggregateNeighbors <- function(object,
 
         cur_dat <- as.data.table(colPair(object, colPairName))
         
-        cur_dat[, "celltype" := colData(object)[[count_by]][cur_dat$to]]
+        cur_factor <- factor(colData(object)[[count_by]])
+        
+        cur_dat[, "celltype" := cur_factor[cur_dat$to]]
 
         cur_dat <- dcast(cur_dat, formula = "from ~ celltype", 
-                               fun.aggregate = length)[,-1]
+                               fun.aggregate = length, drop = FALSE)[,-1]
 
         if (proportions) {
             .SD <- NULL
@@ -79,8 +81,12 @@ aggregateNeighbors <- function(object,
         }
     
         name <- ifelse(is.null(name), "aggregatedNeighbors", name)
+        
+        out_dat <- DataFrame(matrix(data = 0, nrow = ncol(object), ncol = ncol(cur_dat)))
+        names(out_dat) <- names(cur_dat)
+        out_dat[from(colPair(object, colPairName)),] <- cur_dat
 
-        colData(object)[[name]] <- DataFrame(cur_dat)
+        colData(object)[[name]] <- out_dat
 
         return(object)
 
@@ -100,12 +106,16 @@ aggregateNeighbors <- function(object,
         cur_dat <- cur_dat[,eval(parse(text = paste0(statistic, "(value)"))), 
                            by=c("from","variable")]
         
-        cur_out <- dcast(cur_dat, formula = "from ~ variable", value.var = "V1")
+        cur_dat <- dcast(cur_dat, formula = "from ~ variable", value.var = "V1")
 
         name <- ifelse(is.null(name), 
                        paste0(statistic,"_aggregatedExpression"), name)
+        
+        out_dat <- DataFrame(matrix(data = NA, nrow = ncol(object), ncol = ncol(cur_dat) - 1))
+        names(out_dat) <- names(cur_dat)[-1]
+        out_dat[from(colPair(object, colPairName)),] <- cur_dat[,-1]
 
-        colData(object)[[name]] <- DataFrame(cur_out[,-1])
+        colData(object)[[name]] <- out_dat
 
         return(object)
     }

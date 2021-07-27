@@ -588,7 +588,7 @@
 
 }
 
-.valid.summarizeNeighbors.input <- function(object, colPairName, aggregate_by, count_by, 
+.valid.aggregateNeighbors.input <- function(object, colPairName, aggregate_by, count_by, 
                                             proportions, assay_type, subset_row,
                                             name){
 
@@ -602,6 +602,10 @@
     
     if (! colPairName %in% colPairNames(object)) {
         stop("'colPairName' not in 'colPairNames(object)'.")
+    }
+    
+    if (length(colPair(object, colPairName)) == 0) {
+        stop("No interactions found.")
     }
 
     if (aggregate_by == "metadata") {

@@ -6,11 +6,6 @@ test_that("aggregateNeighbors function works", {
                                      img_id = "ImageNb",
                                      type = "knn",k = 10,
                                      name = "knn_10")
-    pancreasSCE <- buildSpatialGraph(object = pancreasSCE,
-                                     img_id = "ImageNb",
-                                     type = "expansion",
-                                     threshold = 20,
-                                     name = "exp_20")
     
     # Works metadata version on knn
     # Directed
@@ -88,23 +83,379 @@ test_that("aggregateNeighbors function works", {
     cur_sce2$aggregatedNeighbors
     
     # Undirected
+    pancreasSCE <- buildSpatialGraph(object = pancreasSCE,
+                                     img_id = "ImageNb",
+                                     type = "knn",k = 10,
+                                     directed = FALSE,
+                                     name = "knn_10")
     
+    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,
+                                                colPairName = "knn_10",
+                                                aggregate_by = "metadata",
+                                                count_by = "CellType"))
+    
+    expect_s4_class(cur_sce , class = "SingleCellExperiment")
+    expect_equal(names(colData(cur_sce)), 
+                 c("ImageName", "Pos_X", "Pos_Y", "Area", "CellType", "ImageNb",
+                   "CellNb", "MaskName", "Pattern", "aggregatedNeighbors"))
+    expect_s4_class(cur_sce$aggregatedNeighbors, "DataFrame")
+    expect_true(all(rowSums(as.matrix(cur_sce$aggregatedNeighbors)) == 1))
+    
+    # check for correct results of neighboring metadata
+    cur_dat <- data.frame(colPair(pancreasSCE,"knn_10"))
+    cur_dat$celltype <- factor(colData(cur_sce)$CellType[cur_dat$to])
+    
+    cur_dat <- cur_dat %>% group_by(from) %>% count(celltype, .drop = FALSE) %>% 
+        pivot_wider(names_from = "celltype", values_from = "n") %>% ungroup() %>% 
+        select(-from) %>% as.matrix()
+    
+    cur_dat <- cur_dat / rowSums(cur_dat)
+    
+    expect_equal(cur_sce$aggregatedNeighbors,
+                 DataFrame(cur_dat))
+    
+    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,
+                                                colPairName = "knn_10",
+                                                aggregate_by = "metadata",
+                                                count_by = "CellType",
+                                                proportions = FALSE))
+    
+    expect_s4_class(cur_sce , class = "SingleCellExperiment")
+    expect_equal(names(colData(cur_sce)), 
+                 c("ImageName", "Pos_X", "Pos_Y", "Area", "CellType", "ImageNb",
+                   "CellNb", "MaskName", "Pattern", "aggregatedNeighbors"))
+    expect_s4_class(cur_sce$aggregatedNeighbors, "DataFrame")
+    expect_true(all(rowSums(as.matrix(cur_sce$aggregatedNeighbors)) == countLnodeHits(colPair(cur_sce, "knn_10"))))
+    
+    # check for correct results of neighboring metadata
+    cur_dat <- data.frame(colPair(pancreasSCE,"knn_10"))
+    cur_dat$celltype <- factor(colData(cur_sce)$CellType[cur_dat$to])
+    
+    cur_dat <- cur_dat %>% group_by(from) %>% count(celltype, .drop = FALSE) %>% 
+        pivot_wider(names_from = "celltype", values_from = "n") %>% ungroup() %>% 
+        select(-from) %>% as.matrix()
+    
+    expect_equal(cur_sce$aggregatedNeighbors,
+                 DataFrame(cur_dat))
+    
+    cur_sce2 <- cur_sce
+    colPair(cur_sce2, "knn_10") <- colPair(cur_sce2, "knn_10")[from(colPair(cur_sce2, "knn_10")) == 215,]
+    cur_sce2 <- cur_sce2[,c(215, to(colPair(cur_sce2, "knn_10"))[from(colPair(cur_sce2, "knn_10")) == 215])]
+    
+    plotSpatial(cur_sce2, img_id = "ImageNb", node_color_by = "CellType", draw_edges = TRUE,
+                colPairName = "knn_10")
+    cur_sce2$aggregatedNeighbors
+    
+    cur_sce2 <- cur_sce
+    colPair(cur_sce2, "knn_10") <- colPair(cur_sce2, "knn_10")[from(colPair(cur_sce2, "knn_10")) == 10,]
+    cur_sce2 <- cur_sce2[,c(10, to(colPair(cur_sce2, "knn_10"))[from(colPair(cur_sce2, "knn_10")) == 10])]
+    
+    plotSpatial(cur_sce2, img_id = "ImageNb", node_color_by = "CellType", draw_edges = TRUE,
+                colPairName = "knn_10")
+    cur_sce2$aggregatedNeighbors
+    
+    cur_sce2 <- cur_sce
+    colPair(cur_sce2, "knn_10") <- colPair(cur_sce2, "knn_10")[from(colPair(cur_sce2, "knn_10")) == 322,]
+    cur_sce2 <- cur_sce2[,c(322, to(colPair(cur_sce2, "knn_10"))[from(colPair(cur_sce2, "knn_10")) == 322])]
+    
+    plotSpatial(cur_sce2, img_id = "ImageNb", node_color_by = "CellType", draw_edges = TRUE,
+                colPairName = "knn_10")
+    cur_sce2$aggregatedNeighbors
     
     # Works expression version on knn
-    cur_markers <- rownames(pancreasSCE)
+    # Directed
+    # Mean
+    pancreasSCE <- buildSpatialGraph(object = pancreasSCE,
+                                     img_id = "ImageNb",
+                                     type = "knn",k = 10,
+                                     name = "knn_10")
+    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,
+                                                colPairName = "knn_10",
+                                                aggregate_by = "expression",
+                                                assay_type = "exprs"))
+    
+    
+    expect_s4_class(cur_sce , class = "SingleCellExperiment")
+    expect_equal(names(colData(cur_sce)), 
+                 c("ImageName", "Pos_X", "Pos_Y", "Area", "CellType", "ImageNb",
+                   "CellNb", "MaskName", "Pattern", "mean_aggregatedExpression"))
+    expect_s4_class(cur_sce$mean_aggregatedExpression, "DataFrame")
+    expect_equal(dim(t(cur_sce$mean_aggregatedExpression)), dim(cur_sce))
+    
+    # check for correct results of neighboring metadata
+    cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"knn_10"))]
+    colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"knn_10"))
+
+    cur_sce_2 <- aggregateAcrossCells(cur_sce_2, ids = cur_sce_2$from, statistics = "mean", 
+                                      use.assay.type = "exprs")
+    
+    expect_equal(as.matrix(cur_sce$mean_aggregatedExpression),
+                 t(as.matrix(assay(cur_sce_2, "exprs"))), check.attributes = FALSE)
+    
+    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,
+                                                colPairName = "knn_10",
+                                                aggregate_by = "expression",
+                                                assay_type = "counts"))
+    
+    expect_s4_class(cur_sce , class = "SingleCellExperiment")
+    expect_equal(names(colData(cur_sce)), 
+                 c("ImageName", "Pos_X", "Pos_Y", "Area", "CellType", "ImageNb",
+                   "CellNb", "MaskName", "Pattern", "mean_aggregatedExpression"))
+    expect_s4_class(cur_sce$mean_aggregatedExpression, "DataFrame")
+    expect_equal(dim(t(cur_sce$mean_aggregatedExpression)), dim(cur_sce))
+    
+    # check for correct results of neighboring metadata
+    cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"knn_10"))]
+    colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"knn_10"))
+    
+    cur_sce_2 <- aggregateAcrossCells(cur_sce_2, ids = cur_sce_2$from, statistics = "mean", 
+                                      use.assay.type = "counts")
+    
+    expect_equal(as.matrix(cur_sce$mean_aggregatedExpression),
+                 t(as.matrix(assay(cur_sce_2, "counts"))), check.attributes = FALSE)
+    
+    # Median
+    pancreasSCE <- buildSpatialGraph(object = pancreasSCE,
+                                     img_id = "ImageNb",
+                                     type = "knn",k = 10,
+                                     name = "knn_10")
     expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,
                                                 colPairName = "knn_10",
                                                 aggregate_by = "expression",
                                                 assay_type = "exprs",
-                                                subset_row = cur_markers,
-                                                name = "knn_10_expMean"))
-    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,
-                                                colPairName = "knn_10",
-                                                aggregate_by = "expression",
-                                                assay_type = "exprs",
-                                                subset_row = cur_markers,
-                                                name = "knn_10_expMedian",
                                                 statistic = "median"))
+    
+    expect_s4_class(cur_sce , class = "SingleCellExperiment")
+    expect_equal(names(colData(cur_sce)), 
+                 c("ImageName", "Pos_X", "Pos_Y", "Area", "CellType", "ImageNb",
+                   "CellNb", "MaskName", "Pattern", "median_aggregatedExpression"))
+    expect_s4_class(cur_sce$median_aggregatedExpression, "DataFrame")
+    expect_equal(dim(t(cur_sce$median_aggregatedExpression)), dim(cur_sce))
+    
+    # check for correct results of neighboring metadata
+    cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"knn_10"))]
+    colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"knn_10"))
+    
+    cur_sce_2 <- aggregateAcrossCells(cur_sce_2, ids = cur_sce_2$from, statistics = "median", 
+                                      use.assay.type = "exprs")
+    
+    expect_equal(as.matrix(cur_sce$median_aggregatedExpression),
+                 t(as.matrix(assay(cur_sce_2, "exprs"))), check.attributes = FALSE)
+    
+    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,
+                                                colPairName = "knn_10",
+                                                aggregate_by = "expression",
+                                                assay_type = "counts",
+                                                statistic = "median"))
+    
+    expect_s4_class(cur_sce , class = "SingleCellExperiment")
+    expect_equal(names(colData(cur_sce)), 
+                 c("ImageName", "Pos_X", "Pos_Y", "Area", "CellType", "ImageNb",
+                   "CellNb", "MaskName", "Pattern", "median_aggregatedExpression"))
+    expect_s4_class(cur_sce$median_aggregatedExpression, "DataFrame")
+    expect_equal(dim(t(cur_sce$median_aggregatedExpression)), dim(cur_sce))
+    
+    # check for correct results of neighboring metadata
+    cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"knn_10"))]
+    colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"knn_10"))
+    
+    cur_sce_2 <- aggregateAcrossCells(cur_sce_2, ids = cur_sce_2$from, statistics = "median", 
+                                      use.assay.type = "counts")
+    
+    expect_equal(as.matrix(cur_sce$median_aggregatedExpression),
+                 t(as.matrix(assay(cur_sce_2, "counts"))), check.attributes = FALSE)
+    
+    # Undirected
+    ## Mean
+    pancreasSCE <- buildSpatialGraph(object = pancreasSCE,
+                                     img_id = "ImageNb",
+                                     type = "knn",k = 10,
+                                     name = "knn_10", directed = FALSE)
+    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,
+                                                colPairName = "knn_10",
+                                                aggregate_by = "expression",
+                                                assay_type = "exprs"))
+    
+    expect_s4_class(cur_sce , class = "SingleCellExperiment")
+    expect_equal(names(colData(cur_sce)), 
+                 c("ImageName", "Pos_X", "Pos_Y", "Area", "CellType", "ImageNb",
+                   "CellNb", "MaskName", "Pattern", "mean_aggregatedExpression"))
+    expect_s4_class(cur_sce$mean_aggregatedExpression, "DataFrame")
+    expect_equal(dim(t(cur_sce$mean_aggregatedExpression)), dim(cur_sce))
+    
+    # check for correct results of neighboring metadata
+    cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"knn_10"))]
+    colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"knn_10"))
+    
+    cur_sce_2 <- aggregateAcrossCells(cur_sce_2, ids = cur_sce_2$from, statistics = "mean", 
+                                      use.assay.type = "exprs")
+    
+    expect_equal(as.matrix(cur_sce$mean_aggregatedExpression),
+                 t(as.matrix(assay(cur_sce_2, "exprs"))), check.attributes = FALSE)
+    
+    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,
+                                                colPairName = "knn_10",
+                                                aggregate_by = "expression",
+                                                assay_type = "counts"))
+    
+    expect_s4_class(cur_sce , class = "SingleCellExperiment")
+    expect_equal(names(colData(cur_sce)), 
+                 c("ImageName", "Pos_X", "Pos_Y", "Area", "CellType", "ImageNb",
+                   "CellNb", "MaskName", "Pattern", "mean_aggregatedExpression"))
+    expect_s4_class(cur_sce$mean_aggregatedExpression, "DataFrame")
+    expect_equal(dim(t(cur_sce$mean_aggregatedExpression)), dim(cur_sce))
+    
+    # check for correct results of neighboring metadata
+    cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"knn_10"))]
+    colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"knn_10"))
+    
+    cur_sce_2 <- aggregateAcrossCells(cur_sce_2, ids = cur_sce_2$from, statistics = "mean", 
+                                      use.assay.type = "counts")
+    
+    expect_equal(as.matrix(cur_sce$mean_aggregatedExpression),
+                 t(as.matrix(assay(cur_sce_2, "counts"))), check.attributes = FALSE)
+    
+    # Median
+    pancreasSCE <- buildSpatialGraph(object = pancreasSCE,
+                                     img_id = "ImageNb",
+                                     type = "knn",k = 10,
+                                     name = "knn_10",
+                                     directed = FALSE)
+    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,
+                                                colPairName = "knn_10",
+                                                aggregate_by = "expression",
+                                                assay_type = "exprs",
+                                                statistic = "median"))
+    
+    expect_s4_class(cur_sce , class = "SingleCellExperiment")
+    expect_equal(names(colData(cur_sce)), 
+                 c("ImageName", "Pos_X", "Pos_Y", "Area", "CellType", "ImageNb",
+                   "CellNb", "MaskName", "Pattern", "median_aggregatedExpression"))
+    expect_s4_class(cur_sce$median_aggregatedExpression, "DataFrame")
+    expect_equal(dim(t(cur_sce$median_aggregatedExpression)), dim(cur_sce))
+    
+    # check for correct results of neighboring metadata
+    cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"knn_10"))]
+    colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"knn_10"))
+    
+    cur_sce_2 <- aggregateAcrossCells(cur_sce_2, ids = cur_sce_2$from, statistics = "median", 
+                                      use.assay.type = "exprs")
+    
+    expect_equal(as.matrix(cur_sce$median_aggregatedExpression),
+                 t(as.matrix(assay(cur_sce_2, "exprs"))), check.attributes = FALSE)
+    
+    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,
+                                                colPairName = "knn_10",
+                                                aggregate_by = "expression",
+                                                assay_type = "counts",
+                                                statistic = "median"))
+    
+    expect_s4_class(cur_sce , class = "SingleCellExperiment")
+    expect_equal(names(colData(cur_sce)), 
+                 c("ImageName", "Pos_X", "Pos_Y", "Area", "CellType", "ImageNb",
+                   "CellNb", "MaskName", "Pattern", "median_aggregatedExpression"))
+    expect_s4_class(cur_sce$median_aggregatedExpression, "DataFrame")
+    expect_equal(dim(t(cur_sce$median_aggregatedExpression)), dim(cur_sce))
+    
+    # check for correct results of neighboring metadata
+    cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"knn_10"))]
+    colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"knn_10"))
+    
+    cur_sce_2 <- aggregateAcrossCells(cur_sce_2, ids = cur_sce_2$from, statistics = "median", 
+                                      use.assay.type = "counts")
+    
+    expect_equal(as.matrix(cur_sce$median_aggregatedExpression),
+                 t(as.matrix(assay(cur_sce_2, "counts"))), check.attributes = FALSE)
+    
+    # Expansion
+    ## metadata
+    pancreasSCE <- buildSpatialGraph(object = pancreasSCE,
+                                     img_id = "ImageNb",
+                                     type = "expansion",
+                                     threshold = 5,
+                                     name = "exp_20")
+    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,
+                                                colPairName = "exp_20",
+                                                aggregate_by = "metadata",
+                                                count_by = "CellType"))
+    
+    expect_s4_class(cur_sce , class = "SingleCellExperiment")
+    expect_equal(names(colData(cur_sce)), 
+                 c("ImageName", "Pos_X", "Pos_Y", "Area", "CellType", "ImageNb",
+                   "CellNb", "MaskName", "Pattern", "aggregatedNeighbors"))
+    expect_s4_class(cur_sce$aggregatedNeighbors, "DataFrame")
+    expect_true(all(rowSums(as.matrix(cur_sce$aggregatedNeighbors)) == 1))
+    
+    # check for correct results of neighboring metadata
+    cur_dat <- data.frame(colPair(pancreasSCE,"exp_20"))
+    cur_dat$celltype <- factor(colData(cur_sce)$CellType[cur_dat$to])
+    
+    cur_dat <- cur_dat %>% group_by(from) %>% count(celltype, .drop = FALSE) %>% 
+        pivot_wider(names_from = "celltype", values_from = "n") %>% ungroup() %>% 
+        select(-from) %>% as.matrix()
+    
+    cur_dat <- cur_dat / rowSums(cur_dat)
+    
+    expect_equal(cur_sce$aggregatedNeighbors,
+                 DataFrame(cur_dat))
+    
+    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,
+                                                colPairName = "exp_20",
+                                                aggregate_by = "metadata",
+                                                count_by = "CellType",
+                                                proportions = FALSE))
+    
+    expect_s4_class(cur_sce , class = "SingleCellExperiment")
+    expect_equal(names(colData(cur_sce)), 
+                 c("ImageName", "Pos_X", "Pos_Y", "Area", "CellType", "ImageNb",
+                   "CellNb", "MaskName", "Pattern", "aggregatedNeighbors"))
+    expect_s4_class(cur_sce$aggregatedNeighbors, "DataFrame")
+    expect_true(all(rowSums(as.matrix(cur_sce$aggregatedNeighbors)) == countLnodeHits(colPair(cur_sce, "exp_20"))))
+    
+    # check for correct results of neighboring metadata
+    cur_dat <- data.frame(colPair(pancreasSCE,"knn_10"))
+    cur_dat$celltype <- factor(colData(cur_sce)$CellType[cur_dat$to])
+    
+    cur_dat <- cur_dat %>% group_by(from) %>% count(celltype, .drop = FALSE) %>% 
+        pivot_wider(names_from = "celltype", values_from = "n") %>% ungroup() %>% 
+        select(-from) %>% as.matrix()
+    
+    expect_equal(cur_sce$aggregatedNeighbors,
+                 DataFrame(cur_dat))
+    
+    cur_sce2 <- cur_sce
+    colPair(cur_sce2, "knn_10") <- colPair(cur_sce2, "knn_10")[from(colPair(cur_sce2, "knn_10")) == 215,]
+    cur_sce2 <- cur_sce2[,c(215, to(colPair(cur_sce2, "knn_10"))[from(colPair(cur_sce2, "knn_10")) == 215])]
+    
+    plotSpatial(cur_sce2, img_id = "ImageNb", node_color_by = "CellType", draw_edges = TRUE,
+                colPairName = "knn_10")
+    cur_sce2$aggregatedNeighbors
+    
+    cur_sce2 <- cur_sce
+    colPair(cur_sce2, "knn_10") <- colPair(cur_sce2, "knn_10")[from(colPair(cur_sce2, "knn_10")) == 10,]
+    cur_sce2 <- cur_sce2[,c(10, to(colPair(cur_sce2, "knn_10"))[from(colPair(cur_sce2, "knn_10")) == 10])]
+    
+    plotSpatial(cur_sce2, img_id = "ImageNb", node_color_by = "CellType", draw_edges = TRUE,
+                colPairName = "knn_10")
+    cur_sce2$aggregatedNeighbors
+    
+    cur_sce2 <- cur_sce
+    colPair(cur_sce2, "knn_10") <- colPair(cur_sce2, "knn_10")[from(colPair(cur_sce2, "knn_10")) == 322,]
+    cur_sce2 <- cur_sce2[,c(322, to(colPair(cur_sce2, "knn_10"))[from(colPair(cur_sce2, "knn_10")) == 322])]
+    
+    plotSpatial(cur_sce2, img_id = "ImageNb", node_color_by = "CellType", draw_edges = TRUE,
+                colPairName = "knn_10")
+    cur_sce2$aggregatedNeighbors
+    
+    
+    ## expression
+    
+    # Delaunay
+    ## metadata
+    
+    ## expression
+    
+    
     
     # Works metadata version on expansion
     expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,
@@ -135,54 +486,7 @@ test_that("aggregateNeighbors function works", {
                                                 name = "exp_20_expMedian",
                                                 statistic = "median"))
     
-    # check for correct results of neighboring metadata
-    cur_dat <- data.frame(colPair(pancreasSCE,"knn_10"))
-    # our reference cell will be cell number 215
-    cur_dat <- cur_dat[which(cur_dat$from == 215),]
-    # what type of cells are the neighbors of cell 71?
-    neighbors_cell_215 <- unclass(as.matrix(t(table(pancreasSCE[,cur_dat$to]$CellType))))
-
-    
-    cur_sce <- aggregateNeighbors(object = pancreasSCE, colPairName = "knn_10",
-                                  aggregate_by = "metadata",
-                                  count_by = "CellType")
-    
-    expect_equal(as.data.frame(cur_sce$aggregatedNeighbors[215,]),
-                 as.data.frame(neighbors_cell_215/sum(neighbors_cell_215)))
-    
-    
-    # check for correct results of neighboring expression
-    cur_dat <- data.frame(colPair(pancreasSCE,"knn_10"))
-    # our reference cell will be cell number 215
-    cur_dat <- cur_dat[which(cur_dat$from == 215),]
-    # what type of cells are the neighbors of cell 215?
-    neighbors_cell_215 <- t(assay(pancreasSCE,"exprs"))[cur_dat$to,]
-    # calculate mean per marker for neighboring cells
-    mean_exp <- apply(neighbors_cell_215,2,mean)
-
-    cur_sce <- aggregateNeighbors(object = pancreasSCE,colPairName = "knn_10",
-                                  aggregate_by = "expression",
-                                  assay_type = "exprs",
-                                  subset_row = cur_markers,
-                                  name = "knn_10_expMean")
-    
-    expect_equal(as.numeric(as.data.frame(cur_sce$knn_10_expMean[215,])),
-                 as.numeric(mean_exp))
-    
-    # calculate median per marker for neighboring cells
-    median_exp <- apply(neighbors_cell_215,2,median)
-    
-    cur_sce <- aggregateNeighbors(object = pancreasSCE,
-                                  colPairName = "knn_10",
-                                  aggregate_by = "expression",
-                                  assay_type = "exprs",
-                                  subset_row = cur_markers,
-                                  name = "knn_10_expMean",
-                                  statistic = "median")
-    
-    expect_equal(as.numeric(as.data.frame(cur_sce$knn_10_expMean[215,])),
-                 as.numeric(median_exp))
-    
+   
     # Error
     expect_error(aggregateNeighbors("test"),
                  regexp = "'object' not of type 'SingleCellExperiment'.",
