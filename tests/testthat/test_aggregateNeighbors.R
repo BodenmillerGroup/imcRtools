@@ -372,7 +372,7 @@ test_that("aggregateNeighbors function works", {
     pancreasSCE <- buildSpatialGraph(object = pancreasSCE,
                                      img_id = "ImageNb",
                                      type = "expansion",
-                                     threshold = 5,
+                                     threshold = 10,
                                      name = "exp_20")
     expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,
                                                 colPairName = "exp_20",

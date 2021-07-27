@@ -70,21 +70,21 @@ aggregateNeighbors <- function(object,
         cur_dat[, "celltype" := cur_factor[cur_dat$to]]
 
         cur_dat <- dcast(cur_dat, formula = "from ~ celltype", 
-                               fun.aggregate = length, drop = FALSE)[,-1]
+                               fun.aggregate = length, drop = FALSE)
 
         if (proportions) {
             .SD <- NULL
-            all_col <- names(cur_dat)
-            row_sums <- rowSums(cur_dat)
+            all_col <- names(cur_dat)[-1]
+            row_sums <- rowSums(cur_dat[,-1])
             cur_dat[, (all_col) := lapply(.SD, function(x){x / row_sums}), 
                     .SDcols = all_col]
         }
     
         name <- ifelse(is.null(name), "aggregatedNeighbors", name)
         
-        out_dat <- DataFrame(matrix(data = 0, nrow = ncol(object), ncol = ncol(cur_dat)))
-        names(out_dat) <- names(cur_dat)
-        out_dat[from(colPair(object, colPairName)),] <- cur_dat
+        out_dat <- DataFrame(matrix(data = 0, nrow = ncol(object), ncol = ncol(cur_dat) - 1))
+        names(out_dat) <- names(cur_dat)[-1]
+        out_dat[cur_dat$from,] <- cur_dat[,-1]
 
         colData(object)[[name]] <- out_dat
 
@@ -113,7 +113,7 @@ aggregateNeighbors <- function(object,
         
         out_dat <- DataFrame(matrix(data = NA, nrow = ncol(object), ncol = ncol(cur_dat) - 1))
         names(out_dat) <- names(cur_dat)[-1]
-        out_dat[from(colPair(object, colPairName)),] <- cur_dat[,-1]
+        out_dat[cur_dat$from,] <- cur_dat[,-1]
 
         colData(object)[[name]] <- out_dat
 
