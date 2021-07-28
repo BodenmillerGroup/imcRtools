@@ -496,6 +496,110 @@ test_that("aggregateNeighbors function works", {
     expect_true(all(rowSums(as.matrix(cur_sce$aggregatedNeighbors)) == countLnodeHits(colPair(cur_sce, "exp_20"))))
     
     ## expression
+    pancreasSCE <- buildSpatialGraph(object = pancreasSCE,
+                                     img_id = "ImageNb",
+                                     type = "expansion",
+                                     threshold = 5,
+                                     name = "exp_20")
+    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,
+                                                colPairName = "exp_20",
+                                                aggregate_by = "expression",
+                                                assay_type = "exprs"))
+    
+    expect_s4_class(cur_sce , class = "SingleCellExperiment")
+    expect_equal(names(colData(cur_sce)), 
+                 c("ImageName", "Pos_X", "Pos_Y", "Area", "CellType", "ImageNb",
+                   "CellNb", "MaskName", "Pattern", "mean_aggregatedExpression"))
+    expect_s4_class(cur_sce$mean_aggregatedExpression, "DataFrame")
+    expect_equal(dim(t(cur_sce$mean_aggregatedExpression)), dim(cur_sce))
+    
+    # check for correct results of neighboring metadata
+    cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"exp_20"))]
+    colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"exp_20"))
+    
+    cur_sce_2 <- aggregateAcrossCells(cur_sce_2, ids = cur_sce_2$from, statistics = "mean", 
+                                      use.assay.type = "exprs")
+    
+    expect_equal(as.matrix(cur_sce$mean_aggregatedExpression[unique(from(colPair(pancreasSCE,"exp_20"))),]),
+                 t(as.matrix(assay(cur_sce_2, "exprs"))), check.attributes = FALSE)
+    expect_true(all(is.na(as.matrix(cur_sce$mean_aggregatedExpression[-unique(from(colPair(pancreasSCE,"exp_20"))),]))))
+    
+    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,
+                                                colPairName = "exp_20",
+                                                aggregate_by = "expression",
+                                                assay_type = "counts"))
+    
+    expect_s4_class(cur_sce , class = "SingleCellExperiment")
+    expect_equal(names(colData(cur_sce)), 
+                 c("ImageName", "Pos_X", "Pos_Y", "Area", "CellType", "ImageNb",
+                   "CellNb", "MaskName", "Pattern", "mean_aggregatedExpression"))
+    expect_s4_class(cur_sce$mean_aggregatedExpression, "DataFrame")
+    expect_equal(dim(t(cur_sce$mean_aggregatedExpression)), dim(cur_sce))
+    
+    # check for correct results of neighboring metadata
+    cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"exp_20"))]
+    colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"exp_20"))
+    
+    cur_sce_2 <- aggregateAcrossCells(cur_sce_2, ids = cur_sce_2$from, statistics = "mean", 
+                                      use.assay.type = "counts")
+    
+    expect_equal(as.matrix(cur_sce$mean_aggregatedExpression[from(colPair(pancreasSCE,"exp_20")),]),
+                 t(as.matrix(assay(cur_sce_2, "counts"))), check.attributes = FALSE)
+    expect_true(all(is.na(as.matrix(cur_sce$mean_aggregatedExpression[-from(colPair(pancreasSCE,"exp_20")),]))))
+    
+    # Median
+    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,
+                                                colPairName = "exp_20",
+                                                aggregate_by = "expression",
+                                                assay_type = "exprs",
+                                                statistic = "median"))
+    
+    expect_s4_class(cur_sce , class = "SingleCellExperiment")
+    expect_equal(names(colData(cur_sce)), 
+                 c("ImageName", "Pos_X", "Pos_Y", "Area", "CellType", "ImageNb",
+                   "CellNb", "MaskName", "Pattern", "median_aggregatedExpression"))
+    expect_s4_class(cur_sce$median_aggregatedExpression, "DataFrame")
+    expect_equal(dim(t(cur_sce$median_aggregatedExpression)), dim(cur_sce))
+    
+    # check for correct results of neighboring metadata
+    cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"exp_20"))]
+    colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"exp_20"))
+    
+    cur_sce_2 <- aggregateAcrossCells(cur_sce_2, ids = cur_sce_2$from, statistics = "median", 
+                                      use.assay.type = "exprs")
+    
+    expect_equal(as.matrix(cur_sce$median_aggregatedExpression[unique(from(colPair(pancreasSCE,"exp_20"))),]),
+                 t(as.matrix(assay(cur_sce_2, "exprs"))), check.attributes = FALSE)
+    expect_true(all(is.na(as.matrix(cur_sce$median_aggregatedExpression[-unique(from(colPair(pancreasSCE,"exp_20"))),]))))
+    
+    pancreasSCE <- buildSpatialGraph(object = pancreasSCE,
+                                     img_id = "ImageNb",
+                                     type = "expansion",
+                                     threshold = 15,
+                                     name = "exp_20")
+    expect_silent(cur_sce <- aggregateNeighbors(object = pancreasSCE,
+                                                colPairName = "exp_20",
+                                                aggregate_by = "expression",
+                                                assay_type = "exprs"))
+    
+    expect_s4_class(cur_sce , class = "SingleCellExperiment")
+    expect_equal(names(colData(cur_sce)), 
+                 c("ImageName", "Pos_X", "Pos_Y", "Area", "CellType", "ImageNb",
+                   "CellNb", "MaskName", "Pattern", "mean_aggregatedExpression"))
+    expect_s4_class(cur_sce$mean_aggregatedExpression, "DataFrame")
+    expect_equal(dim(t(cur_sce$mean_aggregatedExpression)), dim(cur_sce))
+    
+    # check for correct results of neighboring metadata
+    cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"exp_20"))]
+    colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"exp_20"))
+    
+    cur_sce_2 <- aggregateAcrossCells(cur_sce_2, ids = cur_sce_2$from, statistics = "mean", 
+                                      use.assay.type = "exprs")
+    
+    expect_equal(as.matrix(cur_sce$mean_aggregatedExpression[unique(from(colPair(pancreasSCE,"exp_20"))),]),
+                 t(as.matrix(assay(cur_sce_2, "exprs"))), check.attributes = FALSE)
+    expect_true(all(is.na(as.matrix(cur_sce$mean_aggregatedExpression[-unique(from(colPair(pancreasSCE,"exp_20"))),]))))
+    
     
     # Delaunay
     ## metadata
