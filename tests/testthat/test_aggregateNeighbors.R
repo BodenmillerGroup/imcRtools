@@ -862,8 +862,16 @@ test_that("aggregateNeighbors function works", {
     expect_error(aggregateNeighbors(object = pancreasSCE, colPairName = "knn_10",
                                     aggregate_by = "expression", assay_type = "counts",
                                     subset_row = c(1, "test")),
-                 regexp = "'assay_type' not an assay in the 'object'.",
+                 regexp = "'subset_row' not in rownames(object).",
                  fixed = TRUE)
-    
-  
+    expect_error(aggregateNeighbors(object = pancreasSCE, colPairName = "knn_10",
+                                    aggregate_by = "expression", assay_type = "counts",
+                                    subset_row = TRUE),
+                 regexp = "'subset_row' logical entries must be as long as 'nrow(object)'.",
+                 fixed = TRUE)
+    expect_error(aggregateNeighbors(object = pancreasSCE, colPairName = "knn_10",
+                                    aggregate_by = "expression", assay_type = "counts",
+                                    name = TRUE),
+                 regexp = "'name' must be a single string.",
+                 fixed = TRUE)
 })
