@@ -6,7 +6,8 @@ Description:
 Authors@R: 
     c(person("Nils", "Eling", role = c("aut", "cre"), email = "nils.eling@uzh.ch"),
       person("Tobias", "Hoch", role = "ctb"),
-      person("Vito", "Zanotelli", role = "ctb"))
+      person("Vito", "Zanotelli", role = "ctb"),
+      person("Daniel", "Schulz", role = "ctb"))
 License: GPL (>= 2)
 Depends:
     R (>= 4.0),
@@ -34,12 +35,12 @@ Imports:
     RTriangle,
     ggraph,
     tidygraph,
-    ggplot2
+    ggplot2,
+    data.table
 Suggests:
     CATALYST,
     grid,
     tidyr,
-    data.table,
     BiocStyle,
     knitr,
     rmarkdown,

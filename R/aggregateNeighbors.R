@@ -33,6 +33,26 @@
 #' @return returns an object of \code{class(object)} containing the aggregated
 #' values in form of a \code{DataFrame} object in
 #' \code{colData(object)[[name]]}.
+#' 
+#' @examples
+#' library(cytomapper)
+#' data(pancreasSCE)
+#' 
+#' sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+#'                          type = "knn", k = 3)
+#'                          
+#' # Aggregating neighboring cell-types
+#' sce <- aggregateNeighbors(sce, colPairName = "knn_interaction_graph",
+#'                           aggregate_by = "metadata",
+#'                           count_by = "CellType")
+#' sce$aggregatedNeighbors
+#' 
+#' # Aggregating neighboring expression values
+#' sce <- aggregateNeighbors(sce, colPairName = "knn_interaction_graph",
+#'                           aggregate_by = "expression",
+#'                           assay_type = "exprs",
+#'                           statistic = "mean")
+#' sce$mean_aggregatedExpression
 #'   
 #' @author Daniel Schulz (\email{daniel.schulz@@uzh.ch})
 #'

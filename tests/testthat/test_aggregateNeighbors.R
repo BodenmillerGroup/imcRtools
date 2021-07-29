@@ -27,7 +27,7 @@ test_that("aggregateNeighbors function works", {
     cur_dat$celltype <- factor(colData(cur_sce)$CellType[cur_dat$to])
     
     cur_dat <- cur_dat %>% group_by(from) %>% count(celltype, .drop = FALSE) %>% 
-        pivot_wider(names_from = "celltype", values_from = "n") %>% ungroup() %>% 
+        tidyr::pivot_wider(names_from = "celltype", values_from = "n") %>% ungroup() %>% 
         select(-from) %>% as.matrix()
     
     cur_dat <- cur_dat / rowSums(cur_dat)
@@ -53,7 +53,7 @@ test_that("aggregateNeighbors function works", {
     cur_dat$celltype <- factor(colData(cur_sce)$CellType[cur_dat$to])
     
     cur_dat <- cur_dat %>% group_by(from) %>% count(celltype, .drop = FALSE) %>% 
-        pivot_wider(names_from = "celltype", values_from = "n") %>% ungroup() %>% 
+        tidyr::pivot_wider(names_from = "celltype", values_from = "n") %>% ungroup() %>% 
         select(-from) %>% as.matrix()
     
     expect_equal(cur_sce$aggregatedNeighbors,
@@ -107,7 +107,7 @@ test_that("aggregateNeighbors function works", {
     cur_dat$celltype <- factor(colData(cur_sce)$CellType[cur_dat$to])
     
     cur_dat <- cur_dat %>% group_by(from) %>% count(celltype, .drop = FALSE) %>% 
-        pivot_wider(names_from = "celltype", values_from = "n") %>% ungroup() %>% 
+        tidyr::pivot_wider(names_from = "celltype", values_from = "n") %>% ungroup() %>% 
         select(-from) %>% as.matrix()
     
     cur_dat <- cur_dat / rowSums(cur_dat)
@@ -133,7 +133,7 @@ test_that("aggregateNeighbors function works", {
     cur_dat$celltype <- factor(colData(cur_sce)$CellType[cur_dat$to])
     
     cur_dat <- cur_dat %>% group_by(from) %>% count(celltype, .drop = FALSE) %>% 
-        pivot_wider(names_from = "celltype", values_from = "n") %>% ungroup() %>% 
+        tidyr::pivot_wider(names_from = "celltype", values_from = "n") %>% ungroup() %>% 
         select(-from) %>% as.matrix()
     
     expect_equal(cur_sce$aggregatedNeighbors,
@@ -391,7 +391,7 @@ test_that("aggregateNeighbors function works", {
     cur_dat$celltype <- factor(colData(cur_sce)$CellType)[cur_dat$to]
     
     cur_dat <- cur_dat %>% group_by(from) %>% count(celltype, .drop = FALSE) %>% 
-        pivot_wider(names_from = "celltype", values_from = "n") %>% ungroup() %>% as.matrix()
+        tidyr::pivot_wider(names_from = "celltype", values_from = "n") %>% ungroup() %>% as.matrix()
     
     cur_dat[,-1] <- cur_dat[,-1] / rowSums(cur_dat[,-1])
     
@@ -433,7 +433,7 @@ test_that("aggregateNeighbors function works", {
     cur_dat$celltype <- factor(colData(cur_sce)$CellType)[cur_dat$to]
     
     cur_dat <- cur_dat %>% group_by(from) %>% count(celltype, .drop = FALSE) %>% 
-        pivot_wider(names_from = "celltype", values_from = "n") %>% ungroup() %>% as.matrix()
+        tidyr::pivot_wider(names_from = "celltype", values_from = "n") %>% ungroup() %>% as.matrix()
     
     cur_dat[,-1] <- cur_dat[,-1] / rowSums(cur_dat[,-1])
     
@@ -475,7 +475,7 @@ test_that("aggregateNeighbors function works", {
     cur_dat$celltype <- factor(colData(cur_sce)$CellType)[cur_dat$to]
     
     cur_dat <- cur_dat %>% group_by(from) %>% count(celltype, .drop = FALSE) %>% 
-        pivot_wider(names_from = "celltype", values_from = "n") %>% ungroup() %>% as.matrix()
+        tidyr::pivot_wider(names_from = "celltype", values_from = "n") %>% ungroup() %>% as.matrix()
     
     cur_dat[,-1] <- cur_dat[,-1] / rowSums(cur_dat[,-1])
     
@@ -512,7 +512,7 @@ test_that("aggregateNeighbors function works", {
     cur_dat$Pattern <- factor(colData(cur_sce)$Pattern)[cur_dat$to]
     
     cur_dat <- cur_dat %>% group_by(from) %>% count(Pattern, .drop = FALSE) %>% 
-        pivot_wider(names_from = "Pattern", values_from = "n") %>% ungroup() %>% as.matrix()
+        tidyr::pivot_wider(names_from = "Pattern", values_from = "n") %>% ungroup() %>% as.matrix()
     
     cur_dat[,-1] <- cur_dat[,-1] / rowSums(cur_dat[,-1])
     
@@ -535,7 +535,7 @@ test_that("aggregateNeighbors function works", {
     cur_dat$Area <- factor(colData(cur_sce)$Area)[cur_dat$to]
     
     cur_dat <- cur_dat %>% group_by(from) %>% count(Area, .drop = FALSE) %>% 
-        pivot_wider(names_from = "Area", values_from = "n") %>% ungroup() %>% as.matrix()
+        tidyr::pivot_wider(names_from = "Area", values_from = "n") %>% ungroup() %>% as.matrix()
     
     cur_dat[,-1] <- cur_dat[,-1] / rowSums(cur_dat[,-1])
     
@@ -669,7 +669,7 @@ test_that("aggregateNeighbors function works", {
     cur_dat$celltype <- factor(colData(cur_sce)$CellType)[cur_dat$to]
     
     cur_dat <- cur_dat %>% group_by(from) %>% count(celltype, .drop = FALSE) %>% 
-        pivot_wider(names_from = "celltype", values_from = "n") %>% ungroup() %>% as.matrix()
+        tidyr::pivot_wider(names_from = "celltype", values_from = "n") %>% ungroup() %>% as.matrix()
     
     cur_dat[,-1] <- cur_dat[,-1] / rowSums(cur_dat[,-1])
     

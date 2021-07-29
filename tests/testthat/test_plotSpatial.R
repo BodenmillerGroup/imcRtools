@@ -602,7 +602,16 @@ test_that("plotSpatial function works", {
                  "'node_color_by' must be a single string.",
                  fixed = TRUE)
     expect_error(plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "test"), 
-                 "'node_color_by' not in colData(object).",
+                 "'node_color_by' not in colData(object) or rownames(object).",
+                 fixed = TRUE)
+    expect_error(plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "PIN"), 
+                 "When coloring nodes by marker expression, please specify 'assay_type'.",
+                 fixed = TRUE)
+    expect_error(plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "PIN", assay_type = 1), 
+                 "'assay_type' must be a single string.",
+                 fixed = TRUE)
+    expect_error(plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "PIN", assay_type = "test"), 
+                 "'assay_type' not an assay in object.",
                  fixed = TRUE)
     expect_error(plotSpatial(cur_sce, img_id = "ImageNb", node_shape_by = c("test", "test2")), 
                  "'node_shape_by' must be a single string.",

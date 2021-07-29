@@ -12,6 +12,10 @@ author:
   affiliation: 
   - Department for Quantitative Biomedicine, University of Zurich
   - Institute for Molecular Health Sciences, ETH Zurich
+- name: Daniel Schulz
+  affiliation: 
+  - Department for Quantitative Biomedicine, University of Zurich
+  - Institute for Molecular Health Sciences, ETH Zurich
 output:
     BiocStyle::html_document:
         toc_float: yes
