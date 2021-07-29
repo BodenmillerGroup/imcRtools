@@ -1,3 +1,28 @@
+.makeNodes <- function(object, node_color_by, img_id, node_shape_by,
+                       node_size_by, assay_type){
+    if (is.null(node_color_by)) {
+        nodes <- colData(object)[,c(img_id, node_shape_by, 
+                                    node_size_by),
+                                 drop=FALSE]
+    } else if (node_color_by %in% names(colData(object))) {
+        nodes <- colData(object)[,c(img_id, node_color_by, node_shape_by, 
+                                    node_size_by),
+                                 drop=FALSE]
+    } else {
+        nodes <- colData(object)[,c(img_id, node_shape_by, 
+                                    node_size_by),
+                                 drop=FALSE]
+        nodes <- cbind(nodes, t(assay(object, assay_type)[node_color_by,, 
+                                                          drop = FALSE]))
+    }
+    
+    if (!is.null(node_shape_by)) {
+        nodes[,node_shape_by] <- as.character(nodes[,node_shape_by])
+    }
+    
+    return(nodes)
+}
+
 # Function to generate the tidygraph
 #' @importFrom S4Vectors isRedundantHit
 .generateGraph <- function(object, nodes, colPairName, draw_edges, 
@@ -97,8 +122,9 @@
 }
 
 # Post process the plots
-#' @importFrom ggplot2 ggtitle
-.postProcessPlot <- function(p, object, img_id, nrows, ncols, node_color_fix,
+#' @importFrom ggplot2 ggtitle scale_color_viridis
+.postProcessPlot <- function(p, object, img_id, nrows, ncols, node_color_by,
+                             node_color_fix,
                              node_shape_fix, node_size_fix, edge_color_fix, 
                              edge_width_fix, scales){
     
@@ -126,6 +152,9 @@
         names(edge_width_fix) <- as.character(edge_width_fix)
         p <- p + scale_edge_width_manual(values = edge_width_fix,
                                     guide = "none") 
+    }
+    if (!is.null(node_color_by) && node_color_by %in% rownames(object)) {
+        p <- p + scale_color_viridis()
     }
     
     if (length(unique(colData(object)[[img_id]])) > 1) {

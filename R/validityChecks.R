@@ -660,8 +660,9 @@
 #' @importFrom S4Vectors mcols
 .valid.plotSpatial.input <- function(object, img_id, coords, node_color_by,
                                      node_shape_by, node_size_by, edge_color_by,
-                                     edge_width_by, draw_edges, directed, arrow, 
-                                     end_cap, colPairName, ncols, nrows, scales){
+                                     assay_type, edge_width_by, draw_edges, 
+                                     directed,  arrow,  end_cap, colPairName, 
+                                     ncols, nrows, scales){
     
     if (!is(object, "SingleCellExperiment")) {
         stop("'object' not of type 'SingleCellExperiment'.")
@@ -693,10 +694,25 @@
         !is.character(node_color_by))) {
         stop("'node_color_by' must be a single string.")
     }
+    
+    cur_accepted <- c(names(colData(object)), rownames(object))
 
-    if (!is.null(node_color_by) &&
-        (!node_color_by %in% names(colData(object)))) {
-        stop("'node_color_by' not in colData(object).")
+    if (!is.null(node_color_by) && !node_color_by %in% cur_accepted) {
+        stop("'node_color_by' not in colData(object) or rownames(object).")
+    }
+    
+    if (!is.null(node_color_by) && node_color_by %in% rownames(object)) {
+        if (is.null(assay_type)) {
+            stop("When coloring nodes by marker expression, please specify 'assay_type'.")
+        }
+        
+        if (length(assay_type) != 1 | !is.character(assay_type)) {
+            stop("'assay_type' must be a single string.")
+        }
+        
+        if (!assay_type %in% assayNames(object)) {
+            stop("'assay_type' not an assay in object.")
+        }
     }
 
     if (!is.null(node_shape_by) &&

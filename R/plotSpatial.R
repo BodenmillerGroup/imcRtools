@@ -12,7 +12,7 @@
 #' \code{colData} (for a \code{SingleCellExperiment} object) or the
 #' \code{spatialCoords} entries of the cells' x and y locations.
 #' @param node_color_by single character indicating the \code{colData(object)}
-#' entry by which the nodes (cell locations) should be colored. 
+#' entry or marker name by which the nodes (cell locations) should be colored. 
 #' @param node_shape_by single character indicating the \code{colData(object)}
 #' entry by which the shape of the nodes are defined. 
 #' @param node_size_by single character indicating the \code{colData(object)}
@@ -22,6 +22,9 @@
 #' @param node_size_fix single numeric specifying the size of the nodes
 #' @param node_shape_fix single numeric or character specifying the shape of the 
 #' nodes
+#' @param assay_type single character indicating the assay slot from which
+#' to extract the expression data when \code{node_color_by} is set to one of
+#' \code{rownames(object)}
 #' @param draw_edges should cell-cell interactions be drawn as edges between
 #' nodes? 
 #' @param directed should cell-cell interactions be handled a directed graph?
@@ -88,9 +91,10 @@
 #'             node_shape_by = "ImageNb",
 #'             node_size_by = "Area")
 #'   
-#' # With edges
+#' # With edges and nodes colored by expression
 #' plotSpatial(sce, img_id = "ImageNb",
-#'             node_color_by = "CellType",
+#'             node_color_by = "PIN",
+#'             assay_type = "exprs",
 #'             node_shape_by = "ImageNb",
 #'             node_size_by = "Area",
 #'             draw_edges = TRUE,
@@ -127,6 +131,7 @@ plotSpatial <- function(object,
                         node_color_fix = NULL,
                         node_shape_fix = NULL,
                         node_size_fix = NULL,
+                        assay_type = NULL,
                         draw_edges = FALSE,
                         directed = TRUE,
                         edge_color_by = NULL,
@@ -142,17 +147,14 @@ plotSpatial <- function(object,
     
     .valid.plotSpatial.input(object, img_id, coords, node_color_by, 
                              node_shape_by, node_size_by, edge_color_by,
-                             edge_width_by, draw_edges, directed, arrow, 
-                             end_cap, colPairName,
+                             assay_type, edge_width_by, draw_edges, directed, 
+                             arrow, end_cap, colPairName,
                              ncols, nrows, scales)
     
-    nodes <- colData(object)[,c(img_id,node_color_by, node_shape_by, 
-                                node_size_by),
-                             drop=FALSE]
     
-    if (!is.null(node_shape_by)) {
-        nodes[,node_shape_by] <- as.character(nodes[,node_shape_by])
-    }
+    
+    nodes <- .makeNodes(object, node_color_by, img_id, node_shape_by,
+                        node_size_by, assay_type)
     
     cur_graph <- .generateGraph(object, nodes, colPairName, draw_edges, 
                                 edge_color_by, edge_width_by, directed)
@@ -179,7 +181,8 @@ plotSpatial <- function(object,
                        node_shape_fix, edge_color_by, edge_width_by, edge_color_fix, 
                        edge_width_fix)
     
-    p <- .postProcessPlot(p, object, img_id, nrows, ncols, node_color_fix,
+    p <- .postProcessPlot(p, object, img_id, nrows, ncols, node_color_by, 
+                          node_color_fix,
                           node_shape_fix, node_size_fix, edge_color_fix, 
                           edge_width_fix, scales)
         

@@ -1,5 +1,6 @@
 test_that("aggregateNeighbors function works", {
     library(cytomapper)
+    library(dplyr)
     data("pancreasSCE")
     
     pancreasSCE <- buildSpatialGraph(object = pancreasSCE,

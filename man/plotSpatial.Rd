@@ -14,6 +14,7 @@ plotSpatial(
   node_color_fix = NULL,
   node_shape_fix = NULL,
   node_size_fix = NULL,
+  assay_type = NULL,
   draw_edges = FALSE,
   directed = TRUE,
   edge_color_by = NULL,
@@ -40,7 +41,7 @@ containing the unique image identifiers.}
 \code{spatialCoords} entries of the cells' x and y locations.}
 
 \item{node_color_by}{single character indicating the \code{colData(object)}
-entry by which the nodes (cell locations) should be colored.}
+entry or marker name by which the nodes (cell locations) should be colored.}
 
 \item{node_shape_by}{single character indicating the \code{colData(object)}
 entry by which the shape of the nodes are defined.}
@@ -55,6 +56,10 @@ nodes.}
 nodes}
 
 \item{node_size_fix}{single numeric specifying the size of the nodes}
+
+\item{assay_type}{single character indicating the assay slot from which
+to extract the expression data when \code{node_color_by} is set to one of
+\code{rownames(object)}}
 
 \item{draw_edges}{should cell-cell interactions be drawn as edges between
 nodes?}
@@ -141,9 +146,10 @@ plotSpatial(sce, img_id = "ImageNb",
             node_shape_by = "ImageNb",
             node_size_by = "Area")
   
-# With edges
+# With edges and nodes colored by expression
 plotSpatial(sce, img_id = "ImageNb",
-            node_color_by = "CellType",
+            node_color_by = "PIN",
+            assay_type = "exprs",
             node_shape_by = "ImageNb",
             node_size_by = "Area",
             draw_edges = TRUE,

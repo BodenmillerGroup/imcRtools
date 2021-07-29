@@ -6,7 +6,7 @@ test_that("plotSpatial function works", {
     cur_sce <- pancreasSCE
 
     # SingleCellExperiment
-    p <- plotSpatial(cur_sce, img_id = "ImageNb")
+    expect_silent(p <- plotSpatial(cur_sce, img_id = "ImageNb"))
     expect_s3_class(p, "ggraph")
     expect_silent(print(p))
     expect_equal(p$data$x, pancreasSCE$Pos_X)
@@ -36,6 +36,30 @@ test_that("plotSpatial function works", {
     expect_equal(p$data$y, pancreasSCE$Pos_Y)
     expect_equal(p$data$ImageNb, pancreasSCE$ImageNb)
     expect_equal(p$data$Pattern, pancreasSCE$Pattern)
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "PIN", assay_type = "counts")
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    expect_equal(p$data$x, pancreasSCE$Pos_X)
+    expect_equal(p$data$y, pancreasSCE$Pos_Y)
+    expect_equal(p$data$ImageNb, pancreasSCE$ImageNb)
+    expect_equal(p$data$PIN, counts(pancreasSCE)["PIN",], check.attributes = FALSE)
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "PIN", assay_type = "exprs")
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    expect_equal(p$data$x, pancreasSCE$Pos_X)
+    expect_equal(p$data$y, pancreasSCE$Pos_Y)
+    expect_equal(p$data$ImageNb, pancreasSCE$ImageNb)
+    expect_equal(p$data$PIN, assay(pancreasSCE, "exprs")["PIN",], check.attributes = FALSE)
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "CDH", assay_type = "exprs")
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    expect_equal(p$data$x, pancreasSCE$Pos_X)
+    expect_equal(p$data$y, pancreasSCE$Pos_Y)
+    expect_equal(p$data$ImageNb, pancreasSCE$ImageNb)
+    expect_equal(p$data$CDH, assay(pancreasSCE, "exprs")["CDH",], check.attributes = FALSE)
     
     p <- plotSpatial(cur_sce, img_id = "ImageNb", node_shape_by = "CellType")
     expect_s3_class(p, "ggraph")
@@ -171,6 +195,13 @@ test_that("plotSpatial function works", {
     p <- plotSpatial(cur_sce, img_id = "ImageNb", 
                      draw_edges = TRUE, colPairName = "knn_interaction_graph",
                      edge_color_by = "CellType")
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", 
+                     draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_color_by = "CellType", node_color_by = "PIN",
+                     assay_type = "exprs", node_size_fix = 5)
     expect_s3_class(p, "ggraph")
     expect_silent(print(p))
     
