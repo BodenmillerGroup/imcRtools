@@ -642,11 +642,6 @@
         }
         
         if (!is.null(subset_row)) {
-            if (!(all(is.character(subset_row)) | all(is.logical(subset_row)) |
-                all(is.numeric(subset_row)))) {
-                stop("'subset_row' must be all 'logical', 'numeric' or 'character'.")
-            }
-            
             if (all(is.character(subset_row)) & !all(subset_row %in% rownames(object))) {
                 stop("'subset_row' not in rownames(object).")
             }
