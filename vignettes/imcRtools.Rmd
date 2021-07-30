@@ -12,6 +12,10 @@ author:
   affiliation: 
   - Department for Quantitative Biomedicine, University of Zurich
   - Institute for Molecular Health Sciences, ETH Zurich
+- name: Daniel Schulz
+  affiliation: 
+  - Department for Quantitative Biomedicine, University of Zurich
+  - Institute for Molecular Health Sciences, ETH Zurich
 output:
     BiocStyle::html_document:
         toc_float: yes
@@ -286,11 +290,136 @@ metadata(sce)$spillover_matrix
 
 # Spatial analysis
 
+The following section will highlight functions for spatial analysis of the data.
+
 ## Constructing graphs
 
-## Spatial clustering and patch detection
+When following the `ImcSegmentationPipeline` or `steinbock`, the generated 
+graphs are automatically stored in the `colPair(spe, "neighbourhood")` slot.
+Alternatively, the `buildSpatialGraph` function in the `imcRtools` package
+constructs interaction graphs using either (i) cell-centroid expansion,
+(ii) k-nearest neighbor search or (iii) delaunay triangulation.
 
-## Neighbour counting
+```{r buildSpatialGraph, message=FALSE}
+library(cytomapper)
+data("pancreasSCE")
+
+pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",
+                                 type = "expansion",
+                                 threshold = 20)
+pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",
+                                 type = "knn",
+                                 k = 5)
+pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",
+                                 type = "delaunay")
+
+colPairNames(pancreasSCE)
+```
+
+When setting `type = "knn"`, by default a directional graph will be build.
+Setting `directed = FALSE` will create bi-directional edges for each pair of 
+cells that are connected by at least one edge in the directed setting.
+
+## Graph/cell visualization
+
+The cells' locations and constructed graphs can be visualized using the 
+`plotSpatial` function. Here, cells are referred to as "nodes" and cell-cell
+interactions are referred to as "edges". All visual attributes of the nodes
+and edges can be set. Either by specifying a variable in `colData(spe)`, a
+marker name or a single entry using the `*_fix` parameters.
+
+```{r plotSpatial}
+library(ggplot2)
+library(ggraph)
+
+plotSpatial(pancreasSCE,
+            img_id = "ImageNb",
+            node_color_by = "CellType",
+            node_shape_by = "ImageNb",
+            node_size_by = "Area",
+            draw_edges = TRUE,
+            colPairName = "knn_interaction_graph",
+            directed = FALSE)
+
+# Colored by expression and with arrows
+plotSpatial(pancreasSCE,
+            img_id = "ImageNb",
+            node_color_by = "PIN",
+            assay_type = "exprs",
+            node_size_fix = 3,
+            edge_width_fix = 0.2,
+            draw_edges = TRUE,
+            colPairName = "knn_interaction_graph",
+            directed = TRUE,
+            arrow = grid::arrow(length = grid::unit(0.1, "inch")),
+            end_cap = ggraph::circle(0.05, "cm"))
+
+# Subsetting the SingleCellExperiment
+plotSpatial(pancreasSCE[,pancreasSCE$Pattern],
+            img_id = "ImageNb",
+            node_color_by = "CellType",
+            node_size_fix = 1,
+            draw_edges = TRUE,
+            colPairName = "knn_interaction_graph",
+            directed = TRUE,
+            scales = "fixed") 
+```
+
+The returned object can be further modified using the `ggplot2` logic. This
+includes chaning the node color, shape and size using `scale_color_*`,
+`scale_shape_*` and `scale_size_*`. Edge attributes can be altered using the
+`scale_edge_*` exported by `ggraph`,
+
+## Neighborhood aggregation
+
+The `aggregatedNeighbors` function can be used to aggregate features of all
+neighboring cells for each individual cell. This function operates in two 
+settings. 1. `metadata`: when aggregating by cell-specific metadata, the 
+function computes the relative frequencies of all entries to 
+`colData(sce)[[count_by]]` within the direct neighborhood of each cell. 
+2. `expression`: the expression counts stored in `assay_type` are aggregated
+using the specified `statistic` (defaults to `mean`). 
+
+Each cell's neighborhood is defined as endpoints of edges stored in 
+`colPair(sce, colPairName)`.
+
+```{r aggregateNeigbors}
+pancreasSCE <- aggregateNeighbors(pancreasSCE,
+                                  colPairName = "knn_interaction_graph",
+                                  aggregate_by = "metadata",
+                                  count_by = "CellType")
+head(pancreasSCE$aggregatedNeighbors)
+
+pancreasSCE <- aggregateNeighbors(pancreasSCE,
+                                  colPairName = "knn_interaction_graph",
+                                  aggregate_by = "expression",
+                                  assay_type =  "exprs")
+head(pancreasSCE$mean_aggregatedExpression)
+```
+
+The returned entries can now be used for clustering to group cells based on their
+environment (either by aggregated categorial features or expression).
+
+```{r aggregateNeigbors-clustering}
+cur_cluster <- kmeans(pancreasSCE$aggregatedNeighbors, centers = 3)
+pancreasSCE$clustered_neighbors <- factor(cur_cluster$cluster)
+
+plotSpatial(pancreasSCE,
+            img_id = "ImageNb",
+            node_color_by = "CellType",
+            node_size_fix = 4,
+            edge_width_fix = 2,
+            edge_color_by = "clustered_neighbors",
+            draw_edges = TRUE,
+            colPairName = "knn_interaction_graph",
+            directed = FALSE,
+            nodes_first = FALSE) +
+    scale_color_brewer(palette = "Set2") +
+    scale_edge_color_brewer(palette = "Set1")
+```
+
+
+## Patch detection
 
 ## Neighbourhood permutation testing
 
