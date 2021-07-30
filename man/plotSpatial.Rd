@@ -24,6 +24,7 @@ plotSpatial(
   arrow = NULL,
   end_cap = NULL,
   colPairName = NULL,
+  nodes_first = TRUE,
   ncols = NULL,
   nrows = NULL,
   scales = "free"
@@ -86,6 +87,9 @@ Default: \code{end_cap = circle(0.1, 'cm')}}
 
 \item{colPairName}{single character specifying from which 
 \code{colPair(object)} slot to retrieve the cell-cell pairings.}
+
+\item{nodes_first}{should the nodes be plotted first and then the edges?
+When \code{nodes_first = FALSE}, the edges will be drawn first}
 
 \item{ncols}{number of columns of the grid to arrange individual images.}
 
