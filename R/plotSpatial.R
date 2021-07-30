@@ -42,6 +42,8 @@
 #' @param end_cap \code{\link[ggraph]{geometry}} object specifying how long the 
 #' edges are. This only takes effect when drawing arrows. 
 #' Default: \code{end_cap = circle(0.1, 'cm')}
+#' @param nodes_first should the nodes be plotted first and then the edges?
+#' When \code{nodes_first = FALSE}, the edges will be drawn first
 #' @param ncols number of columns of the grid to arrange individual images.
 #' @param nrows number of rows of the grid to arrange individual images.
 #' @param scales one of \code{"free"}, \code{"fixed"}, \code{"free_x"} or 
@@ -141,6 +143,7 @@ plotSpatial <- function(object,
                         arrow = NULL,
                         end_cap = NULL,
                         colPairName = NULL,
+                        nodes_first = TRUE,
                         ncols = NULL,
                         nrows = NULL,
                         scales = "free"){
@@ -148,7 +151,7 @@ plotSpatial <- function(object,
     .valid.plotSpatial.input(object, img_id, coords, node_color_by, 
                              node_shape_by, node_size_by, edge_color_by,
                              assay_type, edge_width_by, draw_edges, directed, 
-                             arrow, end_cap, colPairName,
+                             arrow, end_cap, colPairName, nodes_first,
                              ncols, nrows, scales)
     
     
@@ -179,7 +182,7 @@ plotSpatial <- function(object,
     p <- .generatePlot(layout, draw_edges, directed, arrow, end_cap, node_color_by,
                        node_size_by, node_shape_by, node_color_fix, node_size_fix, 
                        node_shape_fix, edge_color_by, edge_width_by, edge_color_fix, 
-                       edge_width_fix)
+                       edge_width_fix, nodes_first)
     
     p <- .postProcessPlot(p, object, img_id, nrows, ncols, node_color_by, 
                           node_color_fix,

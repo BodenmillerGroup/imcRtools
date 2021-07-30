@@ -662,7 +662,7 @@
                                      node_shape_by, node_size_by, edge_color_by,
                                      assay_type, edge_width_by, draw_edges, 
                                      directed,  arrow,  end_cap, colPairName, 
-                                     ncols, nrows, scales){
+                                     nodes_first, ncols, nrows, scales){
     
     if (!is(object, "SingleCellExperiment")) {
         stop("'object' not of type 'SingleCellExperiment'.")
@@ -788,6 +788,10 @@
         if (!is.null(end_cap) && !is(end_cap, "geometry")) {
             stop("'end_cap' must be of type 'geometry'.")
         }
+    }
+    
+    if (length(nodes_first) != 1 | !is.logical(nodes_first)) {
+        stop("'nodes_first' must be a single logical")
     }
 
     if (!is.null(ncols) && (length(ncols) != 1 | !is.numeric(ncols))) {

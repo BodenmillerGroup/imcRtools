@@ -64,7 +64,7 @@
 .generatePlot <- function(layout, draw_edges, directed, arrow, end_cap, node_color_by,
                           node_size_by, node_shape_by, node_color_fix, node_size_fix,
                           node_shape_fix, edge_color_by, edge_width_by,
-                          edge_color_fix, edge_width_fix){
+                          edge_color_fix, edge_width_fix, nodes_first){
     
     node_color_by <- if(is.null(node_color_by)) NULL else as.name(node_color_by)
     node_size_by <- if(is.null(node_size_by)) NULL else as.name(node_size_by)
@@ -106,11 +106,19 @@
             }
         }
             
-        p <- ggraph(layout) + 
-             geom_node_point(aes_(colour = node_color_by,
-                                  size = node_size_by,
-                                  shape = node_shape_by)) +
-            cur_geom_edge
+        if (nodes_first) {
+            p <- ggraph(layout) + 
+                geom_node_point(aes_(colour = node_color_by,
+                                     size = node_size_by,
+                                     shape = node_shape_by)) +
+                cur_geom_edge
+        } else {
+            p <- ggraph(layout) + 
+                cur_geom_edge +
+                geom_node_point(aes_(colour = node_color_by,
+                                     size = node_size_by,
+                                     shape = node_shape_by))
+        }
     } else {
         p <- ggraph(layout) +
             geom_node_point(aes_(colour = node_color_by,

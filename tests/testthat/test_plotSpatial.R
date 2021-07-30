@@ -219,6 +219,13 @@ test_that("plotSpatial function works", {
     
     p <- plotSpatial(cur_sce, img_id = "ImageNb", 
                      draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_color_by = "Pattern", node_color_by = "Pattern",
+                     nodes_first = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", 
+                     draw_edges = TRUE, colPairName = "knn_interaction_graph",
                      edge_color_by = "Area", node_color_by = "Area")
     expect_s3_class(p, "ggraph")
     expect_silent(print(p))
@@ -684,7 +691,12 @@ test_that("plotSpatial function works", {
                              end_cap = "test"), 
                  "'end_cap' must be of type 'geometry'.",
                  fixed = TRUE)
-    
+
+    expect_error(plotSpatial(cur_sce, img_id = "ImageNb",
+                             nodes_first = "test"), 
+                 "'nodes_first' must be a single logical",
+                 fixed = TRUE)
+        
     expect_error(plotSpatial(cur_sce, img_id = "ImageNb",
                              ncols = "test"), 
                  "'ncols' must be a single numeric",
