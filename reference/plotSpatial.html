@@ -144,6 +144,7 @@ in form of edges between points.</p>
   arrow <span class='op'>=</span> <span class='cn'>NULL</span>,
   end_cap <span class='op'>=</span> <span class='cn'>NULL</span>,
   colPairName <span class='op'>=</span> <span class='cn'>NULL</span>,
+  nodes_first <span class='op'>=</span> <span class='cn'>TRUE</span>,
   ncols <span class='op'>=</span> <span class='cn'>NULL</span>,
   nrows <span class='op'>=</span> <span class='cn'>NULL</span>,
   scales <span class='op'>=</span> <span class='st'>"free"</span>
@@ -246,6 +247,11 @@ Default: <code>end_cap = circle(0.1, 'cm')</code></p></td>
       <th>colPairName</th>
       <td><p>single character specifying from which 
 <code>colPair(object)</code> slot to retrieve the cell-cell pairings.</p></td>
+    </tr>
+    <tr>
+      <th>nodes_first</th>
+      <td><p>should the nodes be plotted first and then the edges?
+When <code>nodes_first = FALSE</code>, the edges will be drawn first</p></td>
     </tr>
     <tr>
       <th>ncols</th>
