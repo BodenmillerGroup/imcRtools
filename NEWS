@@ -38,3 +38,14 @@ Changes in version 0.3.6 (2021-06-04):
 Changes in version 0.3.7 (2021-06-14):
 
 + added read_cpout function, docs and tests
+
+Changes in version 0.3.8 (2021-06-30):
+
++ Adjusted default parameters for read_steinbock function
++ Added updated test data
+
+Changes in version 0.3.9 (2021-29-08):
+
++ Added buildSpatialGraph function
++ Added plotSpatial function
++ Added aggregateNeighbors function

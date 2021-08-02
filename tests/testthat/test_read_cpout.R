@@ -9,7 +9,7 @@ test_that("read_cpout function works.", {
     expect_equal(rownames(cur_spe), c("Ag107", "Pr141", "Sm147", 
                                       "Eu153", "Yb172"))
     expect_equal(assayNames(cur_spe), "counts")
-    expect_equal(dim(cur_spe), c(5, 409))
+    expect_equal(dim(cur_spe), c(5, 219))
     expect_equal(names(rowData(cur_spe)), 
                  c("Tube.Number", "Metal.Tag", "Target", "ilastik", "full"))
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "Neighbors_NumberOfNeighbors_8", 
@@ -25,8 +25,8 @@ test_that("read_cpout function works.", {
     object_file <- merge(object_file, image_file, by = "ImageNumber", order = FALSE)
     
     expect_equal(counts(cur_spe), cur_counts * (2^16 - 1))
-    expect_equal(counts(cur_spe)[1:10], c(0.03703704, 0.05555556, 0.05555556, 0.09259259, 0.62962963,
-                                          0.00000000, 0.00000000, 0.00000000, 0.00000000, 0.33333333))
+    expect_equal(counts(cur_spe)[1:10], c(0.06172840, 0.04938272, 0.02469136, 0.06790123, 0.59259259, 
+                                          0.09448819, 0.07086614, 0.07874016, 0.09448819, 0.38582677))
     
     expect_equal(cur_spe$Neighbors_NumberOfNeighbors_8, object_file$Neighbors_NumberOfNeighbors_8)
     expect_equal(cur_spe$Metadata_acname, object_file$Metadata_acname)
@@ -72,7 +72,7 @@ test_that("read_cpout function works.", {
     expect_equal(rownames(cur_sce), c("Ag107", "Pr141", "Sm147", 
                                       "Eu153", "Yb172"))
     expect_equal(assayNames(cur_sce), "counts")
-    expect_equal(dim(cur_sce), c(5, 409))
+    expect_equal(dim(cur_sce), c(5, 219))
     expect_equal(names(rowData(cur_sce)), 
                  c("Tube.Number", "Metal.Tag", "Target", "ilastik", "full"))
     expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectNumber", "Pos_X", "Pos_Y",
@@ -88,8 +88,8 @@ test_that("read_cpout function works.", {
     object_file <- merge(object_file, image_file, by = "ImageNumber", order = FALSE)
     
     expect_equal(counts(cur_sce), cur_counts * (2^16 - 1))
-    expect_equal(counts(cur_sce)[1:10], c(0.03703704, 0.05555556, 0.05555556, 0.09259259, 0.62962963,
-                                          0.00000000, 0.00000000, 0.00000000, 0.00000000, 0.33333333))
+    expect_equal(counts(cur_sce)[1:10], c(0.06172840, 0.04938272, 0.02469136, 0.06790123, 0.59259259, 
+                                          0.09448819, 0.07086614, 0.07874016, 0.09448819, 0.38582677))
     
     expect_equal(cur_sce$Neighbors_NumberOfNeighbors_8, object_file$Neighbors_NumberOfNeighbors_8)
     expect_equal(cur_sce$Metadata_acname, object_file$Metadata_acname)
@@ -133,7 +133,7 @@ test_that("read_cpout function works.", {
     expect_equal(rownames(cur_spe), c("Ag107", "Pr141", "Sm147", 
                                       "Eu153", "Yb172"))
     expect_equal(assayNames(cur_spe), "counts")
-    expect_equal(dim(cur_spe), c(5, 409))
+    expect_equal(dim(cur_spe), c(5, 219))
     expect_equal(names(rowData(cur_spe)), 
                  c("Tube.Number", "Metal.Tag", "Target", "ilastik", "full"))
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "Neighbors_NumberOfNeighbors_8"))
@@ -144,8 +144,8 @@ test_that("read_cpout function works.", {
     rownames(cur_counts) <- rownames(cur_spe)
     
     expect_equal(counts(cur_spe), cur_counts)
-    expect_equal(counts(cur_spe)[1:10], c(5.651490e-07, 8.477234e-07, 8.477234e-07, 1.412872e-06, 9.607532e-06,
-                                          0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 5.086341e-06))
+    expect_equal(counts(cur_spe)[1:10], c(9.419149e-07, 7.535319e-07, 3.767660e-07, 1.036106e-06, 9.042383e-06, 
+                                          1.441797e-06, 1.081348e-06, 1.201498e-06, 1.441797e-06, 5.887339e-06))
     
     expect_equal(cur_spe$Neighbors_NumberOfNeighbors_8, object_file$Neighbors_NumberOfNeighbors_8)
     expect_equal(as.numeric(spatialCoords(cur_spe)[,1]), object_file$Location_Center_X)
@@ -185,7 +185,7 @@ test_that("read_cpout function works.", {
     expect_equal(rownames(cur_sce), c("Ag107", "Pr141", "Sm147", 
                                       "Eu153", "Yb172"))
     expect_equal(assayNames(cur_sce), "counts")
-    expect_equal(dim(cur_sce), c(5, 409))
+    expect_equal(dim(cur_sce), c(5, 219))
     expect_equal(names(rowData(cur_sce)), 
                  c("Tube.Number", "Metal.Tag", "Target", "ilastik", "full"))
     expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectNumber", "Pos_X", "Pos_Y",
@@ -196,8 +196,8 @@ test_that("read_cpout function works.", {
     rownames(cur_counts) <- rownames(cur_sce)
 
     expect_equal(counts(cur_sce), cur_counts)
-    expect_equal(counts(cur_sce)[1:10], c(5.651490e-07, 8.477234e-07, 8.477234e-07, 1.412872e-06, 9.607532e-06,
-                                          0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 5.086341e-06))
+    expect_equal(counts(cur_sce)[1:10], c(9.419149e-07, 7.535319e-07, 3.767660e-07, 1.036106e-06, 9.042383e-06, 
+                                          1.441797e-06, 1.081348e-06, 1.201498e-06, 1.441797e-06, 5.887339e-06))
     
     expect_equal(cur_sce$Neighbors_NumberOfNeighbors_8, object_file$Neighbors_NumberOfNeighbors_8)
     expect_equal(cur_sce$Pos_X, object_file$Location_Center_X)
@@ -237,7 +237,7 @@ test_that("read_cpout function works.", {
     expect_equal(rownames(cur_spe), c("Ag107", "Pr141", "Sm147", 
                                       "Eu153", "Yb172"))
     expect_equal(assayNames(cur_spe), "counts")
-    expect_equal(dim(cur_spe), c(5, 409))
+    expect_equal(dim(cur_spe), c(5, 219))
     expect_equal(names(rowData(cur_spe)), 
                  c("Tube.Number", "Metal.Tag", "Target", "ilastik", "full"))
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "Neighbors_NumberOfNeighbors_8",
@@ -249,8 +249,8 @@ test_that("read_cpout function works.", {
     rownames(cur_counts) <- rownames(cur_spe)
     
     expect_equal(counts(cur_spe), cur_counts)
-    expect_equal(counts(cur_spe)[1:10], c(5.651490e-07, 8.477234e-07, 8.477234e-07, 1.412872e-06, 9.607532e-06,
-                                          0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 5.086341e-06))
+    expect_equal(counts(cur_spe)[1:10], c(9.419149e-07, 7.535319e-07, 3.767660e-07, 1.036106e-06, 9.042383e-06, 
+                                          1.441797e-06, 1.081348e-06, 1.201498e-06, 1.441797e-06, 5.887339e-06))
     
     expect_equal(cur_spe$Neighbors_NumberOfNeighbors_8, object_file$Neighbors_NumberOfNeighbors_8)
     expect_equal(as.numeric(spatialCoords(cur_spe)[,1]), object_file$Location_Center_X)
@@ -272,7 +272,7 @@ test_that("read_cpout function works.", {
     expect_equal(rownames(cur_spe), c("Ag107", "Pr141", "Sm147", 
                                       "Eu153", "Yb172"))
     expect_equal(assayNames(cur_spe), "counts")
-    expect_equal(dim(cur_spe), c(5, 409))
+    expect_equal(dim(cur_spe), c(5, 219))
     expect_equal(names(rowData(cur_spe)), 
                  c("Tube.Number", "Metal.Tag", "Target", "ilastik", "full"))
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "Neighbors_NumberOfNeighbors_8", 
@@ -288,8 +288,8 @@ test_that("read_cpout function works.", {
     object_file <- merge(object_file, image_file, by = "ImageNumber", order = FALSE)
     
     expect_equal(counts(cur_spe), cur_counts * (2^16 - 1))
-    expect_equal(counts(cur_spe)[1:10], c(0.03703704, 0.05555556, 0.05555556, 0.09259259, 0.62962963,
-                                          0.00000000, 0.00000000, 0.00000000, 0.00000000, 0.33333333))
+    expect_equal(counts(cur_spe)[1:10], c(0.06172840, 0.04938272, 0.02469136, 0.06790123, 0.59259259, 
+                                          0.09448819, 0.07086614, 0.07874016, 0.09448819, 0.38582677))
     
     expect_equal(cur_spe$Neighbors_NumberOfNeighbors_8, object_file$Neighbors_NumberOfNeighbors_8)
     expect_equal(cur_spe$Metadata_acname, object_file$Metadata_acname)
@@ -314,7 +314,7 @@ test_that("read_cpout function works.", {
     expect_equal(rownames(cur_spe), c("Ag107", "Pr141", "Sm147", 
                                       "Eu153", "Yb172"))
     expect_equal(assayNames(cur_spe), "counts")
-    expect_equal(dim(cur_spe), c(5, 409))
+    expect_equal(dim(cur_spe), c(5, 219))
     expect_equal(length(names(rowData(cur_spe))), 0) 
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "Neighbors_NumberOfNeighbors_8", 
                                             "Metadata_acname", 
@@ -329,8 +329,8 @@ test_that("read_cpout function works.", {
     object_file <- merge(object_file, image_file, by = "ImageNumber", order = FALSE)
     
     expect_equal(counts(cur_spe), cur_counts * (2^16 - 1))
-    expect_equal(counts(cur_spe)[1:10], c(0.03703704, 0.05555556, 0.05555556, 0.09259259, 0.62962963,
-                                          0.00000000, 0.00000000, 0.00000000, 0.00000000, 0.33333333))
+    expect_equal(counts(cur_spe)[1:10], c(0.06172840, 0.04938272, 0.02469136, 0.06790123, 0.59259259, 
+                                          0.09448819, 0.07086614, 0.07874016, 0.09448819, 0.38582677))
     
     expect_equal(cur_spe$Neighbors_NumberOfNeighbors_8, object_file$Neighbors_NumberOfNeighbors_8)
     expect_equal(cur_spe$Metadata_acname, object_file$Metadata_acname)
@@ -346,7 +346,7 @@ test_that("read_cpout function works.", {
     expect_equal(rownames(cur_spe), c("Ag107", "Pr141", "Sm147", 
                                       "Eu153", "Yb172"))
     expect_equal(assayNames(cur_spe), "counts")
-    expect_equal(dim(cur_spe), c(5, 409))
+    expect_equal(dim(cur_spe), c(5, 219))
     expect_equal(names(rowData(cur_spe)), 
                  c("Tube.Number", "Metal.Tag", "Target", "ilastik", "full"))
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "Neighbors_NumberOfNeighbors_8", 
@@ -363,7 +363,7 @@ test_that("read_cpout function works.", {
     
     expect_equal(counts(cur_spe), cur_counts * (2^16 - 1))
     expect_equal(counts(cur_spe)[1:10], c(0, 0, 0, 0, 0,
-                                          0, 0, 0, 0, 0.5))
+                                          0, 0, 0, 0, 0))
     
     expect_equal(cur_spe$Neighbors_NumberOfNeighbors_8, object_file$Neighbors_NumberOfNeighbors_8)
     expect_equal(cur_spe$Metadata_acname, object_file$Metadata_acname)

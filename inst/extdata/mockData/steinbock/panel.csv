@@ -1,6 +1,6 @@
-channel,name,keep,ilastik,Tube Number
-Ag107,Ag107,1,1,
-Pr141,Cytokeratin 5,1,,2266.0
-Sm147,Laminin,1,,625.0
-Eu153,YBX1,1,2,2359.0
-Yb172,H3K27Ac,1,3,1378.0
+channel,name,keep,ilastik,deepcell,Tube Number
+Ag107,Ag107,1,1,,
+Pr141,Cytokeratin 5,1,,,2266.0
+Sm147,Laminin,1,,,625.0
+Eu153,YBX1,1,2,,2359.0
+Yb172,H3K27Ac,1,3,,1378.0
