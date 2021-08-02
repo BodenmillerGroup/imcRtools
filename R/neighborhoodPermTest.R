@@ -15,16 +15,17 @@
 #'
 #' @export
 neighborhoodPermTest <- function(object, 
-                                 img_id,
+                                 group_by,
                                  label,
-                                 colpair_name = "neighbourhood",
+                                 method = c("classic", "histocat", "patch"),
+                                 colPairName = "neighbourhood",
                                  iter = 1000,
                                  min_neighbours = 0){
-    
-    stop("This function is under development!")
 
     # Input check
 
     # Add neighbouRhood functionality here
+    cur_label <- as.factor(colData(object)[[label]])
+    cur_table <- .prepare_table(object, img_id, cur_label, colPairName)
 
 }
