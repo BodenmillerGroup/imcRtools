@@ -198,9 +198,6 @@ test_that("neighbourhoodPermTest function works", {
     
     labels_applied <- apply_labels(d[[1]], d[[2]])
     
-    histocat_aggregation <- 
-    
-    
     # Compare to imcRtools
     cur_path <- system.file("extdata/mockData/cpout", package = "imcRtools")
     cur_spe <- read_cpout(cur_path)
@@ -214,7 +211,7 @@ test_that("neighbourhoodPermTest function works", {
     
     cur_spe$label <- cur_label
     
-    cur_table <- .prepare_table(cur_spe, img_id = "sample_id", 
+    cur_table <- .prepare_table(cur_spe, group_by = "sample_id", 
                                 cur_label  = as.factor(colData(cur_spe)[["label"]]), 
                                 colPairName = "neighbourhood")
     
@@ -223,9 +220,44 @@ test_that("neighbourhoodPermTest function works", {
     cur_table <- as.data.frame(cur_table)
     cur_table <- cur_table[order(paste(cur_table[,"from"], cur_table[,"to"])),]
     
-    expect_equal(labels_applied$group, as.numeric(cur_table$image_id))
+    expect_equal(labels_applied$group, as.numeric(cur_table$group_by))
     expect_equal(labels_applied$`First Object ID`, cur_table$from)
     expect_equal(labels_applied$`Second Object ID`, cur_table$to)
     expect_equal(labels_applied$FirstLabel, cur_table$from_label)
-    expect_equal(labels_applied$SecondLabel, cur_table$to_label),
+    expect_equal(labels_applied$SecondLabel, cur_table$to_label)
+    
+    cur_table <- .prepare_table(cur_spe, group_by = "sample_id", 
+                                cur_label  = as.factor(colData(cur_spe)[["label"]]), 
+                                colPairName = "neighbourhood")
+
+    cur_histo <- .aggregate_histo(cur_table)
+    
+    labels_applied <- apply_labels(d[[1]], d[[2]])
+    histocat_aggregation <- aggregate_histo(labels_applied)
+    
+    cur_histo <- as.data.frame(cur_histo)
+    cur_histo <- cur_histo[order(paste(cur_histo[,1], cur_histo[,2], cur_histo[,3])),]
+    histocat_aggregation <- as.data.frame(histocat_aggregation)
+    histocat_aggregation <- histocat_aggregation[order(paste(histocat_aggregation[,1], histocat_aggregation[,2], histocat_aggregation[,3])),]
+    
+    expect_equal(cur_histo$group_by, as.character(histocat_aggregation$group))
+    expect_equal(cur_histo$from_label, histocat_aggregation$FirstLabel)
+    expect_equal(cur_histo$to_label, histocat_aggregation$SecondLabel)
+    expect_equal(cur_histo$ct, histocat_aggregation$ct)
+    
+    classic_aggregation <- aggregate_classic(labels_applied)
+    cur_classic <- .aggregate_classic(cur_table)
+    
+    cur_classic <- as.data.frame(cur_classic)
+    cur_classic <- cur_classic[order(paste(cur_classic[,1], cur_classic[,2], cur_classic[,3])),]
+    classic_aggregation <- as.data.frame(classic_aggregation)
+    classic_aggregation <- classic_aggregation[order(paste(classic_aggregation[,1], classic_aggregation[,2], classic_aggregation[,3])),]
+    
+    expect_equal(cur_classic$group_by, as.character(classic_aggregation$group))
+    expect_equal(cur_classic$from_label, classic_aggregation$FirstLabel)
+    expect_equal(cur_classic$to_label, classic_aggregation$SecondLabel)
+    expect_equal(cur_classic$ct, classic_aggregation$ct)
+    
+        
+    
 })
