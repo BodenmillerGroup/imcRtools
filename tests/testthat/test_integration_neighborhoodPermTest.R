@@ -269,4 +269,31 @@ test_that("neighbourhoodPermTest gives same results as neighbouRhood", {
     expect_equal(cur_patch$from_label, patch_aggregation$FirstLabel)
     expect_equal(cur_patch$to_label, patch_aggregation$SecondLabel)
     expect_equal(cur_patch$ct, patch_aggregation$ct)
+    
+    # With cytomapper data
+    library(cytomapper)
+    data(pancreasSCE)
+
+    pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn",
+                                     k = 3)
+    
+    dat_cells <- as.data.table(colData(pancreasSCE))
+    dat_relation <- as.data.table(colPair(pancreasSCE))
+    dat_cells[, label := CellType]
+    dat_cells[, group := ImageNb]
+    dat_cells[, ImageNumber := ImageNb]
+    dat_cells[, ObjectNumber := CellNb]
+    dat_relation[, Relationship := "Neighbors"]
+    dat_relation[, "First Image Number" := colData(pancreasSCE)[["ImageNb"]][from]]
+    dat_relation[, "First Object Number" := colData(pancreasSCE)[["CellNb"]][from]]
+    dat_relation[, "Second Image Number" := colData(pancreasSCE)[["ImageNb"]][to]]
+    dat_relation[, "Second Object Number" := colData(pancreasSCE)[["CellNb"]][to]]
+    dat_relation[, "First Object Name" := "cell"]
+    dat_relation[, "Second Object Name" := "cell"]
+    
+    d <- prepare_tables(dat_cells, dat_relation)
+    
+    labels_applied <- apply_labels(d[[1]], d[[2]])
+    
+    cur_classic <- aggregate_classic(labels_applied)
 })

@@ -15,15 +15,25 @@
     return(dat_temp)
 }
 
-.aggregate_classic <- function(dat_table){
+.aggregate_classic <- function(dat_table, object, group_by, label){
     dat_temp <- dcast.data.table(dat_table, "group_by + from_label + from ~ to_label",
-                                value.var = "ct", fun.aggregate = sum, fill=0) 
+                                value.var = "ct", fun.aggregate = sum,
+                                fill = 0, drop = FALSE) 
     dat_temp <- melt.data.table(dat_temp, id.vars = c("group_by", "from_label", "from"),
                         variable.name = "to_label",
                         value.name = "ct") 
     dat_temp <- dcast.data.table(dat_temp, "group_by + from_label ~ to_label",
                          value.var = "ct",
-                         fun.aggregate = mean , fill = 0) 
+                         fun.aggregate = mean, 
+                         fill = 0, drop = FALSE) 
+    
+    # Set all cells that are not contained in specific groups to NA
+    cur_dat <- data.table(group_by = colData(object)[[group_by]],
+                          label = colData(object)[[label]])
+    cur_dat <- dcast.data.table(dat_table, "group_by  ~ to_label",
+                                value.var = "ct", fun.aggregate = sum,
+                                fill = 0, drop = FALSE)
+    
     dat_temp <- melt.data.table(dat_temp, id.vars = c("group_by", "from_label"),
                         variable.name = "to_label",
                         value.name = "ct")

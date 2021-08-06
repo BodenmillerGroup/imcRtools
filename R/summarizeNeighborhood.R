@@ -45,6 +45,10 @@
 #' across all cells of type A. The final count can be interpreted as "What 
 #' fraction of cells of type A have at least a given number of neighbors of 
 #' type B?"
+#' 
+#' @return a DataFrame containing one row per group_by entry and unique label
+#' entry combination. The \code{ct} entry stores the interaction count as 
+#' described in the details. 
 #'  
 #' @examples 
 #' # TODO
@@ -78,13 +82,16 @@ summarizeNeighborhood <- function(object,
     
     # Count interactions
     if (method == "classic") {
-        cur_count <- .aggregate_classic(cur_table)
+        cur_count <- .aggregate_classic(cur_table, object, group_by, label)
     } else if (method == "histocat") {
         cur_count <- .aggregate_histo(cur_table)
     } else if (method == "patch") {
         cur_count <- .aggregate_classic_patch(cur_table, 
                                               patch_size = patch_size)
     }
+    
+    setorder(cur_count, group_by, from_label, to_label)
+    cur_count <- as(cur_count, "DataFrame")
     
     return(cur_count)
 
