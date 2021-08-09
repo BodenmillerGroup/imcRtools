@@ -18,21 +18,28 @@
 .aggregate_classic <- function(dat_table, object, group_by, label){
     dat_temp <- dcast.data.table(dat_table, "group_by + from_label + from ~ to_label",
                                 value.var = "ct", fun.aggregate = sum,
-                                fill = 0, drop = FALSE) 
+                                fill = 0) 
     dat_temp <- melt.data.table(dat_temp, id.vars = c("group_by", "from_label", "from"),
                         variable.name = "to_label",
                         value.name = "ct") 
+    
+    # Set all cells that are not contained in specific groups to NA
+    cur_dat <- unclass(table(colData(object)[[group_by]], colData(object)[[label]]))
+    cur_ind <- which(cur_dat == 0, arr.ind = TRUE)
+    
+    if (nrow(cur_ind) > 0) {
+        apply(cur_ind, 1 , function(x){
+            dat_temp[group_by == rownames(cur_dat)[x[1]] & 
+                         (from_label == colnames(cur_dat)[x[2]] |
+                              to_label == colnames(cur_dat)[x[2]]), 
+                     ct := NA]
+        })
+    }
+    
     dat_temp <- dcast.data.table(dat_temp, "group_by + from_label ~ to_label",
                          value.var = "ct",
                          fun.aggregate = mean, 
-                         fill = 0, drop = FALSE) 
-    
-    # Set all cells that are not contained in specific groups to NA
-    cur_dat <- data.table(group_by = colData(object)[[group_by]],
-                          label = colData(object)[[label]])
-    cur_dat <- dcast.data.table(dat_table, "group_by  ~ to_label",
-                                value.var = "ct", fun.aggregate = sum,
-                                fill = 0, drop = FALSE)
+                         fill = 0) 
     
     dat_temp <- melt.data.table(dat_temp, id.vars = c("group_by", "from_label"),
                         variable.name = "to_label",
@@ -42,10 +49,23 @@
 
 .aggregate_classic_patch <- function(dat_table, patch_size){
     dat_temp <- dcast.data.table(dat_table, "group_by + from_label + from ~ to_label",
-                                value.var = "ct", fun.aggregate = sum, fill=0) 
+                                value.var = "ct", fun.aggregate = sum, fill = 0) 
     dat_temp <- melt.data.table(dat_temp, id.vars = c("group_by", "from_label", "from"),
                         variable.name = "to_label",
                         value.name = "ct")
+    
+    # Set all cells that are not contained in specific groups to NA
+    cur_dat <- unclass(table(colData(object)[[group_by]], colData(object)[[label]]))
+    cur_ind <- which(cur_dat == 0, arr.ind = TRUE)
+    
+    if (nrow(cur_ind) > 0) {
+        apply(cur_ind, 1 , function(x){
+            dat_temp[group_by == rownames(cur_dat)[x[1]] & 
+                         (from_label == colnames(cur_dat)[x[2]] |
+                              to_label == colnames(cur_dat)[x[2]]), 
+                     ct := NA]
+        })
+    }
     
     dat_temp[, ct := patch_size <= ct ]
     
