@@ -50,6 +50,7 @@
 }
 
 #' @importFrom SummarizedExperiment colData assayNames
+#' @importFrom methods is
 .valid.plotSpotHeatmap.input <- function(object, spot_id, channel_id,
                                          assay_type, log,
                                    threshold, order_metals){

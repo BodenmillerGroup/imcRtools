@@ -27,7 +27,7 @@
 #' enriched or depleted per group.
 #' @param BBPARAM parameters for parallelized processing. 
 #'
-#' @section Counting and summarizing cell-cell interactions
+#' @section Counting and summarizing cell-cell interactions:
 #' 
 #' In principle, the \code{summarizeNeighborhood} function counts the number
 #' of edges (interactions) between each set of unique entries in 
@@ -53,7 +53,7 @@
 #' fraction of cells of type A have at least a given number of neighbors of 
 #' type B?"
 #' 
-#' @section Testing for significance
+#' @section Testing for significance:
 #' 
 #' 
 #'  
@@ -98,22 +98,23 @@ neighborhoodPermTest <- function(object,
     
     # Count interactions
     if (method == "classic") {
-        cur_count <- .aggregate_classic(cur_table)
+        cur_count <- .aggregate_classic(cur_table, object, group_by, label)
     } else if (method == "histocat") {
         cur_count <- .aggregate_histo(cur_table)
     } else if (method == "patch") {
         cur_count <- .aggregate_classic_patch(cur_table, 
-                                              patch_size = patch_size)
+                                              patch_size = patch_size, 
+                                              object, group_by, label)
     }
     
     # Permute the labels
-    cur_out <- .permute_labels(object, group_by, cur_label, iter,
+    cur_out <- .permute_labels(object, group_by, cur_label, iter, patch_size,
                                colPairName, method, BBPARAM)
     
     cur_out <- .calc_p_vals(cur_count, cur_out, n_perm = iter, 
                             p_thres = p_threshold)
     
-    setorder(cur_out, group_by, from_label, to_label)
+    setorder(cur_out, "group_by", "from_label", "to_label")
     
     return(cur_out)
 }

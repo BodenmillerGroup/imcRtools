@@ -20,7 +20,7 @@
 #' @param colPairName single character indicating the \code{colPair(object)}
 #' entry containing cell-cell interactions in form of an edge list.
 #'
-#' @section Counting and summarizing cell-cell interactions
+#' @section Counting and summarizing cell-cell interactions:
 #' 
 #' In principle, the \code{summarizeNeighborhood} function counts the number
 #' of edges (interactions) between each set of unique entries in 
@@ -46,9 +46,10 @@
 #' fraction of cells of type A have at least a given number of neighbors of 
 #' type B?"
 #' 
-#' @return a DataFrame containing one row per group_by entry and unique label
-#' entry combination. The \code{ct} entry stores the interaction count as 
-#' described in the details. 
+#' @return a DataFrame containing one row per \code{group_by} entry and unique
+#' label entry combination (\code{from_label}, \code{to_label}). The \code{ct}
+#' entry stores the interaction count as described in the details. \code{NA}
+#' is returned if a certain label is not present in this grouping level.
 #'  
 #' @examples 
 #' # TODO
@@ -67,6 +68,8 @@
 #' Shapiro, D. et al., histoCAT: analysis of cell phenotypes and interactions in 
 #' multiplex image cytometry data, Nature Methods 2017 14, p. 873–876}
 #'
+#' @importFrom data.table setorder
+#'
 #' @export
 summarizeNeighborhood <- function(object, 
                                  group_by,
@@ -76,6 +79,7 @@ summarizeNeighborhood <- function(object,
                                  colPairName = NULL){
     
     # Input check
+    
     
     cur_label <- as.factor(colData(object)[[label]])
     cur_table <- .prepare_table(object, group_by, cur_label, colPairName)
@@ -87,10 +91,11 @@ summarizeNeighborhood <- function(object,
         cur_count <- .aggregate_histo(cur_table)
     } else if (method == "patch") {
         cur_count <- .aggregate_classic_patch(cur_table, 
-                                              patch_size = patch_size)
+                                              patch_size = patch_size,
+                                              object, group_by, label)
     }
     
-    setorder(cur_count, group_by, from_label, to_label)
+    setorder(cur_count, "group_by", "from_label", "to_label")
     cur_count <- as(cur_count, "DataFrame")
     
     return(cur_count)
