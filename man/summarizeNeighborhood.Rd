@@ -8,9 +8,9 @@ summarizeNeighborhood(
   object,
   group_by,
   label,
+  colPairName,
   method = c("classic", "histocat", "patch"),
-  patch_size = NULL,
-  colPairName = NULL
+  patch_size = NULL
 )
 }
 \arguments{
@@ -25,27 +25,27 @@ patient ID.}
 which stores the cell labels. These can be cell-types labels or other m
 metadata.}
 
+\item{colPairName}{single character indicating the \code{colPair(object)}
+entry containing cell-cell interactions in form of an edge list.}
+
 \item{method}{which cell-cell interaction counting method to use 
 (see details)}
 
 \item{patch_size}{if \code{method = "patch"}, a single numeric specifying
 the minimum number of neighbors of the same type to be considered a patch
 (see details)}
-
-\item{colPairName}{single character indicating the \code{colPair(object)}
-entry containing cell-cell interactions in form of an edge list.}
 }
 \value{
-a DataFrame containing one row per group_by entry and unique label
-entry combination. The \code{ct} entry stores the interaction count as 
-described in the details.
+a DataFrame containing one row per \code{group_by} entry and unique
+label entry combination (\code{from_label}, \code{to_label}). The \code{ct}
+entry stores the interaction count as described in the details. \code{NA}
+is returned if a certain label is not present in this grouping level.
 }
 \description{
 Function to calculate the average number of neighbors B that
 a cell of type A has using different approaches.
 }
 \section{Counting and summarizing cell-cell interactions}{
-
 
 In principle, the \code{summarizeNeighborhood} function counts the number
 of edges (interactions) between each set of unique entries in 

@@ -73,7 +73,7 @@
 summarizeNeighborhood <- function(object, 
                                  group_by,
                                  label,
-                                 colPairName
+                                 colPairName,
                                  method = c("classic", "histocat", "patch"),
                                  patch_size = NULL){
     

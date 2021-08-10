@@ -9,9 +9,9 @@ neighborhoodPermTest(
   object,
   group_by,
   label,
+  colPairName,
   method = c("classic", "histocat", "patch"),
   patch_size = NULL,
-  colPairName = NULL,
   iter = 1000,
   p_threshold = 0.01,
   BBPARAM = SerialParam()
@@ -29,15 +29,15 @@ patient ID.}
 which stores the cell labels. These can be cell-types labels or other m
 metadata.}
 
+\item{colPairName}{single character indicating the \code{colPair(object)}
+entry containing cell-cell interactions in form of an edge list.}
+
 \item{method}{which cell-cell interaction counting method to use 
 (see details)}
 
 \item{patch_size}{if \code{method = "patch"}, a single numeric specifying
 the minimum number of neighbors of the same type to be considered a patch
 (see details)}
-
-\item{colPairName}{single character indicating the \code{colPair(object)}
-entry containing cell-cell interactions in form of an edge list.}
 
 \item{iter}{single numeric specifying the number of permutations to perform}
 
