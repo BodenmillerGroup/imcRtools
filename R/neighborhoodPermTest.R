@@ -84,14 +84,19 @@
 neighborhoodPermTest <- function(object, 
                                  group_by,
                                  label,
+                                 colPairName
                                  method = c("classic", "histocat", "patch"),
                                  patch_size = NULL,
-                                 colPairName = NULL,
                                  iter = 1000,
                                  p_threshold = 0.01,
                                  BBPARAM = SerialParam()){
 
     # Input check
+    .valid.summarizeNeighborhood.input(object, group_by, label, method,
+                                       patch_size, colPairName)
+    .valid.neighborhoodPermTest.input(iter, p_threshold)
+    
+    method <- match.arg(method)
 
     cur_label <- as.factor(colData(object)[[label]])
     cur_table <- .prepare_table(object, group_by, cur_label, colPairName)

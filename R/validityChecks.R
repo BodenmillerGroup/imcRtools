@@ -773,6 +773,53 @@
     if (!scales %in% c("fixed", "free_x", "free_y", "free")) {
         stop("'scales' should be one of 'fixed', 'free_x', 'free_y', 'free'.")
     }
+}
+
+.valid.summarizeNeighborhood.input <- function(object, group_by, label, method,
+                                               patch_size, colPairName){
     
+    if (!is(object, "SingleCellExperiment")) {
+        stop("'object' not of type 'SingleCellExperiment'.")
+    }
     
+    if (length(group_by) != 1 | !is.character(group_by)) {
+        stop("'group_by' must be a single string.")
+    }
+    
+    if (!group_by %in% names(colData(object))) {
+        stop("'group_by' not in colData(object).")
+    }
+    
+    if (length(colPairName) != 1 | !is.character(colPairName)) {
+        stop("'colPairName' must be a single string.")
+    }
+    
+    if (!colPairName %in% colPairNames(object)) {
+        stop("'colPairName' not in colPairNames(object).")
+    }
+    
+    if (length(label) != 1 | !is.character(label)) {
+        stop("'label' must be a single string.")
+    }
+    
+    if (!label %in% names(colData(object))) {
+        stop("'label' not in colData(object).")
+    }
+    
+    if (method == "patch") {
+        if (is.null(patch_size)) {
+            stop("When method = 'patch', please specify 'patch_size'.")
+        }
+    }
+}
+
+.valid.neighborhoodPermTest.input <- function(iter, p_threshold){
+    if (length(iter) != 1 | !is.numeric(iter) | iter < 1) {
+        stop("'iter' must be a single positive numeric.")
+    }
+    
+    if (length(p_threshold) != 1 | !is.numeric(p_threshold) | 
+        (p_threshold < 0 | p_threshold > 1)) {
+        stop("'p_threshold' must be a single numeric between 0 and 1.")
+    }
 }

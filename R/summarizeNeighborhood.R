@@ -21,7 +21,6 @@
 #' entry containing cell-cell interactions in form of an edge list.
 #'
 #' @section Counting and summarizing cell-cell interactions:
-#' 
 #' In principle, the \code{summarizeNeighborhood} function counts the number
 #' of edges (interactions) between each set of unique entries in 
 #' \code{colData(object)[[label]]}. Simplified, it counts for each cell of
@@ -74,12 +73,15 @@
 summarizeNeighborhood <- function(object, 
                                  group_by,
                                  label,
+                                 colPairName
                                  method = c("classic", "histocat", "patch"),
-                                 patch_size = NULL,
-                                 colPairName = NULL){
+                                 patch_size = NULL){
     
     # Input check
+    .valid.summarizeNeighborhood.input(object, group_by, label, method,
+                                       patch_size, colPairName)
     
+    method <- match.arg(method)
     
     cur_label <- as.factor(colData(object)[[label]])
     cur_table <- .prepare_table(object, group_by, cur_label, colPairName)
