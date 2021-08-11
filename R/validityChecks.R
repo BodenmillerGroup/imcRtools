@@ -810,6 +810,10 @@
         if (is.null(patch_size)) {
             stop("When method = 'patch', please specify 'patch_size'.")
         }
+        
+        if (length(patch_size) != 1 | !is.numeric(patch_size)) {
+            stop("'patch_size' must be a single numeric.")
+        }
     }
 }
 
