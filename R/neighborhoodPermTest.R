@@ -113,7 +113,7 @@ neighborhoodPermTest <- function(object,
     }
     
     # Permute the labels
-    cur_out <- .permute_labels(object, group_by, cur_label, iter, patch_size,
+    cur_out <- .permute_labels(object, group_by, label, iter, patch_size,
                                colPairName, method, BBPARAM)
     
     cur_out <- .calc_p_vals(cur_count, cur_out, n_perm = iter, 

@@ -17,7 +17,8 @@
 }
 
 #' @importFrom data.table dcast.data.table melt.data.table
-.aggregate_classic <- function(dat_table, object, group_by, label){
+.aggregate_classic <- function(dat_table, object, group_by, label, 
+                               check_missing = TRUE){
     dat_temp <- dcast.data.table(dat_table, "group_by + from_label + from ~ to_label",
                                 value.var = "ct", fun.aggregate = sum,
                                 fill = 0) 
@@ -25,19 +26,21 @@
                         variable.name = "to_label",
                         value.name = "ct") 
     
-    # Set all cells that are not contained in specific groups to NA
-    cur_dat <- unclass(table(colData(object)[[group_by]], colData(object)[[label]]))
-    cur_ind <- which(cur_dat == 0, arr.ind = TRUE)
-    
-    ct <- from_label <- to_label <- NULL
-    
-    if (nrow(cur_ind) > 0) {
-        apply(cur_ind, 1 , function(x){
-            dat_temp[group_by == rownames(cur_dat)[x[1]] & 
-                         (from_label == colnames(cur_dat)[x[2]] |
-                              to_label == colnames(cur_dat)[x[2]]), 
-                     ct := NA]
-        })
+    if (check_missing) {
+        # Set all cells that are not contained in specific groups to NA
+        cur_dat <- unclass(table(colData(object)[[group_by]], colData(object)[[label]]))
+        cur_ind <- which(cur_dat == 0, arr.ind = TRUE)
+        
+        ct <- from_label <- to_label <- NULL
+        
+        if (nrow(cur_ind) > 0) {
+            apply(cur_ind, 1 , function(x){
+                dat_temp[group_by == rownames(cur_dat)[x[1]] & 
+                             (from_label == colnames(cur_dat)[x[2]] |
+                                  to_label == colnames(cur_dat)[x[2]]), 
+                         ct := NA]
+            })
+        }
     }
     
     dat_temp <- dcast.data.table(dat_temp, "group_by + from_label ~ to_label",
@@ -51,26 +54,29 @@
     return(dat_temp)
 }
 
-.aggregate_classic_patch <- function(dat_table, patch_size, object, group_by, label){
+.aggregate_classic_patch <- function(dat_table, patch_size, object, group_by, 
+                                     label, check_missing = TRUE){
     dat_temp <- dcast.data.table(dat_table, "group_by + from_label + from ~ to_label",
                                 value.var = "ct", fun.aggregate = sum, fill = 0) 
     dat_temp <- melt.data.table(dat_temp, id.vars = c("group_by", "from_label", "from"),
                         variable.name = "to_label",
                         value.name = "ct")
     
-    # Set all cells that are not contained in specific groups to NA
-    cur_dat <- unclass(table(colData(object)[[group_by]], colData(object)[[label]]))
-    cur_ind <- which(cur_dat == 0, arr.ind = TRUE)
+    if (check_missing) {
+        # Set all cells that are not contained in specific groups to NA
+        cur_dat <- unclass(table(colData(object)[[group_by]], colData(object)[[label]]))
+        cur_ind <- which(cur_dat == 0, arr.ind = TRUE)
     
-    ct <- from_label <- to_label <- NULL
+        ct <- from_label <- to_label <- NULL
     
-    if (nrow(cur_ind) > 0) {
-        apply(cur_ind, 1 , function(x){
-            dat_temp[group_by == rownames(cur_dat)[x[1]] & 
-                         (from_label == colnames(cur_dat)[x[2]] |
-                              to_label == colnames(cur_dat)[x[2]]), 
-                     ct := NA]
-        })
+        if (nrow(cur_ind) > 0) {
+            apply(cur_ind, 1 , function(x){
+                dat_temp[group_by == rownames(cur_dat)[x[1]] & 
+                             (from_label == colnames(cur_dat)[x[2]] |
+                                  to_label == colnames(cur_dat)[x[2]]), 
+                        ct := NA]
+            })
+        }
     }
     
     dat_temp[, ct := patch_size <= ct ]
@@ -85,26 +91,31 @@
 }
 
 #' @importFrom data.table data.table
-.permute_labels <- function(object, group_by, cur_label, iter, patch_size,
+.permute_labels <- function(object, group_by, label, iter, patch_size,
                             colPairName, method, BBPARAM) {
+    
+    cur_lab_table <- data.table(label = colData(object)[[label]],
+                                group_by = colData(object)[[group_by]])
+    
+    . <- label <- NULL
     
     cur_out <- bplapply(seq_len(iter), 
                         function(x){
-                            cur_lab_table <- data.table(label = cur_label,
-                                                        group_by = colData(object)[[group_by]])
-                            
-                            . <- label <- NULL
                             
                             label_perm <- cur_lab_table[ , .(label=sample(label)), by=group_by]
                             cur_perm <- .prepare_table(object, group_by, label_perm$label, colPairName)
                             
                             if (method == "classic") {
-                                cur_perm <- .aggregate_classic(cur_perm)
+                                cur_perm <- .aggregate_classic(cur_perm, object, 
+                                                               group_by, label,
+                                                               check_missing = FALSE)
                             } else if (method == "histocat") {
                                 cur_perm <- .aggregate_histo(cur_perm)
                             } else if (method == "patch") {
                                 cur_perm <- .aggregate_classic_patch(cur_perm, 
-                                                                     patch_size = patch_size)
+                                                        patch_size = patch_size,
+                                                        object, group_by, label,
+                                                        check_missing = FALSE)
                             }
                             cur_perm$iter <- x
                             
