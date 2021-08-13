@@ -36,7 +36,7 @@ test_that("summarizeNeighborhood function works", {
     cur_out_2 <- as.data.frame(cur_out_2)
     cur_out_2 <- cur_out_2[order(cur_out_2$group_by, cur_out_2$from_label, cur_out_2$to_label),]
         
-    expect_equal(cur_out_2, cur_out)
+    expect_equal(cur_out_2$ct, cur_out$ct)
     
     # As character
     pancreasSCE$CellType <- as.character(pancreasSCE$CellType)
@@ -159,7 +159,7 @@ test_that("summarizeNeighborhood function works", {
     cur_out_2 <- as.data.frame(cur_out_2)
     cur_out_2 <- cur_out_2[order(cur_out_2$group_by, cur_out_2$from_label, cur_out_2$to_label),]
     
-    expect_equal(cur_out_2, cur_out)
+    expect_equal(cur_out_2$ct, cur_out$ct)
     
     # As character
     pancreasSCE$CellType <- as.character(pancreasSCE$CellType)
@@ -285,7 +285,7 @@ test_that("summarizeNeighborhood function works", {
     cur_out_2 <- as.data.frame(cur_out_2)
     cur_out_2 <- cur_out_2[order(cur_out_2$group_by, cur_out_2$from_label, cur_out_2$to_label),]
     
-    expect_equal(cur_out_2, cur_out)
+    expect_equal(cur_out_2$ct, cur_out$ct)
     
     # As character
     pancreasSCE$CellType <- as.character(pancreasSCE$CellType)

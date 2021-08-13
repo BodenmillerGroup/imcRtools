@@ -121,5 +121,7 @@ neighborhoodPermTest <- function(object,
     
     setorder(cur_out, "group_by", "from_label", "to_label")
     
+    cur_out <- as(cur_out, "DataFrame")
+    
     return(cur_out)
 }

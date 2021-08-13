@@ -43,6 +43,19 @@ test_that("neighborhoodPermTest function works", {
     
     expect_equal(cur_out_3, cur_out_4)
     
+    # Check against summarizeNeigborhood
+    expect_silent(cur_sn <- summarizeNeighborhood(pancreasSCE, 
+                                                  group_by = "ImageNb", 
+                                                  label = "CellType",
+                                                  method = "classic",
+                                                  colPairName = "knn_interaction_graph"))
+    expect_equal(cur_out$group_by, cur_sn$group_by)
+    expect_equal(cur_out$from_label, cur_sn$from_label)
+    expect_equal(cur_out$to_label, cur_sn$to_label)
+    expect_equal(cur_out$ct, cur_sn$ct)
+    
+    
+    
     
 
 })
