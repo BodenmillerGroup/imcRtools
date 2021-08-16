@@ -92,11 +92,10 @@ neighborhoodPermTest <- function(object,
                                  BBPARAM = SerialParam()){
 
     # Input check
+    method <- match.arg(method)
     .valid.summarizeNeighborhood.input(object, group_by, label, method,
                                        patch_size, colPairName)
     .valid.neighborhoodPermTest.input(iter, p_threshold)
-    
-    method <- match.arg(method)
 
     cur_label <- as.factor(colData(object)[[label]])
     cur_table <- .prepare_table(object, group_by, cur_label, colPairName)

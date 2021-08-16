@@ -169,7 +169,7 @@ test_that("summarizeNeighborhood function works", {
     cur_out_2 <- as.data.frame(cur_out_2)
     cur_out_2 <- cur_out_2[order(cur_out_2$group_by, cur_out_2$from_label, cur_out_2$to_label),]
     
-    expect_equal(cur_out_2, cur_out)
+    expect_equal(cur_out_2$ct, cur_out$ct)
     
     # As numeric
     pancreasSCE$CellType <- as.numeric(as.factor(pancreasSCE$CellType))
@@ -296,7 +296,7 @@ test_that("summarizeNeighborhood function works", {
     cur_out_2 <- as.data.frame(cur_out_2)
     cur_out_2 <- cur_out_2[order(cur_out_2$group_by, cur_out_2$from_label, cur_out_2$to_label),]
     
-    expect_equal(cur_out_2, cur_out)
+    expect_equal(cur_out_2$ct, cur_out$ct)
     
     # As numeric
     pancreasSCE$CellType <- as.numeric(as.factor(pancreasSCE$CellType))
@@ -447,5 +447,4 @@ test_that("summarizeNeighborhood function works", {
                                        method = "patch", patch_size = "test"),
                  regexp = "'patch_size' must be a single numeric.",
                  fixed = TRUE)
-    
 })

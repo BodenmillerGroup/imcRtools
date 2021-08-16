@@ -818,12 +818,19 @@
 }
 
 .valid.neighborhoodPermTest.input <- function(iter, p_threshold){
-    if (length(iter) != 1 | !is.numeric(iter) | iter < 1) {
+    if (length(iter) != 1 | !is.numeric(iter)) {
         stop("'iter' must be a single positive numeric.")
     }
     
-    if (length(p_threshold) != 1 | !is.numeric(p_threshold) | 
-        (p_threshold < 0 | p_threshold > 1)) {
+    if (iter < 1) {
+        stop("'iter' must be a single positive numeric.")
+    }
+    
+    if (length(p_threshold) != 1 | !is.numeric(p_threshold)) {
+        stop("'p_threshold' must be a single numeric between 0 and 1.")
+    }
+    
+    if (p_threshold < 0 | p_threshold > 1) {
         stop("'p_threshold' must be a single numeric between 0 and 1.")
     }
 }

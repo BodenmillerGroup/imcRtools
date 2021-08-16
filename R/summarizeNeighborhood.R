@@ -78,10 +78,9 @@ summarizeNeighborhood <- function(object,
                                  patch_size = NULL){
     
     # Input check
+    method <- match.arg(method)
     .valid.summarizeNeighborhood.input(object, group_by, label, method,
                                        patch_size, colPairName)
-    
-    method <- match.arg(method)
     
     cur_label <- colData(object)[[label]]
     cur_table <- .prepare_table(object, group_by, cur_label, colPairName)
