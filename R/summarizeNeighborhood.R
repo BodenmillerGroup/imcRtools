@@ -34,9 +34,9 @@
 #' of type B does a cell of type A have on average?" 
 #' 
 #' 2. \code{method = "classic"}: The count is divided by the number of cells
-#' of type A that have at least one neigbor of type B. The final count can be 
-#' interpreted as "How many many neightbours of type B has a cell of type A on 
-#' average, given it has at least one neigthbour of type B?"
+#' of type A that have at least one neighbor of type B. The final count can be 
+#' interpreted as "How many many neighbors of type B has a cell of type A on 
+#' average, given it has at least one neighbor of type B?"
 #' 
 #' 3. \code{method = "patch"}: For each cell, the count is binarized to 0 
 #' (less than \code{patch_size} neighbors of type B) or 1 (more or equal to 
@@ -51,7 +51,33 @@
 #' is returned if a certain label is not present in this grouping level.
 #'  
 #' @examples 
-#' # TODO
+#' library(cytomapper)
+#' data(pancreasSCE)
+#'
+#' pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn",
+#'                                k = 3)
+#'                                
+#' # Classic style calculation
+#' (out <- summarizeNeighborhood(pancreasSCE, 
+#'                                 group_by = "ImageNb",
+#'                                 label = "CellType", 
+#'                                 method = "classic",
+#'                                 colPairName = "knn_interaction_graph"))
+#'                                 
+#' # Histocat style calculation
+#' (out <- summarizeNeighborhood(pancreasSCE, 
+#'                                 group_by = "ImageNb",
+#'                                 label = "CellType", 
+#'                                 method = "histocat",
+#'                                 colPairName = "knn_interaction_graph"))
+#'                                 
+#' # Patch style calculation
+#' (out <- summarizeNeighborhood(pancreasSCE, 
+#'                                 group_by = "ImageNb",
+#'                                 label = "CellType", 
+#'                                 method = "pathc",
+#'                                 patch_size = 3,
+#'                                 colPairName = "knn_interaction_graph"))
 #'
 #' @author Vito Zanotelli
 #' @author Jana Fischer

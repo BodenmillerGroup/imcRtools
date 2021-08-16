@@ -47,13 +47,33 @@ enriched or depleted per group.}
 
 \item{BBPARAM}{parameters for parallelized processing.}
 }
+\value{
+a DataFrame containing one row per \code{group_by} entry and unique
+label entry combination (\code{from_label}, \code{to_label}). The object
+contains following entries:
+
+\describe{
+\item{ct}{stores the interaction count as described in the details}   
+\item{p_gt}{stores the fraction of perturbations equal or greater than \code{ct}}  
+\item{p_lt}{stores the fraction of perturbations equal or less than \code{ct}}  
+\item{interaction}{is there the tendency for a positive interaction between  
+\code{from_label} and \code{to_label}? Is \code{p_lt} greater than \code{p_gt}?}  
+\item{p}{the smaller value of \code{p_gt} and \code{p_lt}.}  
+\item{sig}{is \code{p} smaller than \code{p_threshold}?}  
+\item{sigval}{Combination of \code{interaction} and \code{sig}.
+   -1: \code{interaction == FALSE} and \code{sig == TRUE}  
+    0: \code{sig == FALSE}  
+    1: \code{interaction == TRUE} and \code{sig == TRUE}}  
+}
+
+\code{NA} is returned if a certain label is not present in this grouping level.
+}
 \description{
 Cell-cell interactions are summarized in different ways and
 the resulting count is compared to a distribution of counts arising 
 from random permutations.
 }
 \section{Counting and summarizing cell-cell interactions}{
-
 
 In principle, the \code{summarizeNeighborhood} function counts the number
 of edges (interactions) between each set of unique entries in 
@@ -68,9 +88,9 @@ cells of type A. The final count can be interpreted as "How many neighbors
 of type B does a cell of type A have on average?" 
 
 2. \code{method = "classic"}: The count is divided by the number of cells
-of type A that have at least one neigbor of type B. The final count can be 
-interpreted as "How many many neightbours of type B has a cell of type A on 
-average, given it has at least one neigthbour of type B?"
+of type A that have at least one neighbor of type B. The final count can be 
+interpreted as "How many many neighbors of type B has a cell of type A on 
+average, given it has at least one neighbor of type B?"
 
 3. \code{method = "patch"}: For each cell, the count is binarized to 0 
 (less than \code{patch_size} neighbors of type B) or 1 (more or equal to 
