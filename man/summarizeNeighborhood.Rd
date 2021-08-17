@@ -97,7 +97,7 @@ pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn",
 (out <- summarizeNeighborhood(pancreasSCE, 
                                 group_by = "ImageNb",
                                 label = "CellType", 
-                                method = "pathc",
+                                method = "patch",
                                 patch_size = 3,
                                 colPairName = "knn_interaction_graph"))
 
