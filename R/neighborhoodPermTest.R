@@ -1,19 +1,18 @@
 #' @rdname neighborhoodPermTest
-#' @title Performs perturbations to test if two cell-types interact more or 
-#' less frequently than random.
+#' @title Tests if cell types interact more or less frequently than random
 #'
 #' @description Cell-cell interactions are summarized in different ways and
 #' the resulting count is compared to a distribution of counts arising 
 #' from random permutations.
 #'
 #' @param object a \code{SingleCellExperiment} or \code{SpatialExperiment}
-#' object .
+#' object.
 #' @param group_by a single character indicating the \code{colData(object)}
 #' entry by which interactions are grouped. This is usually the image ID or
 #' patient ID.
 #' @param label single character specifying the \code{colData(object)} entry
-#' which stores the cell labels. These can be cell-types labels or other m
-#' metadata. 
+#' which stores the cell labels. These can be cell-types labels or other
+#' metadata entries. 
 #' @param method which cell-cell interaction counting method to use 
 #' (see details)
 #' @param patch_size if \code{method = "patch"}, a single numeric specifying
@@ -28,12 +27,11 @@
 #' @param BBPARAM parameters for parallelized processing. 
 #'
 #' @section Counting and summarizing cell-cell interactions:
-#' In principle, the \code{summarizeNeighborhood} function counts the number
+#' In principle, the \code{\link{summarizeNeighborhood}} function counts the number
 #' of edges (interactions) between each set of unique entries in 
 #' \code{colData(object)[[label]]}. Simplified, it counts for each cell of
 #' type A the number of neighbors of type B.
-#' 
-#' This count can be averaged within each unique entry 
+#' This count is averaged within each unique entry 
 #' \code{colData(object)[[group_by]]} in three different ways:
 #' 
 #' 1. \code{method = "classic"}: The count is divided by the total number of 
@@ -53,29 +51,74 @@
 #' type B?"
 #' 
 #' @section Testing for significance:
+#' Within each unique entry to \code{colData(object)[[group_by]]}, the entries
+#' of \code{colData(object)[[label]]} are randomized \code{iter} times. 
+#' For each iteration, the interactions are counted as described above.
+#' The result is a distribution of the interaction count under spatial randomness.
+#' The observed interaction count is compared against this Null distribution to derive
+#' empirical p-values: 
+#' 
+#' \code{p_gt}: fraction of perturbations equal or greater than the observed count
+#' 
+#' \code{p_lt}: fraction of perturbations equal or less than the observed count
+#' 
+#' Based on these empirical p-values, the \code{interaction} score (interaction
+#' or depletion), overall \code{p} value and significance by comparison to
+#' \code{p_treshold} (\code{sig} and \code{sigval}) are derived.
 #' 
 #' @return a DataFrame containing one row per \code{group_by} entry and unique
 #' label entry combination (\code{from_label}, \code{to_label}). The object
 #' contains following entries:
 #' 
-#' \describe{
-#' \item{ct}{stores the interaction count as described in the details}   
-#' \item{p_gt}{stores the fraction of perturbations equal or greater than \code{ct}}  
-#' \item{p_lt}{stores the fraction of perturbations equal or less than \code{ct}}  
-#' \item{interaction}{is there the tendency for a positive interaction between  
-#' \code{from_label} and \code{to_label}? Is \code{p_lt} greater than \code{p_gt}?}  
-#' \item{p}{the smaller value of \code{p_gt} and \code{p_lt}.}  
-#' \item{sig}{is \code{p} smaller than \code{p_threshold}?}  
-#' \item{sigval}{Combination of \code{interaction} and \code{sig}.
-#'    -1: \code{interaction == FALSE} and \code{sig == TRUE}  
-#'     0: \code{sig == FALSE}  
-#'     1: \code{interaction == TRUE} and \code{sig == TRUE}}  
-#'}
+#' \itemize{
+#' \item{ct:}{ stores the interaction count as described in the details} 
+#' \item{p_gt:}{ stores the fraction of perturbations equal or greater than \code{ct}}  
+#' \item{p_ltv}{ stores the fraction of perturbations equal or less than \code{ct}}
+#' \item{interaction:}{ is there the tendency for a positive interaction between  
+#' \code{from_label} and \code{to_label}? Is \code{p_lt} greater than \code{p_gt}?} 
+#' \item{p:}{ the smaller value of \code{p_gt} and \code{p_lt}.} 
+#' \item{sig:}{ is \code{p} smaller than \code{p_threshold}?}
+#' \item{sigval:}{ Combination of \code{interaction} and \code{sig}.}
+#' \itemize{
+#' \item{-1:}{ \code{interaction == FALSE} and \code{sig == TRUE}}  
+#' \item{0:}{ \code{sig == FALSE}}  
+#' \item{1:}{ \code{interaction == TRUE} and \code{sig == TRUE}}
+#' }
+#' }
 #' 
 #' \code{NA} is returned if a certain label is not present in this grouping level.
 #'  
 #' @examples 
-#' # TODO
+#' library(cytomapper)
+#' data(pancreasSCE)
+#'
+#' pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn",
+#'                                k = 3)
+#'                                
+#' # Classic style calculation
+#' (out <- neighborhoodPermTest(pancreasSCE, 
+#'                                 group_by = "ImageNb",
+#'                                 label = "CellType", 
+#'                                 method = "classic",
+#'                                 colPairName = "knn_interaction_graph",
+#'                                 iter = 1000))
+#'                                 
+#' # Histocat style calculation
+#' (out <- neighborhoodPermTest(pancreasSCE, 
+#'                                 group_by = "ImageNb",
+#'                                 label = "CellType", 
+#'                                 method = "histocat",
+#'                                 colPairName = "knn_interaction_graph",
+#'                                 iter = 1000))
+#'                                 
+#' # Patch style calculation
+#' (out <- neighborhoodPermTest(pancreasSCE, 
+#'                                 group_by = "ImageNb",
+#'                                 label = "CellType", 
+#'                                 method = "patch",
+#'                                 patch_size = 3,
+#'                                 colPairName = "knn_interaction_graph",
+#'                                 ))
 #' 
 #' @seealso 
 #' \code{\link{summarizeNeighborhood}} for counting (but not testing) cell-cell
@@ -88,7 +131,7 @@
 #' @author adapted by Nils Eling (\email{nils.eling@@uzh.ch})
 #' 
 #' @references
-#' \href{https://www.sciencedirect.com/science/article/pii/S2405471217305434?via%3Dihub}{
+#' \href{https://www.sciencedirect.com/science/article/pii/S2405471217305434}{
 #' Schulz, D. et al., Simultaneous Multiplexed Imaging of mRNA and Proteins with 
 #' Subcellular Resolution in Breast Cancer Tissue Samples by Mass Cytometry., 
 #' Cell Systems 2018 6(1):25-36.e5}

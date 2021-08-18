@@ -25,8 +25,7 @@
 #' of edges (interactions) between each set of unique entries in 
 #' \code{colData(object)[[label]]}. Simplified, it counts for each cell of
 #' type A the number of neighbors of type B.
-#' 
-#' This count can be averaged within each unique entry 
+#' This count is averaged within each unique entry 
 #' \code{colData(object)[[group_by]]} in three different ways:
 #' 
 #' 1. \code{method = "classic"}: The count is divided by the total number of 
@@ -84,7 +83,7 @@
 #' @author adapted by Nils Eling (\email{nils.eling@@uzh.ch})
 #' 
 #' @references
-#' \href{https://www.sciencedirect.com/science/article/pii/S2405471217305434?via%3Dihub}{
+#' \href{https://www.sciencedirect.com/science/article/pii/S2405471217305434}{
 #' Schulz, D. et al., Simultaneous Multiplexed Imaging of mRNA and Proteins with 
 #' Subcellular Resolution in Breast Cancer Tissue Samples by Mass Cytometry., 
 #' Cell Systems 2018 6(1):25-36.e5}
@@ -126,5 +125,4 @@ summarizeNeighborhood <- function(object,
     cur_count <- as(cur_count, "DataFrame")
     
     return(cur_count)
-
 }

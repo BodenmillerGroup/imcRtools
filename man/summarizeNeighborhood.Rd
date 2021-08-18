@@ -103,7 +103,7 @@ pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn",
 
 }
 \references{
-\href{https://www.sciencedirect.com/science/article/pii/S2405471217305434?via%3Dihub}{
+\href{https://www.sciencedirect.com/science/article/pii/S2405471217305434}{
 Schulz, D. et al., Simultaneous Multiplexed Imaging of mRNA and Proteins with 
 Subcellular Resolution in Breast Cancer Tissue Samples by Mass Cytometry., 
 Cell Systems 2018 6(1):25-36.e5}

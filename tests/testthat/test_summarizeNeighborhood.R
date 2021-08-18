@@ -417,17 +417,21 @@ test_that("summarizeNeighborhood function works", {
     
     expect_equal(cur_out$ct, test$ct)
     
+    data(pancreasSCE)
+    pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn",
+                                     k = 3)
+    
     # Fail
     expect_error(summarizeNeighborhood("test"),
                  regexp = "'object' not of type 'SingleCellExperiment'.",
                  fixed = TRUE)
-    expect_error(summarizeNeighborhood(pancreasSCE, group_by = "test", label = "CellType", colPairName = "knn_interaction_graph"),
+    expect_error(summarizeNeighborhood(pancreasSCE, group_by = "test_test", label = "CellType", colPairName = "knn_interaction_graph"),
                  regexp = "'group_by' not in colData(object).",
                  fixed = TRUE)
     expect_error(summarizeNeighborhood(pancreasSCE, group_by = 1, label = "CellType", colPairName = "knn_interaction_graph"),
                  regexp = "'group_by' must be a single string.",
                  fixed = TRUE)
-    expect_error(summarizeNeighborhood(pancreasSCE, group_by = "ImageNb", label = "test", colPairName = "knn_interaction_graph"),
+    expect_error(summarizeNeighborhood(pancreasSCE, group_by = "ImageNb", label = "test_test", colPairName = "knn_interaction_graph"),
                  regexp = "'label' not in colData(object).",
                  fixed = TRUE)
     expect_error(summarizeNeighborhood(pancreasSCE, group_by = "ImageNb", label = 1, colPairName = "knn_interaction_graph"),
