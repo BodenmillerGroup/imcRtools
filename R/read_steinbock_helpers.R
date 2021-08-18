@@ -124,7 +124,7 @@
         
         cur_channel_names <- cur_panel[,extract_names_from]
         
-        if (length(unique(cur_channel_names) < length(cur_channel_names)) {
+        if (length(unique(cur_channel_names)) < length(cur_channel_names)) {
             warning("Channel names in the panel file are not unique.")
             
             cur_panel <- cur_panel[match(unique(cur_channel_names), 
