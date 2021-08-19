@@ -1,4 +1,4 @@
-test_that("summarizeNeighborhood function works", {
+test_that("countInteractions function works", {
     library(cytomapper)
     data(pancreasSCE)
     
@@ -7,7 +7,7 @@ test_that("summarizeNeighborhood function works", {
     
     ########################### classic ############################
 
-    expect_silent(cur_out <- summarizeNeighborhood(pancreasSCE, group_by = "ImageNb",
+    expect_silent(cur_out <- countInteractions(pancreasSCE, group_by = "ImageNb",
                                                    label = "CellType", method = "classic",
                                                    colPairName = "knn_interaction_graph")) 
     cur_out <- as.data.frame(cur_out)
@@ -30,7 +30,7 @@ test_that("summarizeNeighborhood function works", {
 
     # As factor
     pancreasSCE$CellType <- as.factor(pancreasSCE$CellType)
-    expect_silent(cur_out_2 <- summarizeNeighborhood(pancreasSCE, group_by = "ImageNb",
+    expect_silent(cur_out_2 <- countInteractions(pancreasSCE, group_by = "ImageNb",
                                                    label = "CellType", method = "classic",
                                                    colPairName = "knn_interaction_graph")) 
     cur_out_2 <- as.data.frame(cur_out_2)
@@ -40,7 +40,7 @@ test_that("summarizeNeighborhood function works", {
     
     # As character
     pancreasSCE$CellType <- as.character(pancreasSCE$CellType)
-    expect_silent(cur_out_2 <- summarizeNeighborhood(pancreasSCE, group_by = "ImageNb",
+    expect_silent(cur_out_2 <- countInteractions(pancreasSCE, group_by = "ImageNb",
                                                      label = "CellType", method = "classic",
                                                      colPairName = "knn_interaction_graph")) 
     cur_out_2 <- as.data.frame(cur_out_2)
@@ -50,7 +50,7 @@ test_that("summarizeNeighborhood function works", {
     
     # As numeric
     pancreasSCE$CellType <- as.numeric(as.factor(pancreasSCE$CellType))
-    expect_silent(cur_out_2 <- summarizeNeighborhood(pancreasSCE, group_by = "ImageNb",
+    expect_silent(cur_out_2 <- countInteractions(pancreasSCE, group_by = "ImageNb",
                                                      label = "CellType", method = "classic",
                                                      colPairName = "knn_interaction_graph")) 
     cur_out_2 <- as.data.frame(cur_out_2)
@@ -59,7 +59,7 @@ test_that("summarizeNeighborhood function works", {
     expect_equal(cur_out_2$ct, cur_out$ct)
     
     # Logical
-    expect_silent(cur_out_2 <- summarizeNeighborhood(pancreasSCE, group_by = "ImageNb",
+    expect_silent(cur_out_2 <- countInteractions(pancreasSCE, group_by = "ImageNb",
                                                    label = "Pattern", method = "classic",
                                                    colPairName = "knn_interaction_graph")) 
 
@@ -85,7 +85,7 @@ test_that("summarizeNeighborhood function works", {
     
     pancreasSCE$test <- pancreasSCE$CellType
     pancreasSCE$test[pancreasSCE$ImageNb == 3] <- "test" 
-    expect_silent(cur_out_3 <- summarizeNeighborhood(pancreasSCE, group_by = "ImageNb",
+    expect_silent(cur_out_3 <- countInteractions(pancreasSCE, group_by = "ImageNb",
                                                    label = "test", method = "classic",
                                                    colPairName = "knn_interaction_graph")) 
     
@@ -109,7 +109,7 @@ test_that("summarizeNeighborhood function works", {
                                      k = 3)
     pancreasSCE$ImageName <- "test"
     
-    expect_silent(cur_out <- summarizeNeighborhood(pancreasSCE, group_by = "ImageName",
+    expect_silent(cur_out <- countInteractions(pancreasSCE, group_by = "ImageName",
                                                    label = "CellType", method = "classic",
                                                    colPairName = "knn_interaction_graph")) 
     
@@ -130,7 +130,7 @@ test_that("summarizeNeighborhood function works", {
     pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn",
                                      k = 3)
     
-    expect_silent(cur_out <- summarizeNeighborhood(pancreasSCE, group_by = "ImageNb",
+    expect_silent(cur_out <- countInteractions(pancreasSCE, group_by = "ImageNb",
                                                    label = "CellType", method = "histocat",
                                                    colPairName = "knn_interaction_graph")) 
     
@@ -153,7 +153,7 @@ test_that("summarizeNeighborhood function works", {
     
     # As factor
     pancreasSCE$CellType <- as.factor(pancreasSCE$CellType)
-    expect_silent(cur_out_2 <- summarizeNeighborhood(pancreasSCE, group_by = "ImageNb",
+    expect_silent(cur_out_2 <- countInteractions(pancreasSCE, group_by = "ImageNb",
                                                      label = "CellType", method = "histocat",
                                                      colPairName = "knn_interaction_graph")) 
     cur_out_2 <- as.data.frame(cur_out_2)
@@ -163,7 +163,7 @@ test_that("summarizeNeighborhood function works", {
     
     # As character
     pancreasSCE$CellType <- as.character(pancreasSCE$CellType)
-    expect_silent(cur_out_2 <- summarizeNeighborhood(pancreasSCE, group_by = "ImageNb",
+    expect_silent(cur_out_2 <- countInteractions(pancreasSCE, group_by = "ImageNb",
                                                      label = "CellType", method = "histocat",
                                                      colPairName = "knn_interaction_graph")) 
     cur_out_2 <- as.data.frame(cur_out_2)
@@ -173,7 +173,7 @@ test_that("summarizeNeighborhood function works", {
     
     # As numeric
     pancreasSCE$CellType <- as.numeric(as.factor(pancreasSCE$CellType))
-    expect_silent(cur_out_2 <- summarizeNeighborhood(pancreasSCE, group_by = "ImageNb",
+    expect_silent(cur_out_2 <- countInteractions(pancreasSCE, group_by = "ImageNb",
                                                      label = "CellType", method = "histocat",
                                                      colPairName = "knn_interaction_graph")) 
     cur_out_2 <- as.data.frame(cur_out_2)
@@ -182,7 +182,7 @@ test_that("summarizeNeighborhood function works", {
     expect_equal(cur_out_2$ct, cur_out$ct)
     
     # Logical
-    expect_silent(cur_out_2 <- summarizeNeighborhood(pancreasSCE, group_by = "ImageNb",
+    expect_silent(cur_out_2 <- countInteractions(pancreasSCE, group_by = "ImageNb",
                                                    label = "Pattern", method = "histocat",
                                                    colPairName = "knn_interaction_graph")) 
     
@@ -208,7 +208,7 @@ test_that("summarizeNeighborhood function works", {
     
     pancreasSCE$test <- pancreasSCE$CellType
     pancreasSCE$test[pancreasSCE$ImageNb == 3] <- "test" 
-    expect_silent(cur_out_3 <- summarizeNeighborhood(pancreasSCE, group_by = "ImageNb",
+    expect_silent(cur_out_3 <- countInteractions(pancreasSCE, group_by = "ImageNb",
                                                      label = "test", method = "histocat",
                                                      colPairName = "knn_interaction_graph")) 
     
@@ -232,7 +232,7 @@ test_that("summarizeNeighborhood function works", {
                                      k = 3)
     pancreasSCE$ImageName <- "test"
     
-    expect_silent(cur_out <- summarizeNeighborhood(pancreasSCE, group_by = "ImageName",
+    expect_silent(cur_out <- countInteractions(pancreasSCE, group_by = "ImageName",
                                                    label = "CellType", method = "histocat",
                                                    colPairName = "knn_interaction_graph")) 
     
@@ -253,7 +253,7 @@ test_that("summarizeNeighborhood function works", {
     pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn",
                                      k = 3)
     
-    expect_silent(cur_out <- summarizeNeighborhood(pancreasSCE, group_by = "ImageNb",
+    expect_silent(cur_out <- countInteractions(pancreasSCE, group_by = "ImageNb",
                                                    label = "CellType", method = "patch",
                                                    patch_size = 3,
                                                    colPairName = "knn_interaction_graph")) 
@@ -278,7 +278,7 @@ test_that("summarizeNeighborhood function works", {
     
     # As factor
     pancreasSCE$CellType <- as.factor(pancreasSCE$CellType)
-    expect_silent(cur_out_2 <- summarizeNeighborhood(pancreasSCE, group_by = "ImageNb",
+    expect_silent(cur_out_2 <- countInteractions(pancreasSCE, group_by = "ImageNb",
                                                      label = "CellType", method = "patch",
                                                      patch_size = 3,
                                                      colPairName = "knn_interaction_graph")) 
@@ -289,7 +289,7 @@ test_that("summarizeNeighborhood function works", {
     
     # As character
     pancreasSCE$CellType <- as.character(pancreasSCE$CellType)
-    expect_silent(cur_out_2 <- summarizeNeighborhood(pancreasSCE, group_by = "ImageNb",
+    expect_silent(cur_out_2 <- countInteractions(pancreasSCE, group_by = "ImageNb",
                                                      label = "CellType", method = "patch",
                                                      patch_size = 3,
                                                      colPairName = "knn_interaction_graph")) 
@@ -300,7 +300,7 @@ test_that("summarizeNeighborhood function works", {
     
     # As numeric
     pancreasSCE$CellType <- as.numeric(as.factor(pancreasSCE$CellType))
-    expect_silent(cur_out_2 <- summarizeNeighborhood(pancreasSCE, group_by = "ImageNb",
+    expect_silent(cur_out_2 <- countInteractions(pancreasSCE, group_by = "ImageNb",
                                                      label = "CellType", method = "patch",
                                                      patch_size = 3,
                                                      colPairName = "knn_interaction_graph")) 
@@ -310,7 +310,7 @@ test_that("summarizeNeighborhood function works", {
     expect_equal(cur_out_2$ct, cur_out$ct)
     
     # Logical
-    expect_silent(cur_out_2 <- summarizeNeighborhood(pancreasSCE, group_by = "ImageNb",
+    expect_silent(cur_out_2 <- countInteractions(pancreasSCE, group_by = "ImageNb",
                                                      label = "Pattern", method = "patch",
                                                      patch_size = 3,
                                                      colPairName = "knn_interaction_graph")) 
@@ -338,7 +338,7 @@ test_that("summarizeNeighborhood function works", {
     
     pancreasSCE$test <- pancreasSCE$CellType
     pancreasSCE$test[pancreasSCE$ImageNb == 3] <- "test" 
-    expect_silent(cur_out_3 <- summarizeNeighborhood(pancreasSCE, group_by = "ImageNb",
+    expect_silent(cur_out_3 <- countInteractions(pancreasSCE, group_by = "ImageNb",
                                                      label = "test", method = "patch",
                                                      patch_size = 3,
                                                      colPairName = "knn_interaction_graph")) 
@@ -364,21 +364,21 @@ test_that("summarizeNeighborhood function works", {
     pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn",
                                      k = 3)
     
-    expect_silent(cur_out <- summarizeNeighborhood(pancreasSCE, group_by = "ImageNb",
+    expect_silent(cur_out <- countInteractions(pancreasSCE, group_by = "ImageNb",
                                                    label = "CellType", method = "patch",
                                                    patch_size = 4,
                                                    colPairName = "knn_interaction_graph")) 
     
     expect_true(all(cur_out$ct[!is.na(cur_out$ct)] == 0))
     
-    expect_silent(cur_out <- summarizeNeighborhood(pancreasSCE, group_by = "ImageNb",
+    expect_silent(cur_out <- countInteractions(pancreasSCE, group_by = "ImageNb",
                                                    label = "CellType", method = "patch",
                                                    patch_size = 0,
                                                    colPairName = "knn_interaction_graph")) 
     
     expect_true(all(cur_out$ct[!is.na(cur_out$ct)] == 1))
     
-    expect_silent(cur_out <- summarizeNeighborhood(pancreasSCE, group_by = "ImageNb",
+    expect_silent(cur_out <- countInteractions(pancreasSCE, group_by = "ImageNb",
                                                    label = "CellType", method = "patch",
                                                    patch_size = 1,
                                                    colPairName = "knn_interaction_graph")) 
@@ -400,7 +400,7 @@ test_that("summarizeNeighborhood function works", {
                                      k = 3)
     pancreasSCE$ImageName <- "test"
     
-    expect_silent(cur_out <- summarizeNeighborhood(pancreasSCE, group_by = "ImageName",
+    expect_silent(cur_out <- countInteractions(pancreasSCE, group_by = "ImageName",
                                                    label = "CellType", method = "patch",
                                                    patch_size = 3,
                                                    colPairName = "knn_interaction_graph")) 
@@ -422,32 +422,32 @@ test_that("summarizeNeighborhood function works", {
                                      k = 3)
     
     # Fail
-    expect_error(summarizeNeighborhood("test"),
+    expect_error(countInteractions("test"),
                  regexp = "'object' not of type 'SingleCellExperiment'.",
                  fixed = TRUE)
-    expect_error(summarizeNeighborhood(pancreasSCE, group_by = "test_test", label = "CellType", colPairName = "knn_interaction_graph"),
+    expect_error(countInteractions(pancreasSCE, group_by = "test_test", label = "CellType", colPairName = "knn_interaction_graph"),
                  regexp = "'group_by' not in colData(object).",
                  fixed = TRUE)
-    expect_error(summarizeNeighborhood(pancreasSCE, group_by = 1, label = "CellType", colPairName = "knn_interaction_graph"),
+    expect_error(countInteractions(pancreasSCE, group_by = 1, label = "CellType", colPairName = "knn_interaction_graph"),
                  regexp = "'group_by' must be a single string.",
                  fixed = TRUE)
-    expect_error(summarizeNeighborhood(pancreasSCE, group_by = "ImageNb", label = "test_test", colPairName = "knn_interaction_graph"),
+    expect_error(countInteractions(pancreasSCE, group_by = "ImageNb", label = "test_test", colPairName = "knn_interaction_graph"),
                  regexp = "'label' not in colData(object).",
                  fixed = TRUE)
-    expect_error(summarizeNeighborhood(pancreasSCE, group_by = "ImageNb", label = 1, colPairName = "knn_interaction_graph"),
+    expect_error(countInteractions(pancreasSCE, group_by = "ImageNb", label = 1, colPairName = "knn_interaction_graph"),
                  regexp = "'label' must be a single string.",
                  fixed = TRUE)
-    expect_error(summarizeNeighborhood(pancreasSCE, group_by = "ImageNb", label = "CellType", colPairName = "test"),
+    expect_error(countInteractions(pancreasSCE, group_by = "ImageNb", label = "CellType", colPairName = "test"),
                  regexp = "'colPairName' not in colPairNames(object).",
                  fixed = TRUE)
-    expect_error(summarizeNeighborhood(pancreasSCE, group_by = "ImageNb", label = "CellType", colPairName = 1),
+    expect_error(countInteractions(pancreasSCE, group_by = "ImageNb", label = "CellType", colPairName = 1),
                  regexp = "'colPairName' must be a single string.",
                  fixed = TRUE)
-    expect_error(summarizeNeighborhood(pancreasSCE, group_by = "ImageNb", label = "CellType", colPairName = "knn_interaction_graph",
+    expect_error(countInteractions(pancreasSCE, group_by = "ImageNb", label = "CellType", colPairName = "knn_interaction_graph",
                                        method = "patch"),
                  regexp = "When method = 'patch', please specify 'patch_size'.",
                  fixed = TRUE)
-    expect_error(summarizeNeighborhood(pancreasSCE, group_by = "ImageNb", label = "CellType", colPairName = "knn_interaction_graph",
+    expect_error(countInteractions(pancreasSCE, group_by = "ImageNb", label = "CellType", colPairName = "knn_interaction_graph",
                                        method = "patch", patch_size = "test"),
                  regexp = "'patch_size' must be a single numeric.",
                  fixed = TRUE)

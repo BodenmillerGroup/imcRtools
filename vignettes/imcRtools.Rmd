@@ -429,8 +429,8 @@ et al., Cell
 Systems](https://www.sciencedirect.com/science/article/pii/S2405471217305434)
 [@Schulz2018]
 
-The `imcRtools` package exports the `summarizeNeighborhood` and
-`neighborhoodPermTest` function, which summarize all cell-cell interactions per
+The `imcRtools` package exports the `countInteractions` and
+`testInteractions` function, which summarize all cell-cell interactions per
 grouping level (e.g. image). As a result, a table is returned where each row
 represents one of all possible cell-type/cell-type interactions among all
 grouping levels. Missing entries or `NA`s indicate missing cell-type labels for
@@ -439,7 +439,7 @@ summarized.
 
 ### Summarizing interactions
 
-The `summarizeNeighborhood` function counts the number of edges (interactions)
+The `countInteractions` function counts the number of edges (interactions)
 between each set of unique cell labels per grouping level.
 Simplified, it counts for each cell of type A the number of neighbors of type B.
 This count is averaged within each unique grouping level (e.g. image) 
@@ -449,7 +449,7 @@ in three different ways:
 cells of type A. The final count can be interpreted as "How many neighbors 
 of type B does a cell of type A have on average?" 
   
-2. `method = "classic"`: The count is divided by the number of cells
+2. `method = "histocat"`: The count is divided by the number of cells
 of type A that have at least one neighbor of type B. The final count can be 
 interpreted as "How many many neighbors of type B has a cell of type A on 
 average, given it has at least one neighbor of type B?"
@@ -461,15 +461,15 @@ across all cells of type A. The final count can be interpreted as "What
 fraction of cells of type A have at least a given number of neighbors of 
 type B?"
 
-The `summarizeNeighborhood` returns a `DataFrame` containing the summarized
+The `countInteractions` returns a `DataFrame` containing the summarized
 counts (`ct`) for all combinations of `from_label`, `to_label` and `group_by`.
 
-```{r summarizeNeighborhood}
-out <- summarizeNeighborhood(pancreasSCE,
-                             group_by = "ImageNb",
-                             label = "CellType",
-                             method = "classic",
-                             colPairName = "knn_interaction_graph")
+```{r countInteractions}
+out <- countInteractions(pancreasSCE,
+                         group_by = "ImageNb",
+                         label = "CellType",
+                         method = "classic",
+                         colPairName = "knn_interaction_graph")
 out
 ```
 
@@ -477,26 +477,27 @@ out
 
 In the next instance, one can test if the obtained count is larger or smaller
 compared to what is expected from a random distribution of cell labels. For
-this, the `neighborhoodPermTest` function permutes the labels `iter` times and
-counts interactions as described above. This approach generates a distribution
-of the interaction count under spatial randomness. The observed interaction
-count is compared against this Null distribution to derive empirical p-values:
+this, the `testInteractions` function permutes the cell labels `iter` times
+and counts interactions as described above. This approach generates a
+distribution of the interaction count under a random distribution of cell
+labels. The observed interaction count is compared against this Null
+distribution to derive empirical p-values:
  
 `p_gt`: fraction of perturbations equal or greater than the observed count
  
 `p_lt`: fraction of perturbations equal or less than the observed count
  
-Based on these empirical p-values, the `interaction` score (interaction
-or depletion), overall `p` value and significance by comparison to
+Based on these empirical p-values, the `interaction` score (attraction
+or avoidance), overall `p` value and significance by comparison to
 `p_treshold` (`sig` and `sigval`) are derived. All results are returned in form
 of a `DataFrame`.
 
-```{r neighborhoodPermTest}
-out <- neighborhoodPermTest(pancreasSCE,
-                             group_by = "ImageNb",
-                             label = "CellType",
-                             method = "classic",
-                             colPairName = "knn_interaction_graph")
+```{r testInteractions}
+out <- testInteractions(pancreasSCE,
+                        group_by = "ImageNb",
+                        label = "CellType",
+                        method = "classic",
+                        colPairName = "knn_interaction_graph")
 out
 ```
 
