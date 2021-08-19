@@ -60,6 +60,14 @@ test_that("readSCEfromTXT function reads in correct objects.", {
     expect_silent(cur_sce_4 <- readSCEfromTXT(cur_files, metadata_cols = "X", verbose = FALSE))
     expect_equal(cur_sce_2, cur_sce_4)
     
+    # Don't extract metal names
+    cur_sce_5 <- readSCEfromTXT(path, verbose = FALSE, read_metal_from_filename = FALSE)
+    
+    expect_equal(counts(cur_sce), counts(cur_sce_5))
+    expect_equal(names(colData(cur_sce_5)), c("Start_push", "End_push",
+                                              "Pushes_duration", "X", "Y",
+                                              "Z", "sample_id"))
+
     # Error
     names(cur_files)[1] <- "test" 
     expect_error(readSCEfromTXT(cur_files, verbose = FALSE), 
