@@ -301,7 +301,7 @@ test_that("neighbourhoodPermTest gives same results as neighbouRhood", {
     cur_classic <- aggregate_classic(labels_applied)
     setorder(cur_classic, group, FirstLabel, SecondLabel)
     
-    imcRtools_classic <- summarizeNeighborhood(pancreasSCE, 
+    imcRtools_classic <- countInteractions(pancreasSCE, 
                                                group_by = "ImageNb", 
                                                label = "CellType",
                                                colPairName = "knn_interaction_graph")
@@ -326,7 +326,7 @@ test_that("neighbourhoodPermTest gives same results as neighbouRhood", {
     setorder(dat_p, group, FirstLabel, SecondLabel)
     
     set.seed(123)
-    imcRtools_classic_perm <- neighborhoodPermTest(pancreasSCE, 
+    imcRtools_classic_perm <- testInteractions(pancreasSCE, 
                                                    group_by = "ImageNb", 
                                                    label = "CellType",
                                                    colPairName = "knn_interaction_graph",
@@ -350,7 +350,7 @@ test_that("neighbourhoodPermTest gives same results as neighbouRhood", {
     cur_histo <- aggregate_histo(labels_applied)
     setorder(cur_histo, group, FirstLabel, SecondLabel)
     
-    imcRtools_histo <- summarizeNeighborhood(pancreasSCE, 
+    imcRtools_histo <- countInteractions(pancreasSCE, 
                                                group_by = "ImageNb", 
                                                label = "CellType",
                                                colPairName = "knn_interaction_graph",
@@ -376,7 +376,7 @@ test_that("neighbourhoodPermTest gives same results as neighbouRhood", {
     setorder(dat_p, group, FirstLabel, SecondLabel)
     
     set.seed(123)
-    imcRtools_histo_perm <- neighborhoodPermTest(pancreasSCE, 
+    imcRtools_histo_perm <- testInteractions(pancreasSCE, 
                                                    group_by = "ImageNb", 
                                                    label = "CellType",
                                                    colPairName = "knn_interaction_graph",
@@ -401,7 +401,7 @@ test_that("neighbourhoodPermTest gives same results as neighbouRhood", {
     cur_patch <- aggregate_classic_patch(labels_applied, patch_size = 3)
     setorder(cur_patch, group, FirstLabel, SecondLabel)
     
-    imcRtools_patch <- summarizeNeighborhood(pancreasSCE, 
+    imcRtools_patch <- countInteractions(pancreasSCE, 
                                              group_by = "ImageNb", 
                                              label = "CellType",
                                              colPairName = "knn_interaction_graph",
@@ -428,7 +428,7 @@ test_that("neighbourhoodPermTest gives same results as neighbouRhood", {
     setorder(dat_p, group, FirstLabel, SecondLabel)
     
     set.seed(123)
-    imcRtools_patch_perm <- neighborhoodPermTest(pancreasSCE, 
+    imcRtools_patch_perm <- testInteractions(pancreasSCE, 
                                                  group_by = "ImageNb", 
                                                  label = "CellType",
                                                  colPairName = "knn_interaction_graph",

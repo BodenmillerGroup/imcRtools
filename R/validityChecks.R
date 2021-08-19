@@ -775,7 +775,7 @@
     }
 }
 
-.valid.summarizeNeighborhood.input <- function(object, group_by, label, method,
+.valid.countInteractions.input <- function(object, group_by, label, method,
                                                patch_size, colPairName){
     
     if (!is(object, "SingleCellExperiment")) {
@@ -817,7 +817,7 @@
     }
 }
 
-.valid.neighborhoodPermTest.input <- function(iter, p_threshold){
+.valid.testInteractions.input <- function(iter, p_threshold){
     if (length(iter) != 1 | !is.numeric(iter)) {
         stop("'iter' must be a single positive numeric.")
     }

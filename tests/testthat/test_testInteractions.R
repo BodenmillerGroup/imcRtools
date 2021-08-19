@@ -1,4 +1,4 @@
-test_that("neighborhoodPermTest function works", {
+test_that("testInteractions function works", {
     library(cytomapper)
     data(pancreasSCE)
     
@@ -6,13 +6,13 @@ test_that("neighborhoodPermTest function works", {
                                      k = 3)
     
     ################################ classic ###################################
-    expect_silent(cur_out <- neighborhoodPermTest(pancreasSCE, 
+    expect_silent(cur_out <- testInteractions(pancreasSCE, 
                                                   group_by = "ImageNb", 
                                                   label = "CellType",
                                                   colPairName = "knn_interaction_graph"))
     
     set.seed(123)
-    expect_silent(cur_out <- neighborhoodPermTest(pancreasSCE, 
+    expect_silent(cur_out <- testInteractions(pancreasSCE, 
                                                   group_by = "ImageNb", 
                                                   label = "CellType",
                                                   method = "classic",
@@ -20,7 +20,7 @@ test_that("neighborhoodPermTest function works", {
                                                   iter = 100))
     
     set.seed(123)
-    expect_silent(cur_out_2 <- neighborhoodPermTest(pancreasSCE, 
+    expect_silent(cur_out_2 <- testInteractions(pancreasSCE, 
                                                   group_by = "ImageNb", 
                                                   label = "CellType",
                                                   method = "classic",
@@ -29,8 +29,8 @@ test_that("neighborhoodPermTest function works", {
     
     expect_identical(cur_out, cur_out_2)
     
-    # Check against summarizeNeigborhood
-    expect_silent(cur_sn <- summarizeNeighborhood(pancreasSCE, 
+    # Check against countInteractions
+    expect_silent(cur_sn <- countInteractions(pancreasSCE, 
                                                   group_by = "ImageNb", 
                                                   label = "CellType",
                                                   method = "classic",
@@ -47,7 +47,7 @@ test_that("neighborhoodPermTest function works", {
     expect_equal(cur_test$sig * sign(cur_test$interaction - 0.5), cur_test$sigval)
     
     set.seed(123)
-    expect_silent(cur_out_2 <- neighborhoodPermTest(pancreasSCE, 
+    expect_silent(cur_out_2 <- testInteractions(pancreasSCE, 
                                                   group_by = "ImageNb", 
                                                   label = "CellType",
                                                   method = "classic",
@@ -67,7 +67,7 @@ test_that("neighborhoodPermTest function works", {
     
     ################################ histocat ###################################
     set.seed(123)
-    expect_silent(cur_out <- neighborhoodPermTest(pancreasSCE, 
+    expect_silent(cur_out <- testInteractions(pancreasSCE, 
                                                   group_by = "ImageNb", 
                                                   label = "CellType",
                                                   method = "histocat",
@@ -75,7 +75,7 @@ test_that("neighborhoodPermTest function works", {
                                                   iter = 100))
     
     set.seed(123)
-    expect_silent(cur_out_2 <- neighborhoodPermTest(pancreasSCE, 
+    expect_silent(cur_out_2 <- testInteractions(pancreasSCE, 
                                                     group_by = "ImageNb", 
                                                     label = "CellType",
                                                     method = "histocat",
@@ -84,8 +84,8 @@ test_that("neighborhoodPermTest function works", {
     
     expect_identical(cur_out, cur_out_2)
     
-    # Check against summarizeNeigborhood
-    expect_silent(cur_sn <- summarizeNeighborhood(pancreasSCE, 
+    # Check against countInteractions
+    expect_silent(cur_sn <- countInteractions(pancreasSCE, 
                                                   group_by = "ImageNb", 
                                                   label = "CellType",
                                                   method = "histocat",
@@ -102,7 +102,7 @@ test_that("neighborhoodPermTest function works", {
     expect_equal(cur_test$sig * sign(cur_test$interaction - 0.5), cur_test$sigval)
     
     set.seed(123)
-    expect_silent(cur_out_2 <- neighborhoodPermTest(pancreasSCE, 
+    expect_silent(cur_out_2 <- testInteractions(pancreasSCE, 
                                                     group_by = "ImageNb", 
                                                     label = "CellType",
                                                     method = "histocat",
@@ -123,7 +123,7 @@ test_that("neighborhoodPermTest function works", {
     
     ################################ patch ###################################
     set.seed(123)
-    expect_silent(cur_out <- neighborhoodPermTest(pancreasSCE, 
+    expect_silent(cur_out <- testInteractions(pancreasSCE, 
                                                   group_by = "ImageNb", 
                                                   label = "CellType",
                                                   method = "patch",
@@ -132,7 +132,7 @@ test_that("neighborhoodPermTest function works", {
                                                   iter = 100))
     
     set.seed(123)
-    expect_silent(cur_out_2 <- neighborhoodPermTest(pancreasSCE, 
+    expect_silent(cur_out_2 <- testInteractions(pancreasSCE, 
                                                     group_by = "ImageNb", 
                                                     label = "CellType",
                                                     method = "patch",
@@ -142,8 +142,8 @@ test_that("neighborhoodPermTest function works", {
     
     expect_identical(cur_out, cur_out_2)
     
-    # Check against summarizeNeigborhood
-    expect_silent(cur_sn <- summarizeNeighborhood(pancreasSCE, 
+    # Check against countInteractions
+    expect_silent(cur_sn <- countInteractions(pancreasSCE, 
                                                   group_by = "ImageNb", 
                                                   label = "CellType",
                                                   method = "patch",
@@ -161,7 +161,7 @@ test_that("neighborhoodPermTest function works", {
     expect_equal(cur_test$sig * sign(cur_test$interaction - 0.5), cur_test$sigval)
     
     set.seed(123)
-    expect_silent(cur_out_2 <- neighborhoodPermTest(pancreasSCE, 
+    expect_silent(cur_out_2 <- testInteractions(pancreasSCE, 
                                                     group_by = "ImageNb", 
                                                     label = "CellType",
                                                     method = "patch",
@@ -181,68 +181,68 @@ test_that("neighborhoodPermTest function works", {
     expect_equal(cur_test$sig * sign(cur_test$interaction - 0.5), cur_test$sigval)  
     
     # Fail
-    expect_error(neighborhoodPermTest("test"),
+    expect_error(testInteractions("test"),
                  regexp = "'object' not of type 'SingleCellExperiment'.",
                  fixed = TRUE)
-    expect_error(neighborhoodPermTest(pancreasSCE, group_by = "test", label = "CellType", 
+    expect_error(testInteractions(pancreasSCE, group_by = "test", label = "CellType", 
                                       colPairName = "knn_interaction_graph"),
                  regexp = "'group_by' not in colData(object).",
                  fixed = TRUE)
-    expect_error(neighborhoodPermTest(pancreasSCE, group_by = 1, label = "CellType", 
+    expect_error(testInteractions(pancreasSCE, group_by = 1, label = "CellType", 
                                       colPairName = "knn_interaction_graph"),
                  regexp = "'group_by' must be a single string.",
                  fixed = TRUE)
-    expect_error(neighborhoodPermTest(pancreasSCE, group_by = "ImageNb", label = "test", 
+    expect_error(testInteractions(pancreasSCE, group_by = "ImageNb", label = "test", 
                                       colPairName = "knn_interaction_graph"),
                  regexp = "'label' not in colData(object).",
                  fixed = TRUE)
-    expect_error(neighborhoodPermTest(pancreasSCE, group_by = "ImageNb", label = 1, 
+    expect_error(testInteractions(pancreasSCE, group_by = "ImageNb", label = 1, 
                                       colPairName = "knn_interaction_graph"),
                  regexp = "'label' must be a single string.",
                  fixed = TRUE)
-    expect_error(neighborhoodPermTest(pancreasSCE, group_by = "ImageNb", label = "CellType", 
+    expect_error(testInteractions(pancreasSCE, group_by = "ImageNb", label = "CellType", 
                                       colPairName = "test"),
                  regexp = "'colPairName' not in colPairNames(object).",
                  fixed = TRUE)
-    expect_error(neighborhoodPermTest(pancreasSCE, group_by = "ImageNb", label = "CellType", colPairName = 1),
+    expect_error(testInteractions(pancreasSCE, group_by = "ImageNb", label = "CellType", colPairName = 1),
                  regexp = "'colPairName' must be a single string.",
                  fixed = TRUE)
-    expect_error(neighborhoodPermTest(pancreasSCE, group_by = "ImageNb", label = "CellType", 
+    expect_error(testInteractions(pancreasSCE, group_by = "ImageNb", label = "CellType", 
                                       colPairName = "knn_interaction_graph",
                                        method = "patch"),
                  regexp = "When method = 'patch', please specify 'patch_size'.",
                  fixed = TRUE)
-    expect_error(neighborhoodPermTest(pancreasSCE, group_by = "ImageNb", label = "CellType", 
+    expect_error(testInteractions(pancreasSCE, group_by = "ImageNb", label = "CellType", 
                                       colPairName = "knn_interaction_graph",
                                        method = "patch", patch_size = "test"),
                  regexp = "'patch_size' must be a single numeric.",
                  fixed = TRUE)
-    expect_error(neighborhoodPermTest(pancreasSCE, group_by = "ImageNb", label = "CellType", 
+    expect_error(testInteractions(pancreasSCE, group_by = "ImageNb", label = "CellType", 
                                       colPairName = "knn_interaction_graph",
                                       iter = "test"),
                  regexp = "'iter' must be a single positive numeric.",
                  fixed = TRUE)
-    expect_error(neighborhoodPermTest(pancreasSCE, group_by = "ImageNb", label = "CellType", 
+    expect_error(testInteractions(pancreasSCE, group_by = "ImageNb", label = "CellType", 
                                       colPairName = "knn_interaction_graph",
                                       iter = c(1,2)),
                  regexp = "'iter' must be a single positive numeric.",
                  fixed = TRUE)
-    expect_error(neighborhoodPermTest(pancreasSCE, group_by = "ImageNb", label = "CellType", 
+    expect_error(testInteractions(pancreasSCE, group_by = "ImageNb", label = "CellType", 
                                       colPairName = "knn_interaction_graph",
                                       iter = -20),
                  regexp = "'iter' must be a single positive numeric.",
                  fixed = TRUE)
-    expect_error(neighborhoodPermTest(pancreasSCE, group_by = "ImageNb", label = "CellType", 
+    expect_error(testInteractions(pancreasSCE, group_by = "ImageNb", label = "CellType", 
                                       colPairName = "knn_interaction_graph",
                                       p_threshold = "test"),
                  regexp = "'p_threshold' must be a single numeric between 0 and 1.",
                  fixed = TRUE)
-    expect_error(neighborhoodPermTest(pancreasSCE, group_by = "ImageNb", label = "CellType", 
+    expect_error(testInteractions(pancreasSCE, group_by = "ImageNb", label = "CellType", 
                                       colPairName = "knn_interaction_graph",
                                       p_threshold = c(1,2)),
                  regexp = "'p_threshold' must be a single numeric between 0 and 1.",
                  fixed = TRUE)
-    expect_error(neighborhoodPermTest(pancreasSCE, group_by = "ImageNb", label = "CellType", 
+    expect_error(testInteractions(pancreasSCE, group_by = "ImageNb", label = "CellType", 
                                       colPairName = "knn_interaction_graph",
                                       p_threshold = 3),
                  regexp = "'p_threshold' must be a single numeric between 0 and 1.",
