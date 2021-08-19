@@ -54,3 +54,7 @@ Changes in version 0.3.10 (2021-08-18):
 
 + Added neighborhoodPermTest function
 + Added summarizeNeighborhood function
+
+Changes in version 0.3.11 (2021-08-19):
+
++ Added flip_x, flip_y argument for plotSpatial function

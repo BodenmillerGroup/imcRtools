@@ -49,6 +49,8 @@
 #' @param scales one of \code{"free"}, \code{"fixed"}, \code{"free_x"} or 
 #' \code{"free_y"} indicating if x- and y-axis ranges should be fixed across
 #' all images. 
+#' @param flip_x flip the x-axis?
+#' @param flip_y flip the y-axis?
 #' 
 #' @return returns a \code{ggplot} object.
 #' 
@@ -146,15 +148,15 @@ plotSpatial <- function(object,
                         nodes_first = TRUE,
                         ncols = NULL,
                         nrows = NULL,
-                        scales = "free"){
+                        scales = "free",
+                        flip_x = FALSE,
+                        flip_y = TRUE){
     
     .valid.plotSpatial.input(object, img_id, coords, node_color_by, 
                              node_shape_by, node_size_by, edge_color_by,
                              assay_type, edge_width_by, draw_edges, directed, 
                              arrow, end_cap, colPairName, nodes_first,
-                             ncols, nrows, scales)
-    
-    
+                             ncols, nrows, scales, flip_x, flip_y)
     
     nodes <- .makeNodes(object, node_color_by, img_id, node_shape_by,
                         node_size_by, assay_type)
@@ -187,7 +189,7 @@ plotSpatial <- function(object,
     p <- .postProcessPlot(p, object, img_id, nrows, ncols, node_color_by, 
                           node_color_fix,
                           node_shape_fix, node_size_fix, edge_color_fix, 
-                          edge_width_fix, scales)
+                          edge_width_fix, scales, flip_x, flip_y)
         
     return(p)
 }

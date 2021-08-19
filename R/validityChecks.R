@@ -630,7 +630,8 @@
                                      node_shape_by, node_size_by, edge_color_by,
                                      assay_type, edge_width_by, draw_edges, 
                                      directed,  arrow,  end_cap, colPairName, 
-                                     nodes_first, ncols, nrows, scales){
+                                     nodes_first, ncols, nrows, scales, 
+                                     flip_x, flip_y){
     
     if (!is(object, "SingleCellExperiment")) {
         stop("'object' not of type 'SingleCellExperiment'.")
@@ -772,6 +773,14 @@
     
     if (!scales %in% c("fixed", "free_x", "free_y", "free")) {
         stop("'scales' should be one of 'fixed', 'free_x', 'free_y', 'free'.")
+    }
+    
+    if (length(flip_y) != 1 | !is.logical(flip_y)) {
+        stop("'flip_y' must be a single logical")
+    }
+    
+    if (length(flip_x) != 1 | !is.logical(flip_x)) {
+        stop("'flip_x' must be a single logical")
     }
 }
 

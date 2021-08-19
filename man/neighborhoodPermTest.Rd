@@ -80,8 +80,7 @@ In principle, the \code{\link{summarizeNeighborhood}} function counts the number
 of edges (interactions) between each set of unique entries in 
 \code{colData(object)[[label]]}. Simplified, it counts for each cell of
 type A the number of neighbors of type B.
-
-This count can be averaged within each unique entry 
+This count is averaged within each unique entry 
 \code{colData(object)[[group_by]]} in three different ways:
 
 1. \code{method = "classic"}: The count is divided by the total number of 
@@ -114,7 +113,7 @@ empirical p-values:
 
 \code{p_lt}: fraction of perturbations equal or less than the observed count
 
-Based on these empircial p-values, the \code{interaction} score (interaction
+Based on these empirical p-values, the \code{interaction} score (interaction
 or depletion), overall \code{p} value and significance by comparison to
 \code{p_treshold} (\code{sig} and \code{sigval}) are derived.
 }

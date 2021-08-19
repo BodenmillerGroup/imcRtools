@@ -27,7 +27,9 @@ plotSpatial(
   nodes_first = TRUE,
   ncols = NULL,
   nrows = NULL,
-  scales = "free"
+  scales = "free",
+  flip_x = FALSE,
+  flip_y = TRUE
 )
 }
 \arguments{
@@ -98,6 +100,10 @@ When \code{nodes_first = FALSE}, the edges will be drawn first}
 \item{scales}{one of \code{"free"}, \code{"fixed"}, \code{"free_x"} or 
 \code{"free_y"} indicating if x- and y-axis ranges should be fixed across
 all images.}
+
+\item{flip_x}{flip the x-axis?}
+
+\item{flip_y}{flip the y-axis?}
 }
 \value{
 returns a \code{ggplot} object.

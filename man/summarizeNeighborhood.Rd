@@ -51,8 +51,7 @@ In principle, the \code{summarizeNeighborhood} function counts the number
 of edges (interactions) between each set of unique entries in 
 \code{colData(object)[[label]]}. Simplified, it counts for each cell of
 type A the number of neighbors of type B.
-
-This count can be averaged within each unique entry 
+This count is averaged within each unique entry 
 \code{colData(object)[[group_by]]} in three different ways:
 
 1. \code{method = "classic"}: The count is divided by the total number of 
