@@ -1,36 +1,3 @@
-# Checks if input files exist and if they contain the right entries
-.fileChecks <- function(cells, image_meta, relationships, panel){
-
-  # Object to save errors
-  errors <- c()
-
-  # Cells.csv file
-  if(!file.exists(cells)){
-    errors <- c(errors, paste0("The file containing the cell features does not exist. ",
-                "Please correct the path to the file.\n"))
-  }
-
-  # Image metadata file
-  if(!file.exists(image_meta)){
-    errors <- c(errors, paste0("The file containing the image metadata does not exist. ",
-                "Please correct the path to the file.\n"))
-  }
-
-  # Relationship file
-  if(!file.exists(relationships)){
-    errors <- c(errors, paste0("The file containing the cell-cell relationships does not exist. ",
-                "Please correct the path to the file.\n"))
-  }
-
-  # Panel file
-  if(!file.exists(panel)){
-    errors <- c(errors, paste0("The file containing the panel does not exist. ",
-                "Please correct the path to the file.\n"))
-  }
-
-  return(errors)
-}
-
 # Check function for SCE from TXT function
 #' @importFrom stringr str_extract
 .valid.readSCEfromTXT.input <- function(txt_list, cur_names,
@@ -83,6 +50,7 @@
 }
 
 #' @importFrom SummarizedExperiment colData assayNames
+#' @importFrom methods is
 .valid.plotSpotHeatmap.input <- function(object, spot_id, channel_id,
                                          assay_type, log,
                                    threshold, order_metals){
@@ -805,6 +773,64 @@
     if (!scales %in% c("fixed", "free_x", "free_y", "free")) {
         stop("'scales' should be one of 'fixed', 'free_x', 'free_y', 'free'.")
     }
+}
+
+.valid.countInteractions.input <- function(object, group_by, label, method,
+                                               patch_size, colPairName){
     
+    if (!is(object, "SingleCellExperiment")) {
+        stop("'object' not of type 'SingleCellExperiment'.")
+    }
     
+    if (length(group_by) != 1 | !is.character(group_by)) {
+        stop("'group_by' must be a single string.")
+    }
+    
+    if (!group_by %in% names(colData(object))) {
+        stop("'group_by' not in colData(object).")
+    }
+    
+    if (length(colPairName) != 1 | !is.character(colPairName)) {
+        stop("'colPairName' must be a single string.")
+    }
+    
+    if (!colPairName %in% colPairNames(object)) {
+        stop("'colPairName' not in colPairNames(object).")
+    }
+    
+    if (length(label) != 1 | !is.character(label)) {
+        stop("'label' must be a single string.")
+    }
+    
+    if (!label %in% names(colData(object))) {
+        stop("'label' not in colData(object).")
+    }
+    
+    if (method == "patch") {
+        if (is.null(patch_size)) {
+            stop("When method = 'patch', please specify 'patch_size'.")
+        }
+        
+        if (length(patch_size) != 1 | !is.numeric(patch_size)) {
+            stop("'patch_size' must be a single numeric.")
+        }
+    }
+}
+
+.valid.testInteractions.input <- function(iter, p_threshold){
+    if (length(iter) != 1 | !is.numeric(iter)) {
+        stop("'iter' must be a single positive numeric.")
+    }
+    
+    if (iter < 1) {
+        stop("'iter' must be a single positive numeric.")
+    }
+    
+    if (length(p_threshold) != 1 | !is.numeric(p_threshold)) {
+        stop("'p_threshold' must be a single numeric between 0 and 1.")
+    }
+    
+    if (p_threshold < 0 | p_threshold > 1) {
+        stop("'p_threshold' must be a single numeric between 0 and 1.")
+    }
 }
