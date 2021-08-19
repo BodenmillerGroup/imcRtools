@@ -34,7 +34,7 @@ jobs:
 
       - name: Install system dependecies
         run: |
-          brew install harfbuzz fribidi cairo xquartz
+          brew install harfbuzz fribidi cairo xquartz imagemagick
           
       - name: Install dependencies
         run: |
