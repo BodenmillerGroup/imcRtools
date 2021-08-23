@@ -22,6 +22,9 @@
 #' @param name single character specifying the name of the graph.
 #' @param directed should the returned graph be directed? Only effects the k
 #' nearest neighbour graph (see details).
+#' @param k_max_dist if \code{type = "knn"}, the maximum distance at which to
+#' consider neighboring cells. All neighbors within a distance larger than 
+#' \code{k_max_dist} will be excluded from graph construction.
 #' @param BNPARAM a \code{\link[BiocNeighbors]{BiocNeighborParam} object
 #' defining the algorithm to use.}
 #' @param BPPARAM a \code{\link[BiocParallel]{BiocParallelParam-class}} object
@@ -115,6 +118,7 @@ buildSpatialGraph <- function(object,
                               type = c("expansion", "knn", "delaunay"),
                               k = NULL,
                               directed = TRUE,
+                              k_max_dist = NULL,
                               threshold = NULL,
                               coords = c("Pos_X", "Pos_Y"),
                               name = NULL,
@@ -124,7 +128,7 @@ buildSpatialGraph <- function(object,
     type <- match.arg(type)
     
     .valid.buildSpatialGraph.input(object, type, img_id, k, threshold, coords,
-                                   name, directed)
+                                   name, directed, k_max_dist)
     
     name <- ifelse(is.null(name), paste0(type, "_interaction_graph"), name)
     
@@ -159,13 +163,26 @@ buildSpatialGraph <- function(object,
                                                          mode = "mutual")
                                 
                             } else {
-                                cur_graph <- findKNN(cur_coords,
-                                                     k = k,
-                                                     BNPARAM = BNPARAM,
-                                                     get.distance = FALSE,
-                                                     ...)
-                                cur_graph <- as.list(as.data.frame(t(cur_graph$index)))
-                                cur_graph <- graph_from_adj_list(cur_graph)
+                                if (is.null(k_max_dist)) {
+                                    cur_graph <- findKNN(cur_coords,
+                                                         k = k,
+                                                         BNPARAM = BNPARAM,
+                                                         get.distance = FALSE,
+                                                         ...) 
+                                    cur_graph <- as.list(as.data.frame(t(cur_graph$index)))
+                                    cur_graph <- graph_from_adj_list(cur_graph)
+                                } else {
+                                    cur_graph <- findKNN(cur_coords,
+                                                         k = k,
+                                                         BNPARAM = BNPARAM,
+                                                         get.distance = TRUE,
+                                                         ...) 
+                                    cur_graph <- lapply(seq_len(nrow(cur_graph$index)),
+                                           function(i){
+                                               cur_graph$index[i,cur_graph$distance[i,] <= k_max_dist] 
+                                           })
+                                    cur_graph <- graph_from_adj_list(cur_graph)
+                                }
                                 
                                 if (!directed) {
                                     cur_graph <- as.undirected(cur_graph, 
