@@ -267,6 +267,64 @@ test_that("buildSpatialGraph function works", {
     expect_equal(colPair(cur_sce, "knn_interaction_graph"),
                  colPair(cur_sce, "vptree"))
     
+    # Max dist
+    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                               type = "knn", k = 5, k_max_dist = 10))
+    expect_equal(colPairNames(cur_sce), "knn_interaction_graph")
+    expect_true(!is.null(colPair(cur_sce)))
+    expect_equal(length(colPair(cur_sce)), 711)
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", draw_edges = TRUE,
+                     colPairName = "knn_interaction_graph")
+    expect_silent(print(p))
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", draw_edges = TRUE,
+                     colPairName = "knn_interaction_graph", 
+                     directed = FALSE)
+    expect_silent(print(p))
+    expect_equal(from(colPair(cur_sce))[10:20], c(9, 9, 10, 10, 11, 12, 12, 12, 13, 13, 13))
+    expect_equal(to(colPair(cur_sce))[10:20], c(6, 14,  4,  7, 13,  3, 17, 18,  5, 11, 19))
+    
+    cur_sce_1 <- cur_sce[,cur_sce$ImageNb == 1]
+    
+    cur_dist <- dist(as.matrix(colData(cur_sce_1)[,c("Pos_X", "Pos_Y")]))
+    cur_ind_real <- apply(as.matrix(cur_dist), 1, function(x){sort(order(x)[2:6])})
+    cur_dist_real <- apply(as.matrix(cur_dist), 1, function(x){x[sort(order(x)[2:6])]})
+    cur_ind_real <- lapply(1:ncol(cur_ind_real), function(x){
+        cur_ind_real[cur_dist_real[,x] <= 10,x]
+    })
+    cur_ind_real <- cur_ind_real[lapply(cur_ind_real, length) > 0]
+    cur_ind_test <- table(from(colPair(cur_sce_1)), to(colPair(cur_sce_1)))
+    cur_ind_test <- apply(cur_ind_test, 1, function(x){as.numeric(names(which(x == 1)))})
+    
+    expect_equal(cur_ind_real, cur_ind_test, check.attributes = FALSE)
+    
+    cur_sce_1 <- cur_sce[,cur_sce$ImageNb == 2]
+    
+    cur_dist <- dist(as.matrix(colData(cur_sce_1)[,c("Pos_X", "Pos_Y")]))
+    cur_ind_real <- apply(as.matrix(cur_dist), 1, function(x){sort(order(x)[2:6])})
+    cur_dist_real <- apply(as.matrix(cur_dist), 1, function(x){x[sort(order(x)[2:6])]})
+    cur_ind_real <- lapply(1:ncol(cur_ind_real), function(x){
+        cur_ind_real[cur_dist_real[,x] <= 10,x]
+    })
+    cur_ind_real <- cur_ind_real[lapply(cur_ind_real, length) > 0]
+    cur_ind_test <- table(from(colPair(cur_sce_1)), to(colPair(cur_sce_1)))
+    cur_ind_test <- apply(cur_ind_test, 1, function(x){as.numeric(names(which(x == 1)))})
+    
+    expect_equal(cur_ind_real, cur_ind_test, check.attributes = FALSE)
+   
+    cur_sce_1 <- cur_sce[,cur_sce$ImageNb == 3]
+    
+    cur_dist <- dist(as.matrix(colData(cur_sce_1)[,c("Pos_X", "Pos_Y")]))
+    cur_ind_real <- apply(as.matrix(cur_dist), 1, function(x){sort(order(x)[2:6])})
+    cur_dist_real <- apply(as.matrix(cur_dist), 1, function(x){x[sort(order(x)[2:6])]})
+    cur_ind_real <- lapply(1:ncol(cur_ind_real), function(x){
+        cur_ind_real[cur_dist_real[,x] <= 10,x]
+    })
+    cur_ind_real <- cur_ind_real[lapply(cur_ind_real, length) > 0]
+    cur_ind_test <- table(from(colPair(cur_sce_1)), to(colPair(cur_sce_1)))
+    cur_ind_test <- apply(cur_ind_test, 1, function(x){as.numeric(names(which(x == 1)))})
+    
+    expect_equal(cur_ind_real, cur_ind_test, check.attributes = FALSE)
+    
     # Expansion
     expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
                                  type = "expansion", threshold = 15))
