@@ -60,4 +60,5 @@ Changes in version 0.3.11 (2021-08-19):
 + Added flip_x, flip_y argument for plotSpatial function
 + readSCEfromTXT does not require spot names anymore
 + knn graph construction can be pruned by distance
++ added
 

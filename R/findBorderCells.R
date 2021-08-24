@@ -7,12 +7,23 @@
 #'
 #' @param object a \code{SingleCellExperiment} or \code{SpatialExperiment}
 #' object.
-#' @param img_id 
-#' @param border_dist 
-#' @param BPPARAM 
+#' @param img_id single character indicating the \code{colData(object)} entry
+#' containing the unique image identifiers. 
+#' @param border_dist single numeric defining the distance to the image border.
+#' The image border here is defined as the minimum and maximum among the 
+#' cells' x and y location.
+#' @param coords character vector of length 2 specifying the names of the
+#' \code{colData} (for a \code{SingleCellExperiment} object) or the
+#' \code{spatialCoords} entries of the cells' x and y locations.
 #'  
 #' @examples 
-#' # TODO
+#' library(cytomapper)
+#' data("pancreasSCE")
+#' 
+#' sce <- findBorderCells(pancreasSCE, img_id = "ImageNb", 
+#'                        border_dist = 10)
+#' 
+#' plotSpatial(sce, img_id = "ImageNb", node_color_by = "border_cells")
 #'
 #' @author Nils Eling (\email{nils.eling@@uzh.ch})
 #' 
@@ -23,20 +34,22 @@
 findBorderCells <- function(object,
                             img_id,
                             border_dist,
-                            coords = c("Position_X", "Pos_Y")){
+                            coords = c("Pos_X", "Pos_Y")){
     
     # Input check
     .valid.findBorderCells.input(object, img_id, border_dist, coords)
     
-    if (is(cur_obj, "SpatialExperiment")) {
-        cur_df <- as.data.table(cbind(colData(object)[,img_id], 
+    if (is(object, "SpatialExperiment")) {
+        cur_df <- as.data.table(cbind.data.frame(colData(object)[,img_id], 
                                       spatialCoords(object)[,coords]))
     } else {
         cur_df <- as.data.table(colData(object)[,c(img_id, coords)])
     }
     
+    Pos_X <- Pos_Y <- border_cells <- NULL
+    
     setnames(cur_df, old = names(cur_df), c("img_id", "Pos_X", "Pos_Y")) 
-    cur_df <- cur_df[,border_cells := Pos_X <= min(Pos_X) + border_dist | 
+    cur_df[,border_cells := Pos_X <= min(Pos_X) + border_dist | 
                          Pos_X >= max(Pos_X) - border_dist |
                          Pos_Y <= min(Pos_Y) + border_dist |
                          Pos_Y >= max(Pos_Y) - border_dist, by = img_id]
