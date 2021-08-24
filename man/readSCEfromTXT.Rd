@@ -8,7 +8,8 @@ readSCEfromTXT(
   x,
   pattern = ".txt$",
   metadata_cols = c("Start_push", "End_push", "Pushes_duration", "X", "Y", "Z"),
-  verbose = TRUE
+  verbose = TRUE,
+  read_metal_from_filename = TRUE
 )
 }
 \arguments{
@@ -28,6 +29,9 @@ spotted metals (see details).}
 
 \item{verbose}{logical indicating if additional information regarding the
 spotted and acquired masses should be shown.}
+
+\item{read_metal_from_filename}{should the sample metal and mass be extracted
+from the file/object names?}
 }
 \value{
 returns a SCE object where pixels are stored as columns and acquired
@@ -48,8 +52,8 @@ using the Hyperion imaging system. Each acquisition corresponds to one spot.
 All acquisitions are stored in a single .mcd file and individual acquisitions
 are stored in single .txt files.
 
-This function aggregates these measurements into a single \code{SingleCellExperiment} object.
-For this, two inputs are possible:
+This function aggregates these measurements into a single
+\code{SingleCellExperiment} object. For this, two inputs are possible:
 
 \enumerate{
 \item \code{x} is a path:
@@ -68,6 +72,10 @@ contents of a single .txt file. The names of the list must indicate the
 spotted metal in the format \code{(mt)(mass)}. These names will be stored in
 the \code{colData(sce)$sample_id} slot.
 }
+
+When \code{read_metal_from_filename = FALSE}, the function will not attempt
+to read in the spotted metal isotopes from the file or list names. Therefore,
+only the \code{sample_id} will be set based on the file/list names.
 }
 
 \examples{

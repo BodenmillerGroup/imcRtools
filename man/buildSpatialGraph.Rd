@@ -10,6 +10,7 @@ buildSpatialGraph(
   type = c("expansion", "knn", "delaunay"),
   k = NULL,
   directed = TRUE,
+  k_max_dist = NULL,
   threshold = NULL,
   coords = c("Pos_X", "Pos_Y"),
   name = NULL,
@@ -36,6 +37,10 @@ number of nearest neighbours to search for.}
 
 \item{directed}{should the returned graph be directed? Only effects the k
 nearest neighbour graph (see details).}
+
+\item{k_max_dist}{if \code{type = "knn"}, the maximum distance at which to
+consider neighboring cells. All neighbors within a distance larger than 
+\code{k_max_dist} will be excluded from graph construction.}
 
 \item{threshold}{(when \code{type = "expansion"}) single numeric specifying
 the maximum distance for considering neighbours}

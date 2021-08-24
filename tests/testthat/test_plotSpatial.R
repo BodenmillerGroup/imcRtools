@@ -491,6 +491,21 @@ test_that("plotSpatial function works", {
     expect_s3_class(p, "ggraph")
     expect_silent(print(p))
     
+    p <- plotSpatial(cur_sce, img_id = "ImageName", node_color_by = "CellType",
+                     flip_y = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", node_color_by = "CellType",
+                     flip_x = TRUE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", node_color_by = "CellType",
+                     flip_x = TRUE, flip_y = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
     ## Subsetting
     cur_sce2 <- cur_sce[,cur_sce$Pattern]
     
@@ -741,12 +756,24 @@ test_that("plotSpatial function works", {
                  "Unknown colour name: test",
                  fixed = TRUE)
     
-    p <- plotSpatial(cur_sce, img_id = "ImageNb",
-                     draw_edges = TRUE, colPairName = "knn_interaction_graph",
-                     edge_width_fix = "test")
+    expect_error(plotSpatial(cur_sce, img_id = "ImageNb",
+                             flip_x = "test"), 
+                 "'flip_x' must be a single logical",
+                 fixed = TRUE)
     
-    expect_error(print(p), 
-                 "non-numeric argument to binary operator",
+    expect_error(plotSpatial(cur_sce, img_id = "ImageNb",
+                             flip_x = c(1, 2)), 
+                 "'flip_x' must be a single logical",
+                 fixed = TRUE)
+    
+    expect_error(plotSpatial(cur_sce, img_id = "ImageNb",
+                             flip_y = "test"), 
+                 "'flip_y' must be a single logical",
+                 fixed = TRUE)
+    
+    expect_error(plotSpatial(cur_sce, img_id = "ImageNb",
+                             flip_y = c(1, 2)), 
+                 "'flip_y' must be a single logical",
                  fixed = TRUE)
     
 })

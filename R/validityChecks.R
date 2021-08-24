@@ -1,15 +1,44 @@
 # Check function for SCE from TXT function
 #' @importFrom stringr str_extract
 .valid.readSCEfromTXT.input <- function(txt_list, cur_names,
-                                        metadata_cols, verbose){
+                                        metadata_cols, verbose,
+                                        read_metal_from_filename){
 
     # Check if names are all of the format Mt123 where Mt is the metal name
     # and 123 is the mass
-    cur_mass <- str_extract(cur_names, "[0-9]{2,3}$")
-    cur_names <- cur_names[order(as.numeric(cur_mass))]
-
-    if (!all(grepl("^[A-Za-z]{2}[0-9]{2,3}$", cur_names))) {
-        stop("Not all names match the pattern (mt)(mass).")
+    if (read_metal_from_filename) {
+        cur_mass <- str_extract(cur_names, "[0-9]{2,3}$")
+        cur_names <- cur_names[order(as.numeric(cur_mass))]
+        
+        if (!all(grepl("^[A-Za-z]{2}[0-9]{2,3}$", cur_names))) {
+            stop("Not all names match the pattern (mt)(mass).")
+        }
+        
+        # Check if spotted channel is also open
+        cur_channels <- str_extract(colnames(txt_list[[1]]),
+                                    "[A-Za-z]{1,2}[0-9]{2,3}Di")
+        cur_channels <- cur_channels[!is.na(cur_channels)]
+        cur_channels <- sub("Di", "", cur_channels)
+        
+        # Verbose option will print possible missmatched between acquired and open
+        # channels
+        spot_not_ac <- cur_names[!(cur_names %in% cur_channels)]
+        ac_not_spot <- cur_channels[!(cur_channels %in% cur_names)]
+        if (verbose) {
+            cat("Spotted channels: ", paste(cur_names, collapse = ", "))
+            cat("\n")
+            cat("Acquired channels: ", paste(cur_channels, collapse = ", "))
+            cat("\n")
+            cat("Channels spotted but not acquired: ",
+                paste(spot_not_ac, collapse = ", "))
+            cat("\n")
+            cat("Channels acquired but not spotted: ",
+                paste(ac_not_spot, collapse = ", "))
+        }
+        
+        if (!all(cur_names %in% cur_channels)) {
+            stop("Not all spotted channels were acquired.")
+        }
     }
 
     # Check if metadata_cols are in each file
@@ -20,33 +49,6 @@
     if (!all(unlist(cur_check))) {
         stop("Not all 'metadata_cols' are present in entries to 'txt_list'")
     }
-
-    # Check if spotted channel is also open
-    cur_channels <- str_extract(colnames(txt_list[[1]]),
-                                "[A-Za-z]{1,2}[0-9]{2,3}Di")
-    cur_channels <- cur_channels[!is.na(cur_channels)]
-    cur_channels <- sub("Di", "", cur_channels)
-
-    # Verbose option will print possible missmatched between acquired and open
-    # channels
-    spot_not_ac <- cur_names[!(cur_names %in% cur_channels)]
-    ac_not_spot <- cur_channels[!(cur_channels %in% cur_names)]
-    if (verbose) {
-        cat("Spotted channels: ", paste(cur_names, collapse = ", "))
-        cat("\n")
-        cat("Acquired channels: ", paste(cur_channels, collapse = ", "))
-        cat("\n")
-        cat("Channels spotted but not acquired: ",
-                paste(spot_not_ac, collapse = ", "))
-        cat("\n")
-        cat("Channels acquired but not spotted: ",
-                paste(ac_not_spot, collapse = ", "))
-    }
-
-    if (!all(cur_names %in% cur_channels)) {
-        stop("Not all spotted channels were acquired.")
-    }
-
 }
 
 #' @importFrom SummarizedExperiment colData assayNames
@@ -489,7 +491,7 @@
 
 #' @importFrom SpatialExperiment spatialCoordsNames
 .valid.buildSpatialGraph.input <- function(object, type, img_id, k, threshold, coords,
-                                    name, directed){
+                                    name, directed, k_max_dist){
 
     if (!is(object, "SingleCellExperiment")) {
         stop("'object' not of type 'SingleCellExperiment'.")
@@ -524,6 +526,11 @@
         
         if (length(k) != 1 || !is.numeric(k)) {
             stop("'k' must be a single numeric")
+        }
+        
+        if (!is.null(k_max_dist) & (length(k_max_dist) != 1 || 
+                                    !is.numeric(k_max_dist))) {
+            stop("'k_max_dist' must be a single numeric")
         }
         
     }
@@ -630,7 +637,8 @@
                                      node_shape_by, node_size_by, edge_color_by,
                                      assay_type, edge_width_by, draw_edges, 
                                      directed,  arrow,  end_cap, colPairName, 
-                                     nodes_first, ncols, nrows, scales){
+                                     nodes_first, ncols, nrows, scales, 
+                                     flip_x, flip_y){
     
     if (!is(object, "SingleCellExperiment")) {
         stop("'object' not of type 'SingleCellExperiment'.")
@@ -773,6 +781,14 @@
     if (!scales %in% c("fixed", "free_x", "free_y", "free")) {
         stop("'scales' should be one of 'fixed', 'free_x', 'free_y', 'free'.")
     }
+    
+    if (length(flip_y) != 1 | !is.logical(flip_y)) {
+        stop("'flip_y' must be a single logical")
+    }
+    
+    if (length(flip_x) != 1 | !is.logical(flip_x)) {
+        stop("'flip_x' must be a single logical")
+    }
 }
 
 .valid.countInteractions.input <- function(object, group_by, label, method,
@@ -832,5 +848,37 @@
     
     if (p_threshold < 0 | p_threshold > 1) {
         stop("'p_threshold' must be a single numeric between 0 and 1.")
+    }
+}
+
+.valid.findBorderCells.input <- function(object, img_id, border_dist, coords){
+    if (!is(object, "SingleCellExperiment")) {
+        stop("'object' not of type 'SingleCellExperiment'.")
+    }
+    
+    if (length(img_id) != 1 | !is.character(img_id)) {
+        stop("'img_id' must be a single string.")
+    }
+    
+    if (!img_id %in% names(colData(object))) {
+        stop("'img_id' not in colData(object).")
+    }
+    
+    if (length(coords) != 2 | !all(is.character(coords))) {
+        stop("'coords' must be a character vector of length 2.")
+    }
+    
+    if (is(object, "SpatialExperiment")) {
+        if (!all(coords %in% spatialCoordsNames(object))) {
+            stop("'coords' not in spatialCoords(object).")
+        }
+    } else {
+        if (!all(coords %in% names(colData(object)))) {
+            stop("'coords' not in colData(object).")
+        }
+    }
+    
+    if (length(border_dist) != 1 | !is.numeric(border_dist)) {
+        stop("'border_dist' must be a single numeric.")
     }
 }

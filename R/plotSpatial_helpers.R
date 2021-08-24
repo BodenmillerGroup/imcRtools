@@ -130,12 +130,12 @@
 }
 
 # Post process the plots
-#' @importFrom ggplot2 ggtitle 
+#' @importFrom ggplot2 ggtitle scale_x_reverse scale_y_reverse
 #' @importFrom viridis scale_color_viridis
 .postProcessPlot <- function(p, object, img_id, nrows, ncols, node_color_by,
                              node_color_fix,
                              node_shape_fix, node_size_fix, edge_color_fix, 
-                             edge_width_fix, scales){
+                             edge_width_fix, scales, flip_x, flip_y){
     
     if (!is.null(node_color_fix)) {
         names(node_color_fix) <- as.character(node_color_fix)
@@ -177,4 +177,13 @@
             ggtitle(unique(colData(object))[[img_id]])
     }
     
+    if (flip_x) {
+        p <- p + scale_x_reverse()
+    }
+    
+    if (flip_y) {
+        p <- p + scale_y_reverse()
+    }
+    
+    return(p)
 }

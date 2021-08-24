@@ -19,7 +19,9 @@
 #' .txt files should be saved in the \code{colData(sce)} slot.
 #' @param verbose logical indicating if additional information regarding the
 #' spotted and acquired masses should be shown.
-
+#' @param read_metal_from_filename should the sample metal and mass be extracted
+#' from the file/object names?
+#' 
 #' @return returns a SCE object where pixels are stored as columns and acquired
 #' channels are stored as rows.
 #' 
@@ -30,8 +32,8 @@
 #' All acquisitions are stored in a single .mcd file and individual acquisitions
 #' are stored in single .txt files.
 #' 
-#' This function aggregates these measurements into a single \code{SingleCellExperiment} object.
-#' For this, two inputs are possible:
+#' This function aggregates these measurements into a single
+#' \code{SingleCellExperiment} object. For this, two inputs are possible:
 #' 
 #' \enumerate{
 #' \item \code{x} is a path:
@@ -50,6 +52,10 @@
 #' spotted metal in the format \code{(mt)(mass)}. These names will be stored in
 #' the \code{colData(sce)$sample_id} slot.
 #' }
+#' 
+#' When \code{read_metal_from_filename = FALSE}, the function will not attempt
+#' to read in the spotted metal isotopes from the file or list names. Therefore,
+#' only the \code{sample_id} will be set based on the file/list names.
 #'
 #' @examples
 #' # Read files from path
@@ -76,7 +82,7 @@
 #' @importFrom SingleCellExperiment SingleCellExperiment
 #' @importFrom S4Vectors DataFrame
 #' @importFrom SummarizedExperiment colData<- rowData<-
-#' @importFrom stringr str_extract
+#' @importFrom stringr str_extract str_split
 #' @importFrom readr read_delim
 #' @export
 readSCEfromTXT <- function(x, 
@@ -84,7 +90,8 @@ readSCEfromTXT <- function(x,
                            metadata_cols = c("Start_push", "End_push", 
                                                 "Pushes_duration", "X", 
                                                 "Y", "Z"),
-                           verbose = TRUE){
+                           verbose = TRUE,
+                           read_metal_from_filename = TRUE){
     
     if (all(is.character(x)) & length(x) == 1) {
         
@@ -98,11 +105,15 @@ readSCEfromTXT <- function(x,
             stop("Files could not be read in.")
         }
         
-        cur_names <- str_extract(cur_names, "[A-Za-z]{1,2}[0-9]{2,3}")
-    
+        if (read_metal_from_filename) {
+            cur_names <- str_extract(cur_names, "[A-Za-z]{1,2}[0-9]{2,3}")
+        } else {
+            cur_names <- sub("\\.[^.]*$", "", basename(cur_names))
+        }
         
         txt_list <- list.files(x, pattern = pattern, full.names = TRUE)
-        txt_list <- suppressMessages(lapply(txt_list, read_delim, delim = "\t"))
+        txt_list <- lapply(txt_list, read_delim, delim = "\t", 
+                           show_col_types = FALSE)
         txt_list <- lapply(txt_list, as.data.frame)
         names(txt_list) <- cur_names
         
@@ -119,16 +130,23 @@ readSCEfromTXT <- function(x,
     }
     
     .valid.readSCEfromTXT.input(txt_list, cur_names,
-                                metadata_cols, verbose)
+                                metadata_cols, verbose,
+                                read_metal_from_filename)
    
     cur_out <- do.call(rbind, txt_list)
     
     # Construct SCE object
     cell_meta <- DataFrame(cur_out[metadata_cols]) 
-    cell_meta$sample_id <- str_extract(rownames(cell_meta), 
-                                       "^[A-Za-z]{1,2}[0-9]{2,3}")
-    cell_meta$sample_metal <- str_extract(cell_meta$sample_id, "^[A-Za-z]{1,2}")
-    cell_meta$sample_mass <- str_extract(cell_meta$sample_id, "[0-9]{2,3}$")
+    
+    if (read_metal_from_filename) {
+        cell_meta$sample_id <- str_extract(rownames(cell_meta), 
+                                           "^[A-Za-z]{1,2}[0-9]{2,3}")
+        cell_meta$sample_metal <- str_extract(cell_meta$sample_id, "^[A-Za-z]{1,2}")
+        cell_meta$sample_mass <- str_extract(cell_meta$sample_id, "[0-9]{2,3}$")
+    } else {
+        cell_meta$sample_id <- str_split(rownames(cell_meta), "\\.", 
+                                         simplify = TRUE)[,1]
+    }
     
     cur_counts <- cur_out[grepl("[A-Za-z]{1,2}[0-9]{2,3}", colnames(cur_out))]
     cur_counts <- t(cur_counts)
@@ -144,5 +162,4 @@ readSCEfromTXT <- function(x,
     rowData(sce) <- channel_meta
     
     return(sce)
-       
 }
