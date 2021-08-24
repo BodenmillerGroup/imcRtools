@@ -74,7 +74,7 @@ in form of edges between points." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.10</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.11</span>
       </span>
     </div>
 
@@ -147,7 +147,9 @@ in form of edges between points.</p>
   nodes_first <span class='op'>=</span> <span class='cn'>TRUE</span>,
   ncols <span class='op'>=</span> <span class='cn'>NULL</span>,
   nrows <span class='op'>=</span> <span class='cn'>NULL</span>,
-  scales <span class='op'>=</span> <span class='st'>"free"</span>
+  scales <span class='op'>=</span> <span class='st'>"free"</span>,
+  flip_x <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  flip_y <span class='op'>=</span> <span class='cn'>TRUE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -266,6 +268,14 @@ When <code>nodes_first = FALSE</code>, the edges will be drawn first</p></td>
       <td><p>one of <code>"free"</code>, <code>"fixed"</code>, <code>"free_x"</code> or 
 <code>"free_y"</code> indicating if x- and y-axis ranges should be fixed across
 all images.</p></td>
+    </tr>
+    <tr>
+      <th>flip_x</th>
+      <td><p>flip the x-axis?</p></td>
+    </tr>
+    <tr>
+      <th>flip_y</th>
+      <td><p>flip the y-axis?</p></td>
     </tr>
     </table>
 

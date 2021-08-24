@@ -76,7 +76,7 @@ for a single stain across all open channels." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.10</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.11</span>
       </span>
     </div>
 
@@ -132,7 +132,8 @@ for a single stain across all open channels.</p>
   <span class='va'>x</span>,
   pattern <span class='op'>=</span> <span class='st'>".txt$"</span>,
   metadata_cols <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Start_push"</span>, <span class='st'>"End_push"</span>, <span class='st'>"Pushes_duration"</span>, <span class='st'>"X"</span>, <span class='st'>"Y"</span>, <span class='st'>"Z"</span><span class='op'>)</span>,
-  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>
+  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  read_metal_from_filename <span class='op'>=</span> <span class='cn'>TRUE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -163,6 +164,11 @@ spotted metals (see details).</p></dd>
       <td><p>logical indicating if additional information regarding the
 spotted and acquired masses should be shown.</p></td>
     </tr>
+    <tr>
+      <th>read_metal_from_filename</th>
+      <td><p>should the sample metal and mass be extracted
+from the file/object names?</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -178,8 +184,8 @@ channels are stored as rows.</p>
 using the Hyperion imaging system. Each acquisition corresponds to one spot.
 All acquisitions are stored in a single .mcd file and individual acquisitions
 are stored in single .txt files.</p>
-<p>This function aggregates these measurements into a single <code>SingleCellExperiment</code> object.
-For this, two inputs are possible:</p>
+<p>This function aggregates these measurements into a single
+<code>SingleCellExperiment</code> object. For this, two inputs are possible:</p>
 <ol>
 <li><p><code>x</code> is a path:
 By default all .txt files are read in from the specified path. Here, the path
@@ -197,6 +203,9 @@ spotted metal in the format <code>(mt)(mass)</code>. These names will be stored 
 the <code>colData(sce)$sample_id</code> slot.</p></li>
 </ol>
 
+<p>When <code>read_metal_from_filename = FALSE</code>, the function will not attempt
+to read in the spotted metal isotopes from the file or list names. Therefore,
+only the <code>sample_id</code> will be set based on the file/list names.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p><a href='https://www.sciencedirect.com/science/article/pii/S1550413118306910'>Chevrier,
