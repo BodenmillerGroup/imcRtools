@@ -850,3 +850,35 @@
         stop("'p_threshold' must be a single numeric between 0 and 1.")
     }
 }
+
+.valid.findBorderCells.input <- function(object, img_id, border_dist, coords){
+    if (!is(object, "SingleCellExperiment")) {
+        stop("'object' not of type 'SingleCellExperiment'.")
+    }
+    
+    if (length(img_id) != 1 | !is.character(img_id)) {
+        stop("'img_id' must be a single string.")
+    }
+    
+    if (!img_id %in% names(colData(object))) {
+        stop("'img_id' not in colData(object).")
+    }
+    
+    if (length(coords) != 2 | !all(is.character(coords))) {
+        stop("'coords' must be a character vector of length 2.")
+    }
+    
+    if (is(object, "SpatialExperiment")) {
+        if (!all(coords %in% spatialCoordsNames(object))) {
+            stop("'coords' not in spatialCoords(object).")
+        }
+    } else {
+        if (!all(coords %in% names(colData(object)))) {
+            stop("'coords' not in colData(object).")
+        }
+    }
+    
+    if (length(border_dist) != 1 | !is.numeric(border_dist)) {
+        stop("'border_dist' must be a single numeric.")
+    }
+}
