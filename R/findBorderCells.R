@@ -15,6 +15,9 @@
 #' @param coords character vector of length 2 specifying the names of the
 #' \code{colData} (for a \code{SingleCellExperiment} object) or the
 #' \code{spatialCoords} entries of the cells' x and y locations.
+#' 
+#' @return an object of \code{class(object)} containing the logical
+#' \code{border_cells} entry in the \code{colData} slot.
 #'  
 #' @examples 
 #' library(cytomapper)

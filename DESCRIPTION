@@ -9,9 +9,9 @@ Authors@R:
       person("Vito", "Zanotelli", role = "ctb"),
       person("Jana", "Fischer", role = "ctb"),
       person("Daniel", "Schulz", role = "ctb"))
-License: GPL (>= 2)
+License: GPL-3
 Depends:
-    R (>= 4.0),
+    R (>= 4.1),
     SpatialExperiment
 Imports:
     S4Vectors,

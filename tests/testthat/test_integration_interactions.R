@@ -37,23 +37,23 @@ prepare_tables <- function(dat_obj, dat_rel, objname=DEFAULTOBJNAME,
     
     cols = c(col_imnr, col_objnr, col_label)
     
-    has_objname = F
+    has_objname = FALSE
     if (col_objname %in% colnames(dat_obj)){
         cols = c(cols, col_objname)
-        has_objname = T
+        has_objname = TRUE
     }
     
-    has_group = F
+    has_group = FALSE
     if (!is.null(col_group)){
         cols = c(cols, col_group)
-        has_group = T
+        has_group = TRUE
     }
     
     # subset and copy the relevant part of the data
-    dat_obj <- copy(dat_obj[,cols, with=F])
+    dat_obj <- copy(dat_obj[,cols, with=FALSE])
     
     # set the objectname if needed
-    if (has_objname == F){
+    if (has_objname == FALSE){
         dat_obj[,(col_objname) := objname]
     } else{
         dat_obj = dat_obj[get(col_objname) == objname]
@@ -61,7 +61,7 @@ prepare_tables <- function(dat_obj, dat_rel, objname=DEFAULTOBJNAME,
     }
     
     # set the group if needed
-    if (has_group == F){
+    if (has_group == FALSE){
         col_group = GROUP
         dat_obj[,(col_group):=get(col_imnr)]
     }
@@ -82,26 +82,26 @@ prepare_tables <- function(dat_obj, dat_rel, objname=DEFAULTOBJNAME,
                                (get(FIRSTOBJNAME) == objname)&
                                (get(SECONDOBJNAME) == objname), ][, c(FIRSTOBJNAME, FIRSTIMAGENUMBER, FIRSTOBJNUMBER,
                                                                       SECONDOBJNAME,SECONDIMAGENUMBER,  SECONDOBJNUMBER,
-                                                                      RELATIONSHIP), with=F])
+                                                                      RELATIONSHIP), with=FALSE])
     
     
     
     # give new ids
     dat_obj[, (OBJID) := 1:.N]
     
-    dat_rel <- merge(dat_rel, dat_obj[, c(IMGNR, OBJNR, OBJID, GROUP), with=F],
+    dat_rel <- merge(dat_rel, dat_obj[, c(IMGNR, OBJNR, OBJID, GROUP), with=FALSE],
                      by.x=c(FIRSTIMAGENUMBER, FIRSTOBJNUMBER),
                      by.y=c(IMGNR, OBJNR)
     )
     setnames(dat_rel, OBJID, FIRSTOBJID)
-    dat_rel <- merge(dat_rel, dat_obj[, c(IMGNR, OBJNR, OBJID), with=F],
+    dat_rel <- merge(dat_rel, dat_obj[, c(IMGNR, OBJNR, OBJID), with=FALSE],
                      by.x=c(SECONDIMAGENUMBER, SECONDOBJNUMBER),
                      by.y=c(IMGNR, OBJNR)
     )
     
     setnames(dat_rel, OBJID, SECONDOBJID)
     dat_rel[, (COUNTVAR) := 1]
-    dat_rel <- dat_rel[, c(GROUP, FIRSTOBJID, SECONDOBJID, COUNTVAR), with=F]
+    dat_rel <- dat_rel[, c(GROUP, FIRSTOBJID, SECONDOBJID, COUNTVAR), with=FALSE]
     return(list(dat_obj, dat_rel))
 }
 
@@ -162,8 +162,8 @@ aggregate_classic_patch<- function(dat_nb, patch_size){
 
 calc_p_vals<- function(dat_baseline, dat_perm, n_perm, p_tresh=0.01){
     dat_perm <-
-        merge(dat_perm, dat_baseline[, c(FIRSTLABEL, SECONDLABEL, GROUP, COUNTVAR), with=F], by=c(FIRSTLABEL, SECONDLABEL, GROUP),
-              suffixes = c("_perm", "_obs"),all=T)
+        merge(dat_perm, dat_baseline[, c(FIRSTLABEL, SECONDLABEL, GROUP, COUNTVAR), with=FALSE], by=c(FIRSTLABEL, SECONDLABEL, GROUP),
+              suffixes = c("_perm", "_obs"),all=TRUE)
     dat_perm[, ':='(ct_perm=replace(ct_perm, is.na(ct_perm), 0),
                     ct_obs=replace(ct_obs, is.na(ct_obs), 0)
     )]
@@ -173,7 +173,7 @@ calc_p_vals<- function(dat_baseline, dat_perm, n_perm, p_tresh=0.01){
                              p_lt=(n_perm-sum(ct_perm>ct_obs)+1)/(n_perm+1)) , by=.(group, FirstLabel, SecondLabel)]
     
     dat_stat[, direction := p_gt < p_lt]
-    dat_stat[, p := p_gt * direction + p_lt * (direction == F)]
+    dat_stat[, p := p_gt * direction + p_lt * (direction == FALSE)]
     dat_stat[, sig := p < p_tresh]
     dat_stat[, sigval := as.integer(sig)*sign((direction-0.5))]
     dat_stat
@@ -191,7 +191,7 @@ test_that("neighbourhoodPermTest gives same results as neighbouRhood", {
     dat_relation <- fread(fn_relationship)
     
     set.seed(123)
-    cur_label <- sample.int(10, size=nrow(dat_cells), replace = T)
+    cur_label <- sample.int(10, size=nrow(dat_cells), replace = TRUE)
     dat_cells[, label := cur_label]
     dat_cells[, group := ImageNumber]
     
