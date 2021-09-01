@@ -25,6 +25,8 @@ Depends:
     SpatialExperiment
 Imports:
     S4Vectors,
+    stats,
+    utils,
     SummarizedExperiment,
     methods,
     pheatmap,
