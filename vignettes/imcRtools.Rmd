@@ -1,5 +1,5 @@
 ---
-title: "R tools for IMC data analysis"
+title: "Tools for IMC data analysis"
 date: "`r BiocStyle::doc_date()`"
 package: "`r BiocStyle::pkg_ver('imcRtools')`"
 author:
@@ -8,22 +8,25 @@ author:
   - Department for Quantitative Biomedicine, University of Zurich
   - Institute for Molecular Health Sciences, ETH Zurich
   email: nils.eling@dqbm.uzh.ch
-- name: Tobias Hoch
-  affiliation: 
-  - Department for Quantitative Biomedicine, University of Zurich
-  - Institute for Molecular Health Sciences, ETH Zurich
-- name: Daniel Schulz
-  affiliation: 
-  - Department for Quantitative Biomedicine, University of Zurich
-  - Institute for Molecular Health Sciences, ETH Zurich
 output:
     BiocStyle::html_document:
         toc_float: yes
 bibliography: library.bib
 abstract: |
-    Abstract
+    This R package supports the handling and analysis of imaging mass cytometry 
+    and other highly multiplexed imaging data. The main functionality includes 
+    reading in single-cell data after image segmentation and measurement, data 
+    formatting to perform channel spillover correction and a number of spatial 
+    analysis approaches. First, cell-cell interactions are detected via spatial 
+    graph construction; these graphs can be visualized with cells representing 
+    nodes and interactions representing edges. Furthermore, per cell, its direct 
+    neighbours are summarized to allow spatial clustering. Per image/grouping 
+    level, interactions between types of cells are counted, averaged and 
+    compared against random permutations. In that way, types of cells that 
+    interact more (attraction) or less (avoidance) frequently than expected by 
+    chance are detected. 
 vignette: |
-    %\VignetteIndexEntry{"R tools for IMC data analysis"}
+    %\VignetteIndexEntry{"Tools for IMC data analysis"}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
 ---
@@ -39,9 +42,32 @@ library(imcRtools)
 
 # Introduction
 
-This vignette gives an introduction to the `imcRtools` package.
+This vignette gives an introduction to handling and analyzing imaging mass
+cytometry (IMC) and other highly-multiplexed imaging data in R. The `imcRtools`
+package relies on expression and morphological features extracted from
+multi-channel images using corresponding segmentation masks. A description
+of data types and segmentation approaches can be found below 
+([data types](#dataTypes), [segmentation](#segmentation)). However, due to
+shared data structures, the functionalities of the `imcRtools` package are
+applicable to most highly multiplexed imaging modalities.
 
-## Imaging mass cytometry
+## Overview
+
+The `imcRtools` package exports functions and example data to perform the 
+following analyses:
+
+1. Read in 
+2.
+3.
+4. 
+
+## Highly multiplexed imaging
+
+### Imaging mass cytometry
+
+### Data types {#dataTypes}
+
+### Segmentation and feature extraction {#segmentation}
 
 # Example data
 

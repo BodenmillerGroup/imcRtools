@@ -62,3 +62,7 @@ Changes in version 0.3.11 (2021-08-19):
 + knn graph construction can be pruned by distance
 + added
 
+Changes in version 0.3.12 (2021-09-01):
+
++ clean up for Bioconductor submission
+
