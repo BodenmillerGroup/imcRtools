@@ -247,9 +247,8 @@ the lack of `spatialCoords(sce)`. Here, the spatial coordinates are stored in `c
 
 The [ImcSegmentationPipeline](https://github.com/BodenmillerGroup/ImcSegmentationPipeline)
 produces a number of output files. By default, all single-cell features are
-measured and exported. To select the features of interest, the `imcRtools`
-package provides the `show_cpout_features` function. Here, the exported features
-can be interactively browsed:
+measured and exported. To browse and select the features of interest, the 
+`imcRtools` package provides the `show_cpout_features` function:
 
 ```{r show_cpout_features}
 path <- system.file("extdata/mockData/cpout", package = "imcRtools")
@@ -259,7 +258,9 @@ show_cpout_features(path)
 
 By default, `read_cpout` will read in the mean intensity per channel and cell 
 from "hot pixel" filtered image stacks specified via 
-`intensities = "Intensity_MeanIntensity_FullStackFiltered"`:
+`intensities = "Intensity_MeanIntensity_FullStackFiltered"`. Please refer to
+`?read_cpout` for the full documentation.
+
 
 ```{r read_cpout}
 cur_path <- system.file("extdata/mockData/cpout", package = "imcRtools")
@@ -288,10 +289,9 @@ cur_path <- system.file("extdata/mockData/steinbock", package = "imcRtools")
 (sce <- read_steinbock(cur_path, return_as = "sce"))
 ```
 
-For more information on the `read_steinbock` function, please refer to
-`?read_steinbock`.
+For more information, please refer to `?read_steinbock`.
 
-## Read raw .txt files into `Image` objects
+## Read raw .txt files into Image objects
 
 For reading in and visualization of multi-channel images and segmentation masks,
 please refer to the `r BiocStyle::Biocpkg("cytomapper")` package. The
@@ -308,10 +308,13 @@ cur_CytoImageList <- readImagefromTXT(path)
 cur_CytoImageList
 ```
 
+By specifying the `pattern` argument, individual or a subset of files can be 
+read in. For more information, please refer to `?readImagefromTXT`.
+
 # Spillover correction {#spillover}
 
 When acquiring IMC images, pixel intensities can be influenced by spillover 
-from neighbouring channels. To correct for this, Chevrier _et al._ have 
+from neighboring channels. To correct for this, Chevrier _et al._ have 
 developed a staining protocol to acquire individually spotted metal isotopes
 [@Chevrier2017].
 Based on these measurements, spillover into neighbouring channels can be
