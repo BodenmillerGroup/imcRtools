@@ -38,7 +38,9 @@ show_cpout_features <- function(path,
     display <- match.arg(display)
     
     if (!file.exists(file.path(path, eval(parse(text = display))))){
-        stop(paste0("'", eval(parse(text = display)), "' does not exist in ", path))
+        cur_text <- paste0("'", eval(parse(text = display)), 
+                           "' does not exist in ", path)
+        stop(cur_text)
     }
     
     cur_features <- vroom(file.path(path, eval(parse(text = display))), 

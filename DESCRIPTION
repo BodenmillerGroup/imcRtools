@@ -1,20 +1,33 @@
 Package: imcRtools
-Version: 0.3.11
+Version: 0.3.12
 Title: Methods for imaging mass cytometry data analysis
 Description: 
-    This package contains functions for the low level and spatial analysis of IMC data.  
+    This R package supports the handling and analysis of imaging mass cytometry 
+    and other highly multiplexed imaging data. The main functionality includes 
+    reading in single-cell data after image segmentation and measurement, data 
+    formatting to perform channel spillover correction and a number of spatial 
+    analysis approaches. First, cell-cell interactions are detected via spatial 
+    graph construction; these graphs can be visualized with cells representing 
+    nodes and interactions representing edges. Furthermore, per cell, its direct 
+    neighbours are summarized to allow spatial clustering. Per image/grouping 
+    level, interactions between types of cells are counted, averaged and 
+    compared against random permutations. In that way, types of cells that 
+    interact more (attraction) or less (avoidance) frequently than expected by 
+    chance are detected. 
 Authors@R: 
-    c(person("Nils", "Eling", role = c("aut", "cre"), email = "nils.eling@uzh.ch"),
+    c(person("Nils", "Eling", role = c("aut", "cre"), email = "nils.eling@dqbm.uzh.ch"),
       person("Tobias", "Hoch", role = "ctb"),
       person("Vito", "Zanotelli", role = "ctb"),
       person("Jana", "Fischer", role = "ctb"),
       person("Daniel", "Schulz", role = "ctb"))
-License: GPL (>= 2)
+License: GPL-3
 Depends:
-    R (>= 4.0),
+    R (>= 4.1),
     SpatialExperiment
 Imports:
     S4Vectors,
+    stats,
+    utils,
     SummarizedExperiment,
     methods,
     pheatmap,
@@ -47,7 +60,7 @@ Suggests:
     rmarkdown,
     markdown,
     testthat
-biocViews: ImmunoOncology, Software, SingleCell, 
+biocViews: Software, SingleCell, GeneExpression, DataImport
 VignetteBuilder: knitr
 URL: https://github.com/BodenmillerGroup/imcRtools
 BugReports: https://github.com/BodenmillerGroup/imcRtools/issues

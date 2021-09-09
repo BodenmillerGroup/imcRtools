@@ -1,5 +1,5 @@
 ---
-title: "R tools for IMC data analysis"
+title: "Tools for IMC data analysis"
 date: "`r BiocStyle::doc_date()`"
 package: "`r BiocStyle::pkg_ver('imcRtools')`"
 author:
@@ -8,22 +8,25 @@ author:
   - Department for Quantitative Biomedicine, University of Zurich
   - Institute for Molecular Health Sciences, ETH Zurich
   email: nils.eling@dqbm.uzh.ch
-- name: Tobias Hoch
-  affiliation: 
-  - Department for Quantitative Biomedicine, University of Zurich
-  - Institute for Molecular Health Sciences, ETH Zurich
-- name: Daniel Schulz
-  affiliation: 
-  - Department for Quantitative Biomedicine, University of Zurich
-  - Institute for Molecular Health Sciences, ETH Zurich
 output:
     BiocStyle::html_document:
         toc_float: yes
 bibliography: library.bib
 abstract: |
-    Abstract
+    This R package supports the handling and analysis of imaging mass cytometry 
+    and other highly multiplexed imaging data. The main functionality includes 
+    reading in single-cell data after image segmentation and measurement, data 
+    formatting to perform channel spillover correction and a number of spatial 
+    analysis approaches. First, cell-cell interactions are detected via spatial 
+    graph construction; these graphs can be visualized with cells representing 
+    nodes and interactions representing edges. Furthermore, per cell, its direct 
+    neighbours are summarized to allow spatial clustering. Per image/grouping 
+    level, interactions between types of cells are counted, averaged and 
+    compared against random permutations. In that way, types of cells that 
+    interact more (attraction) or less (avoidance) frequently than expected by 
+    chance are detected. 
 vignette: |
-    %\VignetteIndexEntry{"R tools for IMC data analysis"}
+    %\VignetteIndexEntry{"Tools for IMC data analysis"}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
 ---
@@ -39,11 +42,114 @@ library(imcRtools)
 
 # Introduction
 
-This vignette gives an introduction to the `imcRtools` package.
+This vignette gives an introduction to handling and analyzing imaging mass
+cytometry (IMC) and other highly-multiplexed imaging data in R. The `imcRtools`
+package relies on expression and morphological features extracted from
+multi-channel images using corresponding segmentation masks. A description
+of data types and segmentation approaches can be found below 
+([data types](#dataTypes), [segmentation](#segmentation)). However, due to
+shared data structures, the functionalities of the `imcRtools` package are
+applicable to most highly multiplexed imaging modalities.
 
-## Imaging mass cytometry
+## Overview
 
-# Example data
+The `imcRtools` package exports functions and example data to perform the 
+following analyses:
+
+1. [Read in pre-processed data](#read-in-data) 
+2. [Perform spillover correction for IMC data](#spillover)
+3. [Build](#build-graph) and [visualize](#viz-cells) spatial graphs
+4. [Aggregate across neighbouring cells](#aggregate-neighbors) for spatial 
+clustering 
+5. [Test the attraction or avoidance between celltypes](#test-neighborhood)
+
+To highlight the usability of these function, the `imcRtools` package also
+exports a number of [test data files](#test-data).
+
+## Highly multiplexed imaging
+
+Highly multiplexed imaging techniques [@Bodenmiller2016] such as imaging mass
+cytometry (IMC) [@Giesen2014], multiplexed ion beam imaging (MIBI) [@Angelo2014] 
+and cyclic immunofluorescence techniques [@Lin2018, @Gut2018]
+acquire read-outs of the expression of tens of protein in a spatially resolved
+manner. After technology-dependent data pre-processing, the raw data files are
+comparable: multi-channel images for the dimensions `x`, `y`, and `c`, where `x`
+and `y` define the number of pixels (`x * y`) per image and `c` the number
+of proteins (also refered to as "markers") measured per image. More info on the 
+[data types](#dataTypes) and [further pre-processing](#segmentation) can be 
+found below.
+
+Increased multiplexity compared to epitope-based techniques is achieved using
+single-cell resolved spatial transcriptomics techniques including MERFISH
+[@Chen2015] and seqFISH [@Lubeck2014]. However, data produced by these
+techniques required different pre-processing steps. Nevertheless, analysis
+performed on the single-cell level is equally applicable.
+
+### Imaging mass cytometry
+
+IMC [@Giesen2014] is a highly multiplexed imaging approach to measure spatial
+protein abundance. In IMC, tissue sections on slides are stained with a mix of
+around 40 metal-conjugated antibodies prior to laser ablation with $1\mu{}m$
+resolution. The ablated material is transferred to a mass cytometer for
+time-of-flight detection of the metal ions [@Giesen2014]. At an ablation 
+frequency of 200Hz, a 1mm x 1mm region can be acquired within 1.5 hours.
+
+### Data types {#dataTypes}
+
+In the case of IMC, the raw data output are .mcd files containing all acquired
+regions per slide. During image pre-prcoessing these files are converted into
+individual multi-channel .tiff and 
+[OME-TIFF](https://docs.openmicroscopy.org/ome-model/5.6.3/ome-tiff/) files. 
+These file formats are supported by most open-source and commercial image 
+analysis software, such as [Fiji](https://imagej.net/software/fiji/), 
+[QuPath](https://qupath.github.io/) or [napari](https://napari.org/).
+
+In R, these .tiff files can be read into individual
+[Image](https://bioconductor.org/packages/release/bioc/vignettes/EBImage/inst/doc/EBImage-introduction.html#3_Image_data_representation)
+objects or combined into a
+[CytoImageList](https://www.bioconductor.org/packages/release/bioc/vignettes/cytomapper/inst/doc/cytomapper.html#5_The_CytoImageList_object)
+object supported by the
+[cytomapper](https://www.bioconductor.org/packages/release/bioc/html/cytomapper.html)
+package.
+
+### Segmentation and feature extraction {#segmentation}
+
+The pixel resolution of most highly multiplexed imaging technologies including
+IMC support the detection of cellular structures. Therefore, a common processing
+step using multi-channel images is object segmentation. In this vignette,
+objects are defined as cells; however, also larger scale structures could be
+segmented. 
+
+There are multiple different image segmentation approaches available. However,
+`imcRtools` only supports direct reader functions for two segmentation strategies
+developed for highly multiplexed imaging technologies:
+
+1. The [ImcSegmentationPipeline](https://github.com/BodenmillerGroup/ImcSegmentationPipeline)
+has been developed to give the user flexibility in how to perform channel
+selection and image segmentation. The underlying principle is to train a pixel
+classifier (using [ilastik](https://www.ilastik.org/)) on a number of selected
+channels to perform probabilistic classification of each pixel into: background,
+cytoplasm and nucleus. Based on these classification probabilities a 
+[CellProfiler](https://cellprofiler.org/) pipeline performs cell segmentation
+and feature extraction.
+
+2. A containerized version of this pipeline is implemented in 
+[steinbock](https://github.com/BodenmillerGroup/steinbock). `steinbock` further
+supports segmentation via the use of `Mesmer` from the `DeepCell` 
+library [@Greenwald2021]. 
+
+While the output of both approaches is structured differently, the exported
+features are comparable:
+
+1. per cell: channel intensity, morphology and location
+2. cell-cell interactions exported as graph 
+
+By combining these with availabel channel information, the data can be read into
+a `r BiocStyle::Biocpkg("SpatialExperiment")` or 
+`r BiocStyle::Biocpkg("SingleCellExperiment")` object 
+(see [below](#read-in-data)).
+
+# Example data {#test-data}
 
 The `imcRtools` package contains a number of example data generated by the
 Hyperion imaging system for different purposes. The following section gives an
@@ -53,6 +159,8 @@ overview of these files.
 
 To highlight the use of the `imcRtools` package for spillover correction, 
 we provide four .txt files containing pixel intensities of four spotted metals.
+
+Please refer to the [spillover correction](#spillover) section for full details.
 
 These files are accessible via:
 
@@ -64,6 +172,10 @@ list.files(path, recursive = TRUE)
 
 ## Raw data in form of .txt files
 
+IMC generates .mcd files storing the raw data or all acquired regions of 
+interest (ROI). In addition, the raw pixel values are also stored in individual
+.txt files per ROI.
+
 To highlight reading in raw data in form of .txt files, the `imcRtools` contains
 3 sample acquisitions:
 
@@ -73,7 +185,7 @@ txt_files <- list.files(system.file("extdata/mockData/raw",
 txt_files
 ```
 
-## `ImcSegmentationPipeline` output data
+## ImcSegmentationPipeline output data
 
 IMC data preprocessing and segmentation can be performed using the 
 [ImcSegmentationPipeline](https://github.com/BodenmillerGroup/ImcSegmentationPipeline).
@@ -81,9 +193,9 @@ It generates a number of `.csv` files containing object/cell-specific
 and image-specific metadata. 
 
 The `imcRtools` package exports the `read_cpout` function as convenient reader
-for outpouts generated by the `ImcSegmentationPipeline`. For demonstration 
-purposes, `imcRtools` contains the output of runnin the pipeline on a small
-example dataset:
+function for outputs generated by the `ImcSegmentationPipeline`. For 
+demonstration purposes, `imcRtools` contains the output of running the pipeline 
+on a small example dataset:
 
 ```{r imcsegmentationpipeline-data}
 path <- system.file("extdata/mockData/cpout", package = "imcRtools")
@@ -91,14 +203,15 @@ path <- system.file("extdata/mockData/cpout", package = "imcRtools")
 list.files(path, recursive = TRUE)
 ```
 
-## `steinbock` output data
+## steinbock output data
 
-The [steinbock](https://github.com/BodenmillerGroup/steinbock) pipeline can be used
-to process, segment and extract features from IMC data. For more information,
-please refer to the [documentation](https://bodenmillergroup.github.io/steinbock/).
+The [steinbock](https://github.com/BodenmillerGroup/steinbock) pipeline can be
+used to process, segment and extract features from IMC data. For more
+information, please refer to its
+[documentation](https://bodenmillergroup.github.io/steinbock/).
 
-To highlight the functionality of `imcRtools` to read in single-cell data generated
-by `steinbock`, we provide a small toy dataset available at:
+To highlight the functionality of `imcRtools` to read in single-cell data
+generated by `steinbock`, we provide a small toy dataset available at:
 
 ```{r steinbock-data}
 path <- system.file("extdata/mockData/steinbock", package = "imcRtools")
@@ -106,31 +219,36 @@ path <- system.file("extdata/mockData/steinbock", package = "imcRtools")
 list.files(path, recursive = TRUE)
 ```
 
-# Read in IMC data
+The example data related to the `ImcSegmentationPipeline` and `steinbock`
+can also be accessed [online](https://github.com/BodenmillerGroup/TestData/tree/main/datasets/210308_ImcTestData).
 
-The `imcRtools` package supports reading in data generated by the [ImcSegmentationPipeline](https://github.com/BodenmillerGroup/ImcSegmentationPipeline) 
+# Read in IMC data {#read-in-data}
+
+The `imcRtools` package supports reading in data generated by the
+[ImcSegmentationPipeline](https://github.com/BodenmillerGroup/ImcSegmentationPipeline)
 or [steinbock](https://github.com/BodenmillerGroup/steinbock) pipeline.
 
-To read in the outpout data into a `r BiocStyle::Biocpkg("SpatialExperiment")` 
+To read in the outpout data into a `r BiocStyle::Biocpkg("SpatialExperiment")`
 or `r BiocStyle::Biocpkg("SingleCellExperiment")`, the `imcRtools` package
 exports the `read_cpout` function.
 
-By default, the single-cell data is read into a `r BiocStyle::Biocpkg("SpatialExperiment")` 
-object. Here, the extracted channel- and cell-specific intensities are stored in
-the `counts(spe)` slot. All morphological features are stored in `colData(spe)`
-and the spatial locations of the cells are stored in `spatialCoords(spe)`.
-The interaction graph is stored in `colPair(spe, "neighbourhood")`.
+By default, the single-cell data is read into a 
+`r BiocStyle::Biocpkg("SpatialExperiment")` object. Here, the extracted channel-
+and cell-specific intensities are stored in the `counts(spe)` slot. All
+morphological features are stored in `colData(spe)` and the spatial locations of
+the cells are stored in `spatialCoords(spe)`. The interaction graph is stored in
+`colPair(spe, "neighbourhood")`.
 
-Alternatively, the data can be read into a `r BiocStyle::Biocpkg("SingleCellExperiment")`
-object. The only difference is the lack of `spatialCoords(sce)`. Here, the 
-spatial coordinates are stored in `colData(spe)$Pos_X` and `colData(spe)$Pos_Y`.
+Alternatively, the data can be read into a 
+`r BiocStyle::Biocpkg("SingleCellExperiment")` object. The only difference is 
+the lack of `spatialCoords(sce)`. Here, the spatial coordinates are stored in `colData(spe)$Pos_X` and `colData(spe)$Pos_Y`.
 
 ## Read in CellProfiler output
 
 The [ImcSegmentationPipeline](https://github.com/BodenmillerGroup/ImcSegmentationPipeline)
-produces a number of output file. By default, all single-cell features are measured 
-and exported. To select the features of interest, the `imcRtools` package provides
-the `show_cpout_features` function. Here, the exported features can be interactively browsed:
+produces a number of output files. By default, all single-cell features are
+measured and exported. To browse and select the features of interest, the 
+`imcRtools` package provides the `show_cpout_features` function:
 
 ```{r show_cpout_features}
 path <- system.file("extdata/mockData/cpout", package = "imcRtools")
@@ -140,7 +258,9 @@ show_cpout_features(path)
 
 By default, `read_cpout` will read in the mean intensity per channel and cell 
 from "hot pixel" filtered image stacks specified via 
-`intensities = "Intensity_MeanIntensity_FullStackFiltered"`:
+`intensities = "Intensity_MeanIntensity_FullStackFiltered"`. Please refer to
+`?read_cpout` for the full documentation.
+
 
 ```{r read_cpout}
 cur_path <- system.file("extdata/mockData/cpout", package = "imcRtools")
@@ -169,10 +289,9 @@ cur_path <- system.file("extdata/mockData/steinbock", package = "imcRtools")
 (sce <- read_steinbock(cur_path, return_as = "sce"))
 ```
 
-For more information on the `read_steinbock` function, please refer to
-`?read_steinbock`.
+For more information, please refer to `?read_steinbock`.
 
-## Read raw .txt files into `Image` objects
+## Read raw .txt files into Image objects
 
 For reading in and visualization of multi-channel images and segmentation masks,
 please refer to the `r BiocStyle::Biocpkg("cytomapper")` package. The
@@ -189,24 +308,27 @@ cur_CytoImageList <- readImagefromTXT(path)
 cur_CytoImageList
 ```
 
-# Spillover correction for IMC data
+By specifying the `pattern` argument, individual or a subset of files can be 
+read in. For more information, please refer to `?readImagefromTXT`.
 
-When acquiring IMC images, pixel intensities can be influenced by spillover 
-from neighbouring channels. To correct for this, Chevrier _et al._ have 
-developed a staining protocol to acquire individually spotted metal isotopes
-[@Chevrier].
-Based on these measurements, spillover into neighbouring channels can be
-quantified and pixel intensities can be deconvolved into true and spillover
-signal. 
+# Spillover correction {#spillover}
+
+When acquiring IMC images, pixel intensities can be influenced by spillover from
+neighboring channels. To correct for this, Chevrier _et al._ have developed a
+staining protocol to acquire individually spotted metal isotopes
+[@Chevrier2017]. Based on these measurements, spillover into neighboring
+channels can be quantified to correct pixel intensities.
 
 The `imcRtools` package provides helper functions that facilitate the correction
-of spillover for IMC data. For a full tutorial, please refer to the [IMC data analysis book](https://bodenmillergroup.github.io/IMCDataAnalysis/spillover-correction.html#ref-Chevrier2017).
+of spillover for IMC data. For a full tutorial, please refer to the 
+[IMC data analysis book](https://bodenmillergroup.github.io/IMCDataAnalysis/spillover-correction.html).
 
-## Read in the single-spot acquisition
+## Read in the single-spot acquisitions
 
 In the first step, the pixel intensities of individually spotted metals need to 
 be read into a `SingleCellExperiment` container for downstream use with the
-`CATALYST` package. For this, the `readSCEfromTXT` function can be used:
+`r BiocStyle::Biocpkg("CATALYST")` package. For this, the `readSCEfromTXT` 
+function can be used:
 
 ```{r read-single-metals}
 path <- system.file("extdata/spillover", package = "imcRtools")
@@ -220,17 +342,17 @@ Each column represents a single pixel.
 
 ## Quality control on single-spot acquisitions
 
-In the next step, it is crucial to identify potential mislabeled spots or spots 
-with low pixel intensities, the `imcRtools` package exports the `plotSpotHeatmap`
-function, which visualizes the aggregated (default `median`) pixel intensities
-per spot and per metal:
+In the next step, it is crucial to identify potentially mislabeled spots or
+spots with low pixel intensities. The `imcRtools` package exports the
+`plotSpotHeatmap` function, which visualizes the aggregated (default `median`)
+pixel intensities per spot and per metal:
 
 ```{r plotSpotHeatmap, fig.width=5, fig.height=5}
 plotSpotHeatmap(sce)
 ```
 
-Here, high median pixel intensities can be observed in each spot an their 
-corresponding channels (visualized on the `log10` scale).
+Here, high median pixel intensities can be observed in each spot and their 
+corresponding channels (visualized on the `log10` scale by default).
 To quickly identify spot/channel combinations with low signal, the `threshold`
 parameter can be set:
 
@@ -256,7 +378,8 @@ Prior to spillover estimation, the `r BiocStyle::Biocpkg("CATALYST")` package
 provides the `assignPrelim`, `estCutoffs` and `applyCutoffs` functions to
 estimate the spotted mass for each pixel based on their channel intensities.
 For more information on the spillover estimation and correction, please refer
-to the [CATALYST vignette]().
+to the 
+[CATALYST vignette](https://bioconductor.org/packages/release/bioc/vignettes/CATALYST/inst/doc/preprocessing.html#compensation).
 
 This estimation can be used to identify pixels that cannot be easily assigned
 to their spotted mass, potentially indicating pixels with weak signal. To remove
@@ -272,7 +395,7 @@ sce <- assignPrelim(sce, bc_key = bc_key)
 sce <- estCutoffs(sce)
 sce <- applyCutoffs(sce)
 
-# Filter out mislabelled pixels
+# Filter out mislabeled pixels
 sce <- filterPixels(sce)
 
 table(sce$bc_id, sce$sample_mass)
@@ -288,17 +411,22 @@ sce <- computeSpillmat(sce)
 metadata(sce)$spillover_matrix
 ```
 
+This spillover matrix can be directly applied to compensate the summarized 
+pixel intensities per cell and per channel as described 
+[here](https://bioconductor.org/packages/release/bioc/vignettes/CATALYST/inst/doc/preprocessing.html#compcytof-compensation-of-mass-cytometry-data).
+
 # Spatial analysis
 
-The following section will highlight functions for spatial analysis of the data.
+The following section will highlight functions for spatial analyses of the data.
 
-## Constructing graphs
+## Constructing graphs {#build-graph}
 
-When following the `ImcSegmentationPipeline` or `steinbock`, the generated 
-graphs are automatically stored in the `colPair(spe, "neighbourhood")` slot.
-Alternatively, the `buildSpatialGraph` function in the `imcRtools` package
-constructs interaction graphs using either (i) cell-centroid expansion,
-(ii) k-nearest neighbor search or (iii) delaunay triangulation.
+When following the `ImcSegmentationPipeline` or `steinbock` and reading in the
+data using the corresponding functions, the generated graphs are automatically
+stored in the `colPair(spe, "neighborhood")` slot. Alternatively, the
+`buildSpatialGraph` function in the `imcRtools` package constructs interaction
+graphs using either (i) cell-centroid expansion, (ii) k-nearest neighbor search
+or (iii) delaunay triangulation.
 
 ```{r buildSpatialGraph, message=FALSE}
 library(cytomapper)
@@ -320,7 +448,7 @@ When setting `type = "knn"`, by default a directional graph will be build.
 Setting `directed = FALSE` will create bi-directional edges for each pair of 
 cells that are connected by at least one edge in the directed setting.
 
-## Graph/cell visualization
+## Graph/cell visualization {#viz-cells}
 
 The cells' locations and constructed graphs can be visualized using the 
 `plotSpatial` function. Here, cells are referred to as "nodes" and cell-cell
@@ -366,18 +494,20 @@ plotSpatial(pancreasSCE[,pancreasSCE$Pattern],
 ```
 
 The returned object can be further modified using the `ggplot2` logic. This
-includes chaning the node color, shape and size using `scale_color_*`,
+includes changing the node color, shape and size using `scale_color_*`,
 `scale_shape_*` and `scale_size_*`. Edge attributes can be altered using the
-`scale_edge_*` exported by `ggraph`,
+`scale_edge_*` function exported by `ggraph`,
 
-## Neighborhood aggregation
+## Neighborhood aggregation {#aggregate-neighbors}
 
-The `aggregatedNeighbors` function can be used to aggregate features of all
+The `aggregateNeighbors` function can be used to aggregate features of all
 neighboring cells for each individual cell. This function operates in two 
-settings. 1. `metadata`: when aggregating by cell-specific metadata, the 
+settings. 
+
+1. `metadata`: when aggregating by cell-specific metadata, the 
 function computes the relative frequencies of all entries to 
-`colData(sce)[[count_by]]` within the direct neighborhood of each cell. 
-2. `expression`: the expression counts stored in `assay_type` are aggregated
+`colData(sce)[[count_by]]` within the direct neighborhood of each cell.  
+2. `expression`: the expression counts of neighboring cells are aggregated
 using the specified `statistic` (defaults to `mean`). 
 
 Each cell's neighborhood is defined as endpoints of edges stored in 
@@ -397,8 +527,8 @@ pancreasSCE <- aggregateNeighbors(pancreasSCE,
 head(pancreasSCE$mean_aggregatedExpression)
 ```
 
-The returned entries can now be used for clustering to group cells based on their
-environment (either by aggregated categorial features or expression).
+The returned entries can now be used for clustering to group cells based on
+their environment (either by aggregated categorical features or expression).
 
 ```{r aggregateNeigbors-clustering}
 cur_cluster <- kmeans(pancreasSCE$aggregatedNeighbors, centers = 3)
@@ -440,19 +570,21 @@ plotSpatial(pancreasSCE[,!pancreasSCE$border_cells],
     scale_edge_color_brewer(palette = "Set1")
 ```
 
-## Neighborhood permutation testing
+Excluding border cells can be useful when incorrectly connected cells are 
+observed at image borders.
+
+## Neighborhood permutation testing {#test-neighborhood}
 
 The following section describes how to observe and test the average number of
 interactions between cell labels (e.g. cell-types) within grouping levels (e.g.
 images). For full descriptions of the testing approaches, please refer to
-[Shapiro et al., Nature
-Methods](https://www.nature.com/articles/nmeth.4391)[@Shapiro2017] and [Schulz
-et al., Cell
-Systems](https://www.sciencedirect.com/science/article/pii/S2405471217305434)
+[Shapiro et al., Nature Methods](https://www.nature.com/articles/nmeth.4391) [@Shapiro2017] 
+and 
+[Schulz et al., Cell Systems](https://www.sciencedirect.com/science/article/pii/S2405471217305434)
 [@Schulz2018]
 
 The `imcRtools` package exports the `countInteractions` and
-`testInteractions` function, which summarize all cell-cell interactions per
+`testInteractions` functions, which summarize all cell-cell interactions per
 grouping level (e.g. image). As a result, a table is returned where each row
 represents one of all possible cell-type/cell-type interactions among all
 grouping levels. Missing entries or `NA`s indicate missing cell-type labels for
@@ -523,11 +655,19 @@ out <- testInteractions(pancreasSCE,
 out
 ```
 
-## Patch detection
-
-# Acknowledgements
-
 # Contributions
+
+Large chunks of the code of the `imcRtools` package is based on the work
+of [Vito Zanotelli](https://github.com/votti). Vito has co-developed the 
+spillover correction approach and translated the interaction testing approach
+developed by [Denis Shapiro](https://github.com/DenisSch) and 
+[Jana Fisher](https://github.com/JanaFischer) into R (formerly 
+known as the [neighbouRhood](https://github.com/BodenmillerGroup/neighbouRhood) 
+R package). Jana has furthermore added the "patch" method for interaction
+counting and testing. [Tobias Hoch](https://github.com/toobiwankenobi) has 
+written the first version of reading in the `ImcSegmentationPipeline` output. 
+[Daniel Schulz](https://github.com/SchulzDan) has build the `aggregateNeighbors` 
+function and contributed to developing the spatial clustering approach. 
 
 # Session info {.unnumbered}
 
