@@ -313,22 +313,22 @@ read in. For more information, please refer to `?readImagefromTXT`.
 
 # Spillover correction {#spillover}
 
-When acquiring IMC images, pixel intensities can be influenced by spillover 
-from neighboring channels. To correct for this, Chevrier _et al._ have 
-developed a staining protocol to acquire individually spotted metal isotopes
-[@Chevrier2017].
-Based on these measurements, spillover into neighbouring channels can be
-quantified and pixel intensities can be deconvolved into true and spillover
-signal. 
+When acquiring IMC images, pixel intensities can be influenced by spillover from
+neighboring channels. To correct for this, Chevrier _et al._ have developed a
+staining protocol to acquire individually spotted metal isotopes
+[@Chevrier2017]. Based on these measurements, spillover into neighboring
+channels can be quantified to correct pixel intensities.
 
 The `imcRtools` package provides helper functions that facilitate the correction
-of spillover for IMC data. For a full tutorial, please refer to the [IMC data analysis book](https://bodenmillergroup.github.io/IMCDataAnalysis/spillover-correction.html#ref-Chevrier2017).
+of spillover for IMC data. For a full tutorial, please refer to the 
+[IMC data analysis book](https://bodenmillergroup.github.io/IMCDataAnalysis/spillover-correction.html).
 
-## Read in the single-spot acquisition
+## Read in the single-spot acquisitions
 
 In the first step, the pixel intensities of individually spotted metals need to 
 be read into a `SingleCellExperiment` container for downstream use with the
-`CATALYST` package. For this, the `readSCEfromTXT` function can be used:
+`r BiocStyle::Biocpkg("CATALYST")` package. For this, the `readSCEfromTXT` 
+function can be used:
 
 ```{r read-single-metals}
 path <- system.file("extdata/spillover", package = "imcRtools")
@@ -342,17 +342,17 @@ Each column represents a single pixel.
 
 ## Quality control on single-spot acquisitions
 
-In the next step, it is crucial to identify potential mislabeled spots or spots 
-with low pixel intensities, the `imcRtools` package exports the `plotSpotHeatmap`
-function, which visualizes the aggregated (default `median`) pixel intensities
-per spot and per metal:
+In the next step, it is crucial to identify potentially mislabeled spots or
+spots with low pixel intensities. The `imcRtools` package exports the
+`plotSpotHeatmap` function, which visualizes the aggregated (default `median`)
+pixel intensities per spot and per metal:
 
 ```{r plotSpotHeatmap, fig.width=5, fig.height=5}
 plotSpotHeatmap(sce)
 ```
 
-Here, high median pixel intensities can be observed in each spot an their 
-corresponding channels (visualized on the `log10` scale).
+Here, high median pixel intensities can be observed in each spot and their 
+corresponding channels (visualized on the `log10` scale by default).
 To quickly identify spot/channel combinations with low signal, the `threshold`
 parameter can be set:
 
@@ -378,7 +378,8 @@ Prior to spillover estimation, the `r BiocStyle::Biocpkg("CATALYST")` package
 provides the `assignPrelim`, `estCutoffs` and `applyCutoffs` functions to
 estimate the spotted mass for each pixel based on their channel intensities.
 For more information on the spillover estimation and correction, please refer
-to the [CATALYST vignette]().
+to the 
+[CATALYST vignette](https://bioconductor.org/packages/release/bioc/vignettes/CATALYST/inst/doc/preprocessing.html#compensation).
 
 This estimation can be used to identify pixels that cannot be easily assigned
 to their spotted mass, potentially indicating pixels with weak signal. To remove
@@ -394,7 +395,7 @@ sce <- assignPrelim(sce, bc_key = bc_key)
 sce <- estCutoffs(sce)
 sce <- applyCutoffs(sce)
 
-# Filter out mislabelled pixels
+# Filter out mislabeled pixels
 sce <- filterPixels(sce)
 
 table(sce$bc_id, sce$sample_mass)
@@ -410,17 +411,22 @@ sce <- computeSpillmat(sce)
 metadata(sce)$spillover_matrix
 ```
 
+This spillover matrix can be directly applied to compensate the summarized 
+pixel intensities per cell and per channel as described 
+[here](https://bioconductor.org/packages/release/bioc/vignettes/CATALYST/inst/doc/preprocessing.html#compcytof-compensation-of-mass-cytometry-data).
+
 # Spatial analysis
 
-The following section will highlight functions for spatial analysis of the data.
+The following section will highlight functions for spatial analyses of the data.
 
 ## Constructing graphs {#build-graph}
 
-When following the `ImcSegmentationPipeline` or `steinbock`, the generated 
-graphs are automatically stored in the `colPair(spe, "neighbourhood")` slot.
-Alternatively, the `buildSpatialGraph` function in the `imcRtools` package
-constructs interaction graphs using either (i) cell-centroid expansion,
-(ii) k-nearest neighbor search or (iii) delaunay triangulation.
+When following the `ImcSegmentationPipeline` or `steinbock` and reading in the
+data using the corresponding functions, the generated graphs are automatically
+stored in the `colPair(spe, "neighborhood")` slot. Alternatively, the
+`buildSpatialGraph` function in the `imcRtools` package constructs interaction
+graphs using either (i) cell-centroid expansion, (ii) k-nearest neighbor search
+or (iii) delaunay triangulation.
 
 ```{r buildSpatialGraph, message=FALSE}
 library(cytomapper)
@@ -488,18 +494,20 @@ plotSpatial(pancreasSCE[,pancreasSCE$Pattern],
 ```
 
 The returned object can be further modified using the `ggplot2` logic. This
-includes chaning the node color, shape and size using `scale_color_*`,
+includes changing the node color, shape and size using `scale_color_*`,
 `scale_shape_*` and `scale_size_*`. Edge attributes can be altered using the
-`scale_edge_*` exported by `ggraph`,
+`scale_edge_*` function exported by `ggraph`,
 
 ## Neighborhood aggregation {#aggregate-neighbors}
 
-The `aggregatedNeighbors` function can be used to aggregate features of all
+The `aggregateNeighbors` function can be used to aggregate features of all
 neighboring cells for each individual cell. This function operates in two 
-settings. 1. `metadata`: when aggregating by cell-specific metadata, the 
+settings. 
+
+1. `metadata`: when aggregating by cell-specific metadata, the 
 function computes the relative frequencies of all entries to 
-`colData(sce)[[count_by]]` within the direct neighborhood of each cell. 
-2. `expression`: the expression counts stored in `assay_type` are aggregated
+`colData(sce)[[count_by]]` within the direct neighborhood of each cell.  
+2. `expression`: the expression counts of neighboring cells are aggregated
 using the specified `statistic` (defaults to `mean`). 
 
 Each cell's neighborhood is defined as endpoints of edges stored in 
@@ -519,8 +527,8 @@ pancreasSCE <- aggregateNeighbors(pancreasSCE,
 head(pancreasSCE$mean_aggregatedExpression)
 ```
 
-The returned entries can now be used for clustering to group cells based on their
-environment (either by aggregated categorial features or expression).
+The returned entries can now be used for clustering to group cells based on
+their environment (either by aggregated categorical features or expression).
 
 ```{r aggregateNeigbors-clustering}
 cur_cluster <- kmeans(pancreasSCE$aggregatedNeighbors, centers = 3)
@@ -562,19 +570,21 @@ plotSpatial(pancreasSCE[,!pancreasSCE$border_cells],
     scale_edge_color_brewer(palette = "Set1")
 ```
 
+Excluding border cells can be useful when incorrectly connected cells are 
+observed at image borders.
+
 ## Neighborhood permutation testing {#test-neighborhood}
 
 The following section describes how to observe and test the average number of
 interactions between cell labels (e.g. cell-types) within grouping levels (e.g.
 images). For full descriptions of the testing approaches, please refer to
-[Shapiro et al., Nature
-Methods](https://www.nature.com/articles/nmeth.4391)[@Shapiro2017] and [Schulz
-et al., Cell
-Systems](https://www.sciencedirect.com/science/article/pii/S2405471217305434)
+[Shapiro et al., Nature Methods](https://www.nature.com/articles/nmeth.4391) [@Shapiro2017] 
+and 
+[Schulz et al., Cell Systems](https://www.sciencedirect.com/science/article/pii/S2405471217305434)
 [@Schulz2018]
 
 The `imcRtools` package exports the `countInteractions` and
-`testInteractions` function, which summarize all cell-cell interactions per
+`testInteractions` functions, which summarize all cell-cell interactions per
 grouping level (e.g. image). As a result, a table is returned where each row
 represents one of all possible cell-type/cell-type interactions among all
 grouping levels. Missing entries or `NA`s indicate missing cell-type labels for
@@ -645,9 +655,19 @@ out <- testInteractions(pancreasSCE,
 out
 ```
 
-# Acknowledgements
-
 # Contributions
+
+Large chunks of the code of the `imcRtools` package is based on the work
+of [Vito Zanotelli](https://github.com/votti). Vito has co-developed the 
+spillover correction approach and translated the interaction testing approach
+developed by [Denis Shapiro](https://github.com/DenisSch) and 
+[Jana Fisher](https://github.com/JanaFischer) into R (formerly 
+known as the [neighbouRhood](https://github.com/BodenmillerGroup/neighbouRhood) 
+R package). Jana has furthermore added the "patch" method for interaction
+counting and testing. [Tobias Hoch](https://github.com/toobiwankenobi) has 
+written the first version of reading in the `ImcSegmentationPipeline` output. 
+[Daniel Schulz](https://github.com/SchulzDan) has build the `aggregateNeighbors` 
+function and contributed to developing the spatial clustering approach. 
 
 # Session info {.unnumbered}
 
