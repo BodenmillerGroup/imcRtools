@@ -20,7 +20,7 @@ Here, we will first download the output of the standard [ImcSegmentationPipeline
 For this, we an use the automatically generated Github assets.
 
 ```{r download-cpout}
-cur_url <- "https://github.com/BodenmillerGroup/TestData/releases/download/v1.0.5/210308_ImcTestData_analysis_cpout.tar.gz"
+cur_url <- "https://github.com/BodenmillerGroup/TestData/releases/download/v1.0.6/210308_ImcTestData_analysis_cpout.tar.gz"
 
 download.file(cur_url, "210308_ImcTestData_analysis_cpout.tar.gz")
 untar("210308_ImcTestData_analysis_cpout.tar.gz")
@@ -35,6 +35,16 @@ For reading in the single-cell features, we will only need to copy the .csv file
 file.copy(list.files("datasets/210308_ImcTestData/analysis/cpout/", pattern = ".csv$", full.names = TRUE),
           "../extdata/mockData/cpout", overwrite = TRUE)
 unlink("datasets/", recursive = TRUE)
+```
+
+## Rename object relationship file
+
+This needs to be done to avoid an R CMD check warning indicating an invalid file
+name.
+
+```{r rename-object-relationship}
+file.rename("../extdata/mockData/cpout/Object relationships.csv",
+            "../extdata/mockData/cpout/Object_relationships.csv")
 ```
 
 
