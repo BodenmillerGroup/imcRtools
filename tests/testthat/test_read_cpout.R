@@ -2,7 +2,7 @@ test_that("read_cpout function works.", {
     path <- system.file("extdata/mockData/cpout", package = "imcRtools")
 
     # SpatialExperiment
-    cur_spe <- read_cpout(path)
+    cur_spe <- read_cpout(path, graph_file = "Object_relationships.csv")
     
     expect_s4_class(cur_spe, "SpatialExperiment")
     
@@ -65,7 +65,7 @@ test_that("read_cpout function works.", {
                  to(cur_graphs)[to(cur_graphs) %in% which(cur_spe$sample_id == "4")])
     
     # SingleCellExperiment
-    cur_sce <- read_cpout(path, return_as = "sce")
+    cur_sce <- read_cpout(path, return_as = "sce", graph_file = "Object_relationships.csv")
     
     expect_s4_class(cur_sce, "SingleCellExperiment")
     
@@ -128,7 +128,8 @@ test_that("read_cpout function works.", {
                  to(cur_graphs)[to(cur_graphs) %in% which(cur_sce$sample_id == "4")])
     
     # Test other inputs
-    cur_spe <- read_cpout(path, image_file = NULL, scale_intensities = FALSE)
+    cur_spe <- read_cpout(path, image_file = NULL, scale_intensities = FALSE, 
+                          graph_file = "Object_relationships.csv")
     
     expect_equal(rownames(cur_spe), c("Ag107", "Pr141", "Sm147", 
                                       "Eu153", "Yb172"))
@@ -180,7 +181,8 @@ test_that("read_cpout function works.", {
     expect_equal(cur_test$`Second Object Number` + sum(cur_spe$sample_id %in% c("1", "2", "3")), 
                  to(cur_graphs)[to(cur_graphs) %in% which(cur_spe$sample_id == "4")])
     
-    cur_sce <- read_cpout(path, return_as = "sce", image_file = NULL, scale_intensities = FALSE)
+    cur_sce <- read_cpout(path, return_as = "sce", image_file = NULL, 
+                          scale_intensities = FALSE, graph_file = "Object_relationships.csv")
     
     expect_equal(rownames(cur_sce), c("Ag107", "Pr141", "Sm147", 
                                       "Eu153", "Yb172"))
@@ -232,7 +234,7 @@ test_that("read_cpout function works.", {
     expect_equal(cur_test$`Second Object Number` + sum(cur_sce$sample_id %in% c("1", "2", "3")), 
                  to(cur_graphs)[to(cur_graphs) %in% which(cur_sce$sample_id == "4")])
     
-    cur_spe <- read_cpout(path, scale_intensities = FALSE)
+    cur_spe <- read_cpout(path, scale_intensities = FALSE, graph_file = "Object_relationships.csv")
     
     expect_equal(rownames(cur_spe), c("Ag107", "Pr141", "Sm147", 
                                       "Eu153", "Yb172"))
@@ -309,7 +311,7 @@ test_that("read_cpout function works.", {
     
     expect_equal(length(colPairNames(cur_spe)), 0)
     
-    cur_spe <- read_cpout(path, panel_file = NULL)
+    cur_spe <- read_cpout(path, panel_file = NULL, graph_file = "Object_relationships.csv")
     
     expect_equal(rownames(cur_spe), c("Ag107", "Pr141", "Sm147", 
                                       "Eu153", "Yb172"))
@@ -341,7 +343,7 @@ test_that("read_cpout function works.", {
     
     expect_equal(colPairNames(cur_spe), "neighbourhood")
     
-    cur_spe <- read_cpout(path, intensities = "MedianIntensity_FullStack_")
+    cur_spe <- read_cpout(path, intensities = "MedianIntensity_FullStack_", graph_file = "Object_relationships.csv")
 
     expect_equal(rownames(cur_spe), c("Ag107", "Pr141", "Sm147", 
                                       "Eu153", "Yb172"))
@@ -383,7 +385,8 @@ test_that("read_cpout function works.", {
     
     expect_equal(colPairNames(cur_spe), "neighbourhood")
     
-    cur_spe <- read_cpout(path, extract_cellmetadata_from = "Location_MaxIntensity_Y_ProbSegmentation_c1")
+    cur_spe <- read_cpout(path, extract_cellmetadata_from = "Location_MaxIntensity_Y_ProbSegmentation_c1", 
+                          graph_file = "Object_relationships.csv")
     
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "Location_MaxIntensity_Y_ProbSegmentation_c1", 
                                             "Metadata_acname", 
@@ -394,7 +397,8 @@ test_that("read_cpout function works.", {
     
     expect_equal(cur_spe$Location_MaxIntensity_Y_ProbSegmentation_c1, object_file$Location_MaxIntensity_Y_ProbSegmentation_c1)
 
-    cur_spe <- read_cpout(path, extract_imagemetadata_from = "Metadata_end_timestamp")
+    cur_spe <- read_cpout(path, extract_imagemetadata_from = "Metadata_end_timestamp", 
+                          graph_file = "Object_relationships.csv")
     
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "Neighbors_NumberOfNeighbors_8", 
                                             "Metadata_end_timestamp"))
@@ -410,21 +414,25 @@ test_that("read_cpout function works.", {
     
     expect_equal(cur_spe$Metadata_end_timestamp, object_file$Metadata_end_timestamp)
     
-    cur_spe <- read_cpout(path, extract_coords_from = NULL)
+    cur_spe <- read_cpout(path, extract_coords_from = NULL, 
+                          graph_file = "Object_relationships.csv")
     
     expect_equal(length(spatialCoordsNames(cur_spe)), 0)
     
-    cur_sce <- read_cpout(path, extract_coords_from = NULL, return_as = "sce")   
+    cur_sce <- read_cpout(path, extract_coords_from = NULL, return_as = "sce", 
+                          graph_file = "Object_relationships.csv")   
     
     expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectNumber", "Neighbors_NumberOfNeighbors_8",
                                             "Metadata_acname", "Metadata_acid", "Metadata_description"))
     
-    cur_spe <- read_cpout(path, extract_cellmetadata_from = NULL)
+    cur_spe <- read_cpout(path, extract_cellmetadata_from = NULL, 
+                          graph_file = "Object_relationships.csv")
     
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber",
                                             "Metadata_acname", "Metadata_acid", "Metadata_description"))
     
-    cur_spe <- read_cpout(path, extract_imagemetadata_from = NULL)
+    cur_spe <- read_cpout(path, extract_imagemetadata_from = NULL, 
+                          graph_file = "Object_relationships.csv")
     
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "Neighbors_NumberOfNeighbors_8"))
     
