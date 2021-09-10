@@ -185,7 +185,7 @@ test_that("neighbourhoodPermTest gives same results as neighbouRhood", {
     
     # Test neighbouRhood results
     fn_cells <- system.file("extdata/mockData/cpout", "cell.csv", package = "imcRtools")
-    fn_relationship <- system.file("extdata/mockData/cpout", "Object relationships.csv", package = "imcRtools")
+    fn_relationship <- system.file("extdata/mockData/cpout", "Object_relationships.csv", package = "imcRtools")
 
     dat_cells <- fread(fn_cells)
     dat_relation <- fread(fn_relationship)
@@ -201,7 +201,7 @@ test_that("neighbourhoodPermTest gives same results as neighbouRhood", {
     
     # Compare to imcRtools
     cur_path <- system.file("extdata/mockData/cpout", package = "imcRtools")
-    cur_spe <- read_cpout(cur_path)
+    cur_spe <- read_cpout(cur_path, graph_file = "Object_relationships.csv")
     
     cur_colpair <- as.data.frame(colPair(cur_spe, "neighbourhood"))
     cur_colpair <- cur_colpair[order(paste(cur_colpair[,1], cur_colpair[,2])),]

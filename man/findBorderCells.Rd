@@ -21,6 +21,10 @@ cells' x and y location.}
 \code{colData} (for a \code{SingleCellExperiment} object) or the
 \code{spatialCoords} entries of the cells' x and y locations.}
 }
+\value{
+an object of \code{class(object)} containing the logical
+\code{border_cells} entry in the \code{colData} slot.
+}
 \description{
 Detecting of cells close to the image border for subsequent exclusion from
 downstream analyses.

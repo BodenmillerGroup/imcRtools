@@ -125,16 +125,18 @@ and \code{Pos_Y}.
 path <- system.file("extdata/mockData/cpout", package = "imcRtools")
 
 # Read in as SpatialExperiment object
-x <- read_cpout(path)
+x <- read_cpout(path, graph_file = "Object_relationships.csv")
 x
 
 # Read in as SingleCellExperiment object
-x <- read_cpout(path, return_as = "sce")
+x <- read_cpout(path, graph_file = "Object_relationships.csv", 
+                return_as = "sce")
 x
 
 }
 \seealso{
-\url{https://github.com/BodenmillerGroup/ImcSegmentationPipeline} for the pipeline
+\url{https://github.com/BodenmillerGroup/ImcSegmentationPipeline} for the 
+pipeline
 
 \code{\link{read_steinbock}} for reading in single-cell data as produced by the
 steinbock pipeline

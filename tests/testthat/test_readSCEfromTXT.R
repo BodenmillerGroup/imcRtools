@@ -74,6 +74,15 @@ test_that("readSCEfromTXT function reads in correct objects.", {
                  regexp = "Not all names match the pattern (mt)(mass).",
                  fixed = TRUE)
     
+    expect_error(readSCEfromTXT(path, pattern = "Dy175", verbose = FALSE),
+                 regexp = "Files could not be read in.",
+                 fixed = TRUE)
+    
+    names(cur_files)[1] <- "test" 
+    expect_error(readSCEfromTXT(cur_files, verbose = FALSE), 
+                 regexp = "Not all names match the pattern (mt)(mass).",
+                 fixed = TRUE)
+    
     names(cur_files)[1] <- "XYZ1" 
     expect_error(readSCEfromTXT(cur_files, verbose = FALSE), 
                  regexp = "Not all names match the pattern (mt)(mass).",
