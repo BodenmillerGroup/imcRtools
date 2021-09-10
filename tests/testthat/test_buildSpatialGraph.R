@@ -488,6 +488,10 @@ test_that("buildSpatialGraph function works", {
                                    k = "test"),
                  regexp = "'k' must be a single numeric",
                  fixed = TRUE)
+    expect_error(buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn",
+                                   k = 10, k_max_dist = "test"),
+                 regexp = "'k_max_dist' must be a single numeric",
+                 fixed = TRUE)
     expect_error(buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "delaunay",
                                    coords = "test"),
                  regexp = "'coords' must be a character vector of length 2.",

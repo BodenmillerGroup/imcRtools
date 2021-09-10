@@ -47,7 +47,7 @@ test_that("read_cpout function works.", {
     expect_equal(colPairNames(cur_spe), "neighbourhood")
     
     expect_silent(cur_graphs <- colPair(cur_spe, "neighbourhood"))
-    cur_test <- vroom::vroom(file.path(path, "Object relationships.csv"))
+    cur_test <- vroom::vroom(file.path(path, "Object_relationships.csv"))
     cur_test <- cur_test[cur_test$`First Image Number` == 3,]
     
     expect_equal(cur_test$`First Object Number` + sum(cur_spe$sample_id %in% c("1", "2")), 
@@ -56,7 +56,7 @@ test_that("read_cpout function works.", {
                  to(cur_graphs)[to(cur_graphs) %in% which(cur_spe$sample_id == "3")])
     
     expect_silent(cur_graphs <- colPair(cur_spe, "neighbourhood"))
-    cur_test <- vroom::vroom(file.path(path, "Object relationships.csv"))
+    cur_test <- vroom::vroom(file.path(path, "Object_relationships.csv"))
     cur_test <- cur_test[cur_test$`First Image Number` == 4,]
     
     expect_equal(cur_test$`First Object Number` + sum(cur_spe$sample_id %in% c("1", "2", "3")), 
@@ -110,7 +110,7 @@ test_that("read_cpout function works.", {
     expect_equal(colPairNames(cur_sce), "neighbourhood")
     
     expect_silent(cur_graphs <- colPair(cur_sce, "neighbourhood"))
-    cur_test <- vroom::vroom(file.path(path, "Object relationships.csv"))
+    cur_test <- vroom::vroom(file.path(path, "Object_relationships.csv"))
     cur_test <- cur_test[cur_test$`First Image Number` == 3,]
     
     expect_equal(cur_test$`First Object Number` + sum(cur_sce$sample_id %in% c("1", "2")), 
@@ -119,7 +119,7 @@ test_that("read_cpout function works.", {
                  to(cur_graphs)[to(cur_graphs) %in% which(cur_sce$sample_id == "3")])
     
     expect_silent(cur_graphs <- colPair(cur_sce, "neighbourhood"))
-    cur_test <- vroom::vroom(file.path(path, "Object relationships.csv"))
+    cur_test <- vroom::vroom(file.path(path, "Object_relationships.csv"))
     cur_test <- cur_test[cur_test$`First Image Number` == 4,]
     
     expect_equal(cur_test$`First Object Number` + sum(cur_sce$sample_id %in% c("1", "2", "3")), 
@@ -128,6 +128,10 @@ test_that("read_cpout function works.", {
                  to(cur_graphs)[to(cur_graphs) %in% which(cur_sce$sample_id == "4")])
     
     # Test other inputs
+    expect_silent(cur_spe <- read_cpout(path, 
+                                        graph_file = "Object_relationships.csv",
+                                        panel_file = paste0(path, "/panel.csv")))
+    
     cur_spe <- read_cpout(path, image_file = NULL, scale_intensities = FALSE, 
                           graph_file = "Object_relationships.csv")
     
@@ -164,7 +168,7 @@ test_that("read_cpout function works.", {
     expect_equal(colPairNames(cur_spe), "neighbourhood")
     
     expect_silent(cur_graphs <- colPair(cur_spe, "neighbourhood"))
-    cur_test <- vroom::vroom(file.path(path, "Object relationships.csv"))
+    cur_test <- vroom::vroom(file.path(path, "Object_relationships.csv"))
     cur_test <- cur_test[cur_test$`First Image Number` == 3,]
     
     expect_equal(cur_test$`First Object Number` + sum(cur_spe$sample_id %in% c("1", "2")), 
@@ -173,7 +177,7 @@ test_that("read_cpout function works.", {
                  to(cur_graphs)[to(cur_graphs) %in% which(cur_spe$sample_id == "3")])
     
     expect_silent(cur_graphs <- colPair(cur_spe, "neighbourhood"))
-    cur_test <- vroom::vroom(file.path(path, "Object relationships.csv"))
+    cur_test <- vroom::vroom(file.path(path, "Object_relationships.csv"))
     cur_test <- cur_test[cur_test$`First Image Number` == 4,]
     
     expect_equal(cur_test$`First Object Number` + sum(cur_spe$sample_id %in% c("1", "2", "3")), 
@@ -217,7 +221,7 @@ test_that("read_cpout function works.", {
     expect_equal(colPairNames(cur_sce), "neighbourhood")
     
     expect_silent(cur_graphs <- colPair(cur_sce, "neighbourhood"))
-    cur_test <- vroom::vroom(file.path(path, "Object relationships.csv"))
+    cur_test <- vroom::vroom(file.path(path, "Object_relationships.csv"))
     cur_test <- cur_test[cur_test$`First Image Number` == 3,]
     
     expect_equal(cur_test$`First Object Number` + sum(cur_sce$sample_id %in% c("1", "2")), 
@@ -226,7 +230,7 @@ test_that("read_cpout function works.", {
                  to(cur_graphs)[to(cur_graphs) %in% which(cur_sce$sample_id == "3")])
     
     expect_silent(cur_graphs <- colPair(cur_sce, "neighbourhood"))
-    cur_test <- vroom::vroom(file.path(path, "Object relationships.csv"))
+    cur_test <- vroom::vroom(file.path(path, "Object_relationships.csv"))
     cur_test <- cur_test[cur_test$`First Image Number` == 4,]
     
     expect_equal(cur_test$`First Object Number` + sum(cur_sce$sample_id %in% c("1", "2", "3")), 
@@ -437,63 +441,90 @@ test_that("read_cpout function works.", {
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "Neighbors_NumberOfNeighbors_8"))
     
     # Fail
-    expect_error(read_cpout("test"), 
+    expect_error(read_cpout("test", 
+                            graph_file = "Object_relationships.csv"), 
                  regexp = "'path' doesn't exist.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(1), 
+    expect_error(read_cpout(1, 
+                            graph_file = "Object_relationships.csv"), 
                  regexp = "'path' must be a single string.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(c("test", "test")), 
+    expect_error(read_cpout(c("test", "test"), 
+                            graph_file = "Object_relationships.csv"), 
                  regexp = "'path' must be a single string.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, object_file = NULL), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            object_file = NULL), 
                  regexp = "'object_file' must be specified.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, object_file = "test"), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            object_file = "test"), 
                  regexp = "'object_file' doesn't exist.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, object_file = 1), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            object_file = 1), 
                  regexp = "'object_file' must be a single string.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, object_file = c("test", "test")), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            object_file = c("test", "test")), 
                  regexp = "'object_file' must be a single string.", 
                  fixed = TRUE)
 
-    expect_error(read_cpout(path, object_feature_file = NULL), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            object_feature_file = NULL), 
                  regexp = "'object_feature_file' must be specified.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, object_feature_file = "test"), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            object_feature_file = "test"), 
                  regexp = "'object_feature_file' doesn't exist.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, object_feature_file = 1), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            object_feature_file = 1), 
                  regexp = "'object_feature_file' must be a single string.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, object_feature_file = c("test", "test")), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            object_feature_file = c("test", "test")), 
                  regexp = "'object_feature_file' must be a single string.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, image_file = NULL), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            image_file = NULL), 
                  regexp = "When scaling the summarized object intensities, please supply the 'image_file'.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, image_file = "test"), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            image_file = "test"), 
                  regexp = "'image_file' doesn't exist.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, image_file = 1), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            image_file = 1), 
                  regexp = "'image_file' must be a single string.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, image_file = c("test", "test")), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            image_file = c("test", "test")), 
                  regexp = "'image_file' must be a single string.", 
                  fixed = TRUE)
     
@@ -509,148 +540,218 @@ test_that("read_cpout function works.", {
                  regexp = "'graph_file' must be a single string.", 
                  fixed = TRUE)
     
-    expect_warning(read_cpout(path, panel_file = "test"), 
+    expect_warning(read_cpout(path, panel_file = "test", 
+                              graph_file = "Object_relationships.csv"), 
                  regexp = "'panel_file' does not exist.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, panel_file = 1), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            panel_file = 1), 
                  regexp = "'panel_file' must be a single string.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, panel_file = c("test", "test")), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            panel_file = c("test", "test")), 
                  regexp = "'panel_file' must be a single string.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, extract_metal_from = NULL), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            extract_metal_from = NULL), 
                  regexp = "'extract_metal_from' must be specified.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, extract_metal_from = "test"), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            extract_metal_from = "test"), 
                  regexp = "'extract_metal_from' not in panel file.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, extract_metal_from = 1), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            extract_metal_from = 1), 
                  regexp = "'extract_metal_from' must be a single string.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, extract_metal_from = c("test", "test")), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            extract_metal_from = c("test", "test")), 
                  regexp = "'extract_metal_from' must be a single string.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, intensities =  NULL), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            intensities =  NULL), 
                  regexp = "'intensities' must be specified.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, intensities =  "test"), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            intensities =  "test"), 
                  regexp = "No intensity features were read in. Please check the 'intensities' parameter.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, intensities =  "MeanIntensity"), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            intensities =  "MeanIntensity"), 
                  regexp = "Some of the features set via 'intensities' cannot be uniquely accessed.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, intensities =  c("MeanIntensity", "MedianIntensity")), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            intensities =  c("MeanIntensity", "MedianIntensity")), 
                  regexp = "'intensities' must be a single string.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, intensities =  1), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            intensities =  1), 
                  regexp = "'intensities' must be a single string.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, extract_imgid_from = NULL), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            extract_imgid_from = NULL), 
                  regexp = "'extract_imgid_from' must be specified.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, extract_imgid_from = 1), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            extract_imgid_from = 1), 
                  regexp = "'extract_imgid_from' must be a single string.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, extract_imgid_from = c("test", "test")), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            extract_imgid_from = c("test", "test")), 
                  regexp = "'extract_imgid_from' must be a single string.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, extract_imgid_from = "test"), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            extract_imgid_from = "test"), 
                  regexp = "'extract_imgid_from' not in 'object_file'.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, extract_cellid_from = NULL), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            extract_cellid_from = NULL), 
                  regexp = "'extract_cellid_from' must be specified.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, extract_cellid_from = 1), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            extract_cellid_from = 1), 
                  regexp = "'extract_cellid_from' must be a single string.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, extract_cellid_from = c("test", "test")), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            extract_cellid_from = c("test", "test")), 
                  regexp = "'extract_cellid_from' must be a single string.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, extract_cellid_from = "test"), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            extract_cellid_from = "test"), 
                  regexp = "'extract_cellid_from' not in 'object_file'.", 
                  fixed = TRUE)
 
-    expect_error(read_cpout(path, extract_coords_from = 1), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            extract_coords_from = 1), 
                  regexp = "'extract_coords_from' not in 'object_file'.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, extract_coords_from = c("test1", "Location_X")), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            extract_coords_from = c("test1", "Location_X")), 
                  regexp = "'extract_coords_from' not in 'object_file'.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, extract_cellmetadata_from = 1), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            extract_cellmetadata_from = 1), 
                  regexp = "'extract_cellmetadata_from' not in 'object_file'.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, extract_cellmetadata_from = c("test1", "Location_X")), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            extract_cellmetadata_from = c("test1", "Location_X")), 
                  regexp = "'extract_cellmetadata_from' not in 'object_file'.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, scale_intensities = NULL), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            scale_intensities = NULL), 
                  regexp = "'scale_intensities' needs to be logical.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, scale_intensities = c(1,2)), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            scale_intensities = c(1,2)), 
                  regexp = "'scale_intensities' needs to be of length 1.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, scale_intensities = "test"), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            scale_intensities = "test"), 
                  regexp = "'scale_intensities' needs to be logical.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, image_file = NULL), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            image_file = NULL), 
                  regexp = "When scaling the summarized object intensities, please supply the 'image_file'.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, extract_imagemetadata_from = "test"), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            extract_imagemetadata_from = "test"), 
                  regexp = "'extract_imagemetadata_from' not in 'image_file'.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, extract_scalingfactor_from = c(1,2)), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            extract_scalingfactor_from = c(1,2)), 
                  regexp = "'extract_scalingfactor_from' must be a single string.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, extract_scalingfactor_from = "test"), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            extract_scalingfactor_from = "test"), 
                  regexp = "'extract_scalingfactor_from' not in 'image_file'.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, extract_graphimageid_from = NULL), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            extract_graphimageid_from = NULL), 
                  regexp = "'extract_graphimageid_from' must be specified.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, extract_graphimageid_from = c(1,2)), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            extract_graphimageid_from = c(1,2)), 
                  regexp = "'extract_graphimageid_from' must be a single string.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, extract_graphimageid_from = "test"), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            extract_graphimageid_from = "test"), 
                  regexp = "'extract_graphimageid_from' not in 'graph_file'.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, extract_graphcellids_from = NULL), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            extract_graphcellids_from = NULL), 
                  regexp = "'extract_graphcellids_from' must be specified.", 
                  fixed = TRUE)
     
-    expect_error(read_cpout(path, extract_graphcellids_from = c("test", "Second Object Number")), 
+    expect_error(read_cpout(path, 
+                            graph_file = "Object_relationships.csv",
+                            extract_graphcellids_from = c("test", "Second Object Number")), 
                  regexp = "'extract_graphcellids_from' not in 'graph_file'.", 
                  fixed = TRUE)
-    
 })
