@@ -132,7 +132,7 @@ pipeline.</p>
   <span class='va'>path</span>,
   intensities_folder <span class='op'>=</span> <span class='st'>"intensities"</span>,
   regionprops_folder <span class='op'>=</span> <span class='st'>"regionprops"</span>,
-  graphs_folder <span class='op'>=</span> <span class='st'>"graphs"</span>,
+  graphs_folder <span class='op'>=</span> <span class='st'>"neighbors"</span>,
   pattern <span class='op'>=</span> <span class='cn'>NULL</span>,
   extract_cellid_from <span class='op'>=</span> <span class='st'>"Object"</span>,
   extract_coords_from <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"centroid-0"</span>, <span class='st'>"centroid-1"</span><span class='op'>)</span>,
@@ -240,7 +240,7 @@ with the cell-cell interaction graphs</p>
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>read_steinbock</span><span class='op'>(</span><span class='va'>path</span><span class='op'>)</span>
 <span class='va'>x</span>
 </div><div class='output co'>#&gt; class: SpatialExperiment 
-#&gt; dim: 5 215 
+#&gt; dim: 5 218 
 #&gt; metadata(0):
 #&gt; assays(1): counts
 #&gt; rownames(5): Ag107 Cytokeratin 5 Laminin YBX1 H3K27Ac
@@ -258,7 +258,7 @@ with the cell-cell interaction graphs</p>
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>read_steinbock</span><span class='op'>(</span><span class='va'>path</span>, return_as <span class='op'>=</span> <span class='st'>"sce"</span><span class='op'>)</span>
 <span class='va'>x</span>
 </div><div class='output co'>#&gt; class: SingleCellExperiment 
-#&gt; dim: 5 215 
+#&gt; dim: 5 218 
 #&gt; metadata(0):
 #&gt; assays(1): counts
 #&gt; rownames(5): Ag107 Cytokeratin 5 Laminin YBX1 H3K27Ac
@@ -273,7 +273,7 @@ with the cell-cell interaction graphs</p>
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>read_steinbock</span><span class='op'>(</span><span class='va'>path</span>, pattern <span class='op'>=</span> <span class='st'>"mockData1"</span><span class='op'>)</span>
 <span class='va'>x</span>
 </div><div class='output co'>#&gt; class: SpatialExperiment 
-#&gt; dim: 5 30 
+#&gt; dim: 5 32 
 #&gt; metadata(0):
 #&gt; assays(1): counts
 #&gt; rownames(5): Ag107 Cytokeratin 5 Laminin YBX1 H3K27Ac
@@ -291,7 +291,7 @@ with the cell-cell interaction graphs</p>
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>read_steinbock</span><span class='op'>(</span><span class='va'>path</span>, graphs_folder <span class='op'>=</span> <span class='cn'>NULL</span>, regionprops_folder <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 <span class='va'>x</span>
 </div><div class='output co'>#&gt; class: SpatialExperiment 
-#&gt; dim: 5 215 
+#&gt; dim: 5 218 
 #&gt; metadata(0):
 #&gt; assays(1): counts
 #&gt; rownames(5): Ag107 Cytokeratin 5 Laminin YBX1 H3K27Ac

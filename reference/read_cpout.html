@@ -277,7 +277,8 @@ coordinates are stored in the <code>colData(x)</code> slot named as <code>Pos_X<
 and <code>Pos_Y</code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='https://github.com/BodenmillerGroup/ImcSegmentationPipeline'>https://github.com/BodenmillerGroup/ImcSegmentationPipeline</a> for the pipeline</p>
+    <div class='dont-index'><p><a href='https://github.com/BodenmillerGroup/ImcSegmentationPipeline'>https://github.com/BodenmillerGroup/ImcSegmentationPipeline</a> for the 
+pipeline</p>
 <p><code><a href='read_steinbock.html'>read_steinbock</a></code> for reading in single-cell data as produced by the
 steinbock pipeline</p>
 <p><code><a href='https://rdrr.io/pkg/SingleCellExperiment/man/colPairs.html'>colPair</a></code> for information on how to work
@@ -291,7 +292,7 @@ with the cell-cell interaction graphs</p></div>
     <pre class="examples"><div class='input'><span class='va'>path</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata/mockData/cpout"</span>, package <span class='op'>=</span> <span class='st'>"imcRtools"</span><span class='op'>)</span>
 
 <span class='co'># Read in as SpatialExperiment object</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>read_cpout</span><span class='op'>(</span><span class='va'>path</span><span class='op'>)</span>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>read_cpout</span><span class='op'>(</span><span class='va'>path</span>, graph_file <span class='op'>=</span> <span class='st'>"Object_relationships.csv"</span><span class='op'>)</span>
 <span class='va'>x</span>
 </div><div class='output co'>#&gt; class: SpatialExperiment 
 #&gt; dim: 5 219 
@@ -309,7 +310,8 @@ with the cell-cell interaction graphs</p></div>
 #&gt; spatialCoords names(2) : Pos_X Pos_Y
 #&gt; imgData names(1): sample_id</div><div class='input'>
 <span class='co'># Read in as SingleCellExperiment object</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>read_cpout</span><span class='op'>(</span><span class='va'>path</span>, return_as <span class='op'>=</span> <span class='st'>"sce"</span><span class='op'>)</span>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>read_cpout</span><span class='op'>(</span><span class='va'>path</span>, graph_file <span class='op'>=</span> <span class='st'>"Object_relationships.csv"</span>, 
+                return_as <span class='op'>=</span> <span class='st'>"sce"</span><span class='op'>)</span>
 <span class='va'>x</span>
 </div><div class='output co'>#&gt; class: SingleCellExperiment 
 #&gt; dim: 5 219 
