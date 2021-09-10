@@ -266,10 +266,11 @@ from "hot pixel" filtered image stacks specified via
 cur_path <- system.file("extdata/mockData/cpout", package = "imcRtools")
 
 # Read as SpatialExperiment
-(spe <- read_cpout(cur_path))
+(spe <- read_cpout(cur_path, graph_file = "Object_relationships.csv"))
 
 # Read as SingleCellExperiment
-(sce <- read_cpout(cur_path, return_as = "sce"))
+(sce <- read_cpout(cur_path, graph_file = "Object_relationships.csv", 
+                   return_as = "sce"))
 ```
 
 ## Read in steinbock output

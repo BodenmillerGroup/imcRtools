@@ -1,7 +1,7 @@
 #' @title Builds an interaction graph based on the cells' locations
 #'
 #' @description Function to define cell-cell interactions via distance-based
-#' expansion, delaunay triangulation or k nearest neighbour detection.
+#' expansion, delaunay triangulation or k nearest neighbor detection.
 #'
 #' @param object a \code{SingleCellExperiment} or \code{SpatialExperiment}
 #' object
@@ -10,25 +10,25 @@
 #' @param type single character specifying the type of graph to be build.
 #' Supported entries are \code{"expansion"} (default) to find interacting
 #' cells via distance thresholding; \code{"delaunay"} to find interactions via
-#' delaunay triangulation; \code{"knn"} to find the k nearest neighbouring
+#' delaunay triangulation; \code{"knn"} to find the k nearest neighboring
 #' cells.
 #' @param threshold (when \code{type = "expansion"}) single numeric specifying
-#' the maximum distance for considering neighbours
+#' the maximum distance for considering neighbors
 #' @param k (when \code{type = "knn"}) single numeric integer defining the
-#' number of nearest neighbours to search for.
+#' number of nearest neighbors to search for.
 #' @param coords character vector of length 2 specifying the names of the
 #' \code{colData} (for a \code{SingleCellExperiment} object) or the
 #' \code{spatialCoords} entries of the cells' x and y locations.
 #' @param name single character specifying the name of the graph.
-#' @param directed should the returned graph be directed? Only effects the k
-#' nearest neighbour graph (see details).
-#' @param k_max_dist if \code{type = "knn"}, the maximum distance at which to
+#' @param directed (when \code{type = "knn"}) should the returned graph be 
+#' directed? (see details).
+#' @param k_max_dist (when \code{type = "knn"}) the maximum distance at which to
 #' consider neighboring cells. All neighbors within a distance larger than 
 #' \code{k_max_dist} will be excluded from graph construction.
-#' @param BNPARAM a \code{\link[BiocNeighbors]{BiocNeighborParam} object
+#' @param BNPARAM a \code{\link[BiocNeighbors]{BiocNeighborParam}} object
 #' defining the algorithm to use.}
 #' @param BPPARAM a \code{\link[BiocParallel]{BiocParallelParam-class}} object
-#' defining how to parallelise computations.
+#' defining how to parallelize computations.
 #' @param ... additional parameters passed to the
 #' \code{\link[BiocNeighbors]{findNeighbors}} function (\code{type =
 #' "expansion"}), the \code{\link[RTriangle]{triangulate}} function
@@ -53,7 +53,7 @@
 #' nearest neighbors in the 2D spatial plane. 
 #' 
 #' The \code{directed} parameter only affects graph construction via k nearest
-#' neighbour search. For \code{directed = FALSE}, each interaction will be
+#' neighbor search. For \code{directed = FALSE}, each interaction will be
 #' stored as mutual edge (e.g. node 2 is connected to node 10 and vise versa).
 #' For \code{type = "expansion"} and \code{type = "delaunay"}, each edge is 
 #' stored as mutual edge by default.
@@ -64,12 +64,13 @@
 #' \code{graph_from_edgelist(as.matrix(colPair(object, name)))}.
 #'
 #' @section Choosing the graph construction method:
-#' When finding interactions via \code{expansion} of \code{knn}, the 
+#' When finding interactions via \code{expansion} or \code{knn}, the 
 #' \code{\link[BiocNeighbors]{findNeighbors}} or 
-#' \code{\link[BiocNeighbors]{findKNN}} functions are used. Both functions
-#' accept the \code{BNPARAM} via which the graph construction method can be 
-#' defined (default \code{\link[BiocNeighbors]{KmknnParam}}). For an overview
-#' on the different algorithms, see 
+#' \code{\link[BiocNeighbors]{findKNN}} functions are used, respectively. Both
+#' functions accept the \code{BNPARAM} parameter via which the graph
+#' construction method can be defined (default
+#' \code{\link[BiocNeighbors]{KmknnParam}}). For an overview on the different
+#' algorithms, see
 #' \code{\link[BiocNeighbors]{BiocNeighborParam}}. Within the 
 #' \code{BiocNeighborParam} object, \code{distance} can be set to
 #' \code{"Euclidean"} (default), \code{"Manhattan"} or \code{"Cosine"}.
@@ -94,8 +95,8 @@
 #' colPair(spe, "knn_interaction_graph")
 #' 
 #' @seealso 
-#' \code{\link[BiocNeighbors]{findNeighbors}} for the function finding interactions
-#' via expansion
+#' \code{\link[BiocNeighbors]{findNeighbors}} for the function finding 
+#' interactions via expansion
 #' 
 #' \code{\link[BiocNeighbors]{findKNN}} for the function finding interactions
 #' via nearest neighbor search
@@ -137,7 +138,8 @@ buildSpatialGraph <- function(object,
     cur_out <- bplapply(cur_ind,
                         function(x){
                             
-                            cur_obj <- object[,as.character(colData(object)[[img_id]]) == x]
+                            cur_obj <- object[,
+                                as.character(colData(object)[[img_id]]) == x]
                             
                             # Create coords matrix
                             if (is(cur_obj, "SpatialExperiment")) {
@@ -148,17 +150,18 @@ buildSpatialGraph <- function(object,
                             
                             if (type == "expansion") {
                                 cur_graph <- findNeighbors(cur_coords, 
-                                                           threshold = threshold, 
-                                                           get.distance = FALSE,
+                                                    threshold = threshold, 
+                                                get.distance = FALSE,
                                                            BNPARAM = BNPARAM,
                                                            ...)
-                                cur_graph <- graph_from_adj_list(cur_graph$index)
+                                cur_graph <- graph_from_adj_list(
+                                    cur_graph$index)
                             } else if (type == "delaunay") {
                                 cur_graph <- triangulate(pslg(P = cur_coords),
                                                     ...)
                                 
                                 cur_graph <- graph_from_edgelist(cur_graph$E, 
-                                                                 directed = FALSE)
+                                                              directed = FALSE)
                                 cur_graph <- as.directed(cur_graph,
                                                          mode = "mutual")
                                 
@@ -169,7 +172,8 @@ buildSpatialGraph <- function(object,
                                                          BNPARAM = BNPARAM,
                                                          get.distance = FALSE,
                                                          ...) 
-                                    cur_graph <- as.list(as.data.frame(t(cur_graph$index)))
+                                    cur_graph <- as.list(as.data.frame(
+                                        t(cur_graph$index)))
                                     cur_graph <- graph_from_adj_list(cur_graph)
                                 } else {
                                     cur_graph <- findKNN(cur_coords,
@@ -177,16 +181,18 @@ buildSpatialGraph <- function(object,
                                                          BNPARAM = BNPARAM,
                                                          get.distance = TRUE,
                                                          ...) 
-                                    cur_graph <- lapply(seq_len(nrow(cur_graph$index)),
+                                    cur_graph <- lapply(
+                                        seq_len(nrow(cur_graph$index)),
                                            function(i){
-                                               cur_graph$index[i,cur_graph$distance[i,] <= k_max_dist] 
+                                               cur_graph$index[i,
+                                        cur_graph$distance[i,] <= k_max_dist] 
                                            })
                                     cur_graph <- graph_from_adj_list(cur_graph)
                                 }
                                 
                                 if (!directed) {
                                     cur_graph <- as.undirected(cur_graph, 
-                                                               mode = "collapse")
+                                                            mode = "collapse")
                                     cur_graph <- as.directed(cur_graph,
                                                              mode = "mutual")
                                 }

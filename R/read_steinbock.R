@@ -88,7 +88,7 @@
 read_steinbock <- function(path,
                            intensities_folder = "intensities",
                            regionprops_folder = "regionprops",
-                           graphs_folder = "graphs",
+                           graphs_folder = "neighbors",
                            pattern = NULL,
                            extract_cellid_from = "Object",
                            extract_coords_from = c("centroid-0", "centroid-1"),

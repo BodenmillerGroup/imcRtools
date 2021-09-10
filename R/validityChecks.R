@@ -221,16 +221,19 @@
     if (!is.null(regionprops_folder)) {
         all_files <- list.files(file.path(path, regionprops_folder),
                                 pattern =  pattern, full.names = TRUE)
-        cur_file <- vroom(all_files[1],
-                          progress = FALSE,
-                          col_types = cols())
-
-        if (!all(is.character(coords))) {
-            stop("'extract_coords_from' must be characters.")
-        }
-
-        if (!all(coords %in% colnames(cur_file))) {
-            stop("'coords' not in regionprops files.")
+        
+        if (length(all_files) > 0) {
+            cur_file <- vroom(all_files[1],
+                              progress = FALSE,
+                              col_types = cols())
+            
+            if (!all(is.character(coords))) {
+                stop("'extract_coords_from' must be characters.")
+            }
+            
+            if (!all(coords %in% colnames(cur_file))) {
+                stop("'coords' not in regionprops files.")
+            }   
         }
     }
 

@@ -74,6 +74,15 @@ test_that("readSCEfromTXT function reads in correct objects.", {
                  regexp = "Not all names match the pattern (mt)(mass).",
                  fixed = TRUE)
     
+    expect_error(readSCEfromTXT(path, pattern = "Dy175", verbose = FALSE),
+                 regexp = "Files could not be read in.",
+                 fixed = TRUE)
+    
+    names(cur_files)[1] <- "test" 
+    expect_error(readSCEfromTXT(cur_files, verbose = FALSE), 
+                 regexp = "Not all names match the pattern (mt)(mass).",
+                 fixed = TRUE)
+    
     names(cur_files)[1] <- "XYZ1" 
     expect_error(readSCEfromTXT(cur_files, verbose = FALSE), 
                  regexp = "Not all names match the pattern (mt)(mass).",
@@ -95,5 +104,29 @@ test_that("readSCEfromTXT function reads in correct objects.", {
     expect_error(readSCEfromTXT(path, metadata_cols = "test", verbose = FALSE), 
                  regexp = "Not all 'metadata_cols' are present in entries to 'txt_list'",
                  fixed = TRUE)
+    
+})
+
+test_that("readSCEfromTXT function detects channels that were not acquired.", {
+    path <- system.file("extdata/spillover", package = "imcRtools")
+    
+    # Move files to tmp location
+    cur_path <- tempdir()
+    file.copy(path, cur_path, recursive = TRUE)
+    
+    # Alter the files
+    lapply(list.files(paste0(cur_path, "/spillover"), full.names = TRUE),
+           function(x) {
+               cur_file <- read.csv(x)
+               cur_file <- cur_file[,-8]
+               write.csv(cur_file, x)
+           })
+    
+    # Read in .txt
+    expect_error(cur_sce <- readSCEfromTXT(paste0(cur_path, "/spillover"), 
+                                            verbose = FALSE),
+                 regexp = "Not all spotted channels were acquired.",
+                 fixed = TRUE)
+
     
 })
