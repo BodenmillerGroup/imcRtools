@@ -25,7 +25,7 @@ the files.}
 \item{index_names}{exact names of the columns storing the x and y coordinates 
 of the image}
 
-\item{BPPARAM}{parameters for parallelised reading in of images. 
+\item{BPPARAM}{parameters for parallelized reading in of images. 
 This is only recommended for very large images.}
 }
 \value{
@@ -68,8 +68,11 @@ z
 }
 \seealso{
 \code{\linkS4class{CytoImageList}} for the container
-\code{\link[BiocParallel]{MulticoreParam}} for parallelised processing
+
+\code{\link[BiocParallel]{MulticoreParam}} for parallelized processing
+
 \code{\linkS4class{Image}} for the multi-channel image object
+
 \code{vignette("cytomapper")} for visualization of multi-channel images
 }
 \author{

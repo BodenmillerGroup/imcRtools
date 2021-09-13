@@ -24,7 +24,7 @@
 #' @param p_threshold single numeric indicating the empirical p-value 
 #' threshold at which interactions are considered to be significantly 
 #' enriched or depleted per group.
-#' @param BBPARAM parameters for parallelized processing. 
+#' @param BPPARAM parameters for parallelized processing. 
 #'
 #' @section Counting and summarizing cell-cell interactions:
 #' In principle, the \code{\link{countInteractions}} function counts the number
@@ -50,15 +50,16 @@
 #' fraction of cells of type A have at least a given number of neighbors of 
 #' type B?"
 #' 
-#' @section Testing for significance:
-#' Within each unique entry to \code{colData(object)[[group_by]]}, the entries
-#' of \code{colData(object)[[label]]} are randomized \code{iter} times. 
-#' For each iteration, the interactions are counted as described above.
-#' The result is a distribution of the interaction count under spatial randomness.
-#' The observed interaction count is compared against this Null distribution to derive
-#' empirical p-values: 
+#' @section Testing for significance: Within each unique entry to
+#' \code{colData(object)[[group_by]]}, the entries of
+#' \code{colData(object)[[label]]} are randomized \code{iter} times. For each
+#' iteration, the interactions are counted as described above. The result is a
+#' distribution of the interaction count under spatial randomness. The
+#' observed interaction count is compared against this Null distribution to
+#' derive empirical p-values:
 #' 
-#' \code{p_gt}: fraction of perturbations equal or greater than the observed count
+#' \code{p_gt}: fraction of perturbations equal or greater than the observed 
+#' count
 #' 
 #' \code{p_lt}: fraction of perturbations equal or less than the observed count
 #' 
@@ -67,19 +68,21 @@
 #' \code{p_treshold} (\code{sig} and \code{sigval}) are derived.
 #' 
 #' @return a DataFrame containing one row per \code{group_by} entry and unique
-#' label entry combination (\code{from_label}, \code{to_label}). The object
-#' contains following entries:
+#' \code{label} entry combination (\code{from_label}, \code{to_label}). The
+#' object contains following entries:
 #' 
 #' \itemize{
-#' \item{ct:}{ stores the interaction count as described in the details} 
-#' \item{p_gt:}{ stores the fraction of perturbations equal or greater than \code{ct}}  
-#' \item{p_ltv}{ stores the fraction of perturbations equal or less than \code{ct}}
-#' \item{interaction:}{ is there the tendency for a positive interaction
+#' \item{\code{ct}:}{ stores the interaction count as described in the details} 
+#' \item{\code{p_gt}:}{ stores the fraction of perturbations equal or greater 
+#' than \code{ct}}  
+#' \item{\code{p_lt}:}{ stores the fraction of perturbations equal or less than 
+#' \code{ct}}
+#' \item{\code{interaction}:}{ is there the tendency for a positive interaction
 #' (attraction) between \code{from_label} and \code{to_label}? Is \code{p_lt}
 #' greater than \code{p_gt}?}
-#' \item{p:}{ the smaller value of \code{p_gt} and \code{p_lt}.} 
-#' \item{sig:}{ is \code{p} smaller than \code{p_threshold}?}
-#' \item{sigval:}{ Combination of \code{interaction} and \code{sig}.}
+#' \item{\code{p}:}{ the smaller value of \code{p_gt} and \code{p_lt}.} 
+#' \item{\code{sig}:}{ is \code{p} smaller than \code{p_threshold}?}
+#' \item{\code{sigval}:}{ Combination of \code{interaction} and \code{sig}.}
 #' \itemize{
 #' \item{-1:}{ \code{interaction == FALSE} and \code{sig == TRUE}}  
 #' \item{0:}{ \code{sig == FALSE}}  
@@ -87,39 +90,40 @@
 #' }
 #' }
 #' 
-#' \code{NA} is returned if a certain label is not present in this grouping level.
+#' \code{NA} is returned if a certain label is not present in this grouping 
+#' level.
 #'  
 #' @examples 
 #' library(cytomapper)
 #' data(pancreasSCE)
 #'
-#' pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn",
-#'                                k = 3)
+#' pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+#'                                  type = "knn", k = 3)
 #'                                
 #' # Classic style calculation
 #' (out <- testInteractions(pancreasSCE, 
-#'                                 group_by = "ImageNb",
-#'                                 label = "CellType", 
-#'                                 method = "classic",
-#'                                 colPairName = "knn_interaction_graph",
-#'                                 iter = 1000))
+#'                          group_by = "ImageNb",
+#'                          label = "CellType", 
+#'                          method = "classic",
+#'                          colPairName = "knn_interaction_graph",
+#'                          iter = 1000))
 #'                                 
 #' # Histocat style calculation
 #' (out <- testInteractions(pancreasSCE, 
-#'                                 group_by = "ImageNb",
-#'                                 label = "CellType", 
-#'                                 method = "histocat",
-#'                                 colPairName = "knn_interaction_graph",
-#'                                 iter = 1000))
+#'                          group_by = "ImageNb",
+#'                          label = "CellType", 
+#'                          method = "histocat",
+#'                          colPairName = "knn_interaction_graph",
+#'                          iter = 1000))
 #'                                 
 #' # Patch style calculation
 #' (out <- testInteractions(pancreasSCE, 
-#'                                 group_by = "ImageNb",
-#'                                 label = "CellType", 
-#'                                 method = "patch",
-#'                                 patch_size = 3,
-#'                                 colPairName = "knn_interaction_graph",
-#'                                 ))
+#'                          group_by = "ImageNb",
+#'                          label = "CellType", 
+#'                          method = "patch",
+#'                          patch_size = 3,
+#'                          colPairName = "knn_interaction_graph",
+#'                          ))
 #' 
 #' @seealso 
 #' \code{\link{countInteractions}} for counting (but not testing) cell-cell
@@ -129,7 +133,7 @@
 #'
 #' @author Vito Zanotelli
 #' @author Jana Fischer
-#' @author adapted by Nils Eling (\email{nils.eling@@uzh.ch})
+#' @author adapted by Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #' 
 #' @references
 #' \href{https://www.sciencedirect.com/science/article/pii/S2405471217305434}{
@@ -143,19 +147,19 @@
 #' 
 #' @export
 testInteractions <- function(object, 
-                                 group_by,
-                                 label,
-                                 colPairName,
-                                 method = c("classic", "histocat", "patch"),
-                                 patch_size = NULL,
-                                 iter = 1000,
-                                 p_threshold = 0.01,
-                                 BBPARAM = SerialParam()){
+                                group_by,
+                                label,
+                                colPairName,
+                                method = c("classic", "histocat", "patch"),
+                                patch_size = NULL,
+                                iter = 1000,
+                                p_threshold = 0.01,
+                                BPPARAM = SerialParam()){
 
     # Input check
     method <- match.arg(method)
     .valid.countInteractions.input(object, group_by, label, method,
-                                       patch_size, colPairName)
+                                        patch_size, colPairName)
     .valid.testInteractions.input(iter, p_threshold)
 
     cur_label <- colData(object)[[label]]
@@ -168,13 +172,13 @@ testInteractions <- function(object,
         cur_count <- .aggregate_histo(cur_table)
     } else if (method == "patch") {
         cur_count <- .aggregate_classic_patch(cur_table, 
-                                              patch_size = patch_size, 
-                                              object, group_by, label)
+                                            patch_size = patch_size, 
+                                            object, group_by, label)
     }
     
     # Permute the labels
     cur_out <- .permute_labels(object, group_by, label, iter, patch_size,
-                               colPairName, method, BBPARAM)
+                                colPairName, method, BPPARAM)
     
     cur_out <- .calc_p_vals(cur_count, cur_out, n_perm = iter, 
                             p_thres = p_threshold)

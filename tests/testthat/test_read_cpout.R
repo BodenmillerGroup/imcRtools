@@ -44,9 +44,9 @@ test_that("read_cpout function works.", {
     expect_equal(rowData(cur_spe)$ilastik, cur_panel$ilastik[order(mass, decreasing = FALSE)])
     expect_equal(rowData(cur_spe)$full, cur_panel$full[order(mass, decreasing = FALSE)])
     
-    expect_equal(colPairNames(cur_spe), "neighbourhood")
+    expect_equal(colPairNames(cur_spe), "neighborhood")
     
-    expect_silent(cur_graphs <- colPair(cur_spe, "neighbourhood"))
+    expect_silent(cur_graphs <- colPair(cur_spe, "neighborhood"))
     cur_test <- vroom::vroom(file.path(path, "Object_relationships.csv"))
     cur_test <- cur_test[cur_test$`First Image Number` == 3,]
     
@@ -55,7 +55,7 @@ test_that("read_cpout function works.", {
     expect_equal(cur_test$`Second Object Number` + sum(cur_spe$sample_id %in% c("1", "2")), 
                  to(cur_graphs)[to(cur_graphs) %in% which(cur_spe$sample_id == "3")])
     
-    expect_silent(cur_graphs <- colPair(cur_spe, "neighbourhood"))
+    expect_silent(cur_graphs <- colPair(cur_spe, "neighborhood"))
     cur_test <- vroom::vroom(file.path(path, "Object_relationships.csv"))
     cur_test <- cur_test[cur_test$`First Image Number` == 4,]
     
@@ -107,9 +107,9 @@ test_that("read_cpout function works.", {
     expect_equal(rowData(cur_sce)$ilastik, cur_panel$ilastik[order(mass, decreasing = FALSE)])
     expect_equal(rowData(cur_sce)$full, cur_panel$full[order(mass, decreasing = FALSE)])
     
-    expect_equal(colPairNames(cur_sce), "neighbourhood")
+    expect_equal(colPairNames(cur_sce), "neighborhood")
     
-    expect_silent(cur_graphs <- colPair(cur_sce, "neighbourhood"))
+    expect_silent(cur_graphs <- colPair(cur_sce, "neighborhood"))
     cur_test <- vroom::vroom(file.path(path, "Object_relationships.csv"))
     cur_test <- cur_test[cur_test$`First Image Number` == 3,]
     
@@ -118,7 +118,7 @@ test_that("read_cpout function works.", {
     expect_equal(cur_test$`Second Object Number` + sum(cur_sce$sample_id %in% c("1", "2")), 
                  to(cur_graphs)[to(cur_graphs) %in% which(cur_sce$sample_id == "3")])
     
-    expect_silent(cur_graphs <- colPair(cur_sce, "neighbourhood"))
+    expect_silent(cur_graphs <- colPair(cur_sce, "neighborhood"))
     cur_test <- vroom::vroom(file.path(path, "Object_relationships.csv"))
     cur_test <- cur_test[cur_test$`First Image Number` == 4,]
     
@@ -165,9 +165,9 @@ test_that("read_cpout function works.", {
     expect_equal(rowData(cur_spe)$ilastik, cur_panel$ilastik[order(mass, decreasing = FALSE)])
     expect_equal(rowData(cur_spe)$full, cur_panel$full[order(mass, decreasing = FALSE)])
     
-    expect_equal(colPairNames(cur_spe), "neighbourhood")
+    expect_equal(colPairNames(cur_spe), "neighborhood")
     
-    expect_silent(cur_graphs <- colPair(cur_spe, "neighbourhood"))
+    expect_silent(cur_graphs <- colPair(cur_spe, "neighborhood"))
     cur_test <- vroom::vroom(file.path(path, "Object_relationships.csv"))
     cur_test <- cur_test[cur_test$`First Image Number` == 3,]
     
@@ -176,7 +176,7 @@ test_that("read_cpout function works.", {
     expect_equal(cur_test$`Second Object Number` + sum(cur_spe$sample_id %in% c("1", "2")), 
                  to(cur_graphs)[to(cur_graphs) %in% which(cur_spe$sample_id == "3")])
     
-    expect_silent(cur_graphs <- colPair(cur_spe, "neighbourhood"))
+    expect_silent(cur_graphs <- colPair(cur_spe, "neighborhood"))
     cur_test <- vroom::vroom(file.path(path, "Object_relationships.csv"))
     cur_test <- cur_test[cur_test$`First Image Number` == 4,]
     
@@ -218,9 +218,9 @@ test_that("read_cpout function works.", {
     expect_equal(rowData(cur_sce)$ilastik, cur_panel$ilastik[order(mass, decreasing = FALSE)])
     expect_equal(rowData(cur_sce)$full, cur_panel$full[order(mass, decreasing = FALSE)])
     
-    expect_equal(colPairNames(cur_sce), "neighbourhood")
+    expect_equal(colPairNames(cur_sce), "neighborhood")
     
-    expect_silent(cur_graphs <- colPair(cur_sce, "neighbourhood"))
+    expect_silent(cur_graphs <- colPair(cur_sce, "neighborhood"))
     cur_test <- vroom::vroom(file.path(path, "Object_relationships.csv"))
     cur_test <- cur_test[cur_test$`First Image Number` == 3,]
     
@@ -229,7 +229,7 @@ test_that("read_cpout function works.", {
     expect_equal(cur_test$`Second Object Number` + sum(cur_sce$sample_id %in% c("1", "2")), 
                  to(cur_graphs)[to(cur_graphs) %in% which(cur_sce$sample_id == "3")])
     
-    expect_silent(cur_graphs <- colPair(cur_sce, "neighbourhood"))
+    expect_silent(cur_graphs <- colPair(cur_sce, "neighborhood"))
     cur_test <- vroom::vroom(file.path(path, "Object_relationships.csv"))
     cur_test <- cur_test[cur_test$`First Image Number` == 4,]
     
@@ -271,7 +271,7 @@ test_that("read_cpout function works.", {
     expect_equal(rowData(cur_spe)$ilastik, cur_panel$ilastik[order(mass, decreasing = FALSE)])
     expect_equal(rowData(cur_spe)$full, cur_panel$full[order(mass, decreasing = FALSE)])
     
-    expect_equal(colPairNames(cur_spe), "neighbourhood")
+    expect_equal(colPairNames(cur_spe), "neighborhood")
     
     cur_spe <- read_cpout(path, graph_file = NULL)
     
@@ -345,7 +345,7 @@ test_that("read_cpout function works.", {
     expect_equal(as.numeric(spatialCoords(cur_spe)[,1]), object_file$Location_Center_X)
     expect_equal(as.numeric(spatialCoords(cur_spe)[,2]), object_file$Location_Center_Y)
     
-    expect_equal(colPairNames(cur_spe), "neighbourhood")
+    expect_equal(colPairNames(cur_spe), "neighborhood")
     
     cur_spe <- read_cpout(path, intensities = "MedianIntensity_FullStack_", graph_file = "Object_relationships.csv")
 
@@ -387,7 +387,7 @@ test_that("read_cpout function works.", {
     expect_equal(rowData(cur_spe)$ilastik, cur_panel$ilastik[order(mass, decreasing = FALSE)])
     expect_equal(rowData(cur_spe)$full, cur_panel$full[order(mass, decreasing = FALSE)])
     
-    expect_equal(colPairNames(cur_spe), "neighbourhood")
+    expect_equal(colPairNames(cur_spe), "neighborhood")
     
     cur_spe <- read_cpout(path, extract_cellmetadata_from = "Location_MaxIntensity_Y_ProbSegmentation_c1", 
                           graph_file = "Object_relationships.csv")

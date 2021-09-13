@@ -1,4 +1,4 @@
-#' @title Function to aggregate across all neighbors of each cell.
+#' @title Function to aggregate all neighbors of each cell.
 #'
 #' @description Function to summarize categorical or expression values of all
 #' neighbors of each cell.
@@ -9,7 +9,7 @@
 #' entry containing the neighbor information.
 #' @param aggregate_by character specifying whether the neighborhood should be
 #' summarized by cellular features stored in \code{colData(object)}
-#' (\code{aggregate_by = "metdata"}) or by the marker expression of the
+#' (\code{aggregate_by = "metdata"}) or by marker expression of the
 #' neighboring cells (\code{aggregate_by = "expression"}).
 #' @param count_by for \code{summarize_by = "metadata"}, a single character
 #' specifying the \code{colData(object)} entry containing the cellular
@@ -43,15 +43,15 @@
 #'                          
 #' # Aggregating neighboring cell-types
 #' sce <- aggregateNeighbors(sce, colPairName = "knn_interaction_graph",
-#'                           aggregate_by = "metadata",
-#'                           count_by = "CellType")
+#'                          aggregate_by = "metadata",
+#'                          count_by = "CellType")
 #' sce$aggregatedNeighbors
 #' 
 #' # Aggregating neighboring expression values
 #' sce <- aggregateNeighbors(sce, colPairName = "knn_interaction_graph",
-#'                           aggregate_by = "expression",
-#'                           assay_type = "exprs",
-#'                           statistic = "mean")
+#'                          aggregate_by = "expression",
+#'                          assay_type = "exprs",
+#'                          statistic = "mean")
 #' sce$mean_aggregatedExpression
 #'   
 #' @author Daniel Schulz (\email{daniel.schulz@@uzh.ch})
@@ -64,22 +64,22 @@
 #' @importFrom stats median sd var
 #' @export
 aggregateNeighbors <- function(object,
-                               colPairName,
-                               aggregate_by = c("metadata", "expression"),
-                               count_by = NULL,
-                               proportions = TRUE,
-                               assay_type = NULL,
-                               subset_row = NULL,
-                               statistic = c("mean", "median", "sd", "var"),
-                               name = NULL){
+                            colPairName,
+                            aggregate_by = c("metadata", "expression"),
+                            count_by = NULL,
+                            proportions = TRUE,
+                            assay_type = NULL,
+                            subset_row = NULL,
+                            statistic = c("mean", "median", "sd", "var"),
+                            name = NULL){
 
     summarize_by = match.arg(aggregate_by)
   
     summaryStats = match.arg(statistic)
 
-    .valid.aggregateNeighbors.input(object, colPairName, aggregate_by, count_by, 
-                                    proportions, assay_type, subset_row,
-                                    name)
+    .valid.aggregateNeighbors.input(object, colPairName, aggregate_by, 
+                                count_by, proportions, assay_type, subset_row,
+                                name)
 
     if (summarize_by == "metadata") {
 
@@ -90,7 +90,7 @@ aggregateNeighbors <- function(object,
         cur_dat[, "celltype" := cur_factor[cur_dat$to]]
 
         cur_dat <- dcast(cur_dat, formula = "from ~ celltype", 
-                               fun.aggregate = length, drop = FALSE)
+                                fun.aggregate = length, drop = FALSE)
 
         if (proportions) {
             .SD <- NULL
@@ -102,7 +102,8 @@ aggregateNeighbors <- function(object,
     
         name <- ifelse(is.null(name), "aggregatedNeighbors", name)
         
-        out_dat <- DataFrame(matrix(data = 0, nrow = ncol(object), ncol = ncol(cur_dat) - 1))
+        out_dat <- DataFrame(matrix(data = 0, nrow = ncol(object), 
+                                    ncol = ncol(cur_dat) - 1))
         names(out_dat) <- names(cur_dat)[-1]
         out_dat[cur_dat$from,] <- cur_dat[,-1]
 
@@ -119,19 +120,21 @@ aggregateNeighbors <- function(object,
         cur_dat <- as.data.table(colPair(object, colPairName))
 
         cur_dat <- cbind(cur_dat,t(assay(object, assay_type))[cur_dat$to,
-                                                              subset_row])
+                                                                subset_row])
         
         cur_dat <- melt(cur_dat, id.vars = c("from", "to"))
         
         cur_dat <- cur_dat[,eval(parse(text = paste0(statistic, "(value)"))), 
-                           by=c("from","variable")]
+                            by=c("from","variable")]
         
-        cur_dat <- dcast(cur_dat, formula = "from ~ variable", value.var = "V1")
+        cur_dat <- dcast(cur_dat, formula = "from ~ variable", 
+                        value.var = "V1")
 
         name <- ifelse(is.null(name), 
-                       paste0(statistic,"_aggregatedExpression"), name)
+                        paste0(statistic,"_aggregatedExpression"), name)
         
-        out_dat <- DataFrame(matrix(data = NA, nrow = ncol(object), ncol = ncol(cur_dat) - 1))
+        out_dat <- DataFrame(matrix(data = NA, nrow = ncol(object), 
+                                    ncol = ncol(cur_dat) - 1))
         names(out_dat) <- names(cur_dat)[-1]
         out_dat[cur_dat$from,] <- cur_dat[,-1]
 

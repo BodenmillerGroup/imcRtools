@@ -26,7 +26,7 @@
 #' consider neighboring cells. All neighbors within a distance larger than 
 #' \code{k_max_dist} will be excluded from graph construction.
 #' @param BNPARAM a \code{\link[BiocNeighbors]{BiocNeighborParam}} object
-#' defining the algorithm to use.}
+#' defining the algorithm to use.
 #' @param BPPARAM a \code{\link[BiocParallel]{BiocParallelParam-class}} object
 #' defining how to parallelize computations.
 #' @param ... additional parameters passed to the
@@ -115,21 +115,21 @@
 #' @importFrom RTriangle triangulate pslg
 #' @export
 buildSpatialGraph <- function(object,
-                              img_id,
-                              type = c("expansion", "knn", "delaunay"),
-                              k = NULL,
-                              directed = TRUE,
-                              k_max_dist = NULL,
-                              threshold = NULL,
-                              coords = c("Pos_X", "Pos_Y"),
-                              name = NULL,
-                              BNPARAM = KmknnParam(),
-                              BPPARAM = SerialParam(),
-                              ...){
+                                img_id,
+                                type = c("expansion", "knn", "delaunay"),
+                                k = NULL,
+                                directed = TRUE,
+                                k_max_dist = NULL,
+                                threshold = NULL,
+                                coords = c("Pos_X", "Pos_Y"),
+                                name = NULL,
+                                BNPARAM = KmknnParam(),
+                                BPPARAM = SerialParam(),
+                                ...){
     type <- match.arg(type)
     
     .valid.buildSpatialGraph.input(object, type, img_id, k, threshold, coords,
-                                   name, directed, k_max_dist)
+                                    name, directed, k_max_dist)
     
     name <- ifelse(is.null(name), paste0(type, "_interaction_graph"), name)
     
@@ -152,8 +152,8 @@ buildSpatialGraph <- function(object,
                                 cur_graph <- findNeighbors(cur_coords, 
                                                     threshold = threshold, 
                                                 get.distance = FALSE,
-                                                           BNPARAM = BNPARAM,
-                                                           ...)
+                                                            BNPARAM = BNPARAM,
+                                                            ...)
                                 cur_graph <- graph_from_adj_list(
                                     cur_graph$index)
                             } else if (type == "delaunay") {
@@ -161,32 +161,32 @@ buildSpatialGraph <- function(object,
                                                     ...)
                                 
                                 cur_graph <- graph_from_edgelist(cur_graph$E, 
-                                                              directed = FALSE)
+                                                            directed = FALSE)
                                 cur_graph <- as.directed(cur_graph,
-                                                         mode = "mutual")
+                                                        mode = "mutual")
                                 
                             } else {
                                 if (is.null(k_max_dist)) {
                                     cur_graph <- findKNN(cur_coords,
-                                                         k = k,
-                                                         BNPARAM = BNPARAM,
-                                                         get.distance = FALSE,
-                                                         ...) 
+                                                    k = k,
+                                                    BNPARAM = BNPARAM,
+                                                    get.distance = FALSE,
+                                                    ...) 
                                     cur_graph <- as.list(as.data.frame(
                                         t(cur_graph$index)))
                                     cur_graph <- graph_from_adj_list(cur_graph)
                                 } else {
                                     cur_graph <- findKNN(cur_coords,
-                                                         k = k,
-                                                         BNPARAM = BNPARAM,
-                                                         get.distance = TRUE,
-                                                         ...) 
+                                                        k = k,
+                                                        BNPARAM = BNPARAM,
+                                                        get.distance = TRUE,
+                                                        ...) 
                                     cur_graph <- lapply(
                                         seq_len(nrow(cur_graph$index)),
-                                           function(i){
-                                               cur_graph$index[i,
+                                            function(i){
+                                                cur_graph$index[i,
                                         cur_graph$distance[i,] <= k_max_dist] 
-                                           })
+                                            })
                                     cur_graph <- graph_from_adj_list(cur_graph)
                                 }
                                 
@@ -194,7 +194,7 @@ buildSpatialGraph <- function(object,
                                     cur_graph <- as.undirected(cur_graph, 
                                                             mode = "collapse")
                                     cur_graph <- as.directed(cur_graph,
-                                                             mode = "mutual")
+                                                            mode = "mutual")
                                 }
                             }
                             
@@ -202,8 +202,8 @@ buildSpatialGraph <- function(object,
                             
                             cur_graph <- as_edgelist(cur_graph)
                             cur_graph <- SelfHits(from = cur_graph[,1],
-                                                  to = cur_graph[,2], 
-                                                  nnode = nrow(cur_coords))
+                                                    to = cur_graph[,2], 
+                                                    nnode = nrow(cur_coords))
                             colPair(cur_obj, name) <- cur_graph
                             
                             return(cur_obj)

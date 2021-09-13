@@ -20,8 +20,8 @@
         cur_channels <- cur_channels[!is.na(cur_channels)]
         cur_channels <- sub("Di", "", cur_channels)
         
-        # Verbose option will print possible missmatched between acquired and open
-        # channels
+        # Verbose option will print possible missmatched between acquired and 
+        # open channels
         spot_not_ac <- cur_names[!(cur_names %in% cur_channels)]
         ac_not_spot <- cur_channels[!(cur_channels %in% cur_names)]
         if (verbose) {
@@ -54,8 +54,8 @@
 #' @importFrom SummarizedExperiment colData assayNames
 #' @importFrom methods is
 .valid.plotSpotHeatmap.input <- function(object, spot_id, channel_id,
-                                         assay_type, log,
-                                   threshold, order_metals){
+                                    assay_type, log,
+                                    threshold, order_metals){
 
     # Check sce object
     if (!is(object, "SingleCellExperiment")) {
@@ -75,7 +75,8 @@
         stop("'log' needs to be logical.")
     }
 
-    if (!is.null(threshold) & (length(threshold) != 1 || !all(is.numeric(threshold)))) {
+    if (!is.null(threshold) & (length(threshold) != 1 || 
+                                !all(is.numeric(threshold)))) {
         stop("'threshold' needs to be a single numeric.")
     }
 
@@ -144,14 +145,14 @@
 
     if (length(out) == 0) {
         stop("The pattern does not match any\n",
-             "of the files in the provided directory.")
+                "of the files in the provided directory.")
     }
 }
 
 
 .valid.read_steinbock.input <- function(path, intensities_folder, graphs_folder,
-                                        regionprops_folder, cell_id, coords,
-                                        panel, name, pattern) {
+                                    regionprops_folder, cell_id, coords,
+                                    panel, name, pattern) {
     if (length(path) != 1 | !is.character(path)) {
         stop("'path' must be a single string.")
     }
@@ -186,7 +187,8 @@
 
     if (!is.null(regionprops_folder)) {
 
-        if (length(regionprops_folder) != 1 | !is.character(regionprops_folder)) {
+        if (length(regionprops_folder) != 1 | 
+            !is.character(regionprops_folder)) {
             stop("'regionprops_folder' must be a single string.")
         }
 
@@ -206,8 +208,8 @@
 
     # Check cell_id
     cur_file <- vroom(all_files[1],
-                      progress = FALSE,
-                      col_types = cols())
+                        progress = FALSE,
+                        col_types = cols())
 
     if (length(cell_id) != 1 | !is.character(cell_id)) {
         stop("'extract_cellid_from' must be a single string.")
@@ -224,8 +226,8 @@
         
         if (length(all_files) > 0) {
             cur_file <- vroom(all_files[1],
-                              progress = FALSE,
-                              col_types = cols())
+                                progress = FALSE,
+                                col_types = cols())
             
             if (!all(is.character(coords))) {
                 stop("'extract_coords_from' must be characters.")
@@ -245,12 +247,12 @@
 
         if (file.exists(file.path(path, panel))) {
             cur_panel <- vroom(file.path(path, panel),
-                               progress = FALSE,
-                               col_types = cols())
+                                progress = FALSE,
+                                col_types = cols())
         } else if (file.exists(panel)) {
             cur_panel <- vroom(panel,
-                               progress = FALSE,
-                               col_types = cols())
+                                progress = FALSE,
+                                col_types = cols())
         }
 
         if (exists("cur_panel")) {
@@ -268,14 +270,16 @@
 
 #' @importFrom stringr str_count
 .valid.read_cpout.input <- function(path, object_file, image_file,
-                                    panel_file, graph_file, object_feature_file,
-                                    intensities,
-                                    extract_imgid_from, extract_cellid_from,
-                                    extract_coords_from,
-                                    extract_cellmetadata_from, extract_imagemetadata_from,
-                                    extract_graphimageid_from, extract_graphcellids_from,
-                                    extract_metal_from, scale_intensities,
-                                    extract_scalingfactor_from){
+                            panel_file, graph_file, object_feature_file,
+                            intensities, extract_imgid_from, 
+                            extract_cellid_from,
+                            extract_coords_from,
+                            extract_cellmetadata_from, 
+                            extract_imagemetadata_from,
+                            extract_graphimageid_from, 
+                            extract_graphcellids_from,
+                            extract_metal_from, scale_intensities,
+                            extract_scalingfactor_from){
 
     if (length(path) != 1 | !is.character(path)) {
         stop("'path' must be a single string.")
@@ -341,12 +345,12 @@
 
         if (file.exists(file.path(path, panel_file))) {
             cur_panel <- vroom(file.path(path, panel_file),
-                               progress = FALSE,
-                               col_types = cols())
+                                progress = FALSE,
+                                col_types = cols())
         } else if (file.exists(panel_file)) {
             cur_panel <- vroom(panel_file,
-                               progress = FALSE,
-                               col_types = cols())
+                                progress = FALSE,
+                                col_types = cols())
         }
 
         if (exists("cur_panel")) {
@@ -355,7 +359,8 @@
                 stop("'extract_metal_from' must be specified.")
             }
 
-            if (length(extract_metal_from) != 1 | !is.character(extract_metal_from)) {
+            if (length(extract_metal_from) != 1 | 
+                !is.character(extract_metal_from)) {
                 stop("'extract_metal_from' must be a single string.")
             }
 
@@ -366,7 +371,8 @@
     }
 
     # Check object files
-    cur_file <- vroom(file.path(path, object_file), n_max = 1, col_types = cols())
+    cur_file <- vroom(file.path(path, object_file), n_max = 1, 
+                      col_types = cols())
 
     if (is.null(intensities)) {
         stop("'intensities' must be specified.")
@@ -379,7 +385,8 @@
     feature_count <- sum(str_count(colnames(cur_file), intensities))
 
     if (feature_count == 0) {
-        stop("No intensity features were read in. Please check the 'intensities' parameter.")
+        stop("No intensity features were read in.",
+             " Please check the 'intensities' parameter.")
     }
 
     cur_features <- cur_file %>% select(contains(intensities))
@@ -387,7 +394,8 @@
     cur_channels <- as.numeric(table(cur_channels))
 
     if (any(cur_channels > 1)) {
-        stop("Some of the features set via 'intensities' cannot be uniquely accessed.")
+        stop("Some of the features set via 'intensities'", 
+             " cannot be uniquely accessed.")
     }
 
     if (is.null(extract_imgid_from)) {
@@ -446,7 +454,8 @@
     }
 
     if (!is.null(image_file)) {
-        cur_file <- vroom(file.path(path, image_file), n_max = 1, col_types = cols())
+        cur_file <- vroom(file.path(path, image_file), n_max = 1, 
+                          col_types = cols())
 
         if (!is.null(extract_imagemetadata_from)) {
             if (!all(extract_imagemetadata_from %in% colnames(cur_file))) {
@@ -454,11 +463,13 @@
             }
         }
 
-        if (length(extract_scalingfactor_from) != 1 | !is.character(extract_scalingfactor_from)) {
+        if (length(extract_scalingfactor_from) != 1 | 
+            !is.character(extract_scalingfactor_from)) {
             stop("'extract_scalingfactor_from' must be a single string.")
         }
 
-        if (scale_intensities & !extract_scalingfactor_from %in% colnames(cur_file)) {
+        if (scale_intensities & 
+            !extract_scalingfactor_from %in% colnames(cur_file)) {
             stop("'extract_scalingfactor_from' not in 'image_file'.")
         }
 
@@ -466,13 +477,15 @@
 
     # Check graph file
     if (!is.null(graph_file)) {
-        cur_file <- vroom(file.path(path, graph_file), n_max = 1, col_types = cols())
+        cur_file <- vroom(file.path(path, graph_file), n_max = 1, 
+                            col_types = cols())
 
         if (is.null(extract_graphimageid_from)) {
             stop("'extract_graphimageid_from' must be specified.")
         }
 
-        if (length(extract_graphimageid_from) != 1 | !is.character(extract_graphimageid_from)) {
+        if (length(extract_graphimageid_from) != 1 | 
+            !is.character(extract_graphimageid_from)) {
             stop("'extract_graphimageid_from' must be a single string.")
         }
 
@@ -493,8 +506,9 @@
 }
 
 #' @importFrom SpatialExperiment spatialCoordsNames
-.valid.buildSpatialGraph.input <- function(object, type, img_id, k, threshold, coords,
-                                    name, directed, k_max_dist){
+.valid.buildSpatialGraph.input <- function(object, type, img_id, k, 
+                                    threshold, coords, name, 
+                                    directed, k_max_dist){
 
     if (!is(object, "SingleCellExperiment")) {
         stop("'object' not of type 'SingleCellExperiment'.")
@@ -511,7 +525,8 @@
     if (type == "expansion") {
 
         if (is.null(threshold)) {
-            stop("When constructing a graph via expansion, please specify 'threshold'.")
+            stop("When constructing a graph via expansion,",
+                 " please specify 'threshold'.")
         }
         
         if (length(threshold) != 1 || !is.numeric(threshold)) {
@@ -566,9 +581,9 @@
 
 }
 
-.valid.aggregateNeighbors.input <- function(object, colPairName, aggregate_by, count_by, 
-                                            proportions, assay_type, subset_row,
-                                            name){
+.valid.aggregateNeighbors.input <- function(object, colPairName, aggregate_by, 
+                                        count_by, proportions, assay_type, 
+                                        subset_row, name){
 
     if (!is(object, "SingleCellExperiment")) {
         stop("'object' not of type 'SingleCellExperiment'.")
@@ -620,12 +635,15 @@
         }
         
         if (!is.null(subset_row)) {
-            if (all(is.character(subset_row)) & !all(subset_row %in% rownames(object))) {
+            if (all(is.character(subset_row)) & 
+                !all(subset_row %in% rownames(object))) {
                 stop("'subset_row' not in rownames(object).")
             }
             
-            if (all(is.logical(subset_row)) & length(subset_row) != nrow(object)) {
-                stop("'subset_row' logical entries must be as long as 'nrow(object)'.")
+            if (all(is.logical(subset_row)) & 
+                length(subset_row) != nrow(object)) {
+                stop("'subset_row' logical entries", 
+                     " must be as long as 'nrow(object)'.")
             }
         }
     }
@@ -637,11 +655,11 @@
 
 #' @importFrom S4Vectors mcols
 .valid.plotSpatial.input <- function(object, img_id, coords, node_color_by,
-                                     node_shape_by, node_size_by, edge_color_by,
-                                     assay_type, edge_width_by, draw_edges, 
-                                     directed,  arrow,  end_cap, colPairName, 
-                                     nodes_first, ncols, nrows, scales, 
-                                     flip_x, flip_y){
+                                    node_shape_by, node_size_by, edge_color_by,
+                                    assay_type, edge_width_by, draw_edges, 
+                                    directed,  arrow,  end_cap, colPairName, 
+                                    nodes_first, ncols, nrows, scales, 
+                                    flip_x, flip_y){
     
     if (!is(object, "SingleCellExperiment")) {
         stop("'object' not of type 'SingleCellExperiment'.")
@@ -682,7 +700,8 @@
     
     if (!is.null(node_color_by) && node_color_by %in% rownames(object)) {
         if (is.null(assay_type)) {
-            stop("When coloring nodes by marker expression, please specify 'assay_type'.")
+            stop("When coloring nodes by marker expression,", 
+                    " please specify 'assay_type'.")
         }
         
         if (length(assay_type) != 1 | !is.character(assay_type)) {
@@ -721,7 +740,7 @@
     if (draw_edges) {
         if (is.null(colPairName)) {
             stop("Please specify the name of the",
-                 " column pairing via 'colPairName'.")
+                " column pairing via 'colPairName'.")
         }
 
         if (length(colPairName) != 1 | !is.character(colPairName)) {
@@ -795,7 +814,7 @@
 }
 
 .valid.countInteractions.input <- function(object, group_by, label, method,
-                                               patch_size, colPairName){
+                                                patch_size, colPairName){
     
     if (!is(object, "SingleCellExperiment")) {
         stop("'object' not of type 'SingleCellExperiment'.")

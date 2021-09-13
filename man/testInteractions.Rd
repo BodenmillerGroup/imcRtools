@@ -13,7 +13,7 @@ testInteractions(
   patch_size = NULL,
   iter = 1000,
   p_threshold = 0.01,
-  BBPARAM = SerialParam()
+  BPPARAM = SerialParam()
 )
 }
 \arguments{
@@ -44,23 +44,25 @@ the minimum number of neighbors of the same type to be considered a patch
 threshold at which interactions are considered to be significantly 
 enriched or depleted per group.}
 
-\item{BBPARAM}{parameters for parallelized processing.}
+\item{BPPARAM}{parameters for parallelized processing.}
 }
 \value{
 a DataFrame containing one row per \code{group_by} entry and unique
-label entry combination (\code{from_label}, \code{to_label}). The object
-contains following entries:
+\code{label} entry combination (\code{from_label}, \code{to_label}). The
+object contains following entries:
 
 \itemize{
-\item{ct:}{ stores the interaction count as described in the details} 
-\item{p_gt:}{ stores the fraction of perturbations equal or greater than \code{ct}}  
-\item{p_ltv}{ stores the fraction of perturbations equal or less than \code{ct}}
-\item{interaction:}{ is there the tendency for a positive interaction
+\item{\code{ct}:}{ stores the interaction count as described in the details} 
+\item{\code{p_gt}:}{ stores the fraction of perturbations equal or greater 
+than \code{ct}}  
+\item{\code{p_lt}:}{ stores the fraction of perturbations equal or less than 
+\code{ct}}
+\item{\code{interaction}:}{ is there the tendency for a positive interaction
 (attraction) between \code{from_label} and \code{to_label}? Is \code{p_lt}
 greater than \code{p_gt}?}
-\item{p:}{ the smaller value of \code{p_gt} and \code{p_lt}.} 
-\item{sig:}{ is \code{p} smaller than \code{p_threshold}?}
-\item{sigval:}{ Combination of \code{interaction} and \code{sig}.}
+\item{\code{p}:}{ the smaller value of \code{p_gt} and \code{p_lt}.} 
+\item{\code{sig}:}{ is \code{p} smaller than \code{p_threshold}?}
+\item{\code{sigval}:}{ Combination of \code{interaction} and \code{sig}.}
 \itemize{
 \item{-1:}{ \code{interaction == FALSE} and \code{sig == TRUE}}  
 \item{0:}{ \code{sig == FALSE}}  
@@ -68,7 +70,8 @@ greater than \code{p_gt}?}
 }
 }
 
-\code{NA} is returned if a certain label is not present in this grouping level.
+\code{NA} is returned if a certain label is not present in this grouping 
+level.
 }
 \description{
 Cell-cell interactions are summarized in different ways and
@@ -102,15 +105,16 @@ type B?"
 }
 
 \section{Testing for significance}{
+ Within each unique entry to
+\code{colData(object)[[group_by]]}, the entries of
+\code{colData(object)[[label]]} are randomized \code{iter} times. For each
+iteration, the interactions are counted as described above. The result is a
+distribution of the interaction count under spatial randomness. The
+observed interaction count is compared against this Null distribution to
+derive empirical p-values:
 
-Within each unique entry to \code{colData(object)[[group_by]]}, the entries
-of \code{colData(object)[[label]]} are randomized \code{iter} times. 
-For each iteration, the interactions are counted as described above.
-The result is a distribution of the interaction count under spatial randomness.
-The observed interaction count is compared against this Null distribution to derive
-empirical p-values: 
-
-\code{p_gt}: fraction of perturbations equal or greater than the observed count
+\code{p_gt}: fraction of perturbations equal or greater than the observed 
+count
 
 \code{p_lt}: fraction of perturbations equal or less than the observed count
 
@@ -123,33 +127,33 @@ or avoidance), overall \code{p} value and significance by comparison to
 library(cytomapper)
 data(pancreasSCE)
 
-pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn",
-                               k = 3)
+pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                 type = "knn", k = 3)
                                
 # Classic style calculation
 (out <- testInteractions(pancreasSCE, 
-                                group_by = "ImageNb",
-                                label = "CellType", 
-                                method = "classic",
-                                colPairName = "knn_interaction_graph",
-                                iter = 1000))
+                         group_by = "ImageNb",
+                         label = "CellType", 
+                         method = "classic",
+                         colPairName = "knn_interaction_graph",
+                         iter = 1000))
                                 
 # Histocat style calculation
 (out <- testInteractions(pancreasSCE, 
-                                group_by = "ImageNb",
-                                label = "CellType", 
-                                method = "histocat",
-                                colPairName = "knn_interaction_graph",
-                                iter = 1000))
+                         group_by = "ImageNb",
+                         label = "CellType", 
+                         method = "histocat",
+                         colPairName = "knn_interaction_graph",
+                         iter = 1000))
                                 
 # Patch style calculation
 (out <- testInteractions(pancreasSCE, 
-                                group_by = "ImageNb",
-                                label = "CellType", 
-                                method = "patch",
-                                patch_size = 3,
-                                colPairName = "knn_interaction_graph",
-                                ))
+                         group_by = "ImageNb",
+                         label = "CellType", 
+                         method = "patch",
+                         patch_size = 3,
+                         colPairName = "knn_interaction_graph",
+                         ))
 
 }
 \references{
@@ -173,5 +177,5 @@ Vito Zanotelli
 
 Jana Fischer
 
-adapted by Nils Eling (\email{nils.eling@uzh.ch})
+adapted by Nils Eling (\email{nils.eling@dqbm.uzh.ch})
 }

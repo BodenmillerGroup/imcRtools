@@ -1,4 +1,4 @@
-#' @title Visualizes the spatial locations of cells
+#' @title Visualizes the spatial locations and interactions of cells
 #'
 #' @description A general function to plot spatial locations of cells while 
 #' specifying color, shape, size. Cell-cell interactions can be visualized
@@ -10,40 +10,39 @@
 #' containing the unique image identifiers.
 #' @param coords character vector of length 2 specifying the names of the
 #' \code{colData} (for a \code{SingleCellExperiment} object) or the
-#' \code{spatialCoords} entries of the cells' x and y locations.
+#' \code{spatialCoords} entries indicating the the cells' x and y locations.
 #' @param node_color_by single character indicating the \code{colData(object)}
 #' entry or marker name by which the nodes (cell locations) should be colored. 
 #' @param node_shape_by single character indicating the \code{colData(object)}
 #' entry by which the shape of the nodes are defined. 
 #' @param node_size_by single character indicating the \code{colData(object)}
 #' entry by which the size of the nodes are defined. 
-#' @param node_color_fix single character or numeric specifying the color of the 
+#' @param node_color_fix single character or numeric specifying the color of all 
 #' nodes.
-#' @param node_size_fix single numeric specifying the size of the nodes
-#' @param node_shape_fix single numeric or character specifying the shape of the 
-#' nodes
+#' @param node_size_fix single numeric specifying the size of all nodes
+#' @param node_shape_fix single numeric or character specifying the shape of all 
+#' nodes.
 #' @param assay_type single character indicating the assay slot from which
 #' to extract the expression data when \code{node_color_by} is set to one of
-#' \code{rownames(object)}
+#' \code{rownames(object)}.
 #' @param draw_edges should cell-cell interactions be drawn as edges between
 #' nodes? 
-#' @param directed should cell-cell interactions be handled a directed graph?
-#' @param colPairName single character specifying from which 
+#' @param directed should cell-cell interactions be handled as a directed graph?
+#' @param colPairName single character specifying the 
 #' \code{colPair(object)} slot to retrieve the cell-cell pairings.
 #' @param edge_color_by single character indicating by which to color the edges.
 #' See details for more information.
 #' @param edge_width_by single character determining the size of the edges.
 #' See details for more information.
-#' @param edge_color_fix single character or numeric specifying the color of the 
+#' @param edge_color_fix single character or numeric specifying the color of all 
 #' edges.
-#' @param edge_width_fix single numeric specifying the size of the edges.
-#' @param arrow a \code{\link[grid]{arrow}} object specifying how to draw arrows
-#' between cells.
-#' @param end_cap \code{\link[ggraph]{geometry}} object specifying how long the 
-#' edges are. This only takes effect when drawing arrows. 
-#' Default: \code{end_cap = circle(0.1, 'cm')}
+#' @param edge_width_fix single numeric specifying the size of all edges.
+#' @param arrow an \code{\link[grid]{arrow}} object specifying how to draw
+#' arrows between cells.
+#' @param end_cap a \code{\link[ggraph]{geometry}} object specifying how long
+#' the edges are. This only takes effect when drawing arrows. Default:
+#' \code{end_cap = circle(0.1, 'cm')}
 #' @param nodes_first should the nodes be plotted first and then the edges?
-#' When \code{nodes_first = FALSE}, the edges will be drawn first
 #' @param ncols number of columns of the grid to arrange individual images.
 #' @param nrows number of rows of the grid to arrange individual images.
 #' @param scales one of \code{"free"}, \code{"fixed"}, \code{"free_x"} or 
@@ -61,7 +60,7 @@
 #' \code{SingleCellExperiment} input object) or from the
 #' \code{spatialCoords(object)} slot (for a \code{SpatialExperiment} input
 #' object). Node aesthetics are controlled by setting \code{node_color_by}, 
-#' \code{node_shape_by} and \code{node_size_by}.for associating the aesthetics
+#' \code{node_shape_by} and \code{node_size_by} for associating the aesthetics
 #' with variables. If node aesthetics should be the same for all nodes,  
 #' \code{node_color_fix}, \code{node_shape_fix} and \code{node_size_fix} can 
 #' be set.
@@ -118,6 +117,8 @@
 #'   
 #' @seealso 
 #' \code{\link{buildSpatialGraph}} for constructing interaction graphs
+#' 
+#' \code{\link{ggraph}} for handling graph aesthetics
 #' 
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #' 
@@ -181,9 +182,10 @@ plotSpatial <- function(object,
         nrows <- ceiling(ncols)
     }
     
-    p <- .generatePlot(layout, draw_edges, directed, arrow, end_cap, node_color_by,
-                       node_size_by, node_shape_by, node_color_fix, node_size_fix, 
-                       node_shape_fix, edge_color_by, edge_width_by, edge_color_fix, 
+    p <- .generatePlot(layout, draw_edges, directed, arrow, end_cap, 
+                       node_color_by, node_size_by, node_shape_by, 
+                       node_color_fix, node_size_fix, node_shape_fix, 
+                       edge_color_by, edge_width_by, edge_color_fix, 
                        edge_width_fix, nodes_first)
     
     p <- .postProcessPlot(p, object, img_id, nrows, ncols, node_color_by, 

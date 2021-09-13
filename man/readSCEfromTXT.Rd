@@ -39,10 +39,10 @@ channels are stored as rows.
 }
 \description{
 Helper function to process raw .txt files acquired by the
-Hyperion system into a \code{\linkS4class{SingleCellExperiment}} object.
-This function is mainly used to read-in data generated from a "spillover
-slide". Here, each .txt file contains the measurements of multiple pixels
-for a single stain across all open channels.
+Hyperion imaging system into a \code{\linkS4class{SingleCellExperiment}}
+object. This function is mainly used to read-in data generated from a
+"spillover slide". Here, each .txt file contains the measurements of
+multiple pixels for a single stain across all open channels.
 }
 \section{Reading in .txt files for spillover correction}{
 
@@ -67,7 +67,7 @@ slot.
 
 \item \code{x} is a named list:
 If there are issues with reading in the metal isotope names from the .txt
-file names, the user can provide a list in which each entry contains the
+file names, the user can provide a list for which each entry contains the
 contents of a single .txt file. The names of the list must indicate the
 spotted metal in the format \code{(mt)(mass)}. These names will be stored in
 the \code{colData(sce)$sample_id} slot.

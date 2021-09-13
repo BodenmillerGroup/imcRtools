@@ -1,18 +1,18 @@
 ### Helper functions for reading in ImcSegmentationPipeline data
 #' @importFrom vroom vroom
 #' @importFrom dplyr contains mutate across 
-#' 
 .cpout_create_object <- function(path, object_file, image_file, 
-                                 object_feature_file, 
-                                 intensities, extract_imgid_from,
-                                 extract_cellid_from, extract_coords_from,
-                                 extract_cellmetadata_from, extract_sampleid_from, 
-                                 scale_intensities, extract_scalingfactor_from,
-                                 return_as) {
+                                object_feature_file, 
+                                intensities, extract_imgid_from,
+                                extract_cellid_from, extract_coords_from,
+                                extract_cellmetadata_from, 
+                                extract_sampleid_from, 
+                                scale_intensities, extract_scalingfactor_from,
+                                return_as) {
     
     cur_counts <- vroom(file.path(path, object_file),
                         col_select = c(contains(intensities),
-                                       all_of(c(extract_imgid_from,
+                                        all_of(c(extract_imgid_from,
                                                 extract_cellid_from,
                                                 extract_coords_from,
                                                 extract_cellmetadata_from))),
@@ -20,9 +20,10 @@
 
     scaling_factor <- as.data.frame(vroom(file.path(path, image_file),
                             col_select = all_of(c(extract_imgid_from,
-                                                  extract_scalingfactor_from)),
+                                                extract_scalingfactor_from)),
                             show_col_types = FALSE))
-    rownames(scaling_factor) <- as.character(scaling_factor[[extract_imgid_from]])
+    rownames(scaling_factor) <- 
+        as.character(scaling_factor[[extract_imgid_from]])
     
     # Scale counts
     if (scale_intensities) {
@@ -30,7 +31,8 @@
         scaling_factor <- scaling_factor[names(cur_counts),]
         
         cur_counts <- mapply(function(cells, s_factor) {
-            cells %>% mutate(across(contains(intensities), function(x){x * s_factor}))
+            cells %>% mutate(across(contains(intensities), 
+                                    function(x){x * s_factor}))
         }, cur_counts, as.list(scaling_factor[[extract_scalingfactor_from]]), 
         SIMPLIFY = FALSE)
         
@@ -38,17 +40,20 @@
     }
     
     # Order channels 
-    cur_channels <- colnames(cur_counts)[grepl(intensities, colnames(cur_counts))]
+    cur_channels <- colnames(cur_counts)[grepl(intensities, 
+                                                colnames(cur_counts))]
     cur_channels_id <- as.numeric(str_extract(cur_channels, "[0-9]{1,3}$"))
     
     cur_channels <- cur_channels[order(cur_channels_id, decreasing = FALSE)]
     
     if (return_as == "spe") {
-        object <- SpatialExperiment(assays = list(counts = t(as.matrix(cur_counts[,cur_channels]))),
-                                    sample_id = as.character(cur_counts[[extract_imgid_from]]))
+        object <- SpatialExperiment(
+            assays = list(counts = t(as.matrix(cur_counts[,cur_channels]))),
+            sample_id = as.character(cur_counts[[extract_imgid_from]]))
         object$ObjectNumber <- cur_counts[[extract_cellid_from]]
     } else {
-        object <- SingleCellExperiment(assays = list(counts = t(as.matrix(cur_counts[,cur_channels]))))     
+        object <- SingleCellExperiment(
+            assays = list(counts = t(as.matrix(cur_counts[,cur_channels]))))     
         object$sample_id <- as.character(cur_counts[[extract_imgid_from]])
         object$ObjectNumber <- cur_counts[[extract_cellid_from]]
     }
@@ -56,15 +61,16 @@
     # Build colData
     if (return_as == "spe") {
         if (!is.null(extract_coords_from)) {
-            spatialCoords(object) <- matrix(c(cur_counts[[extract_coords_from[1]]],
-                                              cur_counts[[extract_coords_from[2]]]),
-                                            ncol = 2, byrow = FALSE,
-                                            dimnames = list(as.character(object$ObjectNumber),
-                                                            c("Pos_X", "Pos_Y")))
+            spatialCoords(object) <- matrix(c(
+                cur_counts[[extract_coords_from[1]]],
+                cur_counts[[extract_coords_from[2]]]),
+                ncol = 2, byrow = FALSE,
+                dimnames = list(as.character(object$ObjectNumber),
+                                                c("Pos_X", "Pos_Y")))
         }
         
         colData(object) <- cbind(colData(object),
-                                 cur_counts[,extract_cellmetadata_from])
+                                    cur_counts[,extract_cellmetadata_from])
     } else {
         if (!is.null(extract_coords_from)) {
             object$Pos_X <- cur_counts[[extract_coords_from[1]]]
@@ -72,7 +78,7 @@
         }
 
         colData(object) <- cbind(colData(object),
-                                 cur_counts[,extract_cellmetadata_from])
+                                    cur_counts[,extract_cellmetadata_from])
     }
     
     # Set correct metal names
@@ -80,8 +86,10 @@
                         col_select = c("channel", "channel_id"),
                         show_col_types = FALSE)
     cur_channels <- unique(cur_channels)
-    cur_channels <- cur_channels[grepl("[a-zA-Z]{1,2}[0-9]{2,3}", cur_channels[["channel_id"]]),]
-    cur_channels <- cur_channels[order(cur_channels[["channel"]], decreasing = FALSE),]
+    cur_channels <- cur_channels[grepl("[a-zA-Z]{1,2}[0-9]{2,3}", 
+                                        cur_channels[["channel_id"]]),]
+    cur_channels <- cur_channels[order(cur_channels[["channel"]], 
+                                        decreasing = FALSE),]
     
     rownames(object) <- cur_channels[["channel_id"]]
     
@@ -90,26 +98,26 @@
     
 #' @importFrom methods as
 .cpout_add_image_metadata <- function(object, path, image_file, 
-                                      extract_imgid_from,
-                                      extract_imagemetadata_from) {
+                                        extract_imgid_from,
+                                        extract_imagemetadata_from) {
     
     cur_img_meta <- vroom(file.path(path, image_file),
                         col_select = all_of(c(extract_imgid_from,
                                                 extract_imagemetadata_from)),
                         show_col_types = FALSE)
     colData(object) <- as(merge(x = colData(object), y = cur_img_meta, 
-                             by.x = "sample_id", by.y = extract_imgid_from, 
-                             sort = FALSE), "DataFrame")
+                                by.x = "sample_id", by.y = extract_imgid_from, 
+                                sort = FALSE), "DataFrame")
     
     return(object)
 }
 
 .cpout_add_graph <- function(object, path, graph_file,
-                             extract_graphimageid_from,
-                             extract_graphcellids_from) {
+                            extract_graphimageid_from,
+                            extract_graphcellids_from) {
     cur_graph <- vroom(file.path(path, graph_file), 
                        col_select = all_of(c(extract_graphimageid_from,
-                                             extract_graphcellids_from)),
+                                            extract_graphcellids_from)),
                        show_col_types = FALSE)
     
     cur_graph$firstid <- paste0(cur_graph[[extract_graphimageid_from]], "_",
@@ -119,8 +127,10 @@
     
     cur_objectids <- paste0(object$sample_id, "_", object$ObjectNumber)
     
-    colPair(object, "neighbourhood") <- SelfHits(from = match(cur_graph$firstid, cur_objectids),
-                                                 to = match(cur_graph$secondid, cur_objectids),
+    colPair(object, "neighborhood") <- SelfHits(from = match(cur_graph$firstid, 
+                                                                cur_objectids),
+                                                 to = match(cur_graph$secondid, 
+                                                            cur_objectids),
                                                  nnode = length(cur_objectids))
     
     return(object)

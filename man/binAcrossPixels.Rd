@@ -32,7 +32,8 @@ aggregating consecutive pixels.}
 \item{...}{additional arguments passed to \code{aggregateAcrossCells}}
 }
 \value{
-returns the binned pixel intensities in form of a SCE object
+returns the binned pixel intensities in form of a 
+\code{SingleCellExperiment} object
 }
 \description{
 Helper function for estimating the spillover matrix. Per metal 

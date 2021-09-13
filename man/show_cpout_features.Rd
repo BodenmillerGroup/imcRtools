@@ -2,7 +2,7 @@
 % Please edit documentation in R/show_cpout_features.R
 \name{show_cpout_features}
 \alias{show_cpout_features}
-\title{Helper function to display all features measured by CellProfiler.}
+\title{Display all features measured by CellProfiler.}
 \usage{
 show_cpout_features(
   path,
@@ -21,11 +21,11 @@ features or \code{image_features} to display extracted image-level features.}
 \item{cell_features}{single character indicating the name of the file storing
 the extracted cell features.}
 
-\item{image_features}{single character indicating the name of the file storing
-the extracted image features.}
+\item{image_features}{single character indicating the name of the file 
+storing the extracted image features.}
 }
 \value{
-a `DT::datatable` object
+a \code{\link[DT]{datatable}} object
 }
 \description{
 Searchable datatable object of cell and image features as 

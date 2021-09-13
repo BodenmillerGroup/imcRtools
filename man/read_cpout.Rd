@@ -50,8 +50,8 @@ object/cell feature information.}
 \item{extract_imgid_from}{single character indicating which column entries of
 the \code{object_file} and \code{image_file} contain the image integer ID.}
 
-\item{extract_cellid_from}{single character indicating which column entries
-of the \code{object_file} contain the object/cell integer ID.}
+\item{extract_cellid_from}{single character indicating which column entry
+of the \code{object_file} contains the object/cell integer ID.}
 
 \item{extract_coords_from}{character vector indicating which column entries
 of the \code{object_file} contain the x and y location of the
@@ -71,10 +71,10 @@ entries of the \code{graph_file} contain the image integer ID.}
 \item{extract_graphcellids_from}{character vector indicating which column
 entries of the \code{graph_file} contain the first and second object/cell
 integer IDs. These will be stored as the \code{from} and \code{to} entry of
-the \code{SelfHits} object in colPair(x, "neighbourhood").}
+the \code{SelfHits} object in colPair(x, "neighborhood").}
 
-\item{extract_metal_from}{single character indicating which column entries of
-the \code{panel_file} contain the metal isotopes of the used antibodies.
+\item{extract_metal_from}{single character indicating which column entry of
+the \code{panel_file} contains the metal isotopes of the used antibodies.
 This entry is used to match the panel information to the acquired channel
 information.}
 
@@ -90,31 +90,32 @@ entries of the \code{image_file} contain the image specific scaling factor.}
 }
 \value{
 returns a \code{SpatialExperiment} or \code{SingleCellExperiment}
-object markers in rows and cells in columns.
+object with markers in rows and cells in columns.
 }
 \description{
 Reader function to generate a
 \code{\linkS4class{SpatialExperiment}} or
 \code{\linkS4class{SingleCellExperiment}} object from single-cell data
-obtained by the \href{https://github.com/BodenmillerGroup/ImcSegmentationPipeline}{ImcSegmentationPipeline}
+obtained by the 
+\href{https://github.com/BodenmillerGroup/ImcSegmentationPipeline}{ImcSegmentationPipeline}
 pipeline.
 }
 \section{The returned data container}{
 
-In the case of **both** containers \code{x}, intensity features (as selected
+In the case of both containers \code{x}, intensity features (as selected
 by the \code{intensities} parameter) are stored in the \code{counts(x)} slot.
 Cell metadata (e.g morphological features) are stored in the
 \code{colData(x)} slot. The interaction graphs are stored as
-\code{\link[S4Vectors]{SelfHits}} in the \code{colPair(x, "neighbourhood")}
-slot.
+\code{\link[S4Vectors]{SelfHits}} object in the 
+\code{colPair(x, "neighborhood")} slot.
 
 Intensity features are extracted via partial string matching. Internally, the 
 \code{read_cpout} function checks if per channel a single intensity feature
 is read in (by checking the \code{_cXY} ending where \code{XY} is the 
 channel number).
 
-In the case of a returned \code{SpatialExperiment} object, the cell coordinates
-are stored in the \code{spatialCoords(x)} slot.
+In the case of a returned \code{SpatialExperiment} object, the cell 
+coordinates are stored in the \code{spatialCoords(x)} slot.
 
 In the case of a returned \code{SingleCellExperiment} object, the cell 
 coordinates are stored in the \code{colData(x)} slot named as \code{Pos_X}
@@ -138,8 +139,8 @@ x
 \url{https://github.com/BodenmillerGroup/ImcSegmentationPipeline} for the 
 pipeline
 
-\code{\link{read_steinbock}} for reading in single-cell data as produced by the
-steinbock pipeline
+\code{\link{read_steinbock}} for reading in single-cell data as produced by 
+the steinbock pipeline
 
 \code{\link[SingleCellExperiment]{colPair}} for information on how to work
 with the cell-cell interaction graphs

@@ -1,4 +1,4 @@
-#' @title Helper function to display all features measured by CellProfiler.
+#' @title Display all features measured by CellProfiler.
 #' 
 #' @description Searchable datatable object of cell and image features as 
 #' extracted by CellProfiler.
@@ -9,10 +9,10 @@
 #' features or \code{image_features} to display extracted image-level features.
 #' @param cell_features single character indicating the name of the file storing
 #' the extracted cell features.
-#' @param image_features single character indicating the name of the file storing
-#' the extracted image features.
+#' @param image_features single character indicating the name of the file 
+#' storing the extracted image features.
 #' 
-#' @return a `DT::datatable` object
+#' @return a \code{\link[DT]{datatable}} object
 #'
 #' @examples
 #' path <- system.file("extdata/mockData/cpout", package = "imcRtools")
@@ -39,12 +39,12 @@ show_cpout_features <- function(path,
     
     if (!file.exists(file.path(path, eval(parse(text = display))))){
         cur_text <- paste0("'", eval(parse(text = display)), 
-                           "' does not exist in ", path)
+                            "' does not exist in ", path)
         stop(cur_text)
     }
     
     cur_features <- vroom(file.path(path, eval(parse(text = display))), 
-                          col_types = cols(), progress = FALSE)
+                            col_types = cols(), progress = FALSE)
     
     datatable(cur_features)
 }

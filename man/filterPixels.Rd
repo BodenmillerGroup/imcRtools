@@ -20,18 +20,19 @@ channels are stored as rows.}
 \item{bc_id}{character string indicating which \code{colData(object)} entry
 stores the estimated mass}
 
-\item{spot_mass}{character string indicating which \code{colData(object)} entry
-stores the true isotope mass of the spotted metal.}
+\item{spot_mass}{character string indicating which \code{colData(object)} 
+entry stores the true isotope mass of the spotted metal.}
 
 \item{minevents}{single numeric indicating the threshold under which pixel
 sets are excluded from spillover estimation.}
 
-\item{correct_pixels}{logical indicating if incorrectly assigned pixels should
-be excluded from spillover estimation.}
+\item{correct_pixels}{logical indicating if incorrectly assigned pixels 
+should be excluded from spillover estimation.}
 }
 \value{
-returns a SCE object in which \code{colData(object)$bc_id} has been 
-adjusted based on the filter criteria.
+returns a SingleCellExperiment object in which
+\code{colData(object)$bc_id} has been adjusted based on the filter
+criteria.
 }
 \description{
 Helper function for estimating the spillover matrix. After
@@ -57,5 +58,6 @@ table(sce$sample_mass, sce$bc_id)
 
 }
 \author{
-Vito Zanotelli, adapted by Nils Eling (\email{nils.eling@uzh.ch})
+Vito Zanotelli, adapted by 
+Nils Eling (\email{nils.eling@dqbm.uzh.ch})
 }

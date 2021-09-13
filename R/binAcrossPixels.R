@@ -15,7 +15,8 @@
 #' aggregating consecutive pixels.
 #' @param ... additional arguments passed to \code{aggregateAcrossCells}
 #'
-#' @return returns the binned pixel intensities in form of a SCE object
+#' @return returns the binned pixel intensities in form of a 
+#' \code{SingleCellExperiment} object
 #'
 #' @examples
 #' path <- system.file("extdata/spillover", package = "imcRtools")
@@ -57,7 +58,7 @@ binAcrossPixels <- function(object,
     cur_split <- lapply(cur_split, function(x){ceiling(seq_along(x)/bin_size)})
     
     cur_df <- DataFrame(spot_id = object[[spot_id]],
-                         bin = unlist(cur_split))
+                        bin = unlist(cur_split))
     
     cur_out <- aggregateAcrossCells(object, cur_df, 
                                     statistics = statistic,

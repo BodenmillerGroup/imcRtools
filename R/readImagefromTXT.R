@@ -11,7 +11,7 @@
 #' the files.
 #' @param index_names exact names of the columns storing the x and y coordinates 
 #' of the image
-#' @param BPPARAM parameters for parallelised reading in of images. 
+#' @param BPPARAM parameters for parallelized reading in of images. 
 #' This is only recommended for very large images. 
 #' 
 #' @return returns a \code{\linkS4class{CytoImageList}} object containing one
@@ -46,8 +46,11 @@
 #' 
 #' @seealso 
 #' \code{\linkS4class{CytoImageList}} for the container
-#' \code{\link[BiocParallel]{MulticoreParam}} for parallelised processing
+#' 
+#' \code{\link[BiocParallel]{MulticoreParam}} for parallelized processing
+#' 
 #' \code{\linkS4class{Image}} for the multi-channel image object
+#' 
 #' \code{vignette("cytomapper")} for visualization of multi-channel images
 #' 
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
@@ -60,10 +63,10 @@
 #' @importFrom readr read_delim
 #' @export
 readImagefromTXT <- function(path, 
-                           pattern = ".txt$",
-                           channel_pattern = "[A-Za-z]{1,2}[0-9]{2,3}Di",
-                           index_names = c("X", "Y"),
-                           BPPARAM = SerialParam()){
+                            pattern = ".txt$",
+                            channel_pattern = "[A-Za-z]{1,2}[0-9]{2,3}Di",
+                            index_names = c("X", "Y"),
+                            BPPARAM = SerialParam()){
     
     # Validity checks
     .valid.readImagefromTXT.input(path, pattern)
@@ -71,11 +74,13 @@ readImagefromTXT <- function(path,
     cur_files <- list.files(path, pattern = pattern, full.names = TRUE)
     cur_names <- list.files(path, pattern = pattern, full.names = FALSE)
     
-    cur_dat <- suppressMessages(lapply(cur_files, read_delim, delim = "\t"))
+    cur_dat <- lapply(cur_files, read_delim, delim = "\t", 
+                        show_col_types = FALSE)
     cur_dat <- bplapply(cur_dat, function(x){
         
         if (sum(grepl(channel_pattern, colnames(x))) == 0) {
-            stop("'channel_pattern' does not match any entries in the .txt files.")
+            stop("'channel_pattern' does not match", 
+                    " any entries in the .txt files.")
         }
         
         cur_mat <- x[,grepl(channel_pattern, colnames(x))]
