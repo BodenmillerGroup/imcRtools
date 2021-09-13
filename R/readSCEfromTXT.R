@@ -1,10 +1,10 @@
 #' @title Generates a SingleCellExperiment from .txt files
 #'
 #' @description Helper function to process raw .txt files acquired by the
-#' Hyperion system into a \code{\linkS4class{SingleCellExperiment}} object.
-#' This function is mainly used to read-in data generated from a "spillover
-#' slide". Here, each .txt file contains the measurements of multiple pixels
-#' for a single stain across all open channels.
+#' Hyperion imaging system into a \code{\linkS4class{SingleCellExperiment}}
+#' object. This function is mainly used to read-in data generated from a
+#' "spillover slide". Here, each .txt file contains the measurements of
+#' multiple pixels for a single stain across all open channels.
 #'
 #' @param x input can be of different types:
 #' \describe{
@@ -47,7 +47,7 @@
 #' 
 #' \item \code{x} is a named list:
 #' If there are issues with reading in the metal isotope names from the .txt
-#' file names, the user can provide a list in which each entry contains the
+#' file names, the user can provide a list for which each entry contains the
 #' contents of a single .txt file. The names of the list must indicate the
 #' spotted metal in the format \code{(mt)(mass)}. These names will be stored in
 #' the \code{colData(sce)$sample_id} slot.
@@ -86,12 +86,12 @@
 #' @importFrom readr read_delim
 #' @export
 readSCEfromTXT <- function(x, 
-                           pattern = ".txt$",
-                           metadata_cols = c("Start_push", "End_push", 
+                            pattern = ".txt$",
+                            metadata_cols = c("Start_push", "End_push", 
                                                 "Pushes_duration", "X", 
                                                 "Y", "Z"),
-                           verbose = TRUE,
-                           read_metal_from_filename = TRUE){
+                            verbose = TRUE,
+                            read_metal_from_filename = TRUE){
     
     if (all(is.character(x)) & length(x) == 1) {
         
@@ -113,7 +113,7 @@ readSCEfromTXT <- function(x,
         
         txt_list <- list.files(x, pattern = pattern, full.names = TRUE)
         txt_list <- lapply(txt_list, read_delim, delim = "\t", 
-                           show_col_types = FALSE)
+                            show_col_types = FALSE)
         txt_list <- lapply(txt_list, as.data.frame)
         names(txt_list) <- cur_names
         
@@ -140,12 +140,13 @@ readSCEfromTXT <- function(x,
     
     if (read_metal_from_filename) {
         cell_meta$sample_id <- str_extract(rownames(cell_meta), 
-                                           "^[A-Za-z]{1,2}[0-9]{2,3}")
-        cell_meta$sample_metal <- str_extract(cell_meta$sample_id, "^[A-Za-z]{1,2}")
+                                            "^[A-Za-z]{1,2}[0-9]{2,3}")
+        cell_meta$sample_metal <- str_extract(cell_meta$sample_id, 
+                                                "^[A-Za-z]{1,2}")
         cell_meta$sample_mass <- str_extract(cell_meta$sample_id, "[0-9]{2,3}$")
     } else {
         cell_meta$sample_id <- str_split(rownames(cell_meta), "\\.", 
-                                         simplify = TRUE)[,1]
+                                            simplify = TRUE)[,1]
     }
     
     cur_counts <- cur_out[grepl("[A-Za-z]{1,2}[0-9]{2,3}", colnames(cur_out))]

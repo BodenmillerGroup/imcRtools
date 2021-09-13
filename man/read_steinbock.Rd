@@ -21,7 +21,8 @@ read_steinbock(
 \arguments{
 \item{path}{full path to the steinbock output folder}
 
-\item{intensities_folder}{name of the folder containing the intensity measurements per image}
+\item{intensities_folder}{name of the folder containing the intensity 
+measurements per image}
 
 \item{regionprops_folder}{name of the folder containing the cell-specific
 morphology and spatial measurements per image. Can be set to \code{NULL} to 
@@ -34,13 +35,14 @@ graphs per image. Can be set to \code{NULL} to exclude reading in graphs.}
 be read in.}
 
 \item{extract_cellid_from}{single character indicating which column entry in 
-the intensity files contain the integer cell id.}
+the intensity files contains the integer cell id.}
 
 \item{extract_coords_from}{character vector indicating which column entries 
 in the regionprops files contain the x and y coordinates.}
 
-\item{panel_file}{single character containing the name of the panel file. This can
-either be inside the steinbock path (recommended) or located somewhere else.}
+\item{panel_file}{single character containing the name of the panel file. 
+This can either be inside the steinbock path (recommended) or located 
+somewhere else.}
 
 \item{extract_names_from}{single character indicating the column of the panel
 file containing the channel names.}
@@ -59,18 +61,20 @@ object markers in rows and cells in columns.
 Reader function to generate a
 \code{\linkS4class{SpatialExperiment}} or
 \code{\linkS4class{SingleCellExperiment}} object from single-cell data
-obtained by the \href{https://github.com/BodenmillerGroup/steinbock}{steinbock}
+obtained by the 
+\href{https://github.com/BodenmillerGroup/steinbock}{steinbock}
 pipeline.
 }
 \section{The returned data container}{
 
-In the case of **both** containers \code{x}, intensity features are stored in
+In the case of both containers \code{x}, intensity features are stored in
 the \code{counts(x)} slot. Morphological features are stored in the
-\code{colData(x)} slot. The graphs are stored as \code{\link[S4Vectors]{SelfHits}}
-in the \code{colPair(x, "neighbourhood")} slot.
+\code{colData(x)} slot. The graphs are stored as 
+\code{\link[S4Vectors]{SelfHits}} object in the 
+\code{colPair(x, "neighborhood")} slot.
 
-In the case of a returned \code{SpatialExperiment} object, the cell coordinates
-are stored in the \code{spatialCoords(x)} slot.
+In the case of a returned \code{SpatialExperiment} object, the cell 
+coordinates are stored in the \code{spatialCoords(x)} slot.
 
 In the case of a returned \code{SingleCellExperiment} object, the cell 
 coordinates are stored in the \code{colData(x)} slot named as \code{Pos_X}

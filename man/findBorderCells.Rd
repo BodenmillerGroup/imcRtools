@@ -19,14 +19,14 @@ cells' x and y location.}
 
 \item{coords}{character vector of length 2 specifying the names of the
 \code{colData} (for a \code{SingleCellExperiment} object) or the
-\code{spatialCoords} entries of the cells' x and y locations.}
+\code{spatialCoords} entries indicating the cells' x and y locations.}
 }
 \value{
 an object of \code{class(object)} containing the logical
 \code{border_cells} entry in the \code{colData} slot.
 }
 \description{
-Detecting of cells close to the image border for subsequent exclusion from
+Detection of cells close to the image border for subsequent exclusion from
 downstream analyses.
 }
 \examples{
@@ -40,5 +40,5 @@ plotSpatial(sce, img_id = "ImageNb", node_color_by = "border_cells")
 
 }
 \author{
-Nils Eling (\email{nils.eling@uzh.ch})
+Nils Eling (\email{nils.eling@dqbm.uzh.ch})
 }

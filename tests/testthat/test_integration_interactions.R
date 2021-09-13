@@ -180,7 +180,7 @@ calc_p_vals<- function(dat_baseline, dat_perm, n_perm, p_tresh=0.01){
 }
 
 
-test_that("neighbourhoodPermTest gives same results as neighbouRhood", {
+test_that("testInteractions gives same results as neighbouRhood", {
     library(data.table)
     
     # Test neighbouRhood results
@@ -203,7 +203,7 @@ test_that("neighbourhoodPermTest gives same results as neighbouRhood", {
     cur_path <- system.file("extdata/mockData/cpout", package = "imcRtools")
     cur_spe <- read_cpout(cur_path, graph_file = "Object_relationships.csv")
     
-    cur_colpair <- as.data.frame(colPair(cur_spe, "neighbourhood"))
+    cur_colpair <- as.data.frame(colPair(cur_spe, "neighborhood"))
     cur_colpair <- cur_colpair[order(paste(cur_colpair[,1], cur_colpair[,2])),]
     cur_d <- as.data.frame(d[[2]][,c("First Object ID", "Second Object ID")])
     cur_d <- cur_d[order(paste(cur_d[,1], cur_d[,2])),]
@@ -214,7 +214,7 @@ test_that("neighbourhoodPermTest gives same results as neighbouRhood", {
     
     cur_table <- .prepare_table(cur_spe, group_by = "sample_id", 
                                 cur_label  = as.factor(colData(cur_spe)[["label"]]), 
-                                colPairName = "neighbourhood")
+                                colPairName = "neighborhood")
     
     labels_applied <- as.data.frame(labels_applied)
     labels_applied <- labels_applied[order(paste(labels_applied[,"First Object ID"], labels_applied[,"Second Object ID"])),]
@@ -229,7 +229,7 @@ test_that("neighbourhoodPermTest gives same results as neighbouRhood", {
     
     cur_table <- .prepare_table(cur_spe, group_by = "sample_id", 
                                 cur_label  = as.factor(colData(cur_spe)[["label"]]), 
-                                colPairName = "neighbourhood")
+                                colPairName = "neighborhood")
 
     cur_histo <- .aggregate_histo(cur_table)
     
@@ -314,23 +314,22 @@ test_that("neighbourhoodPermTest gives same results as neighbouRhood", {
     # Perturbation
     n_perm <- 100
     
-    set.seed(123)
-    dat_perm <- lapply(1:n_perm, function(x){
+    dat_perm <- bplapply(1:n_perm, function(x){
         dat_labels = shuffle_labels(d[[1]])
         apply_labels(dat_labels, d[[2]]) %>%
             aggregate_classic()
-    })
+    }, BPPARAM = SerialParam(RNGseed = 123))
     dat_perm <- rbindlist(dat_perm, idcol = 'run')
     
     dat_p <- calc_p_vals(cur_classic, dat_perm, n_perm = n_perm, p_tresh = 0.01) 
     setorder(dat_p, group, FirstLabel, SecondLabel)
     
-    set.seed(123)
     imcRtools_classic_perm <- testInteractions(pancreasSCE, 
                                                    group_by = "ImageNb", 
                                                    label = "CellType",
                                                    colPairName = "knn_interaction_graph",
-                                                   iter = 100)
+                                                   iter = 100,
+                                               BPPARAM = SerialParam(RNGseed = 123))
     
     expect_equal(dat_p$group, imcRtools_classic_perm$group_by)
     expect_equal(as.character(dat_p$FirstLabel), imcRtools_classic_perm$from_label)
@@ -364,24 +363,23 @@ test_that("neighbourhoodPermTest gives same results as neighbouRhood", {
     # Perturbation
     n_perm <- 100
     
-    set.seed(123)
-    dat_perm <- lapply(1:n_perm, function(x){
+    dat_perm <- bplapply(1:n_perm, function(x){
         dat_labels = shuffle_labels(d[[1]])
         apply_labels(dat_labels, d[[2]]) %>%
             aggregate_histo()
-    })
+    }, BPPARAM = SerialParam(RNGseed = 123))
     dat_perm <- rbindlist(dat_perm, idcol = 'run')
     
     dat_p <- calc_p_vals(cur_histo, dat_perm, n_perm = n_perm, p_tresh = 0.01) 
     setorder(dat_p, group, FirstLabel, SecondLabel)
     
-    set.seed(123)
     imcRtools_histo_perm <- testInteractions(pancreasSCE, 
-                                                   group_by = "ImageNb", 
-                                                   label = "CellType",
-                                                   colPairName = "knn_interaction_graph",
-                                                   iter = 100,
-                                                   method = "histocat")
+                                            group_by = "ImageNb", 
+                                            label = "CellType",
+                                            colPairName = "knn_interaction_graph",
+                                            iter = 100,
+                                            method = "histocat", 
+                                            BPPARAM = SerialParam(RNGseed = 123))
     
     expect_equal(dat_p$group, imcRtools_histo_perm$group_by)
     expect_equal(as.character(dat_p$FirstLabel), imcRtools_histo_perm$from_label)
@@ -416,25 +414,24 @@ test_that("neighbourhoodPermTest gives same results as neighbouRhood", {
     # Perturbation
     n_perm <- 100
     
-    set.seed(123)
-    dat_perm <- lapply(1:n_perm, function(x){
+    dat_perm <- bplapply(1:n_perm, function(x){
         dat_labels = shuffle_labels(d[[1]])
         apply_labels(dat_labels, d[[2]]) %>%
             aggregate_classic_patch(patch_size = 3)
-    })
+    }, BPPARAM = SerialParam(RNGseed = 123))
     dat_perm <- rbindlist(dat_perm, idcol = 'run')
     
     dat_p <- calc_p_vals(cur_patch, dat_perm, n_perm = n_perm, p_tresh = 0.01) 
     setorder(dat_p, group, FirstLabel, SecondLabel)
     
-    set.seed(123)
     imcRtools_patch_perm <- testInteractions(pancreasSCE, 
                                                  group_by = "ImageNb", 
                                                  label = "CellType",
                                                  colPairName = "knn_interaction_graph",
                                                  iter = 100,
                                                  method = "patch",
-                                                 patch_size = 3)
+                                                 patch_size = 3,
+                                             BPPARAM = SerialParam(RNGseed = 123))
     
     expect_equal(dat_p$group, imcRtools_patch_perm$group_by)
     expect_equal(as.character(dat_p$FirstLabel), imcRtools_patch_perm$from_label)

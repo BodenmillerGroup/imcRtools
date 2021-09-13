@@ -26,7 +26,7 @@
 #' consider neighboring cells. All neighbors within a distance larger than 
 #' \code{k_max_dist} will be excluded from graph construction.
 #' @param BNPARAM a \code{\link[BiocNeighbors]{BiocNeighborParam}} object
-#' defining the algorithm to use.}
+#' defining the algorithm to use.
 #' @param BPPARAM a \code{\link[BiocParallel]{BiocParallelParam-class}} object
 #' defining how to parallelize computations.
 #' @param ... additional parameters passed to the

@@ -2,7 +2,7 @@
 #' @title Find cells at the image border
 #'
 #' @description  
-#' Detecting of cells close to the image border for subsequent exclusion from
+#' Detection of cells close to the image border for subsequent exclusion from
 #' downstream analyses.
 #'
 #' @param object a \code{SingleCellExperiment} or \code{SpatialExperiment}
@@ -14,7 +14,7 @@
 #' cells' x and y location.
 #' @param coords character vector of length 2 specifying the names of the
 #' \code{colData} (for a \code{SingleCellExperiment} object) or the
-#' \code{spatialCoords} entries of the cells' x and y locations.
+#' \code{spatialCoords} entries indicating the cells' x and y locations.
 #' 
 #' @return an object of \code{class(object)} containing the logical
 #' \code{border_cells} entry in the \code{colData} slot.
@@ -28,7 +28,7 @@
 #' 
 #' plotSpatial(sce, img_id = "ImageNb", node_color_by = "border_cells")
 #'
-#' @author Nils Eling (\email{nils.eling@@uzh.ch})
+#' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #' 
 #' @importFrom data.table as.data.table setnames
 #' @importFrom SpatialExperiment spatialCoords
@@ -44,7 +44,7 @@ findBorderCells <- function(object,
     
     if (is(object, "SpatialExperiment")) {
         cur_df <- as.data.table(cbind.data.frame(colData(object)[,img_id], 
-                                      spatialCoords(object)[,coords]))
+                                        spatialCoords(object)[,coords]))
     } else {
         cur_df <- as.data.table(colData(object)[,c(img_id, coords)])
     }
@@ -53,9 +53,9 @@ findBorderCells <- function(object,
     
     setnames(cur_df, old = names(cur_df), c("img_id", "Pos_X", "Pos_Y")) 
     cur_df[,border_cells := Pos_X <= min(Pos_X) + border_dist | 
-                         Pos_X >= max(Pos_X) - border_dist |
-                         Pos_Y <= min(Pos_Y) + border_dist |
-                         Pos_Y >= max(Pos_Y) - border_dist, by = img_id]
+                            Pos_X >= max(Pos_X) - border_dist |
+                            Pos_Y <= min(Pos_Y) + border_dist |
+                            Pos_Y >= max(Pos_Y) - border_dist, by = img_id]
     colData(object)$border_cells <- cur_df$border_cells
     
     return(object)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/aggregateNeighbors.R
 \name{aggregateNeighbors}
 \alias{aggregateNeighbors}
-\title{Function to aggregate across all neighbors of each cell.}
+\title{Function to aggregate all neighbors of each cell.}
 \usage{
 aggregateNeighbors(
   object,
@@ -25,7 +25,7 @@ entry containing the neighbor information.}
 
 \item{aggregate_by}{character specifying whether the neighborhood should be
 summarized by cellular features stored in \code{colData(object)}
-(\code{aggregate_by = "metdata"}) or by the marker expression of the
+(\code{aggregate_by = "metdata"}) or by marker expression of the
 neighboring cells (\code{aggregate_by = "expression"}).}
 
 \item{count_by}{for \code{summarize_by = "metadata"}, a single character
@@ -70,15 +70,15 @@ sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",
                          
 # Aggregating neighboring cell-types
 sce <- aggregateNeighbors(sce, colPairName = "knn_interaction_graph",
-                          aggregate_by = "metadata",
-                          count_by = "CellType")
+                         aggregate_by = "metadata",
+                         count_by = "CellType")
 sce$aggregatedNeighbors
 
 # Aggregating neighboring expression values
 sce <- aggregateNeighbors(sce, colPairName = "knn_interaction_graph",
-                          aggregate_by = "expression",
-                          assay_type = "exprs",
-                          statistic = "mean")
+                         aggregate_by = "expression",
+                         assay_type = "exprs",
+                         statistic = "mean")
 sce$mean_aggregatedExpression
   
 }

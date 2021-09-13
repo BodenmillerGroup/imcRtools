@@ -85,7 +85,7 @@ plotSpotHeatmap <- function(object,
                             ...){
     
     .valid.plotSpotHeatmap.input(object, spot_id, channel_id, assay_type, 
-                           log, threshold, order_metals)
+                            log, threshold, order_metals)
     
     if (!statistic %in% c("median", "mean", "sum")) {
         stop("'statistic' must be either 'median', 'mean' or 'sum'")
@@ -129,7 +129,7 @@ plotSpotHeatmap <- function(object,
         cur_channels <- cur_channels[order(cur_mass)]
         cur_isotope <- str_extract(cur_channels, "[A-Za-z]{1,2}[0-9]{2,3}")
         cur_rownames <- c(cur_channels[cur_isotope %in% cur_spots],
-                          cur_channels[!cur_isotope %in% cur_spots])
+                            cur_channels[!cur_isotope %in% cur_spots])
         
         cur_mat <- cur_mat[cur_rownames,cur_spots]
         
@@ -143,5 +143,4 @@ plotSpotHeatmap <- function(object,
             cluster_rows = cluster_rows, 
             breaks = breaks, legend_breaks = legend_breaks,
             ...)
-    
 }

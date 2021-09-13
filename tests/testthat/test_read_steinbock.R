@@ -47,9 +47,9 @@ test_that("read_steinbock function works", {
     expect_equal(rowData(cur_spe)$ilastik, cur_panel$ilastik)
     expect_equal(rowData(cur_spe)$Tube.Number, cur_panel$`Tube Number`)
     
-    expect_equal(colPairNames(cur_spe), "neighbourhood")
+    expect_equal(colPairNames(cur_spe), "neighborhood")
     
-    expect_silent(cur_graphs <- colPair(cur_spe, "neighbourhood"))
+    expect_silent(cur_graphs <- colPair(cur_spe, "neighborhood"))
     cur_test <- readr::read_csv(file.path(path, "neighbors", "20210305_NE_mockData1_3.csv"), show_col_types = FALSE)
     
     expect_equal(cur_test$Object + sum(cur_spe$sample_id %in% c("20210305_NE_mockData1_1", "20210305_NE_mockData1_2")), 
@@ -57,7 +57,7 @@ test_that("read_steinbock function works", {
     expect_equal(cur_test$Neighbor + sum(cur_spe$sample_id %in% c("20210305_NE_mockData1_1", "20210305_NE_mockData1_2")), 
                  to(cur_graphs)[to(cur_graphs) %in% which(cur_spe$sample_id == "20210305_NE_mockData1_3")])
     
-    expect_silent(cur_graphs <- colPair(cur_spe, "neighbourhood"))
+    expect_silent(cur_graphs <- colPair(cur_spe, "neighborhood"))
     cur_test <- readr::read_csv(file.path(path, "neighbors", "20210305_NE_mockData2_1.csv"), show_col_types = FALSE)
     
     expect_equal(cur_test$Object + sum(cur_spe$sample_id %in% c("20210305_NE_mockData1_1", "20210305_NE_mockData1_2", "20210305_NE_mockData1_3")), 
@@ -110,9 +110,9 @@ test_that("read_steinbock function works", {
     expect_equal(rowData(cur_sce)$deepcell, cur_panel$deepcell)    
     expect_equal(rowData(cur_sce)$Tube.Number, cur_panel$`Tube Number`)
     
-    expect_equal(colPairNames(cur_sce), "neighbourhood")
+    expect_equal(colPairNames(cur_sce), "neighborhood")
     
-    expect_silent(cur_graphs <- colPair(cur_sce, "neighbourhood"))
+    expect_silent(cur_graphs <- colPair(cur_sce, "neighborhood"))
     cur_test <- readr::read_csv(file.path(path, "neighbors", "20210305_NE_mockData1_3.csv"), show_col_types = FALSE)
     
     expect_equal(cur_test$Object + sum(cur_sce$sample_id %in% c("20210305_NE_mockData1_1", "20210305_NE_mockData1_2")), 
@@ -120,7 +120,7 @@ test_that("read_steinbock function works", {
     expect_equal(cur_test$Neighbor + sum(cur_sce$sample_id %in% c("20210305_NE_mockData1_1", "20210305_NE_mockData1_2")), 
                  to(cur_graphs)[to(cur_graphs) %in% which(cur_sce$sample_id == "20210305_NE_mockData1_3")])
     
-    expect_silent(cur_graphs <- colPair(cur_sce, "neighbourhood"))
+    expect_silent(cur_graphs <- colPair(cur_sce, "neighborhood"))
     cur_test <- readr::read_csv(file.path(path, "neighbors", "20210305_NE_mockData2_1.csv"), show_col_types = FALSE)
     
     expect_equal(cur_test$Object + sum(cur_sce$sample_id %in% c("20210305_NE_mockData1_1", "20210305_NE_mockData1_2", "20210305_NE_mockData1_3")), 
@@ -163,9 +163,9 @@ test_that("read_steinbock function works", {
     expect_equal(rowData(cur_spe)$deepcell, cur_panel$deepcell)
     expect_equal(rowData(cur_spe)$Tube.Number, cur_panel$`Tube Number`)
     
-    expect_equal(colPairNames(cur_sce), "neighbourhood")
+    expect_equal(colPairNames(cur_sce), "neighborhood")
     
-    expect_silent(cur_graphs <- colPair(cur_spe, "neighbourhood"))
+    expect_silent(cur_graphs <- colPair(cur_spe, "neighborhood"))
     cur_test <- readr::read_csv(file.path(path, "neighbors", "20210305_NE_mockData1_3.csv"), show_col_types = FALSE)
     
     expect_equal(cur_test$Object + sum(cur_spe$sample_id %in% c("20210305_NE_mockData1_1", "20210305_NE_mockData1_2")), 
@@ -173,7 +173,7 @@ test_that("read_steinbock function works", {
     expect_equal(cur_test$Neighbor + sum(cur_spe$sample_id %in% c("20210305_NE_mockData1_1", "20210305_NE_mockData1_2")), 
                  to(cur_graphs)[to(cur_graphs) %in% which(cur_spe$sample_id == "20210305_NE_mockData1_3")])
     
-    expect_silent(cur_graphs <- colPair(cur_spe, "neighbourhood"))
+    expect_silent(cur_graphs <- colPair(cur_spe, "neighborhood"))
     cur_test <- readr::read_csv(file.path(path, "neighbors", "20210305_NE_mockData2_1.csv"), show_col_types = FALSE)
     
     expect_equal(cur_test$Object + sum(cur_spe$sample_id %in% c("20210305_NE_mockData1_1", "20210305_NE_mockData1_2", "20210305_NE_mockData1_3")), 
@@ -214,9 +214,9 @@ test_that("read_steinbock function works", {
     expect_equal(rowData(cur_sce)$deepcell, cur_panel$deepcell)
     expect_equal(rowData(cur_sce)$Tube.Number, cur_panel$`Tube Number`)
     
-    expect_equal(colPairNames(cur_sce), "neighbourhood")
+    expect_equal(colPairNames(cur_sce), "neighborhood")
     
-    expect_silent(cur_graphs <- colPair(cur_sce, "neighbourhood"))
+    expect_silent(cur_graphs <- colPair(cur_sce, "neighborhood"))
     cur_test <- readr::read_csv(file.path(path, "neighbors", "20210305_NE_mockData1_3.csv"), show_col_types = FALSE)
     
     expect_equal(cur_test$Object + sum(cur_sce$sample_id %in% c("20210305_NE_mockData1_1", "20210305_NE_mockData1_2")), 
@@ -224,7 +224,7 @@ test_that("read_steinbock function works", {
     expect_equal(cur_test$Neighbor + sum(cur_sce$sample_id %in% c("20210305_NE_mockData1_1", "20210305_NE_mockData1_2")), 
                  to(cur_graphs)[to(cur_graphs) %in% which(cur_sce$sample_id == "20210305_NE_mockData1_3")])
     
-    expect_silent(cur_graphs <- colPair(cur_sce, "neighbourhood"))
+    expect_silent(cur_graphs <- colPair(cur_sce, "neighborhood"))
     cur_test <- readr::read_csv(file.path(path, "neighbors", "20210305_NE_mockData2_1.csv"))
     
     expect_equal(cur_test$Object + sum(cur_sce$sample_id %in% c("20210305_NE_mockData1_1", "20210305_NE_mockData1_2", "20210305_NE_mockData1_3")), 
@@ -442,9 +442,9 @@ test_that("read_steinbock function works", {
     expect_equal(rowData(cur_spe)$ilastik, cur_panel$ilastik)
     expect_equal(rowData(cur_spe)$Tube.Number, cur_panel$`Tube Number`)
     
-    expect_equal(colPairNames(cur_spe), "neighbourhood")
+    expect_equal(colPairNames(cur_spe), "neighborhood")
     
-    expect_silent(cur_graphs <- colPair(cur_spe, "neighbourhood"))
+    expect_silent(cur_graphs <- colPair(cur_spe, "neighborhood"))
     cur_test <- readr::read_csv(file.path(path, "neighbors", "20210305_NE_mockData2_3.csv"))
     
     expect_equal(cur_test$Object + sum(cur_spe$sample_id %in% c("20210305_NE_mockData2_1", "20210305_NE_mockData2_2")), 
@@ -496,9 +496,9 @@ test_that("read_steinbock function works", {
     expect_equal(rowData(cur_sce)$ilastik, cur_panel$ilastik)
     expect_equal(rowData(cur_sce)$Tube.Number, cur_panel$`Tube Number`)
     
-    expect_equal(colPairNames(cur_sce), "neighbourhood")
+    expect_equal(colPairNames(cur_sce), "neighborhood")
     
-    expect_silent(cur_graphs <- colPair(cur_sce, "neighbourhood"))
+    expect_silent(cur_graphs <- colPair(cur_sce, "neighborhood"))
     cur_test <- readr::read_csv(file.path(path, "neighbors", "20210305_NE_mockData2_3.csv"))
     
     expect_equal(cur_test$Object + sum(cur_sce$sample_id %in% c("20210305_NE_mockData2_1", "20210305_NE_mockData2_2")), 
@@ -669,7 +669,7 @@ test_that("read_steinbock function works when files are missing", {
     expect_s4_class(cur_spe, "SpatialExperiment")
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber"))
     
-    expect_equal(colPairNames(cur_spe), "neighbourhood")
+    expect_equal(colPairNames(cur_spe), "neighborhood")
 
     # Remove graphs folder
     file.remove(list.files(paste0(cur_path, "/steinbock/neighbors"), 

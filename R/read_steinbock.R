@@ -3,11 +3,13 @@
 #' @description Reader function to generate a
 #' \code{\linkS4class{SpatialExperiment}} or
 #' \code{\linkS4class{SingleCellExperiment}} object from single-cell data
-#' obtained by the \href{https://github.com/BodenmillerGroup/steinbock}{steinbock}
+#' obtained by the 
+#' \href{https://github.com/BodenmillerGroup/steinbock}{steinbock}
 #' pipeline.
 #'
 #' @param path full path to the steinbock output folder
-#' @param intensities_folder name of the folder containing the intensity measurements per image
+#' @param intensities_folder name of the folder containing the intensity 
+#' measurements per image
 #' @param regionprops_folder name of the folder containing the cell-specific
 #' morphology and spatial measurements per image. Can be set to \code{NULL} to 
 #' exclude reading in morphology measures.
@@ -16,11 +18,12 @@
 #' @param pattern regular expression specifying a subset of files that should 
 #' be read in.
 #' @param extract_cellid_from single character indicating which column entry in 
-#' the intensity files contain the integer cell id.
+#' the intensity files contains the integer cell id.
 #' @param extract_coords_from character vector indicating which column entries 
 #' in the regionprops files contain the x and y coordinates.
-#' @param panel_file single character containing the name of the panel file. This can
-#' either be inside the steinbock path (recommended) or located somewhere else.
+#' @param panel_file single character containing the name of the panel file. 
+#' This can either be inside the steinbock path (recommended) or located 
+#' somewhere else.
 #' @param extract_names_from single character indicating the column of the panel
 #' file containing the channel names.
 #' @param return_as should the object be returned as 
@@ -32,13 +35,14 @@
 #' object markers in rows and cells in columns. 
 #'
 #' @section The returned data container:
-#' In the case of **both** containers \code{x}, intensity features are stored in
+#' In the case of both containers \code{x}, intensity features are stored in
 #' the \code{counts(x)} slot. Morphological features are stored in the
-#' \code{colData(x)} slot. The graphs are stored as \code{\link[S4Vectors]{SelfHits}}
-#' in the \code{colPair(x, "neighbourhood")} slot.
+#' \code{colData(x)} slot. The graphs are stored as 
+#' \code{\link[S4Vectors]{SelfHits}} object in the 
+#' \code{colPair(x, "neighborhood")} slot.
 #' 
-#' In the case of a returned \code{SpatialExperiment} object, the cell coordinates
-#' are stored in the \code{spatialCoords(x)} slot.
+#' In the case of a returned \code{SpatialExperiment} object, the cell 
+#' coordinates are stored in the \code{spatialCoords(x)} slot.
 #' 
 #' In the case of a returned \code{SingleCellExperiment} object, the cell 
 #' coordinates are stored in the \code{colData(x)} slot named as \code{Pos_X}
@@ -86,36 +90,37 @@
 #' @importFrom SpatialExperiment SpatialExperiment
 #' @export
 read_steinbock <- function(path,
-                           intensities_folder = "intensities",
-                           regionprops_folder = "regionprops",
-                           graphs_folder = "neighbors",
-                           pattern = NULL,
-                           extract_cellid_from = "Object",
-                           extract_coords_from = c("centroid-0", "centroid-1"),
-                           panel_file = "panel.csv",
-                           extract_names_from = "name",
-                           return_as = c("spe", "sce"),
-                           BPPARAM = SerialParam()){
+                            intensities_folder = "intensities",
+                            regionprops_folder = "regionprops",
+                            graphs_folder = "neighbors",
+                            pattern = NULL,
+                            extract_cellid_from = "Object",
+                            extract_coords_from = c("centroid-0", "centroid-1"),
+                            panel_file = "panel.csv",
+                            extract_names_from = "name",
+                            return_as = c("spe", "sce"),
+                            BPPARAM = SerialParam()){
     
     .valid.read_steinbock.input(path, intensities_folder, graphs_folder,
                                 regionprops_folder, extract_cellid_from, 
-                                extract_coords_from, panel_file, extract_names_from,
-                                pattern)
+                                extract_coords_from, panel_file, 
+                                extract_names_from, pattern)
     
     return_as <- match.arg(return_as)
     
     # Read intensities
     int_file_names <- list.files(file.path(path, intensities_folder),
-                                 pattern = pattern, full.names = TRUE)
+                                pattern = pattern, full.names = TRUE)
     object <- .steinbock_read_intensities(x = int_file_names,
-                                     cell_id = extract_cellid_from,
-                                     return_as = return_as,
-                                     BPPARAM = BPPARAM)
+                                cell_id = extract_cellid_from,
+                                return_as = return_as,
+                                BPPARAM = BPPARAM)
     
     # Read regionprops
     if (!is.null(regionprops_folder)) {
         object <- .steinbock_read_regionprops(x = object,
-                                    cur_path = file.path(path, regionprops_folder),
+                                    cur_path = file.path(path, 
+                                                    regionprops_folder),
                                     cell_id = extract_cellid_from, 
                                     coords = extract_coords_from,
                                     return_as = return_as,
@@ -125,9 +130,9 @@ read_steinbock <- function(path,
     # Read graphs
     if (!is.null(graphs_folder)) {
         object <- .steinbock_read_graphs(x = object,
-                               cur_path = file.path(path, graphs_folder),
-                               return_as = return_as,
-                               BPPARAM = BPPARAM)
+                                cur_path = file.path(path, graphs_folder),
+                                return_as = return_as,
+                                BPPARAM = BPPARAM)
     }
     
     # Merge objects

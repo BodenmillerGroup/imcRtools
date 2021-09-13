@@ -1,23 +1,24 @@
 #' @title Filter pixels based on their assigned masses
 #'
 #' @description Helper function for estimating the spillover matrix. After
-#' assigning each pixel to a spotted mass, this function will filter incorrectly 
-#' assigned pixels and remove small pixel sets.
+#' assigning each pixel to a spotted mass, this function will filter 
+#' incorrectly assigned pixels and remove small pixel sets.
 #'
 #' @param object a \code{SingleCellExperiment} object containing pixel
 #' intensities per channel. Individual pixels are stored as columns and
 #' channels are stored as rows.
 #' @param bc_id character string indicating which \code{colData(object)} entry
 #' stores the estimated mass 
-#' @param spot_mass character string indicating which \code{colData(object)} entry
-#' stores the true isotope mass of the spotted metal. 
+#' @param spot_mass character string indicating which \code{colData(object)} 
+#' entry stores the true isotope mass of the spotted metal. 
 #' @param minevents single numeric indicating the threshold under which pixel
 #' sets are excluded from spillover estimation.
-#' @param correct_pixels logical indicating if incorrectly assigned pixels should
-#' be excluded from spillover estimation.
+#' @param correct_pixels logical indicating if incorrectly assigned pixels 
+#' should be excluded from spillover estimation.
 #'
-#' @return returns a SCE object in which \code{colData(object)$bc_id} has been 
-#' adjusted based on the filter criteria.
+#' @return returns a SingleCellExperiment object in which
+#' \code{colData(object)$bc_id} has been adjusted based on the filter
+#' criteria.
 #'
 #' @examples
 #' path <- system.file("extdata/spillover", package = "imcRtools")
@@ -36,7 +37,8 @@
 #' 
 #' table(sce$sample_mass, sce$bc_id)
 #' 
-#' @author Vito Zanotelli, adapted by Nils Eling (\email{nils.eling@@uzh.ch})
+#' @author Vito Zanotelli, adapted by 
+#' Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #'
 #' @importFrom SummarizedExperiment colData<-
 #' @export
@@ -46,7 +48,8 @@ filterPixels <- function(object,
                             minevents = 40,
                             correct_pixels = TRUE){
     
-    .valid.filterPixels.input(object, bc_id, spot_mass, minevents, correct_pixels)
+    .valid.filterPixels.input(object, bc_id, spot_mass, minevents, 
+                                correct_pixels)
 
     cur_bcs <- as.character(colData(object)[[bc_id]])    
     cur_mass <- as.character(colData(object)[[spot_mass]])   

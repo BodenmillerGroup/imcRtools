@@ -3,7 +3,8 @@
 #' @description Reader function to generate a
 #' \code{\linkS4class{SpatialExperiment}} or
 #' \code{\linkS4class{SingleCellExperiment}} object from single-cell data
-#' obtained by the \href{https://github.com/BodenmillerGroup/ImcSegmentationPipeline}{ImcSegmentationPipeline}
+#' obtained by the 
+#' \href{https://github.com/BodenmillerGroup/ImcSegmentationPipeline}{ImcSegmentationPipeline}
 #' pipeline.
 #'
 #' @param path full path to the CellProfiler output folder.
@@ -21,8 +22,8 @@
 #' \code{object_file} contain the intensity features of interest. See details.
 #' @param extract_imgid_from single character indicating which column entries of
 #' the \code{object_file} and \code{image_file} contain the image integer ID.
-#' @param extract_cellid_from single character indicating which column entries
-#' of the \code{object_file} contain the object/cell integer ID.
+#' @param extract_cellid_from single character indicating which column entry
+#' of the \code{object_file} contains the object/cell integer ID.
 #' @param extract_coords_from character vector indicating which column entries
 #' of the \code{object_file} contain the x and y location of the
 #' objects/cells.
@@ -37,9 +38,9 @@
 #' @param extract_graphcellids_from character vector indicating which column
 #' entries of the \code{graph_file} contain the first and second object/cell
 #' integer IDs. These will be stored as the \code{from} and \code{to} entry of
-#' the \code{SelfHits} object in colPair(x, "neighbourhood").
-#' @param extract_metal_from single character indicating which column entries of
-#' the \code{panel_file} contain the metal isotopes of the used antibodies.
+#' the \code{SelfHits} object in colPair(x, "neighborhood").
+#' @param extract_metal_from single character indicating which column entry of
+#' the \code{panel_file} contains the metal isotopes of the used antibodies.
 #' This entry is used to match the panel information to the acquired channel
 #' information.
 #' @param scale_intensities single logical. Should the measured intensity
@@ -51,23 +52,23 @@
 #' \code{\linkS4class{SingleCellExperiment}} (\code{return_as = "sce"}).
 #' 
 #' @return returns a \code{SpatialExperiment} or \code{SingleCellExperiment}
-#' object markers in rows and cells in columns.
+#' object with markers in rows and cells in columns.
 #' 
 #' @section The returned data container:
-#' In the case of **both** containers \code{x}, intensity features (as selected
+#' In the case of both containers \code{x}, intensity features (as selected
 #' by the \code{intensities} parameter) are stored in the \code{counts(x)} slot.
 #' Cell metadata (e.g morphological features) are stored in the
 #' \code{colData(x)} slot. The interaction graphs are stored as
-#' \code{\link[S4Vectors]{SelfHits}} in the \code{colPair(x, "neighbourhood")}
-#' slot.
+#' \code{\link[S4Vectors]{SelfHits}} object in the 
+#' \code{colPair(x, "neighborhood")} slot.
 #' 
 #' Intensity features are extracted via partial string matching. Internally, the 
 #' \code{read_cpout} function checks if per channel a single intensity feature
 #' is read in (by checking the \code{_cXY} ending where \code{XY} is the 
 #' channel number).
 #' 
-#' In the case of a returned \code{SpatialExperiment} object, the cell coordinates
-#' are stored in the \code{spatialCoords(x)} slot.
+#' In the case of a returned \code{SpatialExperiment} object, the cell 
+#' coordinates are stored in the \code{spatialCoords(x)} slot.
 #' 
 #' In the case of a returned \code{SingleCellExperiment} object, the cell 
 #' coordinates are stored in the \code{colData(x)} slot named as \code{Pos_X}
@@ -89,8 +90,8 @@
 #' \url{https://github.com/BodenmillerGroup/ImcSegmentationPipeline} for the 
 #' pipeline
 #' 
-#' \code{\link{read_steinbock}} for reading in single-cell data as produced by the
-#' steinbock pipeline
+#' \code{\link{read_steinbock}} for reading in single-cell data as produced by 
+#' the steinbock pipeline
 #' 
 #' \code{\link[SingleCellExperiment]{colPair}} for information on how to work
 #' with the cell-cell interaction graphs
@@ -103,63 +104,66 @@
 #' @importFrom SummarizedExperiment colData<- rowData<- metadata<-
 #' @export
 read_cpout <- function(path,
-                       object_file = "cell.csv",
-                       image_file = "Image.csv",
-                       panel_file = "panel.csv",
-                       graph_file = "Object relationships.csv",
-                       object_feature_file = "var_cell.csv",
-                       intensities = "Intensity_MeanIntensity_FullStackFiltered",
-                       extract_imgid_from = "ImageNumber",
-                       extract_cellid_from = "ObjectNumber",
-                       extract_coords_from = c("Location_Center_X", "Location_Center_Y"),
-                       extract_cellmetadata_from = "Neighbors_NumberOfNeighbors_8",
-                       extract_imagemetadata_from = c("Metadata_acname", "Metadata_acid", "Metadata_description"),
-                       extract_graphimageid_from = "First Image Number",
-                       extract_graphcellids_from = c("First Object Number", "Second Object Number"),
-                       extract_metal_from = "Metal Tag",
-                       scale_intensities = TRUE,
-                       extract_scalingfactor_from = "Scaling_FullStack",
-                       return_as = c("spe", "sce")){
+            object_file = "cell.csv",
+            image_file = "Image.csv",
+            panel_file = "panel.csv",
+            graph_file = "Object relationships.csv",
+            object_feature_file = "var_cell.csv",
+            intensities = "Intensity_MeanIntensity_FullStackFiltered",
+            extract_imgid_from = "ImageNumber",
+            extract_cellid_from = "ObjectNumber",
+            extract_coords_from = c("Location_Center_X", "Location_Center_Y"),
+            extract_cellmetadata_from = "Neighbors_NumberOfNeighbors_8",
+            extract_imagemetadata_from = c("Metadata_acname", "Metadata_acid", 
+                                            "Metadata_description"),
+            extract_graphimageid_from = "First Image Number",
+            extract_graphcellids_from = c("First Object Number",
+                                            "Second Object Number"),
+            extract_metal_from = "Metal Tag",
+            scale_intensities = TRUE,
+            extract_scalingfactor_from = "Scaling_FullStack",
+            return_as = c("spe", "sce")){
     
     .valid.read_cpout.input(path, object_file, image_file,
                             panel_file, graph_file, object_feature_file,
                             intensities, 
                             extract_imgid_from, extract_cellid_from, 
                             extract_coords_from,
-                            extract_cellmetadata_from, extract_imagemetadata_from,
-                            extract_graphimageid_from, extract_graphcellids_from,
+                            extract_cellmetadata_from, 
+                            extract_imagemetadata_from,
+                            extract_graphimageid_from, 
+                            extract_graphcellids_from,
                             extract_metal_from, scale_intensities,
                             extract_scalingfactor_from)
     
     return_as <- match.arg(return_as)
     
     object <- .cpout_create_object(path = path, 
-                                   object_file = object_file, 
-                                   image_file = image_file, 
-                                   object_feature_file = object_feature_file,
-                                   intensities = intensities, 
-                                   extract_imgid_from = extract_imgid_from,
-                                   extract_cellid_from = extract_cellid_from, 
-                                   extract_coords_from = extract_coords_from,
-                                   extract_cellmetadata_from = extract_cellmetadata_from, 
-                                   scale_intensities = scale_intensities, 
-                                   extract_scalingfactor_from = extract_scalingfactor_from,
-                                   return_as = return_as)
+                        object_file = object_file, 
+                        image_file = image_file, 
+                        object_feature_file = object_feature_file,
+                        intensities = intensities, 
+                        extract_imgid_from = extract_imgid_from,
+                        extract_cellid_from = extract_cellid_from, 
+                        extract_coords_from = extract_coords_from,
+                        extract_cellmetadata_from = extract_cellmetadata_from, 
+                        scale_intensities = scale_intensities, 
+                        extract_scalingfactor_from = extract_scalingfactor_from,
+                        return_as = return_as)
     
     if (!is.null(image_file)) {
         object <- .cpout_add_image_metadata(object, path, image_file, 
-                                            extract_imgid_from, 
-                                            extract_imagemetadata_from)
+                                        extract_imgid_from, 
+                                        extract_imagemetadata_from)
     }
     
     if (!is.null(graph_file)){
         object <- .cpout_add_graph(object, path, graph_file, 
-                                   extract_graphimageid_from, 
-                                   extract_graphcellids_from)   
+                                  extract_graphimageid_from, 
+                                  extract_graphcellids_from)   
     }
     
     object <- .add_panel(object, path, panel_file, extract_metal_from)
     
     return(object)
-
 }

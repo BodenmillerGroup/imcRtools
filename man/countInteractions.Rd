@@ -22,7 +22,7 @@ entry by which interactions are grouped. This is usually the image ID or
 patient ID.}
 
 \item{label}{single character specifying the \code{colData(object)} entry
-which stores the cell labels. These can be cell-types labels or other m
+which stores the cell labels. These can be cell-types labels or other
 metadata.}
 
 \item{colPairName}{single character indicating the \code{colPair(object)}
@@ -37,9 +37,10 @@ the minimum number of neighbors of the same type to be considered a patch
 }
 \value{
 a DataFrame containing one row per \code{group_by} entry and unique
-label entry combination (\code{from_label}, \code{to_label}). The \code{ct}
-entry stores the interaction count as described in the details. \code{NA}
-is returned if a certain label is not present in this grouping level.
+\code{label} entry combination (\code{from_label}, \code{to_label}). The
+\code{ct} entry stores the interaction count as described in the details.
+\code{NA} is returned if a certain label is not present in this grouping
+level.
 }
 \description{
 Function to calculate the average number of neighbors B that
@@ -75,8 +76,8 @@ type B?"
 library(cytomapper)
 data(pancreasSCE)
 
-pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn",
-                               k = 3)
+pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                  type = "knn", k = 3)
                                
 # Classic style calculation
 (out <- countInteractions(pancreasSCE, 
@@ -120,5 +121,5 @@ Vito Zanotelli
 
 Jana Fischer
 
-adapted by Nils Eling (\email{nils.eling@uzh.ch})
+adapted by Nils Eling (\email{nils.eling@dqbm.uzh.ch})
 }

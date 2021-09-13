@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotSpatial.R
 \name{plotSpatial}
 \alias{plotSpatial}
-\title{Visualizes the spatial locations of cells}
+\title{Visualizes the spatial locations and interactions of cells}
 \usage{
 plotSpatial(
   object,
@@ -41,7 +41,7 @@ containing the unique image identifiers.}
 
 \item{coords}{character vector of length 2 specifying the names of the
 \code{colData} (for a \code{SingleCellExperiment} object) or the
-\code{spatialCoords} entries of the cells' x and y locations.}
+\code{spatialCoords} entries indicating the the cells' x and y locations.}
 
 \item{node_color_by}{single character indicating the \code{colData(object)}
 entry or marker name by which the nodes (cell locations) should be colored.}
@@ -52,22 +52,22 @@ entry by which the shape of the nodes are defined.}
 \item{node_size_by}{single character indicating the \code{colData(object)}
 entry by which the size of the nodes are defined.}
 
-\item{node_color_fix}{single character or numeric specifying the color of the 
+\item{node_color_fix}{single character or numeric specifying the color of all 
 nodes.}
 
-\item{node_shape_fix}{single numeric or character specifying the shape of the 
-nodes}
+\item{node_shape_fix}{single numeric or character specifying the shape of all 
+nodes.}
 
-\item{node_size_fix}{single numeric specifying the size of the nodes}
+\item{node_size_fix}{single numeric specifying the size of all nodes}
 
 \item{assay_type}{single character indicating the assay slot from which
 to extract the expression data when \code{node_color_by} is set to one of
-\code{rownames(object)}}
+\code{rownames(object)}.}
 
 \item{draw_edges}{should cell-cell interactions be drawn as edges between
 nodes?}
 
-\item{directed}{should cell-cell interactions be handled a directed graph?}
+\item{directed}{should cell-cell interactions be handled as a directed graph?}
 
 \item{edge_color_by}{single character indicating by which to color the edges.
 See details for more information.}
@@ -75,23 +75,22 @@ See details for more information.}
 \item{edge_width_by}{single character determining the size of the edges.
 See details for more information.}
 
-\item{edge_color_fix}{single character or numeric specifying the color of the 
+\item{edge_color_fix}{single character or numeric specifying the color of all 
 edges.}
 
-\item{edge_width_fix}{single numeric specifying the size of the edges.}
+\item{edge_width_fix}{single numeric specifying the size of all edges.}
 
-\item{arrow}{a \code{\link[grid]{arrow}} object specifying how to draw arrows
-between cells.}
+\item{arrow}{an \code{\link[grid]{arrow}} object specifying how to draw
+arrows between cells.}
 
-\item{end_cap}{\code{\link[ggraph]{geometry}} object specifying how long the 
-edges are. This only takes effect when drawing arrows. 
-Default: \code{end_cap = circle(0.1, 'cm')}}
+\item{end_cap}{a \code{\link[ggraph]{geometry}} object specifying how long
+the edges are. This only takes effect when drawing arrows. Default:
+\code{end_cap = circle(0.1, 'cm')}}
 
-\item{colPairName}{single character specifying from which 
+\item{colPairName}{single character specifying the 
 \code{colPair(object)} slot to retrieve the cell-cell pairings.}
 
-\item{nodes_first}{should the nodes be plotted first and then the edges?
-When \code{nodes_first = FALSE}, the edges will be drawn first}
+\item{nodes_first}{should the nodes be plotted first and then the edges?}
 
 \item{ncols}{number of columns of the grid to arrange individual images.}
 
@@ -121,7 +120,7 @@ extracted either from \code{colData(object)} slot (for a
 \code{SingleCellExperiment} input object) or from the
 \code{spatialCoords(object)} slot (for a \code{SpatialExperiment} input
 object). Node aesthetics are controlled by setting \code{node_color_by}, 
-\code{node_shape_by} and \code{node_size_by}.for associating the aesthetics
+\code{node_shape_by} and \code{node_size_by} for associating the aesthetics
 with variables. If node aesthetics should be the same for all nodes,  
 \code{node_color_fix}, \code{node_shape_fix} and \code{node_size_fix} can 
 be set.
@@ -180,6 +179,8 @@ plotSpatial(sce, img_id = "ImageNb",
 }
 \seealso{
 \code{\link{buildSpatialGraph}} for constructing interaction graphs
+
+\code{\link{ggraph}} for handling graph aesthetics
 }
 \author{
 Nils Eling (\email{nils.eling@dqbm.uzh.ch})

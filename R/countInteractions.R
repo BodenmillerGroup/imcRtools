@@ -10,7 +10,7 @@
 #' entry by which interactions are grouped. This is usually the image ID or
 #' patient ID.
 #' @param label single character specifying the \code{colData(object)} entry
-#' which stores the cell labels. These can be cell-types labels or other m
+#' which stores the cell labels. These can be cell-types labels or other
 #' metadata. 
 #' @param method which cell-cell interaction counting method to use 
 #' (see details)
@@ -45,16 +45,17 @@
 #' type B?"
 #' 
 #' @return a DataFrame containing one row per \code{group_by} entry and unique
-#' label entry combination (\code{from_label}, \code{to_label}). The \code{ct}
-#' entry stores the interaction count as described in the details. \code{NA}
-#' is returned if a certain label is not present in this grouping level.
-#'  
+#' \code{label} entry combination (\code{from_label}, \code{to_label}). The
+#' \code{ct} entry stores the interaction count as described in the details.
+#' \code{NA} is returned if a certain label is not present in this grouping
+#' level.
+#'   
 #' @examples 
 #' library(cytomapper)
 #' data(pancreasSCE)
 #'
-#' pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn",
-#'                                k = 3)
+#' pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+#'                                   type = "knn", k = 3)
 #'                                
 #' # Classic style calculation
 #' (out <- countInteractions(pancreasSCE, 
@@ -84,7 +85,7 @@
 #'
 #' @author Vito Zanotelli
 #' @author Jana Fischer
-#' @author adapted by Nils Eling (\email{nils.eling@@uzh.ch})
+#' @author adapted by Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #' 
 #' @references
 #' \href{https://www.sciencedirect.com/science/article/pii/S2405471217305434}{
@@ -109,7 +110,7 @@ countInteractions <- function(object,
     # Input check
     method <- match.arg(method)
     .valid.countInteractions.input(object, group_by, label, method,
-                                       patch_size, colPairName)
+                                        patch_size, colPairName)
     
     cur_label <- colData(object)[[label]]
     cur_table <- .prepare_table(object, group_by, cur_label, colPairName)
@@ -121,8 +122,8 @@ countInteractions <- function(object,
         cur_count <- .aggregate_histo(cur_table)
     } else if (method == "patch") {
         cur_count <- .aggregate_classic_patch(cur_table, 
-                                              patch_size = patch_size,
-                                              object, group_by, label)
+                                                patch_size = patch_size,
+                                                object, group_by, label)
     }
     
     setorder(cur_count, "group_by", "from_label", "to_label")
