@@ -60,7 +60,7 @@ Suggests:
     rmarkdown,
     markdown,
     testthat
-biocViews: Software, SingleCell, GeneExpression, DataImport
+biocViews: Software, SingleCell, GeneExpression, DataImport, Clustering
 VignetteBuilder: knitr
 URL: https://github.com/BodenmillerGroup/imcRtools
 BugReports: https://github.com/BodenmillerGroup/imcRtools/issues
