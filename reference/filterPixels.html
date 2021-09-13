@@ -148,8 +148,8 @@ stores the estimated mass</p></td>
     </tr>
     <tr>
       <th>spot_mass</th>
-      <td><p>character string indicating which <code>colData(object)</code> entry
-stores the true isotope mass of the spotted metal.</p></td>
+      <td><p>character string indicating which <code>colData(object)</code> 
+entry stores the true isotope mass of the spotted metal.</p></td>
     </tr>
     <tr>
       <th>minevents</th>
@@ -158,18 +158,20 @@ sets are excluded from spillover estimation.</p></td>
     </tr>
     <tr>
       <th>correct_pixels</th>
-      <td><p>logical indicating if incorrectly assigned pixels should
-be excluded from spillover estimation.</p></td>
+      <td><p>logical indicating if incorrectly assigned pixels 
+should be excluded from spillover estimation.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>returns a SCE object in which <code>colData(object)$bc_id</code> has been 
-adjusted based on the filter criteria.</p>
+    <p>returns a SingleCellExperiment object in which
+<code>colData(object)$bc_id</code> has been adjusted based on the filter
+criteria.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <p>Vito Zanotelli, adapted by Nils Eling (<a href='mailto:nils.eling@uzh.ch'>nils.eling@uzh.ch</a>)</p>
+    <p>Vito Zanotelli, adapted by 
+Nils Eling (<a href='mailto:nils.eling@dqbm.uzh.ch'>nils.eling@dqbm.uzh.ch</a>)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>path</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata/spillover"</span>, package <span class='op'>=</span> <span class='st'>"imcRtools"</span><span class='op'>)</span>

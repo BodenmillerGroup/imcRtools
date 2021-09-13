@@ -41,7 +41,7 @@
 
 <meta property="og:title" content="Builds an interaction graph based on the cells' locations — buildSpatialGraph" />
 <meta property="og:description" content="Function to define cell-cell interactions via distance-based
-expansion, delaunay triangulation or k nearest neighbour detection." />
+expansion, delaunay triangulation or k nearest neighbor detection." />
 
 
 
@@ -119,7 +119,7 @@ expansion, delaunay triangulation or k nearest neighbour detection." />
 
     <div class="ref-description">
     <p>Function to define cell-cell interactions via distance-based
-expansion, delaunay triangulation or k nearest neighbour detection.</p>
+expansion, delaunay triangulation or k nearest neighbor detection.</p>
     </div>
 
     <pre class="usage"><span class='fu'>buildSpatialGraph</span><span class='op'>(</span>
@@ -155,29 +155,29 @@ containing the unique image identifiers.</p></td>
       <td><p>single character specifying the type of graph to be build.
 Supported entries are <code>"expansion"</code> (default) to find interacting
 cells via distance thresholding; <code>"delaunay"</code> to find interactions via
-delaunay triangulation; <code>"knn"</code> to find the k nearest neighbouring
+delaunay triangulation; <code>"knn"</code> to find the k nearest neighboring
 cells.</p></td>
     </tr>
     <tr>
       <th>k</th>
       <td><p>(when <code>type = "knn"</code>) single numeric integer defining the
-number of nearest neighbours to search for.</p></td>
+number of nearest neighbors to search for.</p></td>
     </tr>
     <tr>
       <th>directed</th>
-      <td><p>should the returned graph be directed? Only effects the k
-nearest neighbour graph (see details).</p></td>
+      <td><p>(when <code>type = "knn"</code>) should the returned graph be 
+directed? (see details).</p></td>
     </tr>
     <tr>
       <th>k_max_dist</th>
-      <td><p>if <code>type = "knn"</code>, the maximum distance at which to
+      <td><p>(when <code>type = "knn"</code>) the maximum distance at which to
 consider neighboring cells. All neighbors within a distance larger than 
 <code>k_max_dist</code> will be excluded from graph construction.</p></td>
     </tr>
     <tr>
       <th>threshold</th>
       <td><p>(when <code>type = "expansion"</code>) single numeric specifying
-the maximum distance for considering neighbours</p></td>
+the maximum distance for considering neighbors</p></td>
     </tr>
     <tr>
       <th>coords</th>
@@ -191,13 +191,13 @@ the maximum distance for considering neighbours</p></td>
     </tr>
     <tr>
       <th>BNPARAM</th>
-      <td><p>a <code><a href='https://rdrr.io/pkg/BiocNeighbors/man/BiocNeighborParam.html'>BiocNeighborParam</a> object
-defining the algorithm to use.</code></p></td>
+      <td><p>a <code><a href='https://rdrr.io/pkg/BiocNeighbors/man/BiocNeighborParam.html'>BiocNeighborParam</a></code> object
+defining the algorithm to use.</p></td>
     </tr>
     <tr>
       <th>BPPARAM</th>
       <td><p>a <code><a href='https://rdrr.io/pkg/BiocParallel/man/BiocParallelParam-class.html'>BiocParallelParam-class</a></code> object
-defining how to parallelise computations.</p></td>
+defining how to parallelize computations.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -227,7 +227,7 @@ triangulation of the cells' centroids.</p>
 <p>3. When <code>type = "knn"</code>, interacting cells are defined as the <code>k</code>
 nearest neighbors in the 2D spatial plane.</p>
 <p>The <code>directed</code> parameter only affects graph construction via k nearest
-neighbour search. For <code>directed = FALSE</code>, each interaction will be
+neighbor search. For <code>directed = FALSE</code>, each interaction will be
 stored as mutual edge (e.g. node 2 is connected to node 10 and vise versa).
 For <code>type = "expansion"</code> and <code>type = "delaunay"</code>, each edge is 
 stored as mutual edge by default.</p>
@@ -239,19 +239,20 @@ and coerced to an <code>igraph</code> object via
 
     
 
-<p>When finding interactions via <code>expansion</code> of <code>knn</code>, the 
+<p>When finding interactions via <code>expansion</code> or <code>knn</code>, the 
 <code><a href='https://rdrr.io/pkg/BiocNeighbors/man/findNeighbors-methods.html'>findNeighbors</a></code> or 
-<code><a href='https://rdrr.io/pkg/BiocNeighbors/man/findKNN-methods.html'>findKNN</a></code> functions are used. Both functions
-accept the <code>BNPARAM</code> via which the graph construction method can be 
-defined (default <code><a href='https://rdrr.io/pkg/BiocNeighbors/man/KmknnParam.html'>KmknnParam</a></code>). For an overview
-on the different algorithms, see 
+<code><a href='https://rdrr.io/pkg/BiocNeighbors/man/findKNN-methods.html'>findKNN</a></code> functions are used, respectively. Both
+functions accept the <code>BNPARAM</code> parameter via which the graph
+construction method can be defined (default
+<code><a href='https://rdrr.io/pkg/BiocNeighbors/man/KmknnParam.html'>KmknnParam</a></code>). For an overview on the different
+algorithms, see
 <code><a href='https://rdrr.io/pkg/BiocNeighbors/man/BiocNeighborParam.html'>BiocNeighborParam</a></code>. Within the 
 <code>BiocNeighborParam</code> object, <code>distance</code> can be set to
 <code>"Euclidean"</code> (default), <code>"Manhattan"</code> or <code>"Cosine"</code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='https://rdrr.io/pkg/BiocNeighbors/man/findNeighbors-methods.html'>findNeighbors</a></code> for the function finding interactions
-via expansion</p>
+    <div class='dont-index'><p><code><a href='https://rdrr.io/pkg/BiocNeighbors/man/findNeighbors-methods.html'>findNeighbors</a></code> for the function finding 
+interactions via expansion</p>
 <p><code><a href='https://rdrr.io/pkg/BiocNeighbors/man/findKNN-methods.html'>findKNN</a></code> for the function finding interactions
 via nearest neighbor search</p>
 <p><code><a href='https://rdrr.io/pkg/RTriangle/man/triangulate.html'>triangulate</a></code> for the function finding interactions

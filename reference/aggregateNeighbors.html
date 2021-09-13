@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function to aggregate across all neighbors of each cell. — aggregateNeighbors • imcRtools</title>
+<title>Function to aggregate all neighbors of each cell. — aggregateNeighbors • imcRtools</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Function to aggregate across all neighbors of each cell. — aggregateNeighbors" />
+<meta property="og:title" content="Function to aggregate all neighbors of each cell. — aggregateNeighbors" />
 <meta property="og:description" content="Function to summarize categorical or expression values of all
 neighbors of each cell." />
 
@@ -112,7 +112,7 @@ neighbors of each cell." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Function to aggregate across all neighbors of each cell.</h1>
+    <h1>Function to aggregate all neighbors of each cell.</h1>
     <small class="dont-index">Source: <a href='https://github.com/BodenmillerGroup/imcRtools/blob/master/R/aggregateNeighbors.R'><code>R/aggregateNeighbors.R</code></a></small>
     <div class="hidden name"><code>aggregateNeighbors.Rd</code></div>
     </div>
@@ -151,7 +151,7 @@ entry containing the neighbor information.</p></td>
       <th>aggregate_by</th>
       <td><p>character specifying whether the neighborhood should be
 summarized by cellular features stored in <code>colData(object)</code>
-(<code>aggregate_by = "metdata"</code>) or by the marker expression of the
+(<code>aggregate_by = "metdata"</code>) or by marker expression of the
 neighboring cells (<code>aggregate_by = "expression"</code>).</p></td>
     </tr>
     <tr>
@@ -222,8 +222,8 @@ values in form of a <code>DataFrame</code> object in
                          
 <span class='co'># Aggregating neighboring cell-types</span>
 <span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'>aggregateNeighbors</span><span class='op'>(</span><span class='va'>sce</span>, colPairName <span class='op'>=</span> <span class='st'>"knn_interaction_graph"</span>,
-                          aggregate_by <span class='op'>=</span> <span class='st'>"metadata"</span>,
-                          count_by <span class='op'>=</span> <span class='st'>"CellType"</span><span class='op'>)</span>
+                         aggregate_by <span class='op'>=</span> <span class='st'>"metadata"</span>,
+                         count_by <span class='op'>=</span> <span class='st'>"CellType"</span><span class='op'>)</span>
 <span class='va'>sce</span><span class='op'>$</span><span class='va'>aggregatedNeighbors</span>
 </div><div class='output co'>#&gt; DataFrame with 362 rows and 3 columns
 #&gt;     celltype_A celltype_B celltype_C
@@ -241,9 +241,9 @@ values in form of a <code>DataFrame</code> object in
 #&gt; 362          0   0.000000   1.000000</div><div class='input'>
 <span class='co'># Aggregating neighboring expression values</span>
 <span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'>aggregateNeighbors</span><span class='op'>(</span><span class='va'>sce</span>, colPairName <span class='op'>=</span> <span class='st'>"knn_interaction_graph"</span>,
-                          aggregate_by <span class='op'>=</span> <span class='st'>"expression"</span>,
-                          assay_type <span class='op'>=</span> <span class='st'>"exprs"</span>,
-                          statistic <span class='op'>=</span> <span class='st'>"mean"</span><span class='op'>)</span>
+                         aggregate_by <span class='op'>=</span> <span class='st'>"expression"</span>,
+                         assay_type <span class='op'>=</span> <span class='st'>"exprs"</span>,
+                         statistic <span class='op'>=</span> <span class='st'>"mean"</span><span class='op'>)</span>
 <span class='va'>sce</span><span class='op'>$</span><span class='va'>mean_aggregatedExpression</span>
 </div><div class='output co'>#&gt; DataFrame with 362 rows and 5 columns
 #&gt;            H3      CD99       PIN      CD8a       CDH

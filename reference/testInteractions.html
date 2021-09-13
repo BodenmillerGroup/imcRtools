@@ -133,7 +133,7 @@ from random permutations.</p>
   patch_size <span class='op'>=</span> <span class='cn'>NULL</span>,
   iter <span class='op'>=</span> <span class='fl'>1000</span>,
   p_threshold <span class='op'>=</span> <span class='fl'>0.01</span>,
-  BBPARAM <span class='op'>=</span> <span class='fu'>SerialParam</span><span class='op'>(</span><span class='op'>)</span>
+  BPPARAM <span class='op'>=</span> <span class='fu'>SerialParam</span><span class='op'>(</span><span class='op'>)</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -183,7 +183,7 @@ threshold at which interactions are considered to be significantly
 enriched or depleted per group.</p></td>
     </tr>
     <tr>
-      <th>BBPARAM</th>
+      <th>BPPARAM</th>
       <td><p>parameters for parallelized processing.</p></td>
     </tr>
     </table>
@@ -191,25 +191,28 @@ enriched or depleted per group.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a DataFrame containing one row per <code>group_by</code> entry and unique
-label entry combination (<code>from_label</code>, <code>to_label</code>). The object
-contains following entries:</p>
+<code>label</code> entry combination (<code>from_label</code>, <code>to_label</code>). The
+object contains following entries:</p>
 <ul>
-<li><p>ct: stores the interaction count as described in the details</p></li>
-<li><p>p_gt: stores the fraction of perturbations equal or greater than <code>ct</code></p></li>
-<li><p>p_ltv stores the fraction of perturbations equal or less than <code>ct</code></p></li>
-<li><p>interaction: is there the tendency for a positive interaction
+<li><p><code>ct</code>: stores the interaction count as described in the details</p></li>
+<li><p><code>p_gt</code>: stores the fraction of perturbations equal or greater 
+than <code>ct</code></p></li>
+<li><p><code>p_lt</code>: stores the fraction of perturbations equal or less than 
+<code>ct</code></p></li>
+<li><p><code>interaction</code>: is there the tendency for a positive interaction
 (attraction) between <code>from_label</code> and <code>to_label</code>? Is <code>p_lt</code>
 greater than <code>p_gt</code>?</p></li>
-<li><p>p: the smaller value of <code>p_gt</code> and <code>p_lt</code>.</p></li>
-<li><p>sig: is <code>p</code> smaller than <code>p_threshold</code>?</p></li>
-<li><p>sigval: Combination of <code>interaction</code> and <code>sig</code>.</p><ul>
+<li><p><code>p</code>: the smaller value of <code>p_gt</code> and <code>p_lt</code>.</p></li>
+<li><p><code>sig</code>: is <code>p</code> smaller than <code>p_threshold</code>?</p></li>
+<li><p><code>sigval</code>: Combination of <code>interaction</code> and <code>sig</code>.</p><ul>
 <li><p>-1: <code>interaction == FALSE</code> and <code>sig == TRUE</code></p></li>
 <li><p>0: <code>sig == FALSE</code></p></li>
 <li><p>1: <code>interaction == TRUE</code> and <code>sig == TRUE</code></p></li>
 </ul></li>
 </ul>
 
-<p><code>NA</code> is returned if a certain label is not present in this grouping level.</p>
+<p><code>NA</code> is returned if a certain label is not present in this grouping 
+level.</p>
     <h2 class="hasAnchor" id="counting-and-summarizing-cell-cell-interactions"><a class="anchor" href="#counting-and-summarizing-cell-cell-interactions"></a>Counting and summarizing cell-cell interactions</h2>
 
     
@@ -235,15 +238,15 @@ fraction of cells of type A have at least a given number of neighbors of
 type B?"</p>
     <h2 class="hasAnchor" id="testing-for-significance"><a class="anchor" href="#testing-for-significance"></a>Testing for significance</h2>
 
-    
-
-<p>Within each unique entry to <code>colData(object)[[group_by]]</code>, the entries
-of <code>colData(object)[[label]]</code> are randomized <code>iter</code> times. 
-For each iteration, the interactions are counted as described above.
-The result is a distribution of the interaction count under spatial randomness.
-The observed interaction count is compared against this Null distribution to derive
-empirical p-values:</p>
-<p><code>p_gt</code>: fraction of perturbations equal or greater than the observed count</p>
+    <p>Within each unique entry to
+<code>colData(object)[[group_by]]</code>, the entries of
+<code>colData(object)[[label]]</code> are randomized <code>iter</code> times. For each
+iteration, the interactions are counted as described above. The result is a
+distribution of the interaction count under spatial randomness. The
+observed interaction count is compared against this Null distribution to
+derive empirical p-values:</p>
+<p><code>p_gt</code>: fraction of perturbations equal or greater than the observed 
+count</p>
 <p><code>p_lt</code>: fraction of perturbations equal or less than the observed count</p>
 <p>Based on these empirical p-values, the <code>interaction</code> score (attraction
 or avoidance), overall <code>p</code> value and significance by comparison to
@@ -266,22 +269,22 @@ interactions per grouping level.</p>
 
     <p>Vito Zanotelli</p>
 <p>Jana Fischer</p>
-<p>adapted by Nils Eling (<a href='mailto:nils.eling@uzh.ch'>nils.eling@uzh.ch</a>)</p>
+<p>adapted by Nils Eling (<a href='mailto:nils.eling@dqbm.uzh.ch'>nils.eling@dqbm.uzh.ch</a>)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/BodenmillerGroup/cytomapper'>cytomapper</a></span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/pkg/CATALYST/man/data.html'>data</a></span><span class='op'>(</span><span class='va'>pancreasSCE</span><span class='op'>)</span>
 
-<span class='va'>pancreasSCE</span> <span class='op'>&lt;-</span> <span class='fu'><a href='buildSpatialGraph.html'>buildSpatialGraph</a></span><span class='op'>(</span><span class='va'>pancreasSCE</span>, img_id <span class='op'>=</span> <span class='st'>"ImageNb"</span>, type <span class='op'>=</span> <span class='st'>"knn"</span>,
-                               k <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
+<span class='va'>pancreasSCE</span> <span class='op'>&lt;-</span> <span class='fu'><a href='buildSpatialGraph.html'>buildSpatialGraph</a></span><span class='op'>(</span><span class='va'>pancreasSCE</span>, img_id <span class='op'>=</span> <span class='st'>"ImageNb"</span>, 
+                                 type <span class='op'>=</span> <span class='st'>"knn"</span>, k <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
                                
 <span class='co'># Classic style calculation</span>
 <span class='op'>(</span><span class='va'>out</span> <span class='op'>&lt;-</span> <span class='fu'>testInteractions</span><span class='op'>(</span><span class='va'>pancreasSCE</span>, 
-                                group_by <span class='op'>=</span> <span class='st'>"ImageNb"</span>,
-                                label <span class='op'>=</span> <span class='st'>"CellType"</span>, 
-                                method <span class='op'>=</span> <span class='st'>"classic"</span>,
-                                colPairName <span class='op'>=</span> <span class='st'>"knn_interaction_graph"</span>,
-                                iter <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span><span class='op'>)</span>
+                         group_by <span class='op'>=</span> <span class='st'>"ImageNb"</span>,
+                         label <span class='op'>=</span> <span class='st'>"CellType"</span>, 
+                         method <span class='op'>=</span> <span class='st'>"classic"</span>,
+                         colPairName <span class='op'>=</span> <span class='st'>"knn_interaction_graph"</span>,
+                         iter <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; DataFrame with 24 rows and 10 columns
 #&gt;      group_by  from_label   to_label        ct        p_gt        p_lt
 #&gt;     &lt;integer&gt; &lt;character&gt;   &lt;factor&gt; &lt;numeric&gt;   &lt;numeric&gt;   &lt;numeric&gt;
@@ -311,11 +314,11 @@ interactions per grouping level.</p>
 #&gt; 24         TRUE 0.000999001      TRUE         1</div><div class='input'>                                
 <span class='co'># Histocat style calculation</span>
 <span class='op'>(</span><span class='va'>out</span> <span class='op'>&lt;-</span> <span class='fu'>testInteractions</span><span class='op'>(</span><span class='va'>pancreasSCE</span>, 
-                                group_by <span class='op'>=</span> <span class='st'>"ImageNb"</span>,
-                                label <span class='op'>=</span> <span class='st'>"CellType"</span>, 
-                                method <span class='op'>=</span> <span class='st'>"histocat"</span>,
-                                colPairName <span class='op'>=</span> <span class='st'>"knn_interaction_graph"</span>,
-                                iter <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span><span class='op'>)</span>
+                         group_by <span class='op'>=</span> <span class='st'>"ImageNb"</span>,
+                         label <span class='op'>=</span> <span class='st'>"CellType"</span>, 
+                         method <span class='op'>=</span> <span class='st'>"histocat"</span>,
+                         colPairName <span class='op'>=</span> <span class='st'>"knn_interaction_graph"</span>,
+                         iter <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; DataFrame with 22 rows and 10 columns
 #&gt;      group_by  from_label    to_label        ct        p_gt        p_lt
 #&gt;     &lt;integer&gt; &lt;character&gt; &lt;character&gt; &lt;numeric&gt;   &lt;numeric&gt;   &lt;numeric&gt;
@@ -345,12 +348,12 @@ interactions per grouping level.</p>
 #&gt; 22         TRUE 0.000999001      TRUE         1</div><div class='input'>                                
 <span class='co'># Patch style calculation</span>
 <span class='op'>(</span><span class='va'>out</span> <span class='op'>&lt;-</span> <span class='fu'>testInteractions</span><span class='op'>(</span><span class='va'>pancreasSCE</span>, 
-                                group_by <span class='op'>=</span> <span class='st'>"ImageNb"</span>,
-                                label <span class='op'>=</span> <span class='st'>"CellType"</span>, 
-                                method <span class='op'>=</span> <span class='st'>"patch"</span>,
-                                patch_size <span class='op'>=</span> <span class='fl'>3</span>,
-                                colPairName <span class='op'>=</span> <span class='st'>"knn_interaction_graph"</span>,
-                                <span class='op'>)</span><span class='op'>)</span>
+                         group_by <span class='op'>=</span> <span class='st'>"ImageNb"</span>,
+                         label <span class='op'>=</span> <span class='st'>"CellType"</span>, 
+                         method <span class='op'>=</span> <span class='st'>"patch"</span>,
+                         patch_size <span class='op'>=</span> <span class='fl'>3</span>,
+                         colPairName <span class='op'>=</span> <span class='st'>"knn_interaction_graph"</span>,
+                         <span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; DataFrame with 24 rows and 10 columns
 #&gt;      group_by  from_label   to_label        ct        p_gt        p_lt
 #&gt;     &lt;integer&gt; &lt;character&gt;   &lt;factor&gt; &lt;numeric&gt;   &lt;numeric&gt;   &lt;numeric&gt;

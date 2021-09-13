@@ -148,7 +148,7 @@ patient ID.</p></td>
     <tr>
       <th>label</th>
       <td><p>single character specifying the <code>colData(object)</code> entry
-which stores the cell labels. These can be cell-types labels or other m
+which stores the cell labels. These can be cell-types labels or other
 metadata.</p></td>
     </tr>
     <tr>
@@ -172,9 +172,10 @@ the minimum number of neighbors of the same type to be considered a patch
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a DataFrame containing one row per <code>group_by</code> entry and unique
-label entry combination (<code>from_label</code>, <code>to_label</code>). The <code>ct</code>
-entry stores the interaction count as described in the details. <code>NA</code>
-is returned if a certain label is not present in this grouping level.</p>
+<code>label</code> entry combination (<code>from_label</code>, <code>to_label</code>). The
+<code>ct</code> entry stores the interaction count as described in the details.
+<code>NA</code> is returned if a certain label is not present in this grouping
+level.</p>
     <h2 class="hasAnchor" id="counting-and-summarizing-cell-cell-interactions"><a class="anchor" href="#counting-and-summarizing-cell-cell-interactions"></a>Counting and summarizing cell-cell interactions</h2>
 
     
@@ -215,14 +216,14 @@ interactions per grouping level.</p></div>
 
     <p>Vito Zanotelli</p>
 <p>Jana Fischer</p>
-<p>adapted by Nils Eling (<a href='mailto:nils.eling@uzh.ch'>nils.eling@uzh.ch</a>)</p>
+<p>adapted by Nils Eling (<a href='mailto:nils.eling@dqbm.uzh.ch'>nils.eling@dqbm.uzh.ch</a>)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/BodenmillerGroup/cytomapper'>cytomapper</a></span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>pancreasSCE</span><span class='op'>)</span>
 
-<span class='va'>pancreasSCE</span> <span class='op'>&lt;-</span> <span class='fu'><a href='buildSpatialGraph.html'>buildSpatialGraph</a></span><span class='op'>(</span><span class='va'>pancreasSCE</span>, img_id <span class='op'>=</span> <span class='st'>"ImageNb"</span>, type <span class='op'>=</span> <span class='st'>"knn"</span>,
-                               k <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
+<span class='va'>pancreasSCE</span> <span class='op'>&lt;-</span> <span class='fu'><a href='buildSpatialGraph.html'>buildSpatialGraph</a></span><span class='op'>(</span><span class='va'>pancreasSCE</span>, img_id <span class='op'>=</span> <span class='st'>"ImageNb"</span>, 
+                                  type <span class='op'>=</span> <span class='st'>"knn"</span>, k <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
                                
 <span class='co'># Classic style calculation</span>
 <span class='op'>(</span><span class='va'>out</span> <span class='op'>&lt;-</span> <span class='fu'>countInteractions</span><span class='op'>(</span><span class='va'>pancreasSCE</span>, 

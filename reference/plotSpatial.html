@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Visualizes the spatial locations of cells — plotSpatial • imcRtools</title>
+<title>Visualizes the spatial locations and interactions of cells — plotSpatial • imcRtools</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Visualizes the spatial locations of cells — plotSpatial" />
+<meta property="og:title" content="Visualizes the spatial locations and interactions of cells — plotSpatial" />
 <meta property="og:description" content="A general function to plot spatial locations of cells while 
 specifying color, shape, size. Cell-cell interactions can be visualized
 in form of edges between points." />
@@ -113,7 +113,7 @@ in form of edges between points." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Visualizes the spatial locations of cells</h1>
+    <h1>Visualizes the spatial locations and interactions of cells</h1>
     <small class="dont-index">Source: <a href='https://github.com/BodenmillerGroup/imcRtools/blob/master/R/plotSpatial.R'><code>R/plotSpatial.R</code></a></small>
     <div class="hidden name"><code>plotSpatial.Rd</code></div>
     </div>
@@ -169,7 +169,7 @@ containing the unique image identifiers.</p></td>
       <th>coords</th>
       <td><p>character vector of length 2 specifying the names of the
 <code>colData</code> (for a <code>SingleCellExperiment</code> object) or the
-<code>spatialCoords</code> entries of the cells' x and y locations.</p></td>
+<code>spatialCoords</code> entries indicating the the cells' x and y locations.</p></td>
     </tr>
     <tr>
       <th>node_color_by</th>
@@ -188,23 +188,23 @@ entry by which the size of the nodes are defined.</p></td>
     </tr>
     <tr>
       <th>node_color_fix</th>
-      <td><p>single character or numeric specifying the color of the 
+      <td><p>single character or numeric specifying the color of all 
 nodes.</p></td>
     </tr>
     <tr>
       <th>node_shape_fix</th>
-      <td><p>single numeric or character specifying the shape of the 
-nodes</p></td>
+      <td><p>single numeric or character specifying the shape of all 
+nodes.</p></td>
     </tr>
     <tr>
       <th>node_size_fix</th>
-      <td><p>single numeric specifying the size of the nodes</p></td>
+      <td><p>single numeric specifying the size of all nodes</p></td>
     </tr>
     <tr>
       <th>assay_type</th>
       <td><p>single character indicating the assay slot from which
 to extract the expression data when <code>node_color_by</code> is set to one of
-<code><a href='https://rdrr.io/r/base/colnames.html'>rownames(object)</a></code></p></td>
+<code><a href='https://rdrr.io/r/base/colnames.html'>rownames(object)</a></code>.</p></td>
     </tr>
     <tr>
       <th>draw_edges</th>
@@ -213,7 +213,7 @@ nodes?</p></td>
     </tr>
     <tr>
       <th>directed</th>
-      <td><p>should cell-cell interactions be handled a directed graph?</p></td>
+      <td><p>should cell-cell interactions be handled as a directed graph?</p></td>
     </tr>
     <tr>
       <th>edge_color_by</th>
@@ -227,33 +227,32 @@ See details for more information.</p></td>
     </tr>
     <tr>
       <th>edge_color_fix</th>
-      <td><p>single character or numeric specifying the color of the 
+      <td><p>single character or numeric specifying the color of all 
 edges.</p></td>
     </tr>
     <tr>
       <th>edge_width_fix</th>
-      <td><p>single numeric specifying the size of the edges.</p></td>
+      <td><p>single numeric specifying the size of all edges.</p></td>
     </tr>
     <tr>
       <th>arrow</th>
-      <td><p>a <code><a href='https://rdrr.io/r/grid/arrow.html'>arrow</a></code> object specifying how to draw arrows
-between cells.</p></td>
+      <td><p>an <code><a href='https://rdrr.io/r/grid/arrow.html'>arrow</a></code> object specifying how to draw
+arrows between cells.</p></td>
     </tr>
     <tr>
       <th>end_cap</th>
-      <td><p><code><a href='https://ggraph.data-imaginist.com/reference/geometry.html'>geometry</a></code> object specifying how long the 
-edges are. This only takes effect when drawing arrows. 
-Default: <code>end_cap = circle(0.1, 'cm')</code></p></td>
+      <td><p>a <code><a href='https://ggraph.data-imaginist.com/reference/geometry.html'>geometry</a></code> object specifying how long
+the edges are. This only takes effect when drawing arrows. Default:
+<code>end_cap = circle(0.1, 'cm')</code></p></td>
     </tr>
     <tr>
       <th>colPairName</th>
-      <td><p>single character specifying from which 
+      <td><p>single character specifying the 
 <code>colPair(object)</code> slot to retrieve the cell-cell pairings.</p></td>
     </tr>
     <tr>
       <th>nodes_first</th>
-      <td><p>should the nodes be plotted first and then the edges?
-When <code>nodes_first = FALSE</code>, the edges will be drawn first</p></td>
+      <td><p>should the nodes be plotted first and then the edges?</p></td>
     </tr>
     <tr>
       <th>ncols</th>
@@ -292,7 +291,7 @@ extracted either from <code>colData(object)</code> slot (for a
 <code>SingleCellExperiment</code> input object) or from the
 <code>spatialCoords(object)</code> slot (for a <code>SpatialExperiment</code> input
 object). Node aesthetics are controlled by setting <code>node_color_by</code>, 
-<code>node_shape_by</code> and <code>node_size_by</code>.for associating the aesthetics
+<code>node_shape_by</code> and <code>node_size_by</code> for associating the aesthetics
 with variables. If node aesthetics should be the same for all nodes,  
 <code>node_color_fix</code>, <code>node_shape_fix</code> and <code>node_size_fix</code> can 
 be set.</p>
@@ -312,7 +311,8 @@ class. To cap the edge before it reaches the next node, the <code>end_cap</code>
 parameter can be used.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='buildSpatialGraph.html'>buildSpatialGraph</a></code> for constructing interaction graphs</p></div>
+    <div class='dont-index'><p><code><a href='buildSpatialGraph.html'>buildSpatialGraph</a></code> for constructing interaction graphs</p>
+<p><code>ggraph</code> for handling graph aesthetics</p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Nils Eling (<a href='mailto:nils.eling@dqbm.uzh.ch'>nils.eling@dqbm.uzh.ch</a>)</p>

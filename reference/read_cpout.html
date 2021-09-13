@@ -43,7 +43,8 @@
 <meta property="og:description" content="Reader function to generate a
 SpatialExperiment or
 SingleCellExperiment object from single-cell data
-obtained by the ImcSegmentationPipeline
+obtained by the 
+ImcSegmentationPipeline
 pipeline." />
 
 
@@ -124,7 +125,8 @@ pipeline." />
     <p>Reader function to generate a
 <code>SpatialExperiment</code> or
 <code>SingleCellExperiment</code> object from single-cell data
-obtained by the <a href='https://github.com/BodenmillerGroup/ImcSegmentationPipeline'>ImcSegmentationPipeline</a>
+obtained by the 
+<a href='https://github.com/BodenmillerGroup/ImcSegmentationPipeline'>ImcSegmentationPipeline</a>
 pipeline.</p>
     </div>
 
@@ -194,8 +196,8 @@ the <code>object_file</code> and <code>image_file</code> contain the image integ
     </tr>
     <tr>
       <th>extract_cellid_from</th>
-      <td><p>single character indicating which column entries
-of the <code>object_file</code> contain the object/cell integer ID.</p></td>
+      <td><p>single character indicating which column entry
+of the <code>object_file</code> contains the object/cell integer ID.</p></td>
     </tr>
     <tr>
       <th>extract_coords_from</th>
@@ -225,12 +227,12 @@ entries of the <code>graph_file</code> contain the image integer ID.</p></td>
       <td><p>character vector indicating which column
 entries of the <code>graph_file</code> contain the first and second object/cell
 integer IDs. These will be stored as the <code>from</code> and <code>to</code> entry of
-the <code>SelfHits</code> object in colPair(x, "neighbourhood").</p></td>
+the <code>SelfHits</code> object in colPair(x, "neighborhood").</p></td>
     </tr>
     <tr>
       <th>extract_metal_from</th>
-      <td><p>single character indicating which column entries of
-the <code>panel_file</code> contain the metal isotopes of the used antibodies.
+      <td><p>single character indicating which column entry of
+the <code>panel_file</code> contains the metal isotopes of the used antibodies.
 This entry is used to match the panel information to the acquired channel
 information.</p></td>
     </tr>
@@ -255,23 +257,23 @@ entries of the <code>image_file</code> contain the image specific scaling factor
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>returns a <code>SpatialExperiment</code> or <code>SingleCellExperiment</code>
-object markers in rows and cells in columns.</p>
+object with markers in rows and cells in columns.</p>
     <h2 class="hasAnchor" id="the-returned-data-container"><a class="anchor" href="#the-returned-data-container"></a>The returned data container</h2>
 
     
 
-<p>In the case of **both** containers <code>x</code>, intensity features (as selected
+<p>In the case of both containers <code>x</code>, intensity features (as selected
 by the <code>intensities</code> parameter) are stored in the <code>counts(x)</code> slot.
 Cell metadata (e.g morphological features) are stored in the
 <code>colData(x)</code> slot. The interaction graphs are stored as
-<code><a href='https://rdrr.io/pkg/S4Vectors/man/Hits-class.html'>SelfHits</a></code> in the <code>colPair(x, "neighbourhood")</code>
-slot.</p>
+<code><a href='https://rdrr.io/pkg/S4Vectors/man/Hits-class.html'>SelfHits</a></code> object in the 
+<code>colPair(x, "neighborhood")</code> slot.</p>
 <p>Intensity features are extracted via partial string matching. Internally, the 
 <code>read_cpout</code> function checks if per channel a single intensity feature
 is read in (by checking the <code>_cXY</code> ending where <code>XY</code> is the 
 channel number).</p>
-<p>In the case of a returned <code>SpatialExperiment</code> object, the cell coordinates
-are stored in the <code>spatialCoords(x)</code> slot.</p>
+<p>In the case of a returned <code>SpatialExperiment</code> object, the cell 
+coordinates are stored in the <code>spatialCoords(x)</code> slot.</p>
 <p>In the case of a returned <code>SingleCellExperiment</code> object, the cell 
 coordinates are stored in the <code>colData(x)</code> slot named as <code>Pos_X</code>
 and <code>Pos_Y</code>.</p>
@@ -279,8 +281,8 @@ and <code>Pos_Y</code>.</p>
 
     <div class='dont-index'><p><a href='https://github.com/BodenmillerGroup/ImcSegmentationPipeline'>https://github.com/BodenmillerGroup/ImcSegmentationPipeline</a> for the 
 pipeline</p>
-<p><code><a href='read_steinbock.html'>read_steinbock</a></code> for reading in single-cell data as produced by the
-steinbock pipeline</p>
+<p><code><a href='read_steinbock.html'>read_steinbock</a></code> for reading in single-cell data as produced by 
+the steinbock pipeline</p>
 <p><code><a href='https://rdrr.io/pkg/SingleCellExperiment/man/colPairs.html'>colPair</a></code> for information on how to work
 with the cell-cell interaction graphs</p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>

@@ -43,7 +43,8 @@
 <meta property="og:description" content="Reader function to generate a
 SpatialExperiment or
 SingleCellExperiment object from single-cell data
-obtained by the steinbock
+obtained by the 
+steinbock
 pipeline." />
 
 
@@ -124,7 +125,8 @@ pipeline." />
     <p>Reader function to generate a
 <code>SpatialExperiment</code> or
 <code>SingleCellExperiment</code> object from single-cell data
-obtained by the <a href='https://github.com/BodenmillerGroup/steinbock'>steinbock</a>
+obtained by the 
+<a href='https://github.com/BodenmillerGroup/steinbock'>steinbock</a>
 pipeline.</p>
     </div>
 
@@ -151,7 +153,8 @@ pipeline.</p>
     </tr>
     <tr>
       <th>intensities_folder</th>
-      <td><p>name of the folder containing the intensity measurements per image</p></td>
+      <td><p>name of the folder containing the intensity 
+measurements per image</p></td>
     </tr>
     <tr>
       <th>regionprops_folder</th>
@@ -172,7 +175,7 @@ be read in.</p></td>
     <tr>
       <th>extract_cellid_from</th>
       <td><p>single character indicating which column entry in 
-the intensity files contain the integer cell id.</p></td>
+the intensity files contains the integer cell id.</p></td>
     </tr>
     <tr>
       <th>extract_coords_from</th>
@@ -181,8 +184,9 @@ in the regionprops files contain the x and y coordinates.</p></td>
     </tr>
     <tr>
       <th>panel_file</th>
-      <td><p>single character containing the name of the panel file. This can
-either be inside the steinbock path (recommended) or located somewhere else.</p></td>
+      <td><p>single character containing the name of the panel file. 
+This can either be inside the steinbock path (recommended) or located 
+somewhere else.</p></td>
     </tr>
     <tr>
       <th>extract_names_from</th>
@@ -209,12 +213,13 @@ object markers in rows and cells in columns.</p>
 
     
 
-<p>In the case of **both** containers <code>x</code>, intensity features are stored in
+<p>In the case of both containers <code>x</code>, intensity features are stored in
 the <code>counts(x)</code> slot. Morphological features are stored in the
-<code>colData(x)</code> slot. The graphs are stored as <code><a href='https://rdrr.io/pkg/S4Vectors/man/Hits-class.html'>SelfHits</a></code>
-in the <code>colPair(x, "neighbourhood")</code> slot.</p>
-<p>In the case of a returned <code>SpatialExperiment</code> object, the cell coordinates
-are stored in the <code>spatialCoords(x)</code> slot.</p>
+<code>colData(x)</code> slot. The graphs are stored as 
+<code><a href='https://rdrr.io/pkg/S4Vectors/man/Hits-class.html'>SelfHits</a></code> object in the 
+<code>colPair(x, "neighborhood")</code> slot.</p>
+<p>In the case of a returned <code>SpatialExperiment</code> object, the cell 
+coordinates are stored in the <code>spatialCoords(x)</code> slot.</p>
 <p>In the case of a returned <code>SingleCellExperiment</code> object, the cell 
 coordinates are stored in the <code>colData(x)</code> slot named as <code>Pos_X</code>
 and <code>Pos_Y</code>.</p>
