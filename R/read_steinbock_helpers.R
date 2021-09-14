@@ -42,8 +42,9 @@
         function(y){
             cur_sample <- unique(y$sample_id)
             
-            cur_file <- list.files(cur_path, pattern = cur_sample,
-                                    full.names = TRUE)
+            cur_file <- list.files(cur_path, 
+                                   pattern = paste0(cur_sample, ".csv"),
+                                   full.names = TRUE)
             
             if (length(cur_file) == 0) {
                 return(y)
@@ -87,8 +88,9 @@
         function(y){
             cur_sample <- unique(y$sample_id)
             
-            cur_file <- list.files(cur_path, pattern = cur_sample, 
-                                    full.names = TRUE)
+            cur_file <- list.files(cur_path, 
+                                   pattern = paste0(cur_sample, ".csv"), 
+                                   full.names = TRUE)
             
             if (length(cur_file) == 0) {
                 return(y)
