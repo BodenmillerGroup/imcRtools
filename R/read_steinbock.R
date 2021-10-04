@@ -97,9 +97,10 @@ read_steinbock <- function(path,
                             extract_cellid_from = "Object",
                             extract_coords_from = c("centroid-0", "centroid-1"),
                             image_file = "images.csv",
-                            extract_imagemetadata_from = c("Metadata_acname", 
-                                                        "Metadata_acid", 
-                                                        "Metadata_description"),
+                            extract_imagemetadata_from = c("width_px", 
+                                                    "height_px", 
+                                                    "acquisition_id",
+                                                    "acquisition_description"),
                             panel_file = "panel.csv",
                             extract_names_from = "name",
                             return_as = c("spe", "sce"),
@@ -107,7 +108,8 @@ read_steinbock <- function(path,
     
     .valid.read_steinbock.input(path, intensities_folder, graphs_folder,
                                 regionprops_folder, extract_cellid_from, 
-                                extract_coords_from, panel_file, 
+                                extract_coords_from, image_file,
+                                extract_imagemetadata_from, panel_file, 
                                 extract_names_from, pattern)
     
     return_as <- match.arg(return_as)
@@ -141,6 +143,13 @@ read_steinbock <- function(path,
     
     # Merge objects
     object <- do.call("cbind", object)
+    
+    # Add image metadata
+    if (!is.null(image_file)) {
+        object <- .steinbock_add_image_metadata(object, 
+                        image_file = file.path(path, image_file),
+                        extract_imagemetadata_from = extract_imagemetadata_from)
+    }
     
     # Add panel data
     object <- .add_panel(object, path, panel_file, extract_names_from)

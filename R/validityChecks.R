@@ -152,6 +152,7 @@
 
 .valid.read_steinbock.input <- function(path, intensities_folder, graphs_folder,
                                     regionprops_folder, cell_id, coords,
+                                    image_file, extract_imagemetadata_from,
                                     panel, name, pattern) {
     if (length(path) != 1 | !is.character(path)) {
         stop("'path' must be a single string.")
@@ -238,6 +239,28 @@
             }   
         }
     }
+    
+    # Check image file
+    if (!is.null(image_file)) {
+        if (length(image_file) != 1 | !is.character(image_file)) {
+            stop("'image_file' must be a single string.")
+        }
+        
+        if (!file.exists(file.path(path, image_file))) {
+            stop("'image_file' doesn't exist.")
+        }
+        
+        if (!all(is.character(extract_imagemetadata_from))) {
+            stop("'extract_imagemetadata_from' should only contain characters.")
+        }
+        
+        cur_images_file <- vroom(file.path(path, image_file), progress = FALSE, 
+                                    col_types = cols())
+            
+        if (!all(extract_imagemetadata_from %in% colnames(cur_images_file))) {
+            stop("'extract_imagemetadata_from' not in images file.")
+        }
+    } 
 
     # Check panel
     if (!is.null(panel)) {
