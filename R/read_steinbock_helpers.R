@@ -117,13 +117,13 @@
 .steinbock_add_image_metadata <- function(object, image_file,
                                       extract_imagemetadata_from) {
     
-    cur_img_meta <- vroom(file.path(path, image_file),
+    cur_img_meta <- vroom(image_file,
                           col_select = all_of(c("image", 
                                                 extract_imagemetadata_from)),
                           show_col_types = FALSE)
     cur_img_meta$sample_id <- sub("\\.[^.]*$", "", cur_img_meta$image)
     
-    colData(object) <- as(merge(x = colData(object), y = cur_img_meta, 
+    colData(object) <- as(merge(x = colData(object), y = cur_img_meta[,-1], 
                                 by = "sample_id", 
                                 sort = FALSE), "DataFrame")
     

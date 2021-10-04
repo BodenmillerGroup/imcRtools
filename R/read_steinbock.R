@@ -21,6 +21,12 @@
 #' the intensity files contains the integer cell id.
 #' @param extract_coords_from character vector indicating which column entries 
 #' in the regionprops files contain the x and y coordinates.
+#' @param image_file single character indicating the file name storing meta data
+#' per image (can be \code{NULL}).
+#' @param extract_imagemetadata_from character vector indicating which
+#' additional image specific metadata to extract from the \code{image_file}.
+#' These will be stored in the \code{colData(x)} slot as object/cell-specific
+#' entries.
 #' @param panel_file single character containing the name of the panel file. 
 #' This can either be inside the steinbock path (recommended) or located 
 #' somewhere else.
@@ -98,9 +104,7 @@ read_steinbock <- function(path,
                             extract_coords_from = c("centroid-0", "centroid-1"),
                             image_file = "images.csv",
                             extract_imagemetadata_from = c("width_px", 
-                                                    "height_px", 
-                                                    "acquisition_id",
-                                                    "acquisition_description"),
+                                                    "height_px"),
                             panel_file = "panel.csv",
                             extract_names_from = "name",
                             return_as = c("spe", "sce"),
