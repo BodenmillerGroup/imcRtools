@@ -77,7 +77,7 @@ pipeline." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.4</span>
       </span>
     </div>
 
@@ -138,6 +138,8 @@ pipeline.</p>
   pattern <span class='op'>=</span> <span class='cn'>NULL</span>,
   extract_cellid_from <span class='op'>=</span> <span class='st'>"Object"</span>,
   extract_coords_from <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"centroid-0"</span>, <span class='st'>"centroid-1"</span><span class='op'>)</span>,
+  image_file <span class='op'>=</span> <span class='st'>"images.csv"</span>,
+  extract_imagemetadata_from <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"width_px"</span>, <span class='st'>"height_px"</span><span class='op'>)</span>,
   panel_file <span class='op'>=</span> <span class='st'>"panel.csv"</span>,
   extract_names_from <span class='op'>=</span> <span class='st'>"name"</span>,
   return_as <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"spe"</span>, <span class='st'>"sce"</span><span class='op'>)</span>,
@@ -181,6 +183,18 @@ the intensity files contains the integer cell id.</p></td>
       <th>extract_coords_from</th>
       <td><p>character vector indicating which column entries 
 in the regionprops files contain the x and y coordinates.</p></td>
+    </tr>
+    <tr>
+      <th>image_file</th>
+      <td><p>single character indicating the file name storing meta data
+per image (can be <code>NULL</code>).</p></td>
+    </tr>
+    <tr>
+      <th>extract_imagemetadata_from</th>
+      <td><p>character vector indicating which
+additional image specific metadata to extract from the <code>image_file</code>.
+These will be stored in the <code>colData(x)</code> slot as object/cell-specific
+entries.</p></td>
     </tr>
     <tr>
       <th>panel_file</th>
@@ -251,8 +265,7 @@ with the cell-cell interaction graphs</p>
 #&gt; rownames(5): Ag107 Cytokeratin 5 Laminin YBX1 H3K27Ac
 #&gt; rowData names(6): channel name ... deepcell Tube.Number
 #&gt; colnames: NULL
-#&gt; colData names(6): sample_id ObjectNumber ... minor_axis_length
-#&gt;   eccentricity
+#&gt; colData names(8): sample_id ObjectNumber ... width_px height_px
 #&gt; reducedDimNames(0):
 #&gt; mainExpName: NULL
 #&gt; altExpNames(0):
@@ -269,8 +282,7 @@ with the cell-cell interaction graphs</p>
 #&gt; rownames(5): Ag107 Cytokeratin 5 Laminin YBX1 H3K27Ac
 #&gt; rowData names(6): channel name ... deepcell Tube.Number
 #&gt; colnames: NULL
-#&gt; colData names(8): sample_id ObjectNumber ... minor_axis_length
-#&gt;   eccentricity
+#&gt; colData names(10): sample_id ObjectNumber ... width_px height_px
 #&gt; reducedDimNames(0):
 #&gt; mainExpName: NULL
 #&gt; altExpNames(0):</div><div class='input'>
@@ -284,8 +296,7 @@ with the cell-cell interaction graphs</p>
 #&gt; rownames(5): Ag107 Cytokeratin 5 Laminin YBX1 H3K27Ac
 #&gt; rowData names(6): channel name ... deepcell Tube.Number
 #&gt; colnames: NULL
-#&gt; colData names(6): sample_id ObjectNumber ... minor_axis_length
-#&gt;   eccentricity
+#&gt; colData names(8): sample_id ObjectNumber ... width_px height_px
 #&gt; reducedDimNames(0):
 #&gt; mainExpName: NULL
 #&gt; altExpNames(0):
@@ -302,7 +313,7 @@ with the cell-cell interaction graphs</p>
 #&gt; rownames(5): Ag107 Cytokeratin 5 Laminin YBX1 H3K27Ac
 #&gt; rowData names(6): channel name ... deepcell Tube.Number
 #&gt; colnames: NULL
-#&gt; colData names(2): sample_id ObjectNumber
+#&gt; colData names(4): sample_id ObjectNumber width_px height_px
 #&gt; reducedDimNames(0):
 #&gt; mainExpName: NULL
 #&gt; altExpNames(0):
