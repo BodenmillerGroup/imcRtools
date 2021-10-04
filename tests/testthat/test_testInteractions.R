@@ -49,6 +49,12 @@ test_that("testInteractions function works", {
     expect_equal(cur_test$sig * sign(cur_test$interaction - 0.5), cur_test$sigval)  
     
     ################################ histocat ###################################
+    expect_silent(cur_out <- testInteractions(pancreasSCE, 
+                                              group_by = "ImageNb", 
+                                              label = "CellType",
+                                              method = "histocat",
+                                              colPairName = "knn_interaction_graph",
+                                              iter = 10))
     
     # Check against countInteractions
     expect_silent(cur_sn <- countInteractions(pancreasSCE, 
@@ -88,6 +94,13 @@ test_that("testInteractions function works", {
     
     
     ################################ patch ###################################
+    expect_silent(cur_out <- testInteractions(pancreasSCE, 
+                                              group_by = "ImageNb", 
+                                              label = "CellType",
+                                              method = "patch",
+                                              patch_size = 3,
+                                              colPairName = "knn_interaction_graph",
+                                              iter = 10))
     
     # Check against countInteractions
     expect_silent(cur_sn <- countInteractions(pancreasSCE, 
