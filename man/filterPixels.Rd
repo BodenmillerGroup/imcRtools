@@ -36,8 +36,8 @@ criteria.
 }
 \description{
 Helper function for estimating the spillover matrix. After
-assigning each pixel to a spotted mass, this function will filter incorrectly 
-assigned pixels and remove small pixel sets.
+assigning each pixel to a spotted mass, this function will filter 
+incorrectly assigned pixels and remove small pixel sets.
 }
 \examples{
 path <- system.file("extdata/spillover", package = "imcRtools")

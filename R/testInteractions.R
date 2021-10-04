@@ -101,12 +101,13 @@
 #'                                  type = "knn", k = 3)
 #'                                
 #' # Classic style calculation
+#' # Increase iterations for real data
 #' (out <- testInteractions(pancreasSCE, 
 #'                          group_by = "ImageNb",
 #'                          label = "CellType", 
 #'                          method = "classic",
 #'                          colPairName = "knn_interaction_graph",
-#'                          iter = 1000))
+#'                          iter = 100))
 #'                                 
 #' # Histocat style calculation
 #' (out <- testInteractions(pancreasSCE, 
@@ -114,7 +115,7 @@
 #'                          label = "CellType", 
 #'                          method = "histocat",
 #'                          colPairName = "knn_interaction_graph",
-#'                          iter = 1000))
+#'                          iter = 100))
 #'                                 
 #' # Patch style calculation
 #' (out <- testInteractions(pancreasSCE, 
@@ -123,7 +124,7 @@
 #'                          method = "patch",
 #'                          patch_size = 3,
 #'                          colPairName = "knn_interaction_graph",
-#'                          ))
+#'                          iter = 100))
 #' 
 #' @seealso 
 #' \code{\link{countInteractions}} for counting (but not testing) cell-cell
