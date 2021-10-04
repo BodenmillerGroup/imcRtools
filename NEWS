@@ -69,3 +69,7 @@ Changes in version 0.3.12 (2021-09-01):
 Changes in version 0.99.0 (2021-09-14):
 
 + Bioconductor submission
+
+Changes in version 0.99.4 (2021-10-04):
+
++ Updated steinbock reader to incorporate images.csv
