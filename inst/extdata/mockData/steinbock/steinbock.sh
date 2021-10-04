@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 base_dir=$(cd -- "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)
-steinbock="docker run -v ${base_dir}:/data -v /tmp/.X11-unix:/tmp/.X11-unix -v ${HOME}/.Xauthority:/home/steinbock/.Xauthority:ro -e DISPLAY ghcr.io/bodenmillergroup/steinbock:0.7.2"
+steinbock="docker run -v ${base_dir}:/data -v /tmp/.X11-unix:/tmp/.X11-unix -v ${HOME}/.Xauthority:/home/steinbock/.Xauthority:ro -e DISPLAY ghcr.io/bodenmillergroup/steinbock:0.8.0"
 
 cd "${base_dir}"
 
@@ -26,7 +26,7 @@ $steinbock measure cellprofiler prepare
 $steinbock measure cellprofiler run
 
 $steinbock export ome
-$steinbock export csv intensities regionprops --dest cells.csv
-$steinbock export fcs intensities regionprops --dest cells.fcs
-$steinbock export anndata --x intensities --obs regionprops --dest anndata
+$steinbock export csv intensities regionprops -o cells.csv
+$steinbock export fcs intensities regionprops -o cells.fcs
+$steinbock export anndata --x intensities --obs regionprops
 $steinbock export graphs --data intensities --data regionprops

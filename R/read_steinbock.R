@@ -21,6 +21,12 @@
 #' the intensity files contains the integer cell id.
 #' @param extract_coords_from character vector indicating which column entries 
 #' in the regionprops files contain the x and y coordinates.
+#' @param image_file single character indicating the file name storing meta data
+#' per image (can be \code{NULL}).
+#' @param extract_imagemetadata_from character vector indicating which
+#' additional image specific metadata to extract from the \code{image_file}.
+#' These will be stored in the \code{colData(x)} slot as object/cell-specific
+#' entries.
 #' @param panel_file single character containing the name of the panel file. 
 #' This can either be inside the steinbock path (recommended) or located 
 #' somewhere else.
@@ -96,6 +102,9 @@ read_steinbock <- function(path,
                             pattern = NULL,
                             extract_cellid_from = "Object",
                             extract_coords_from = c("centroid-0", "centroid-1"),
+                            image_file = "images.csv",
+                            extract_imagemetadata_from = c("width_px", 
+                                                    "height_px"),
                             panel_file = "panel.csv",
                             extract_names_from = "name",
                             return_as = c("spe", "sce"),
@@ -103,7 +112,8 @@ read_steinbock <- function(path,
     
     .valid.read_steinbock.input(path, intensities_folder, graphs_folder,
                                 regionprops_folder, extract_cellid_from, 
-                                extract_coords_from, panel_file, 
+                                extract_coords_from, image_file,
+                                extract_imagemetadata_from, panel_file, 
                                 extract_names_from, pattern)
     
     return_as <- match.arg(return_as)
@@ -137,6 +147,13 @@ read_steinbock <- function(path,
     
     # Merge objects
     object <- do.call("cbind", object)
+    
+    # Add image metadata
+    if (!is.null(image_file)) {
+        object <- .steinbock_add_image_metadata(object, 
+                        image_file = file.path(path, image_file),
+                        extract_imagemetadata_from = extract_imagemetadata_from)
+    }
     
     # Add panel data
     object <- .add_panel(object, path, panel_file, extract_names_from)
