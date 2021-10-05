@@ -14,7 +14,8 @@ test_that("read_steinbock function works", {
                  c("channel", "name", "keep", "ilastik", "deepcell", "Tube.Number"))
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "area", 
                                             "major_axis_length", 
-                                            "minor_axis_length", "eccentricity"))
+                                            "minor_axis_length", "eccentricity",
+                                            "width_px", "height_px"))
     expect_equal(spatialCoordsNames(cur_spe), c("Pos_X", "Pos_Y"))
     
     cur_files <- list.files(file.path(path, "intensities"), full.names = TRUE)
