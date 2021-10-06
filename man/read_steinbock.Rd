@@ -11,7 +11,7 @@ read_steinbock(
   graphs_folder = "neighbors",
   pattern = NULL,
   extract_cellid_from = "Object",
-  extract_coords_from = c("centroid-0", "centroid-1"),
+  extract_coords_from = c("centroid-1", "centroid-0"),
   image_file = "images.csv",
   extract_imagemetadata_from = c("width_px", "height_px"),
   panel_file = "panel.csv",
@@ -40,7 +40,8 @@ be read in.}
 the intensity files contains the integer cell id.}
 
 \item{extract_coords_from}{character vector indicating which column entries 
-in the regionprops files contain the x and y coordinates.}
+in the regionprops files contain the x (first entry) and y (second entry) 
+coordinates.}
 
 \item{image_file}{single character indicating the file name storing meta data
 per image (can be \code{NULL}).}
