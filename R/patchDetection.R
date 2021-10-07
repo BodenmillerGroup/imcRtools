@@ -20,18 +20,38 @@
 patchDetection <- function(object, 
                            pattern,
                            colPairName,
-                           expand_by = 0,
                            min_patch_size = 1,
-                           name = "patch_id"){
+                           name = "patch_id",
+                           expand_by = 0,
+                           coords = c("Pos_X", "Pos_Y"),
+                           convex = FALSE,
+                           img_id = NULL,
+                           BPPARAM = SerialParam()){
     
     # .valid.patchDetection.input(object, colPairName, expand_by)
     
     cur_graph <- graph_from_edgelist(as.matrix(colPair(object[,pattern], colPairName)))
-    cur_clusters <- components(cur_graph)$membership
+    cur_components <- components(cur_graph)
+    cur_clusters <- cur_components$membership
+    
+    if (min_patch_size > 1) {
+        cur_clusters[!(cur_clusters %in% 
+                           which(cur_components$csize >= min_patch_size))] <- NA
+    } 
+    
     cur_out <- vector(mode = "character", length = ncol(object))
     cur_out[!pattern] <- NA
     cur_out[pattern] <- cur_clusters
     colData(object)[[name]] <- cur_out
+    
+    if (expand_by > 0) {
+        object <- .expand_patch(object, name = name, 
+                                expand_by = expand_by, 
+                                coords = coords,
+                                convex = convex,
+                                img_id = img_id,
+                                BPPARAM = BPPARAM)
+    }
     
     return(object)
 }
