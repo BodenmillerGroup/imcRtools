@@ -1,3 +1,5 @@
+<img src="inst/imgs/imcRtools_sticker.png" align="right" alt="" width="120" />
+
 # imcRtools
 
 <!-- badges: start -->
@@ -5,7 +7,9 @@
 [![docs](https://github.com/BodenmillerGroup/imcRtools/actions/workflows/docs.yml/badge.svg?branch=master)](https://github.com/BodenmillerGroup/imcRtools/actions/workflows/docs.yml)
 <!-- badges: end -->
 
-This R package contains helper functions to analyse IMC (or other multiplexed imaging) data.
+This R/Bioconductor package contains helper functions to analyse IMC (or other multiplexed imaging) data.
+
+Its official package page can be found here: [https://bioconductor.org/packages/imcRtools](https://bioconductor.org/packages/imcRtools)
 
 ## Check status
 
@@ -36,12 +40,25 @@ chance are detected.
 
 ## Installation
 
+The `imcRtools` package can be installed from `Bioconductor` via:
+
+```r
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+# The following initializes usage of Bioc devel
+BiocManager::install(version='devel')
+
+BiocManager::install("imcRtools")
+```
+
 The development version of `imcRtools` can be installed from Github via:
 
 ```r
-install.packages("devtools")
+if (!requireNamespace("remotes", quietly = TRUE))
+    install.packages("remotes")
 
-devtools::install_github("BodenmillerGroup/imcRtools")
+remotes::install_github("BodenmillerGroup/imcRtools")
 ```
 
 ## Getting help
