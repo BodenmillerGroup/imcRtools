@@ -9,8 +9,25 @@ test_that("testInteractions function works", {
     expect_silent(cur_out <- testInteractions(pancreasSCE, 
                                                   group_by = "ImageNb", 
                                                   label = "CellType",
+                                                  colPairName = "knn_interaction_graph"))
+    
+    set.seed(123)
+    expect_silent(cur_out <- testInteractions(pancreasSCE, 
+                                                  group_by = "ImageNb", 
+                                                  label = "CellType",
+                                                  method = "classic",
                                                   colPairName = "knn_interaction_graph",
-                                              iter = 10))
+                                                  iter = 100))
+    
+    set.seed(123)
+    expect_silent(cur_out_2 <- testInteractions(pancreasSCE, 
+                                                  group_by = "ImageNb", 
+                                                  label = "CellType",
+                                                  method = "classic",
+                                                  colPairName = "knn_interaction_graph",
+                                                  iter = 100))
+    
+    expect_identical(cur_out, cur_out_2)
     
     # Check against countInteractions
     expect_silent(cur_sn <- countInteractions(pancreasSCE, 
@@ -35,7 +52,7 @@ test_that("testInteractions function works", {
                                                   label = "CellType",
                                                   method = "classic",
                                                   colPairName = "knn_interaction_graph",
-                                                  iter = 10, p_threshold = 0.5))    
+                                                  iter = 100, p_threshold = 0.5))    
     
     expect_equal(cur_out_2$group_by, cur_sn$group_by)
     expect_equal(cur_out_2$from_label, cur_sn$from_label)
@@ -49,12 +66,23 @@ test_that("testInteractions function works", {
     expect_equal(cur_test$sig * sign(cur_test$interaction - 0.5), cur_test$sigval)  
     
     ################################ histocat ###################################
+    set.seed(123)
     expect_silent(cur_out <- testInteractions(pancreasSCE, 
-                                              group_by = "ImageNb", 
-                                              label = "CellType",
-                                              method = "histocat",
-                                              colPairName = "knn_interaction_graph",
-                                              iter = 10))
+                                                  group_by = "ImageNb", 
+                                                  label = "CellType",
+                                                  method = "histocat",
+                                                  colPairName = "knn_interaction_graph",
+                                                  iter = 100))
+    
+    set.seed(123)
+    expect_silent(cur_out_2 <- testInteractions(pancreasSCE, 
+                                                    group_by = "ImageNb", 
+                                                    label = "CellType",
+                                                    method = "histocat",
+                                                    colPairName = "knn_interaction_graph",
+                                                    iter = 100))
+    
+    expect_identical(cur_out, cur_out_2)
     
     # Check against countInteractions
     expect_silent(cur_sn <- countInteractions(pancreasSCE, 
@@ -79,7 +107,7 @@ test_that("testInteractions function works", {
                                                     label = "CellType",
                                                     method = "histocat",
                                                     colPairName = "knn_interaction_graph",
-                                                    iter = 10, p_threshold = 0.5))    
+                                                    iter = 100, p_threshold = 0.5))    
     
     expect_equal(cur_out_2$group_by, cur_sn$group_by)
     expect_equal(cur_out_2$from_label, cur_sn$from_label)
@@ -94,13 +122,25 @@ test_that("testInteractions function works", {
     
     
     ################################ patch ###################################
+    set.seed(123)
     expect_silent(cur_out <- testInteractions(pancreasSCE, 
-                                              group_by = "ImageNb", 
-                                              label = "CellType",
-                                              method = "patch",
-                                              patch_size = 3,
-                                              colPairName = "knn_interaction_graph",
-                                              iter = 10))
+                                                  group_by = "ImageNb", 
+                                                  label = "CellType",
+                                                  method = "patch",
+                                                  patch_size = 3,
+                                                  colPairName = "knn_interaction_graph",
+                                                  iter = 100))
+    
+    set.seed(123)
+    expect_silent(cur_out_2 <- testInteractions(pancreasSCE, 
+                                                    group_by = "ImageNb", 
+                                                    label = "CellType",
+                                                    method = "patch",
+                                                    patch_size = 3,
+                                                    colPairName = "knn_interaction_graph",
+                                                    iter = 100))
+    
+    expect_identical(cur_out, cur_out_2)
     
     # Check against countInteractions
     expect_silent(cur_sn <- countInteractions(pancreasSCE, 
@@ -127,7 +167,7 @@ test_that("testInteractions function works", {
                                                     method = "patch",
                                                     patch_size = 3,
                                                     colPairName = "knn_interaction_graph",
-                                                    iter = 10, p_threshold = 0.5))    
+                                                    iter = 100, p_threshold = 0.5))    
     
     expect_equal(cur_out_2$group_by, cur_sn$group_by)
     expect_equal(cur_out_2$from_label, cur_sn$from_label)

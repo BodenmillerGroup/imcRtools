@@ -21,6 +21,105 @@ test_that("plotSpatial function works", {
     expect_equal(p$data$ImageNb, pancreasSCE$ImageNb)
     expect_equal(p$data$CellType, pancreasSCE$CellType)
     
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "Area")
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    expect_equal(p$data$x, pancreasSCE$Pos_X)
+    expect_equal(p$data$y, pancreasSCE$Pos_Y)
+    expect_equal(p$data$ImageNb, pancreasSCE$ImageNb)
+    expect_equal(p$data$Area, pancreasSCE$Area)
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "Pattern")
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    expect_equal(p$data$x, pancreasSCE$Pos_X)
+    expect_equal(p$data$y, pancreasSCE$Pos_Y)
+    expect_equal(p$data$ImageNb, pancreasSCE$ImageNb)
+    expect_equal(p$data$Pattern, pancreasSCE$Pattern)
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "PIN", assay_type = "counts")
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    expect_equal(p$data$x, pancreasSCE$Pos_X)
+    expect_equal(p$data$y, pancreasSCE$Pos_Y)
+    expect_equal(p$data$ImageNb, pancreasSCE$ImageNb)
+    expect_equal(p$data$PIN, counts(pancreasSCE)["PIN",], check.attributes = FALSE)
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "PIN", assay_type = "exprs")
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    expect_equal(p$data$x, pancreasSCE$Pos_X)
+    expect_equal(p$data$y, pancreasSCE$Pos_Y)
+    expect_equal(p$data$ImageNb, pancreasSCE$ImageNb)
+    expect_equal(p$data$PIN, assay(pancreasSCE, "exprs")["PIN",], check.attributes = FALSE)
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "CDH", assay_type = "exprs")
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    expect_equal(p$data$x, pancreasSCE$Pos_X)
+    expect_equal(p$data$y, pancreasSCE$Pos_Y)
+    expect_equal(p$data$ImageNb, pancreasSCE$ImageNb)
+    expect_equal(p$data$CDH, assay(pancreasSCE, "exprs")["CDH",], check.attributes = FALSE)
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", node_shape_by = "CellType")
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    expect_equal(p$data$x, pancreasSCE$Pos_X)
+    expect_equal(p$data$y, pancreasSCE$Pos_Y)
+    expect_equal(p$data$ImageNb, pancreasSCE$ImageNb)
+    expect_equal(p$data$CellType, pancreasSCE$CellType)
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", node_shape_by = "Area")
+    expect_s3_class(p, "ggraph")
+    expect_warning(print(p))
+    expect_equal(p$data$x, pancreasSCE$Pos_X)
+    expect_equal(p$data$y, pancreasSCE$Pos_Y)
+    expect_equal(p$data$ImageNb, pancreasSCE$ImageNb)
+    expect_equal(p$data$Area, as.character(pancreasSCE$Area))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", node_shape_by = "Pattern")
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    expect_equal(p$data$x, pancreasSCE$Pos_X)
+    expect_equal(p$data$y, pancreasSCE$Pos_Y)
+    expect_equal(p$data$ImageNb, pancreasSCE$ImageNb)
+    expect_equal(p$data$Pattern, as.character(pancreasSCE$Pattern))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", node_size_by = "CellType")
+    expect_s3_class(p, "ggraph")
+    expect_warning(print(p), regexp = "Using size for a discrete variable is not advised.")
+    expect_equal(p$data$x, pancreasSCE$Pos_X)
+    expect_equal(p$data$y, pancreasSCE$Pos_Y)
+    expect_equal(p$data$ImageNb, pancreasSCE$ImageNb)
+    expect_equal(p$data$CellType, pancreasSCE$CellType)
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", node_size_by = "Area")
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    expect_equal(p$data$x, pancreasSCE$Pos_X)
+    expect_equal(p$data$y, pancreasSCE$Pos_Y)
+    expect_equal(p$data$ImageNb, pancreasSCE$ImageNb)
+    expect_equal(p$data$Area, pancreasSCE$Area)
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", node_size_by = "Pattern")
+    expect_s3_class(p, "ggraph")
+    expect_warning(print(p), regexp = "Using size for a discrete variable is not advised.")
+    expect_equal(p$data$x, pancreasSCE$Pos_X)
+    expect_equal(p$data$y, pancreasSCE$Pos_Y)
+    expect_equal(p$data$ImageNb, pancreasSCE$ImageNb)
+    expect_equal(p$data$Pattern, pancreasSCE$Pattern)
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "CellType",
+                     node_shape_by = "Pattern", node_size_by = "Area")
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    expect_equal(p$data$x, pancreasSCE$Pos_X)
+    expect_equal(p$data$y, pancreasSCE$Pos_Y)
+    expect_equal(p$data$ImageNb, pancreasSCE$ImageNb)
+    expect_equal(p$data$Pattern, as.character(pancreasSCE$Pattern))
+    expect_equal(p$data$CellType, pancreasSCE$CellType)
+    expect_equal(p$data$Area, pancreasSCE$Area)
+    
     cur_sce <- pancreasSCE
     cur_sce$ImageNb <- as.factor(cur_sce$ImageNb) 
     p <- plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "CellType")
@@ -30,6 +129,25 @@ test_that("plotSpatial function works", {
     cur_sce <- pancreasSCE
     cur_sce$ImageNb <- as.numeric(cur_sce$ImageNb) 
     p <- plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "CellType")
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", node_color_by = "CellType")
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", node_color_by = "CellType",
+                     node_color_fix = "red")
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName",
+                     node_color_fix = "red")
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName",
+                     node_color_fix = 1)
     expect_s3_class(p, "ggraph")
     expect_silent(print(p))
     
@@ -45,6 +163,21 @@ test_that("plotSpatial function works", {
     
     p <- plotSpatial(cur_sce, img_id = "ImageName", node_shape_by = "ImageNb",
                      node_shape_fix = 21)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName",
+                     node_shape_fix = 21)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", node_size_by = "Area",
+                     node_size_fix = 5)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName",
+                     node_size_fix = 5)
     expect_s3_class(p, "ggraph")
     expect_silent(print(p))
     
@@ -80,7 +213,38 @@ test_that("plotSpatial function works", {
     
     p <- plotSpatial(cur_sce, img_id = "ImageNb", 
                      draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_color_by = "Pattern", node_color_by = "Pattern")
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", 
+                     draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_color_by = "Pattern", node_color_by = "Pattern",
+                     nodes_first = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", 
+                     draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_color_by = "Area", node_color_by = "Area")
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", 
+                     draw_edges = TRUE, colPairName = "knn_interaction_graph",
                      edge_width_by = "CellType")
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", 
+                     draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_width_by = "Pattern")
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", 
+                     draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_width_by = "Area")
     expect_s3_class(p, "ggraph")
     expect_silent(print(p))
     
@@ -99,6 +263,27 @@ test_that("plotSpatial function works", {
     p <- plotSpatial(cur_sce, img_id = "ImageNb", 
                      draw_edges = TRUE, colPairName = "knn_interaction_graph",
                      edge_width_by = "test_2")
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_color_by = "CellType",
+                     edge_color_fix = "red")
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_color_fix = "red")
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_width_fix = 0.1, edge_width_by = "Area")
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_width_fix = 0.1)
     expect_s3_class(p, "ggraph")
     expect_silent(print(p))
     
@@ -122,6 +307,204 @@ test_that("plotSpatial function works", {
     cur_edges_2 <- cur_edges_2[order(paste(cur_edges_2[,1], cur_edges_2[,2])),]
     
     expect_equal(cur_edges, cur_edges_2)
+    
+    # Delaunay
+    cur_sce <- buildSpatialGraph(cur_sce, img_id = "ImageNb", 
+                                 type = "delaunay")
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", draw_edges = TRUE, colPairName = "delaunay_interaction_graph",
+                     edge_width_fix = 0.1)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p2 <- plotSpatial(cur_sce, img_id = "ImageNb", 
+                      draw_edges = TRUE, colPairName = "delaunay_interaction_graph",
+                      directed = FALSE)
+    expect_s3_class(p2, "ggraph")
+    expect_silent(print(p2))
+    expect_equal(p2$data$x, pancreasSCE$Pos_X)
+    expect_equal(p2$data$y, pancreasSCE$Pos_Y)
+    expect_equal(p2$data$ImageNb, pancreasSCE$ImageNb)
+    
+    cur_graph <- igraph::as.igraph(attributes(p$data)$graph)
+    cur_graph <- as.undirected(cur_graph)
+    cur_graph_2 <- igraph::as.igraph(attributes(p2$data)$graph)
+    
+    cur_edges <- as_edgelist(cur_graph)
+    cur_edges_2 <- as_edgelist(cur_graph_2)
+    
+    cur_edges <- cur_edges[order(paste(cur_edges[,1], cur_edges[,2])),]
+    cur_edges_2 <- cur_edges_2[order(paste(cur_edges_2[,1], cur_edges_2[,2])),]
+    
+    expect_equal(cur_edges, cur_edges_2)
+    
+    # Expansion
+    cur_sce <- buildSpatialGraph(cur_sce, img_id = "ImageNb", 
+                                 type = "expansion", threshold = 15)
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", draw_edges = TRUE, colPairName = "expansion_interaction_graph",
+                     edge_width_fix = 0.1)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p2 <- plotSpatial(cur_sce, img_id = "ImageNb", 
+                      draw_edges = TRUE, colPairName = "expansion_interaction_graph",
+                      directed = FALSE)
+    expect_s3_class(p2, "ggraph")
+    expect_silent(print(p2))
+    expect_equal(p2$data$x, pancreasSCE$Pos_X)
+    expect_equal(p2$data$y, pancreasSCE$Pos_Y)
+    expect_equal(p2$data$ImageNb, pancreasSCE$ImageNb)
+    
+    cur_graph <- igraph::as.igraph(attributes(p$data)$graph)
+    cur_graph <- as.undirected(cur_graph)
+    cur_graph_2 <- igraph::as.igraph(attributes(p2$data)$graph)
+    
+    cur_edges <- as_edgelist(cur_graph)
+    cur_edges_2 <- as_edgelist(cur_graph_2)
+    
+    cur_edges <- cur_edges[order(paste(cur_edges[,1], cur_edges[,2])),]
+    cur_edges_2 <- cur_edges_2[order(paste(cur_edges_2[,1], cur_edges_2[,2])),]
+    
+    expect_equal(cur_edges, cur_edges_2)
+    
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", 
+                     draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_color_by = "CellType",
+                     directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", 
+                     draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_color_by = "CellType", node_color_by = "CellType",
+                     directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", 
+                     draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_color_by = "Pattern", node_color_by = "Pattern",
+                     directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", 
+                     draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_color_by = "Area", node_color_by = "Area",
+                     directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", 
+                     draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_width_by = "CellType",
+                     directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", 
+                     draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_width_by = "Pattern",
+                     directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", 
+                     draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_width_by = "Area",
+                     directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", 
+                     draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_width_by = "test",
+                     directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", 
+                     draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_width_by = "test_2",
+                     directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_color_by = "CellType",
+                     edge_color_fix = "red",
+                     directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_color_fix = "red",
+                     directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_width_fix = 0.1, edge_width_by = "Area",
+                     directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_width_fix = 0.1,
+                     directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     edge_width_by = "CellType", edge_color_by = "Area", node_color_by = "CellType",
+                     node_shape_by = "ImageNb", node_size_by = "Area",
+                     directed = TRUE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     arrow = arrow(),
+                     directed = TRUE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     arrow = arrow(angle = 10, length = unit(0.1, "inch"), type = "closed"),
+                     directed = TRUE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     arrow = arrow(angle = 10, length = unit(0.1, "inch"), type = "closed"),
+                     end_cap = circle(0.3, "cm"),
+                     directed = TRUE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", draw_edges = TRUE, colPairName = "knn_interaction_graph",
+                     arrow = arrow(angle = 10, length = unit(0.1, "inch"), type = "closed"),
+                     end_cap = circle(0.3, "cm"),
+                     directed = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", node_color_by = "CellType",
+                     flip_y = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", node_color_by = "CellType",
+                     flip_x = TRUE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce, img_id = "ImageName", node_color_by = "CellType",
+                     flip_x = TRUE, flip_y = FALSE)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
     
     ## Subsetting
     cur_sce2 <- cur_sce[,cur_sce$Pattern]

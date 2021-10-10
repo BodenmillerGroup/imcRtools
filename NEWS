@@ -70,6 +70,7 @@ Changes in version 0.99.0 (2021-09-14):
 
 + Bioconductor submission
 
-Changes in version 0.99.4 (2021-10-04):
+Changes in version 0.99.7 (2021-10-10):
 
-+ Updated steinbock reader to incorporate images.csv
++ Added all unit tests
++ Fixed read_steinbock x/y axis defaults
