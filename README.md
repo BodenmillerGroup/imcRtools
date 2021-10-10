@@ -1,4 +1,4 @@
-<img src="inst/imgs/imcRtools_sticker.png" align="right" alt="" width="120" />
+<img src="inst/imgs/imcRtools_sticker.png" align="right" alt="" width="200" />
 
 # imcRtools
 
