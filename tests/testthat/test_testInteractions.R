@@ -7,25 +7,26 @@ test_that("testInteractions function works", {
     
     ################################ classic ###################################
     expect_silent(cur_out <- testInteractions(pancreasSCE, 
-                                                  group_by = "ImageNb", 
-                                                  label = "CellType",
-                                                  colPairName = "knn_interaction_graph"))
+                                                group_by = "ImageNb", 
+                                                label = "CellType",
+                                                colPairName = "knn_interaction_graph",
+                                                iter = 100))
     
-    set.seed(123)
     expect_silent(cur_out <- testInteractions(pancreasSCE, 
                                                   group_by = "ImageNb", 
                                                   label = "CellType",
                                                   method = "classic",
                                                   colPairName = "knn_interaction_graph",
-                                                  iter = 100))
+                                                  iter = 100,
+                                              BPPARAM = SerialParam(RNGseed = 123)))
     
-    set.seed(123)
     expect_silent(cur_out_2 <- testInteractions(pancreasSCE, 
                                                   group_by = "ImageNb", 
                                                   label = "CellType",
                                                   method = "classic",
                                                   colPairName = "knn_interaction_graph",
-                                                  iter = 100))
+                                                  iter = 100,
+                                                BPPARAM = SerialParam(RNGseed = 123)))
     
     expect_identical(cur_out, cur_out_2)
     
@@ -46,13 +47,13 @@ test_that("testInteractions function works", {
     expect_equal(cur_test$p < 0.01, cur_test$sig)
     expect_equal(cur_test$sig * sign(cur_test$interaction - 0.5), cur_test$sigval)
     
-    set.seed(123)
     expect_silent(cur_out_2 <- testInteractions(pancreasSCE, 
                                                   group_by = "ImageNb", 
                                                   label = "CellType",
                                                   method = "classic",
                                                   colPairName = "knn_interaction_graph",
-                                                  iter = 100, p_threshold = 0.5))    
+                                                  iter = 100, p_threshold = 0.5,
+                                                BPPARAM = SerialParam(RNGseed = 123)))    
     
     expect_equal(cur_out_2$group_by, cur_sn$group_by)
     expect_equal(cur_out_2$from_label, cur_sn$from_label)
@@ -66,21 +67,21 @@ test_that("testInteractions function works", {
     expect_equal(cur_test$sig * sign(cur_test$interaction - 0.5), cur_test$sigval)  
     
     ################################ histocat ###################################
-    set.seed(123)
     expect_silent(cur_out <- testInteractions(pancreasSCE, 
                                                   group_by = "ImageNb", 
                                                   label = "CellType",
                                                   method = "histocat",
                                                   colPairName = "knn_interaction_graph",
-                                                  iter = 100))
+                                                  iter = 100,
+                                              BPPARAM = SerialParam(RNGseed = 123)))
     
-    set.seed(123)
     expect_silent(cur_out_2 <- testInteractions(pancreasSCE, 
                                                     group_by = "ImageNb", 
                                                     label = "CellType",
                                                     method = "histocat",
                                                     colPairName = "knn_interaction_graph",
-                                                    iter = 100))
+                                                    iter = 100,
+                                                BPPARAM = SerialParam(RNGseed = 123)))
     
     expect_identical(cur_out, cur_out_2)
     
@@ -101,13 +102,13 @@ test_that("testInteractions function works", {
     expect_equal(cur_test$p < 0.01, cur_test$sig)
     expect_equal(cur_test$sig * sign(cur_test$interaction - 0.5), cur_test$sigval)
     
-    set.seed(123)
     expect_silent(cur_out_2 <- testInteractions(pancreasSCE, 
                                                     group_by = "ImageNb", 
                                                     label = "CellType",
                                                     method = "histocat",
                                                     colPairName = "knn_interaction_graph",
-                                                    iter = 100, p_threshold = 0.5))    
+                                                    iter = 100, p_threshold = 0.5,
+                                                BPPARAM = SerialParam(RNGseed = 123)))    
     
     expect_equal(cur_out_2$group_by, cur_sn$group_by)
     expect_equal(cur_out_2$from_label, cur_sn$from_label)
@@ -122,23 +123,23 @@ test_that("testInteractions function works", {
     
     
     ################################ patch ###################################
-    set.seed(123)
     expect_silent(cur_out <- testInteractions(pancreasSCE, 
                                                   group_by = "ImageNb", 
                                                   label = "CellType",
                                                   method = "patch",
                                                   patch_size = 3,
                                                   colPairName = "knn_interaction_graph",
-                                                  iter = 100))
+                                                  iter = 100,
+                                              BPPARAM = SerialParam(RNGseed = 123)))
     
-    set.seed(123)
     expect_silent(cur_out_2 <- testInteractions(pancreasSCE, 
                                                     group_by = "ImageNb", 
                                                     label = "CellType",
                                                     method = "patch",
                                                     patch_size = 3,
                                                     colPairName = "knn_interaction_graph",
-                                                    iter = 100))
+                                                    iter = 100,
+                                                BPPARAM = SerialParam(RNGseed = 123)))
     
     expect_identical(cur_out, cur_out_2)
     
@@ -160,14 +161,14 @@ test_that("testInteractions function works", {
     expect_equal(cur_test$p < 0.01, cur_test$sig)
     expect_equal(cur_test$sig * sign(cur_test$interaction - 0.5), cur_test$sigval)
     
-    set.seed(123)
     expect_silent(cur_out_2 <- testInteractions(pancreasSCE, 
                                                     group_by = "ImageNb", 
                                                     label = "CellType",
                                                     method = "patch",
                                                     patch_size = 3,
                                                     colPairName = "knn_interaction_graph",
-                                                    iter = 100, p_threshold = 0.5))    
+                                                    iter = 100, p_threshold = 0.5,
+                                                BPPARAM = SerialParam(RNGseed = 123)))    
     
     expect_equal(cur_out_2$group_by, cur_sn$group_by)
     expect_equal(cur_out_2$from_label, cur_sn$from_label)
