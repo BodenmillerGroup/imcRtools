@@ -30,7 +30,8 @@ patchDetection <- function(object,
     
     # .valid.patchDetection.input(object, colPairName, expand_by)
     
-    cur_graph <- graph_from_edgelist(as.matrix(colPair(object[,pattern], colPairName)))
+    cur_graph <- graph_from_edgelist(as.matrix(colPair(object[,pattern], 
+                                                       colPairName)))
     cur_components <- components(cur_graph)
     cur_clusters <- cur_components$membership
     
