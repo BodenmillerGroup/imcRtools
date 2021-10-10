@@ -81,12 +81,15 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
+
+<p><img src="inst/imgs/imcRtools_sticker.png" align="right" alt="" width="120"></p>
 <div id="imcrtools" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#imcrtools" class="anchor"></a>imcRtools</h1></div>
 <!-- badges: start -->
-
-<p>This R package contains helper functions to analyse IMC (or other multiplexed imaging) data.</p>
+<p><a href="https://codecov.io/gh/BodenmillerGroup/imcRtools"><img src="https://codecov.io/gh/BodenmillerGroup/imcRtools/branch/master/graph/badge.svg" alt="codecov"></a> <a href="https://github.com/BodenmillerGroup/imcRtools/actions/workflows/docs.yml"><img src="https://github.com/BodenmillerGroup/imcRtools/actions/workflows/docs.yml/badge.svg?branch=master" alt="docs"></a> <!-- badges: end --></p>
+<p>This R/Bioconductor package contains helper functions to analyse IMC (or other multiplexed imaging) data.</p>
+<p>Its official package page can be found here: <a href="https://bioconductor.org/packages/imcRtools">https://bioconductor.org/packages/imcRtools</a></p>
 <div id="check-status" class="section level2">
 <h2 class="hasAnchor">
 <a href="#check-status" class="anchor"></a>Check status</h2>
@@ -116,11 +119,21 @@
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>The development version of <code>imcRtools</code> can be installed from Github via:</p>
+<p>The <code>imcRtools</code> package can be installed from <code>Bioconductor</code> via:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span>
 
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"BodenmillerGroup/imcRtools"</span><span class="op">)</span></code></pre></div>
+<span class="co"># The following initializes usage of Bioc devel</span>
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span>version<span class="op">=</span><span class="st">'devel'</span><span class="op">)</span>
+
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span><span class="st">"imcRtools"</span><span class="op">)</span></code></pre></div>
+<p>The development version of <code>imcRtools</code> can be installed from Github via:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span><span class="op">(</span><span class="st">"remotes"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>
+
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"BodenmillerGroup/imcRtools"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="getting-help" class="section level2">
 <h2 class="hasAnchor">
@@ -144,6 +157,7 @@
 <p><a href="https://github.com/nilseling">Nils Eling</a></p>
 </div>
 </div>
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -172,14 +186,7 @@
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
-<ul class="list-unstyled">
-<li><a href="https://codecov.io/gh/BodenmillerGroup/imcRtools"><img src="https://codecov.io/gh/BodenmillerGroup/imcRtools/branch/master/graph/badge.svg" alt="codecov"></a></li>
-<li><a href="https://github.com/BodenmillerGroup/imcRtools/actions/workflows/docs.yml"><img src="https://github.com/BodenmillerGroup/imcRtools/actions/workflows/docs.yml/badge.svg?branch=master" alt="docs"></a></li>
-</ul>
-</div>
-</div>
+  </div>
 </div>
 
 
