@@ -69,3 +69,8 @@ Changes in version 0.3.12 (2021-09-01):
 Changes in version 0.99.0 (2021-09-14):
 
 + Bioconductor submission
+
+Changes in version 0.99.7 (2021-10-10):
+
++ Added all unit tests
++ Fixed read_steinbock x/y axis defaults
