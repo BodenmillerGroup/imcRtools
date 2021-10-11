@@ -34,6 +34,15 @@
 #' cell in \code{colData(object)[[name]]}. 
 #' 
 #' @examples
+#' library(cytomapper)
+#' data(pancreasSCE)
+#'
+#' pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+#'                                  type = "expansion", threshold = 20)
+#' 
+#' pancreasSCE <- patchDetection(pancreasSCE, 
+#'                               patch_cells = pancreasSCE$CellType == "celltype_A",
+#'                               colPairName = "knn_interaction_graph")
 #' 
 #'   
 #' @author Tobias Hoch 
