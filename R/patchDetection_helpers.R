@@ -48,7 +48,7 @@
             
         }, BPPARAM = BPPARAM)
     
-    return(do.call("cbind", cur_out)))
+    return(do.call("cbind", cur_out))
     
 }
 

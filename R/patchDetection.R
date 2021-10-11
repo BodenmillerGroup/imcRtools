@@ -6,16 +6,45 @@
 #'
 #' @param object a \code{SingleCellExperiment} or \code{SpatialExperiment}
 #' object
+#' @param patch_cells logical vector of length equal to the number of cells
+#' contained in \code{object}. \code{TRUE} entries define the cells to consider
+#' for patch detection (see Details).
 #' @param colPairName single character indicating the \code{colPair(object)}
 #' entry containing the neighbor information.
-
-#' @return
+#' @param min_patch_size single integer indicating the minimum number of 
+#' connected cells that make up a patch before expansion.
+#' @param name single character specifying the \code{colData} entry storing
+#' the patch IDs in the returned object.
+#' @param expand_by single numeric indicating in which vicinity range cells
+#' should be considered as belonging to the patch (see Details).
+#' @param coords character vector of length 2 specifying the names of the
+#' \code{colData} (for a \code{SingleCellExperiment} object) or the
+#' \code{spatialCoords} entries of the cells' x and y locations.
+#' @param convex should the convex hull be computed before expansion? Default:
+#' the concave hull is computed.
+#' @param img_id single character indicating the \code{colData(object)} entry
+#' containing the unique image identifiers.
+#' @param BPPARAM a \code{\link[BiocParallel]{BiocParallelParam-class}} object
+#' defining how to parallelize computations.
+#' 
+#' @section Detecting patches of defined cell types:
+#' Explain NAs
+#' 
+#' @return An object of \code{class(object)} containing a patch ID for each 
+#' cell in \code{colData(object)[[name]]}. 
 #' 
 #' @examples
+#' 
 #'   
 #' @author Tobias Hoch 
 #' @author adapted by Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
-#'
+#' 
+#' @references
+#' \href{https://www.biorxiv.org/content/10.1101/2021.07.29.454093v1}{
+#' Hoch, T. et al., Multiplexed Imaging Mass Cytometry of Chemokine Milieus in 
+#' Metastatic Melanoma Characterizes Features of Response to Immunotherapy., 
+#' bioRxiv 2021}
+#' 
 #' @export
 patchDetection <- function(object, 
                            patch_cells,
