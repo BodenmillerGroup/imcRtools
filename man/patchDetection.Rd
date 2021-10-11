@@ -73,7 +73,7 @@ pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",
 
 pancreasSCE <- patchDetection(pancreasSCE, 
                               patch_cells = pancreasSCE$CellType == "celltype_A",
-                              colPairName = "knn_interaction_graph")
+                              colPairName = "expansion_interaction_graph")
 
   
 }

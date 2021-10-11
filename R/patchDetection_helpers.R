@@ -1,4 +1,6 @@
 # Helper function for the patch detection method
+#' @importFrom sf st_multipoint st_cast st_sfc
+#' @importFrom dplyr as_tibble filter sym nest_by summarize
 .expand_patch <- function(object, 
                           name,
                           expand_by,
@@ -20,11 +22,13 @@
             }
             
             cells <- st_multipoint(as.matrix(cur_coords))
-            cells_sfc = st_cast(st_sfc(cells), "POINT")
+            cells_sfc <- st_cast(st_sfc(cells), "POINT")
             
             if (sum(!is.na(colData(cur_obj)[[name]])) == 0) {
                 return(cur_obj)
             }
+            
+            data <- NULL
             
             cur_out <- colData(cur_obj) %>% as_tibble %>%
                 filter(!is.na(!!sym(name))) %>% 
@@ -51,7 +55,9 @@
     return(do.call("cbind", cur_out))
     
 }
-
+#' @importFrom grDevices chull 
+#' @importFrom sf st_polygon st_buffer st_sfc st_intersects
+#' @importFrom concaveman concaveman
 milieu_function <- function(x, coords, convex, distance, cells){
     
     if (nrow(x) <= 2) {

@@ -36,14 +36,29 @@
 #' @examples
 #' library(cytomapper)
 #' data(pancreasSCE)
+#' 
+#' # Visualize cell types
+#' plotSpatial(pancreasSCE, img_id = "ImageNb", node_color_by = "CellType")
 #'
+#' # Build interaction graph
 #' pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
 #'                                  type = "expansion", threshold = 20)
 #' 
+#' # Detect patches of "celltype_B" cells
 #' pancreasSCE <- patchDetection(pancreasSCE, 
-#'                               patch_cells = pancreasSCE$CellType == "celltype_A",
-#'                               colPairName = "knn_interaction_graph")
+#'                               patch_cells = pancreasSCE$CellType == "celltype_B",
+#'                               colPairName = "expansion_interaction_graph")
+#'                               
+#' plotSpatial(pancreasSCE, img_id = "ImageNb", node_color_by = "patch_id")
 #' 
+#' # Include cells in vicinity
+#' pancreasSCE <- patchDetection(pancreasSCE, 
+#'                               patch_cells = pancreasSCE$CellType == "celltype_B",
+#'                               colPairName = "expansion_interaction_graph",
+#'                               expand_by = 20, 
+#'                               img_id = "ImageNb")
+#' 
+#' plotSpatial(pancreasSCE, img_id = "ImageNb", node_color_by = "patch_id")
 #'   
 #' @author Tobias Hoch 
 #' @author adapted by Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
@@ -54,6 +69,7 @@
 #' Metastatic Melanoma Characterizes Features of Response to Immunotherapy., 
 #' bioRxiv 2021}
 #' 
+#' @importFrom igraph graph_from_edgelist components 
 #' @export
 patchDetection <- function(object, 
                            patch_cells,

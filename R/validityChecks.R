@@ -985,11 +985,13 @@
         stop("'convex' must be a single logical.")
     }
     
-    if (length(img_id) != 1 | !is.character(img_id)) {
-        stop("'img_id' must be a single string.")
-    }
-    
-    if (!img_id %in% names(colData(object))) {
-        stop("'img_id' not in colData(object).")
+    if (expand_by > 0) {
+        if (length(img_id) != 1 | !is.character(img_id)) {
+            stop("'img_id' must be a single string.")
+        }
+        
+        if (!img_id %in% names(colData(object))) {
+            stop("'img_id' not in colData(object).")
+        }
     }
 }
