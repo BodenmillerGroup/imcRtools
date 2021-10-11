@@ -18,7 +18,7 @@
 #'
 #' @export
 patchDetection <- function(object, 
-                           pattern,
+                           patch_cells,
                            colPairName,
                            min_patch_size = 1,
                            name = "patch_id",
@@ -28,9 +28,11 @@ patchDetection <- function(object,
                            img_id = NULL,
                            BPPARAM = SerialParam()){
     
-    # .valid.patchDetection.input(object, colPairName, expand_by)
+    .valid.patchDetection.input(object, patch_cells, colPairName, 
+                                min_patch_size, name, expand_by, coords,
+                                convex, img_id)
     
-    cur_graph <- graph_from_edgelist(as.matrix(colPair(object[,pattern], 
+    cur_graph <- graph_from_edgelist(as.matrix(colPair(object[,patch_cells], 
                                                        colPairName)))
     cur_components <- components(cur_graph)
     cur_clusters <- cur_components$membership
@@ -41,8 +43,8 @@ patchDetection <- function(object,
     } 
     
     cur_out <- vector(mode = "character", length = ncol(object))
-    cur_out[!pattern] <- NA
-    cur_out[pattern] <- cur_clusters
+    cur_out[!patch_cells] <- NA
+    cur_out[patch_cells] <- cur_clusters
     colData(object)[[name]] <- cur_out
     
     if (expand_by > 0) {
