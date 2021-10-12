@@ -52,7 +52,7 @@
                     cur_mat <- st_distance(cells_sfc[cur_cells], y)
                     colnames(cur_mat) <- patch_name
                     return(cur_mat)
-                }, cur_out$polygon, cur_out$patch_id, SIMPLIFY = FALSE)
+                }, cur_out$polygon, cur_out[[name]], SIMPLIFY = FALSE)
                 cur_dists <- do.call("cbind", cur_dists)
                 cur_patch_id <- apply(cur_dists, 1, function(y){
                     return(colnames(cur_dists)[which.min(y)])
