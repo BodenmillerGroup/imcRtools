@@ -35,15 +35,17 @@
 #' 
 #' 2. Patches of connected cells are detected. Here, cell-to-cell connections
 #' are defined by the interaction graph stored in 
-#' \code{colPair(object, colPairName)}.
+#' \code{colPair(object, colPairName)}. At this point, patches that contain 
+#' fewer than \code{min_patch_size} cells are removed.
 #' 
 #' 3. If \code{expand_by > 0}, a concave (default) or convex hull is constructed
 #' around each patch. This is is then expanded by \code{expand_by} and cells
-#' within the expanded hull are detected and assigned to the patch.
+#' within the expanded hull are detected and assigned to the patch. This 
+#' expansion only works if a patch contains at least 3 cells.
 #' 
 #' The returned object contains an additional entry 
 #' \code{colData(object)[[name]]}, which stores the patch ID per cell. \code{NA}
-#' indicate cells that are not part of a patch.
+#' indicate cells that are not part of a patch. 
 #' 
 #' @return An object of \code{class(object)} containing a patch ID for each 
 #' cell in \code{colData(object)[[name]]}. 

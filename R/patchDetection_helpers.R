@@ -47,12 +47,15 @@
             cur_cells <- cur_cells[!is.na(cur_cells)]
             
             if (length(cur_cells) > 0) {
-                cur_dists <- lapply(cur_out$polygon, function(x){
-                    return(st_distance(cells_sfc[cur_cells], x))
-                })
+                cur_dists <- mapply(function(y, patch_name){
+                    if (is.na(y)) {return(NULL)}
+                    cur_mat <- st_distance(cells_sfc[cur_cells], y)
+                    colnames(cur_mat) <- patch_name
+                    return(cur_mat)
+                }, cur_out$polygon, cur_out$patch_id, SIMPLIFY = FALSE)
                 cur_dists <- do.call("cbind", cur_dists)
-                cur_patch_id <- apply(cur_dists, 1, function(x){
-                    return(cur_out$patch_id[which.min(x)])
+                cur_patch_id <- apply(cur_dists, 1, function(y){
+                    return(colnames(cur_dists)[which.min(y)])
                 })
             }
             
