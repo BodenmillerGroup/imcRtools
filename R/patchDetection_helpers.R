@@ -62,7 +62,7 @@
             cur_patch <- colData(cur_obj)[[name]]
             for (i in seq_len(nrow(cur_out))) {
                 if (all(!is.na(cur_out$cells[[i]]))) {
-                    cur_patch[cur_out$cells[[i]]] <- cur_out$patch_id[i]
+                    cur_patch[cur_out$cells[[i]]] <- cur_out[[name]][i]
                 }
             }
             
