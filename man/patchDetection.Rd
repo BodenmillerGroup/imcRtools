@@ -61,7 +61,22 @@ of these clusters are detected as well.
 }
 \section{Detecting patches of defined cell types}{
 
-Explain NAs
+This function works as follows:
+
+1. Only cells defined by \code{patch_cells} are considered for patch 
+detection.
+
+2. Patches of connected cells are detected. Here, cell-to-cell connections
+are defined by the interaction graph stored in 
+\code{colPair(object, colPairName)}.
+
+3. If \code{expand_by > 0}, a concave (default) or convex hull is constructed
+around each patch. This is is then expanded by \code{expand_by} and cells
+within the expanded hull are detected and assigned to the patch.
+
+The returned object contains an additional entry 
+\code{colData(object)[[name]]}, which stores the patch ID per cell. \code{NA}
+indicate cells that are not part of a patch.
 }
 
 \examples{
