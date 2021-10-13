@@ -34,7 +34,7 @@ jobs:
 
       - name: Install system dependecies
         run: |
-          brew install harfbuzz fribidi cairo xquartz imagemagick gdal pkg-config
+          brew install harfbuzz fribidi cairo xquartz imagemagick gdal pkg-config proj
           
       - name: Install dependencies
         run: |
