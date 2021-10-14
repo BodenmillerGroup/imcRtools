@@ -986,6 +986,10 @@
     }
     
     if (expand_by > 0) {
+        if (is.null(img_id)) {
+            stop("'img_id' must be specified when patch expansion is performed.")
+        }
+        
         if (length(img_id) != 1 | !is.character(img_id)) {
             stop("'img_id' must be a single string.")
         }
