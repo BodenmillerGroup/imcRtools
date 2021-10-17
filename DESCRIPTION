@@ -1,5 +1,5 @@
 Package: imcRtools
-Version: 0.99.7
+Version: 0.99.8
 Title: Methods for imaging mass cytometry data analysis
 Description: 
     This R package supports the handling and analysis of imaging mass cytometry 
@@ -50,7 +50,9 @@ Imports:
     ggraph,
     tidygraph,
     ggplot2,
-    data.table
+    data.table,
+    sf,
+    concaveman
 Suggests:
     CATALYST,
     grid,
