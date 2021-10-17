@@ -600,7 +600,7 @@ test_that("read_steinbock function works", {
     
     
     # Parallelisation
-    cur_spe <- read_steinbock(path, BPPARAM = BiocParallel::bpparam())
+    #cur_spe <- read_steinbock(path, BPPARAM = BiocParallel::bpparam())
     
     # Error
     expect_error(cur_spe <- read_steinbock(path = "test"),
