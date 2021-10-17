@@ -86,7 +86,7 @@ test_that("patchDetection function works", {
     
     expect_equal(unique(cur_sce$patch_id), c(NA, "1", "3", "4", "6", "7", "8"))
     
-    ß# Concave and convex
+    # Concave and convex
     expect_silent(cur_sce <- patchDetection(pancreasSCE, 
                                             patch_cells = pancreasSCE$CellType == "celltype_B",
                                             colPairName = "expansion_interaction_graph",
@@ -162,6 +162,9 @@ test_that("patchDetection function works", {
     # Spatial Experiment
     cur_spe <- SpatialExperiment:::.sce_to_spe(pancreasSCE, sample_id = as.character(pancreasSCE$ImageNb))
     spatialCoords(cur_spe) <- as.matrix(colData(pancreasSCE)[,c("Pos_X", "Pos_Y")])
+    
+    cur_spe <- buildSpatialGraph(cur_spe, img_id = "ImageNb", 
+                                     type = "expansion", threshold = 20)
     
     expect_silent(cur_spe_2 <- patchDetection(cur_spe, 
                                             patch_cells = pancreasSCE$CellType == "celltype_B",
