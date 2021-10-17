@@ -106,6 +106,11 @@ patchDetection <- function(object,
     cur_graph <- graph_from_edgelist(as.matrix(colPair(object[,patch_cells], 
                                                        colPairName)))
     cur_components <- components(cur_graph)
+    
+    if (length(cur_components$membership) == 0) {
+        stop("No connected components found.")
+    }
+    
     cur_clusters <- cur_components$membership
     
     if (min_patch_size > 1) {
