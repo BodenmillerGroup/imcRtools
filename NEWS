@@ -78,3 +78,7 @@ Changes in version 0.99.7 (2021-10-10):
 Changes in version 0.99.8 (2021-10-11):
 
 + Added patch detection method
+
+Changes in version 0.99.9 (2021-10-22):
+
++ Removed certain unit tests for 64-bit windows
