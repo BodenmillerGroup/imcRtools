@@ -6,12 +6,11 @@ on:
   pull_request:
     branches:
         - master
-        - graphs
 
 jobs:
   R-CMD-check:
     runs-on: ubuntu-latest
-    container: bioconductor/bioconductor_docker:RELEASE_3_13
+    container: rocker/r-ver:4.1.0
 
     steps:
       - uses: actions/checkout@v2
@@ -33,6 +32,7 @@ jobs:
       - name: Install dependencies
         run: |
          install.packages("BiocManager")
+         install.packages("https://cran.rstudio.com/src/contrib/matrixStats_0.61.0.tar.gz")
          remotes::install_deps(dependencies = TRUE, repos = BiocManager::repositories(), Ncpu = 2L)
         shell: Rscript {0}
         

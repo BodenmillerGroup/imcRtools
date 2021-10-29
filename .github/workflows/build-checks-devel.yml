@@ -6,12 +6,11 @@ on:
   pull_request:
     branches: 
         - master
-        - graphs
 
 jobs:
   R-CMD-check:
     runs-on: ubuntu-latest
-    container: bioconductor/bioconductor_docker:devel
+    container: rocker/r-ver:devel
 
     steps:
       - uses: actions/checkout@v2
