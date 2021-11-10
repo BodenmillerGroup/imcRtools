@@ -76,7 +76,9 @@ approaches.
 2. Single-cell analysis using the [Bioconductor](https://www.bioconductor.org/) framework: The 
 [Orchestrating Single-Cell Analysis with Bioconductor](https://bioconductor.org/books/release/OSCA/)
 book is an excellent resource for beginners and advanced analysis concerning
-single-cell data. The `imcRtools` package supports data structures that fully
+single-cell data. Common analysis steps include dimensionality reduction, 
+unsupervised clustering for cell type detection and data visualization.
+The `imcRtools` package supports data structures that fully
 integrate with the analysis presented in the OSCA book.  
 
 3. Handling multiplexed images in R: the 
