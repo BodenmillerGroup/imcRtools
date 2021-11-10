@@ -204,7 +204,7 @@ nodes.</p></td>
       <th>assay_type</th>
       <td><p>single character indicating the assay slot from which
 to extract the expression data when <code>node_color_by</code> is set to one of
-<code><a href='https://rdrr.io/r/base/colnames.html'>rownames(object)</a></code>.</p></td>
+<code>rownames(object)</code>.</p></td>
     </tr>
     <tr>
       <th>draw_edges</th>
@@ -318,40 +318,43 @@ parameter can be used.</p>
     <p>Nils Eling (<a href='mailto:nils.eling@dqbm.uzh.ch'>nils.eling@dqbm.uzh.ch</a>)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/BodenmillerGroup/cytomapper'>cytomapper</a></span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/pkg/CATALYST/man/data.html'>data</a></span><span class='op'>(</span><span class='va'>pancreasSCE</span><span class='op'>)</span>
-
-<span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'><a href='buildSpatialGraph.html'>buildSpatialGraph</a></span><span class='op'>(</span><span class='va'>pancreasSCE</span>, img_id <span class='op'>=</span> <span class='st'>"ImageNb"</span>, 
-                         type <span class='op'>=</span> <span class='st'>"knn"</span>, k <span class='op'>=</span> <span class='fl'>3</span>, directed <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
-<span class='co'># Only nodes</span>
-<span class='fu'>plotSpatial</span><span class='op'>(</span><span class='va'>sce</span>, img_id <span class='op'>=</span> <span class='st'>"ImageNb"</span>,
-            node_color_by <span class='op'>=</span> <span class='st'>"CellType"</span>,
-            node_shape_by <span class='op'>=</span> <span class='st'>"ImageNb"</span>,
-            node_size_by <span class='op'>=</span> <span class='st'>"Area"</span><span class='op'>)</span>
-</div><div class='img'><img src='plotSpatial-1.png' alt='' width='700' height='433' /></div><div class='input'>  
-<span class='co'># With edges and nodes colored by expression</span>
-<span class='fu'>plotSpatial</span><span class='op'>(</span><span class='va'>sce</span>, img_id <span class='op'>=</span> <span class='st'>"ImageNb"</span>,
-            node_color_by <span class='op'>=</span> <span class='st'>"PIN"</span>,
-            assay_type <span class='op'>=</span> <span class='st'>"exprs"</span>,
-            node_shape_by <span class='op'>=</span> <span class='st'>"ImageNb"</span>,
-            node_size_by <span class='op'>=</span> <span class='st'>"Area"</span>,
-            draw_edges <span class='op'>=</span> <span class='cn'>TRUE</span>,
-            colPairName <span class='op'>=</span> <span class='st'>"knn_interaction_graph"</span>,
-            edge_color_by <span class='op'>=</span> <span class='st'>"Pattern"</span><span class='op'>)</span>
-</div><div class='img'><img src='plotSpatial-2.png' alt='' width='700' height='433' /></div><div class='input'>            
-<span class='co'># With arrows</span>
-<span class='fu'>plotSpatial</span><span class='op'>(</span><span class='va'>sce</span>, img_id <span class='op'>=</span> <span class='st'>"ImageNb"</span>,
-            node_color_by <span class='op'>=</span> <span class='st'>"CellType"</span>,
-            node_shape_by <span class='op'>=</span> <span class='st'>"ImageNb"</span>,
-            node_size_by <span class='op'>=</span> <span class='st'>"Area"</span>,
-            draw_edges <span class='op'>=</span> <span class='cn'>TRUE</span>,
-            colPairName <span class='op'>=</span> <span class='st'>"knn_interaction_graph"</span>,
-            edge_color_fix <span class='op'>=</span> <span class='st'>"green"</span>,
-            arrow <span class='op'>=</span> <span class='fu'>grid</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/grid/arrow.html'>arrow</a></span><span class='op'>(</span>length <span class='op'>=</span> <span class='fu'>grid</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/grid/unit.html'>unit</a></span><span class='op'>(</span><span class='fl'>0.1</span>, <span class='st'>"inch"</span><span class='op'>)</span><span class='op'>)</span>,
-            end_cap <span class='op'>=</span> <span class='fu'>ggraph</span><span class='fu'>::</span><span class='fu'><a href='https://ggraph.data-imaginist.com/reference/geometry.html'>circle</a></span><span class='op'>(</span><span class='fl'>0.2</span>, <span class='st'>"cm"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='img'><img src='plotSpatial-3.png' alt='' width='700' height='433' /></div><div class='input'>  
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/BodenmillerGroup/cytomapper'>cytomapper</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/CATALYST/man/data.html'>data</a></span><span class='op'>(</span><span class='va'>pancreasSCE</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'><a href='buildSpatialGraph.html'>buildSpatialGraph</a></span><span class='op'>(</span><span class='va'>pancreasSCE</span>, img_id <span class='op'>=</span> <span class='st'>"ImageNb"</span>, </span>
+<span class='r-in'>                         type <span class='op'>=</span> <span class='st'>"knn"</span>, k <span class='op'>=</span> <span class='fl'>3</span>, directed <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Only nodes</span></span>
+<span class='r-in'><span class='fu'>plotSpatial</span><span class='op'>(</span><span class='va'>sce</span>, img_id <span class='op'>=</span> <span class='st'>"ImageNb"</span>,</span>
+<span class='r-in'>            node_color_by <span class='op'>=</span> <span class='st'>"CellType"</span>,</span>
+<span class='r-in'>            node_shape_by <span class='op'>=</span> <span class='st'>"ImageNb"</span>,</span>
+<span class='r-in'>            node_size_by <span class='op'>=</span> <span class='st'>"Area"</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='plotSpatial-1.png' alt='' width='700' height='433' /></span>
+<span class='r-in'>  </span>
+<span class='r-in'><span class='co'># With edges and nodes colored by expression</span></span>
+<span class='r-in'><span class='fu'>plotSpatial</span><span class='op'>(</span><span class='va'>sce</span>, img_id <span class='op'>=</span> <span class='st'>"ImageNb"</span>,</span>
+<span class='r-in'>            node_color_by <span class='op'>=</span> <span class='st'>"PIN"</span>,</span>
+<span class='r-in'>            assay_type <span class='op'>=</span> <span class='st'>"exprs"</span>,</span>
+<span class='r-in'>            node_shape_by <span class='op'>=</span> <span class='st'>"ImageNb"</span>,</span>
+<span class='r-in'>            node_size_by <span class='op'>=</span> <span class='st'>"Area"</span>,</span>
+<span class='r-in'>            draw_edges <span class='op'>=</span> <span class='cn'>TRUE</span>,</span>
+<span class='r-in'>            colPairName <span class='op'>=</span> <span class='st'>"knn_interaction_graph"</span>,</span>
+<span class='r-in'>            edge_color_by <span class='op'>=</span> <span class='st'>"Pattern"</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='plotSpatial-2.png' alt='' width='700' height='433' /></span>
+<span class='r-in'>            </span>
+<span class='r-in'><span class='co'># With arrows</span></span>
+<span class='r-in'><span class='fu'>plotSpatial</span><span class='op'>(</span><span class='va'>sce</span>, img_id <span class='op'>=</span> <span class='st'>"ImageNb"</span>,</span>
+<span class='r-in'>            node_color_by <span class='op'>=</span> <span class='st'>"CellType"</span>,</span>
+<span class='r-in'>            node_shape_by <span class='op'>=</span> <span class='st'>"ImageNb"</span>,</span>
+<span class='r-in'>            node_size_by <span class='op'>=</span> <span class='st'>"Area"</span>,</span>
+<span class='r-in'>            draw_edges <span class='op'>=</span> <span class='cn'>TRUE</span>,</span>
+<span class='r-in'>            colPairName <span class='op'>=</span> <span class='st'>"knn_interaction_graph"</span>,</span>
+<span class='r-in'>            edge_color_fix <span class='op'>=</span> <span class='st'>"green"</span>,</span>
+<span class='r-in'>            arrow <span class='op'>=</span> <span class='fu'>grid</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/grid/arrow.html'>arrow</a></span><span class='op'>(</span>length <span class='op'>=</span> <span class='fu'>grid</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/grid/unit.html'>unit</a></span><span class='op'>(</span><span class='fl'>0.1</span>, <span class='st'>"inch"</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>            end_cap <span class='op'>=</span> <span class='fu'>ggraph</span><span class='fu'>::</span><span class='fu'><a href='https://ggraph.data-imaginist.com/reference/geometry.html'>circle</a></span><span class='op'>(</span><span class='fl'>0.2</span>, <span class='st'>"cm"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='plotSpatial-3.png' alt='' width='700' height='433' /></span>
+<span class='r-in'>  </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

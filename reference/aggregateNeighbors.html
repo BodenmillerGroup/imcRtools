@@ -194,7 +194,7 @@ saved in the <code>colData(object)</code>. Defaults to "aggregatedNeighbors" whe
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>returns an object of <code><a href='https://rdrr.io/r/base/class.html'>class(object)</a></code> containing the aggregated
+    <p>returns an object of <code>class(object)</code> containing the aggregated
 values in form of a <code>DataFrame</code> object in
 <code>colData(object)[[name]]</code>.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
@@ -202,64 +202,74 @@ values in form of a <code>DataFrame</code> object in
     <p>Daniel Schulz (<a href='mailto:daniel.schulz@uzh.ch'>daniel.schulz@uzh.ch</a>)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/BodenmillerGroup/cytomapper'>cytomapper</a></span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: EBImage</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘EBImage’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:SummarizedExperiment’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    resize</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:Biobase’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    channel</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:GenomicRanges’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    resize, tile</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:IRanges’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    resize, tile</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘cytomapper’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:Biobase’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    channelNames, channelNames&lt;-</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>pancreasSCE</span><span class='op'>)</span>
-
-<span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'><a href='buildSpatialGraph.html'>buildSpatialGraph</a></span><span class='op'>(</span><span class='va'>pancreasSCE</span>, img_id <span class='op'>=</span> <span class='st'>"ImageNb"</span>, 
-                         type <span class='op'>=</span> <span class='st'>"knn"</span>, k <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
-                         
-<span class='co'># Aggregating neighboring cell-types</span>
-<span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'>aggregateNeighbors</span><span class='op'>(</span><span class='va'>sce</span>, colPairName <span class='op'>=</span> <span class='st'>"knn_interaction_graph"</span>,
-                         aggregate_by <span class='op'>=</span> <span class='st'>"metadata"</span>,
-                         count_by <span class='op'>=</span> <span class='st'>"CellType"</span><span class='op'>)</span>
-<span class='va'>sce</span><span class='op'>$</span><span class='va'>aggregatedNeighbors</span>
-</div><div class='output co'>#&gt; DataFrame with 362 rows and 3 columns
-#&gt;     celltype_A celltype_B celltype_C
-#&gt;      &lt;numeric&gt;  &lt;numeric&gt;  &lt;numeric&gt;
-#&gt; 1            0          0          1
-#&gt; 2            0          0          1
-#&gt; 3            0          0          1
-#&gt; 4            0          0          1
-#&gt; 5            0          0          1
-#&gt; ...        ...        ...        ...
-#&gt; 358          0   0.666667   0.333333
-#&gt; 359          0   1.000000   0.000000
-#&gt; 360          0   0.000000   1.000000
-#&gt; 361          0   0.333333   0.666667
-#&gt; 362          0   0.000000   1.000000</div><div class='input'>
-<span class='co'># Aggregating neighboring expression values</span>
-<span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'>aggregateNeighbors</span><span class='op'>(</span><span class='va'>sce</span>, colPairName <span class='op'>=</span> <span class='st'>"knn_interaction_graph"</span>,
-                         aggregate_by <span class='op'>=</span> <span class='st'>"expression"</span>,
-                         assay_type <span class='op'>=</span> <span class='st'>"exprs"</span>,
-                         statistic <span class='op'>=</span> <span class='st'>"mean"</span><span class='op'>)</span>
-<span class='va'>sce</span><span class='op'>$</span><span class='va'>mean_aggregatedExpression</span>
-</div><div class='output co'>#&gt; DataFrame with 362 rows and 5 columns
-#&gt;            H3      CD99       PIN      CD8a       CDH
-#&gt;     &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;
-#&gt; 1     2.13779  0.926813  0.101286  1.047837   2.11764
-#&gt; 2     2.46185  0.978440  0.228181  0.227142   2.31938
-#&gt; 3     3.17958  0.720834  0.153769  0.272481   1.41583
-#&gt; 4     2.61744  0.704024  0.134673  0.183676   2.37763
-#&gt; 5     2.07004  1.195031  0.273259  0.163717   3.00868
-#&gt; ...       ...       ...       ...       ...       ...
-#&gt; 358   3.33523  2.464446 0.2588993  0.337226   2.23754
-#&gt; 359   3.15450  2.516081 0.2071171  0.294574   1.55607
-#&gt; 360   3.44273  0.622654 0.1657428  0.126924   2.69050
-#&gt; 361   3.03402  1.932238 0.1586025  0.192782   3.15072
-#&gt; 362   2.83251  0.822080 0.0583222  0.329829   1.54897</div><div class='input'>  
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/BodenmillerGroup/cytomapper'>cytomapper</a></span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: EBImage</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Attaching package: ‘EBImage’</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> The following object is masked from ‘package:SummarizedExperiment’:</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     resize</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> The following object is masked from ‘package:Biobase’:</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     channel</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> The following objects are masked from ‘package:GenomicRanges’:</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     resize, tile</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> The following objects are masked from ‘package:IRanges’:</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     resize, tile</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Attaching package: ‘cytomapper’</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> The following objects are masked from ‘package:Biobase’:</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     channelNames, channelNames&lt;-</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>pancreasSCE</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'><a href='buildSpatialGraph.html'>buildSpatialGraph</a></span><span class='op'>(</span><span class='va'>pancreasSCE</span>, img_id <span class='op'>=</span> <span class='st'>"ImageNb"</span>, </span>
+<span class='r-in'>                         type <span class='op'>=</span> <span class='st'>"knn"</span>, k <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span></span>
+<span class='r-in'>                         </span>
+<span class='r-in'><span class='co'># Aggregating neighboring cell-types</span></span>
+<span class='r-in'><span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'>aggregateNeighbors</span><span class='op'>(</span><span class='va'>sce</span>, colPairName <span class='op'>=</span> <span class='st'>"knn_interaction_graph"</span>,</span>
+<span class='r-in'>                         aggregate_by <span class='op'>=</span> <span class='st'>"metadata"</span>,</span>
+<span class='r-in'>                         count_by <span class='op'>=</span> <span class='st'>"CellType"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>sce</span><span class='op'>$</span><span class='va'>aggregatedNeighbors</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> DataFrame with 362 rows and 3 columns</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     celltype_A celltype_B celltype_C</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      &lt;numeric&gt;  &lt;numeric&gt;  &lt;numeric&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1            0          0          1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2            0          0          1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3            0          0          1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4            0          0          1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5            0          0          1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ...        ...        ...        ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 358          0   0.666667   0.333333</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 359          0   1.000000   0.000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 360          0   0.000000   1.000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 361          0   0.333333   0.666667</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 362          0   0.000000   1.000000</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Aggregating neighboring expression values</span></span>
+<span class='r-in'><span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'>aggregateNeighbors</span><span class='op'>(</span><span class='va'>sce</span>, colPairName <span class='op'>=</span> <span class='st'>"knn_interaction_graph"</span>,</span>
+<span class='r-in'>                         aggregate_by <span class='op'>=</span> <span class='st'>"expression"</span>,</span>
+<span class='r-in'>                         assay_type <span class='op'>=</span> <span class='st'>"exprs"</span>,</span>
+<span class='r-in'>                         statistic <span class='op'>=</span> <span class='st'>"mean"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>sce</span><span class='op'>$</span><span class='va'>mean_aggregatedExpression</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> DataFrame with 362 rows and 5 columns</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            H3      CD99       PIN      CD8a       CDH</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1     2.13779  0.926813  0.101286  1.047837   2.11764</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2     2.46185  0.978440  0.228181  0.227142   2.31938</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3     3.17958  0.720834  0.153769  0.272481   1.41583</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4     2.61744  0.704024  0.134673  0.183676   2.37763</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5     2.07004  1.195031  0.273259  0.163717   3.00868</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ...       ...       ...       ...       ...       ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 358   3.33523  2.464446 0.2588993  0.337226   2.23754</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 359   3.15450  2.516081 0.2071171  0.294574   1.55607</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 360   3.44273  0.622654 0.1657428  0.126924   2.69050</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 361   3.03402  1.932238 0.1586025  0.192782   3.15072</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 362   2.83251  0.822080 0.0583222  0.329829   1.54897</span>
+<span class='r-in'>  </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

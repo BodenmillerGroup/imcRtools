@@ -272,116 +272,119 @@ interactions per grouping level.</p>
 <p>adapted by Nils Eling (<a href='mailto:nils.eling@dqbm.uzh.ch'>nils.eling@dqbm.uzh.ch</a>)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/BodenmillerGroup/cytomapper'>cytomapper</a></span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/pkg/CATALYST/man/data.html'>data</a></span><span class='op'>(</span><span class='va'>pancreasSCE</span><span class='op'>)</span>
-
-<span class='va'>pancreasSCE</span> <span class='op'>&lt;-</span> <span class='fu'><a href='buildSpatialGraph.html'>buildSpatialGraph</a></span><span class='op'>(</span><span class='va'>pancreasSCE</span>, img_id <span class='op'>=</span> <span class='st'>"ImageNb"</span>, 
-                                 type <span class='op'>=</span> <span class='st'>"knn"</span>, k <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
-                               
-<span class='co'># Classic style calculation</span>
-<span class='op'>(</span><span class='va'>out</span> <span class='op'>&lt;-</span> <span class='fu'>testInteractions</span><span class='op'>(</span><span class='va'>pancreasSCE</span>, 
-                         group_by <span class='op'>=</span> <span class='st'>"ImageNb"</span>,
-                         label <span class='op'>=</span> <span class='st'>"CellType"</span>, 
-                         method <span class='op'>=</span> <span class='st'>"classic"</span>,
-                         colPairName <span class='op'>=</span> <span class='st'>"knn_interaction_graph"</span>,
-                         iter <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; DataFrame with 24 rows and 10 columns
-#&gt;      group_by  from_label   to_label        ct        p_gt        p_lt
-#&gt;     &lt;integer&gt; &lt;character&gt;   &lt;factor&gt; &lt;numeric&gt;   &lt;numeric&gt;   &lt;numeric&gt;
-#&gt; 1           1  celltype_A celltype_A  1.823529 0.000999001 1.000000000
-#&gt; 2           1  celltype_A celltype_B  0.470588 0.020979021 0.994005994
-#&gt; 3           1  celltype_A celltype_C  0.705882 1.000000000 0.000999001
-#&gt; 4           1  celltype_B celltype_A  0.875000 0.055944056 0.978021978
-#&gt; 5           1  celltype_B celltype_B  0.250000 0.499500500 0.796203796
-#&gt; ...       ...         ...        ...       ...         ...         ...
-#&gt; 20          3  celltype_B celltype_B  2.363636 0.000999001 1.000000000
-#&gt; 21          3  celltype_B celltype_C  0.636364 1.000000000 0.000999001
-#&gt; 22          3  celltype_C celltype_A        NA          NA          NA
-#&gt; 23          3  celltype_C celltype_B  0.704918 1.000000000 0.000999001
-#&gt; 24          3  celltype_C celltype_C  2.295082 0.000999001 1.000000000
-#&gt;     interaction           p       sig    sigval
-#&gt;       &lt;logical&gt;   &lt;numeric&gt; &lt;logical&gt; &lt;numeric&gt;
-#&gt; 1          TRUE 0.000999001      TRUE         1
-#&gt; 2          TRUE 0.020979021     FALSE         0
-#&gt; 3         FALSE 0.000999001      TRUE        -1
-#&gt; 4          TRUE 0.055944056     FALSE         0
-#&gt; 5          TRUE 0.499500500     FALSE         0
-#&gt; ...         ...         ...       ...       ...
-#&gt; 20         TRUE 0.000999001      TRUE         1
-#&gt; 21        FALSE 0.000999001      TRUE        -1
-#&gt; 22           NA          NA        NA        NA
-#&gt; 23        FALSE 0.000999001      TRUE        -1
-#&gt; 24         TRUE 0.000999001      TRUE         1</div><div class='input'>                                
-<span class='co'># Histocat style calculation</span>
-<span class='op'>(</span><span class='va'>out</span> <span class='op'>&lt;-</span> <span class='fu'>testInteractions</span><span class='op'>(</span><span class='va'>pancreasSCE</span>, 
-                         group_by <span class='op'>=</span> <span class='st'>"ImageNb"</span>,
-                         label <span class='op'>=</span> <span class='st'>"CellType"</span>, 
-                         method <span class='op'>=</span> <span class='st'>"histocat"</span>,
-                         colPairName <span class='op'>=</span> <span class='st'>"knn_interaction_graph"</span>,
-                         iter <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; DataFrame with 22 rows and 10 columns
-#&gt;      group_by  from_label    to_label        ct        p_gt        p_lt
-#&gt;     &lt;integer&gt; &lt;character&gt; &lt;character&gt; &lt;numeric&gt;   &lt;numeric&gt;   &lt;numeric&gt;
-#&gt; 1           1  celltype_A  celltype_A   1.93750    0.004995 0.996003996
-#&gt; 2           1  celltype_A  celltype_B   1.14286    0.219780 0.786213786
-#&gt; 3           1  celltype_A  celltype_C   1.33333    1.000000 0.000999001
-#&gt; 4           1  celltype_B  celltype_A   1.16667    0.405594 0.613386613
-#&gt; 5           1  celltype_B  celltype_B   1.00000    0.649351 0.934065934
-#&gt; ...       ...         ...         ...       ...         ...         ...
-#&gt; 18          2  celltype_C  celltype_C   2.63636 0.000999001 1.000000000
-#&gt; 19          3  celltype_B  celltype_B   2.36364 0.000999001 1.000000000
-#&gt; 20          3  celltype_B  celltype_C   1.31250 1.000000000 0.000999001
-#&gt; 21          3  celltype_C  celltype_B   1.65385 0.863136863 0.143856144
-#&gt; 22          3  celltype_C  celltype_C   2.45614 0.000999001 1.000000000
-#&gt;     interaction           p       sig    sigval
-#&gt;       &lt;logical&gt;   &lt;numeric&gt; &lt;logical&gt; &lt;numeric&gt;
-#&gt; 1          TRUE 0.004995005      TRUE         1
-#&gt; 2          TRUE 0.219780220     FALSE         0
-#&gt; 3         FALSE 0.000999001      TRUE        -1
-#&gt; 4          TRUE 0.405594406     FALSE         0
-#&gt; 5          TRUE 0.649350649     FALSE         0
-#&gt; ...         ...         ...       ...       ...
-#&gt; 18         TRUE 0.000999001      TRUE         1
-#&gt; 19         TRUE 0.000999001      TRUE         1
-#&gt; 20        FALSE 0.000999001      TRUE        -1
-#&gt; 21        FALSE 0.143856144     FALSE         0
-#&gt; 22         TRUE 0.000999001      TRUE         1</div><div class='input'>                                
-<span class='co'># Patch style calculation</span>
-<span class='op'>(</span><span class='va'>out</span> <span class='op'>&lt;-</span> <span class='fu'>testInteractions</span><span class='op'>(</span><span class='va'>pancreasSCE</span>, 
-                         group_by <span class='op'>=</span> <span class='st'>"ImageNb"</span>,
-                         label <span class='op'>=</span> <span class='st'>"CellType"</span>, 
-                         method <span class='op'>=</span> <span class='st'>"patch"</span>,
-                         patch_size <span class='op'>=</span> <span class='fl'>3</span>,
-                         colPairName <span class='op'>=</span> <span class='st'>"knn_interaction_graph"</span>,
-                         <span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; DataFrame with 24 rows and 10 columns
-#&gt;      group_by  from_label   to_label        ct        p_gt        p_lt
-#&gt;     &lt;integer&gt; &lt;character&gt;   &lt;factor&gt; &lt;numeric&gt;   &lt;numeric&gt;   &lt;numeric&gt;
-#&gt; 1           1  celltype_A celltype_A  0.235294 0.000999001 1.000000000
-#&gt; 2           1  celltype_A celltype_B  0.000000 1.000000000 0.997002997
-#&gt; 3           1  celltype_A celltype_C  0.000000 1.000000000 0.000999001
-#&gt; 4           1  celltype_B celltype_A  0.000000 1.000000000 0.972027972
-#&gt; 5           1  celltype_B celltype_B  0.000000 1.000000000 1.000000000
-#&gt; ...       ...         ...        ...       ...         ...         ...
-#&gt; 20          3  celltype_B celltype_B 0.5151515 0.000999001 1.000000000
-#&gt; 21          3  celltype_B celltype_C 0.0000000 1.000000000 0.000999001
-#&gt; 22          3  celltype_C celltype_A        NA          NA          NA
-#&gt; 23          3  celltype_C celltype_B 0.0655738 0.981018981 0.057942058
-#&gt; 24          3  celltype_C celltype_C 0.5737705 0.000999001 1.000000000
-#&gt;     interaction           p       sig    sigval
-#&gt;       &lt;logical&gt;   &lt;numeric&gt; &lt;logical&gt; &lt;numeric&gt;
-#&gt; 1          TRUE 0.000999001      TRUE         1
-#&gt; 2         FALSE 0.997002997     FALSE         0
-#&gt; 3         FALSE 0.000999001      TRUE        -1
-#&gt; 4         FALSE 0.972027972     FALSE         0
-#&gt; 5         FALSE 1.000000000     FALSE         0
-#&gt; ...         ...         ...       ...       ...
-#&gt; 20         TRUE 0.000999001      TRUE         1
-#&gt; 21        FALSE 0.000999001      TRUE        -1
-#&gt; 22           NA          NA        NA        NA
-#&gt; 23        FALSE 0.057942058     FALSE         0
-#&gt; 24         TRUE 0.000999001      TRUE         1</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/BodenmillerGroup/cytomapper'>cytomapper</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/CATALYST/man/data.html'>data</a></span><span class='op'>(</span><span class='va'>pancreasSCE</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>pancreasSCE</span> <span class='op'>&lt;-</span> <span class='fu'><a href='buildSpatialGraph.html'>buildSpatialGraph</a></span><span class='op'>(</span><span class='va'>pancreasSCE</span>, img_id <span class='op'>=</span> <span class='st'>"ImageNb"</span>, </span>
+<span class='r-in'>                                 type <span class='op'>=</span> <span class='st'>"knn"</span>, k <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span></span>
+<span class='r-in'>                               </span>
+<span class='r-in'><span class='co'># Classic style calculation</span></span>
+<span class='r-in'><span class='op'>(</span><span class='va'>out</span> <span class='op'>&lt;-</span> <span class='fu'>testInteractions</span><span class='op'>(</span><span class='va'>pancreasSCE</span>, </span>
+<span class='r-in'>                         group_by <span class='op'>=</span> <span class='st'>"ImageNb"</span>,</span>
+<span class='r-in'>                         label <span class='op'>=</span> <span class='st'>"CellType"</span>, </span>
+<span class='r-in'>                         method <span class='op'>=</span> <span class='st'>"classic"</span>,</span>
+<span class='r-in'>                         colPairName <span class='op'>=</span> <span class='st'>"knn_interaction_graph"</span>,</span>
+<span class='r-in'>                         iter <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> DataFrame with 24 rows and 10 columns</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      group_by  from_label   to_label        ct        p_gt        p_lt</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;integer&gt; &lt;character&gt;   &lt;factor&gt; &lt;numeric&gt;   &lt;numeric&gt;   &lt;numeric&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1           1  celltype_A celltype_A  1.823529 0.000999001 1.000000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2           1  celltype_A celltype_B  0.470588 0.020979021 0.994005994</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3           1  celltype_A celltype_C  0.705882 1.000000000 0.000999001</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4           1  celltype_B celltype_A  0.875000 0.055944056 0.978021978</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5           1  celltype_B celltype_B  0.250000 0.499500500 0.796203796</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ...       ...         ...        ...       ...         ...         ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 20          3  celltype_B celltype_B  2.363636 0.000999001 1.000000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 21          3  celltype_B celltype_C  0.636364 1.000000000 0.000999001</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 22          3  celltype_C celltype_A        NA          NA          NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 23          3  celltype_C celltype_B  0.704918 1.000000000 0.000999001</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 24          3  celltype_C celltype_C  2.295082 0.000999001 1.000000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     interaction           p       sig    sigval</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;logical&gt;   &lt;numeric&gt; &lt;logical&gt; &lt;numeric&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1          TRUE 0.000999001      TRUE         1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2          TRUE 0.020979021     FALSE         0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3         FALSE 0.000999001      TRUE        -1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4          TRUE 0.055944056     FALSE         0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5          TRUE 0.499500500     FALSE         0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ...         ...         ...       ...       ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 20         TRUE 0.000999001      TRUE         1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 21        FALSE 0.000999001      TRUE        -1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 22           NA          NA        NA        NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 23        FALSE 0.000999001      TRUE        -1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 24         TRUE 0.000999001      TRUE         1</span>
+<span class='r-in'>                                </span>
+<span class='r-in'><span class='co'># Histocat style calculation</span></span>
+<span class='r-in'><span class='op'>(</span><span class='va'>out</span> <span class='op'>&lt;-</span> <span class='fu'>testInteractions</span><span class='op'>(</span><span class='va'>pancreasSCE</span>, </span>
+<span class='r-in'>                         group_by <span class='op'>=</span> <span class='st'>"ImageNb"</span>,</span>
+<span class='r-in'>                         label <span class='op'>=</span> <span class='st'>"CellType"</span>, </span>
+<span class='r-in'>                         method <span class='op'>=</span> <span class='st'>"histocat"</span>,</span>
+<span class='r-in'>                         colPairName <span class='op'>=</span> <span class='st'>"knn_interaction_graph"</span>,</span>
+<span class='r-in'>                         iter <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> DataFrame with 22 rows and 10 columns</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      group_by  from_label    to_label        ct        p_gt        p_lt</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;integer&gt; &lt;character&gt; &lt;character&gt; &lt;numeric&gt;   &lt;numeric&gt;   &lt;numeric&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1           1  celltype_A  celltype_A   1.93750    0.004995 0.996003996</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2           1  celltype_A  celltype_B   1.14286    0.219780 0.786213786</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3           1  celltype_A  celltype_C   1.33333    1.000000 0.000999001</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4           1  celltype_B  celltype_A   1.16667    0.405594 0.613386613</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5           1  celltype_B  celltype_B   1.00000    0.649351 0.934065934</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ...       ...         ...         ...       ...         ...         ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 18          2  celltype_C  celltype_C   2.63636 0.000999001 1.000000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 19          3  celltype_B  celltype_B   2.36364 0.000999001 1.000000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 20          3  celltype_B  celltype_C   1.31250 1.000000000 0.000999001</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 21          3  celltype_C  celltype_B   1.65385 0.863136863 0.143856144</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 22          3  celltype_C  celltype_C   2.45614 0.000999001 1.000000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     interaction           p       sig    sigval</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;logical&gt;   &lt;numeric&gt; &lt;logical&gt; &lt;numeric&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1          TRUE 0.004995005      TRUE         1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2          TRUE 0.219780220     FALSE         0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3         FALSE 0.000999001      TRUE        -1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4          TRUE 0.405594406     FALSE         0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5          TRUE 0.649350649     FALSE         0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ...         ...         ...       ...       ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 18         TRUE 0.000999001      TRUE         1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 19         TRUE 0.000999001      TRUE         1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 20        FALSE 0.000999001      TRUE        -1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 21        FALSE 0.143856144     FALSE         0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 22         TRUE 0.000999001      TRUE         1</span>
+<span class='r-in'>                                </span>
+<span class='r-in'><span class='co'># Patch style calculation</span></span>
+<span class='r-in'><span class='op'>(</span><span class='va'>out</span> <span class='op'>&lt;-</span> <span class='fu'>testInteractions</span><span class='op'>(</span><span class='va'>pancreasSCE</span>, </span>
+<span class='r-in'>                         group_by <span class='op'>=</span> <span class='st'>"ImageNb"</span>,</span>
+<span class='r-in'>                         label <span class='op'>=</span> <span class='st'>"CellType"</span>, </span>
+<span class='r-in'>                         method <span class='op'>=</span> <span class='st'>"patch"</span>,</span>
+<span class='r-in'>                         patch_size <span class='op'>=</span> <span class='fl'>3</span>,</span>
+<span class='r-in'>                         colPairName <span class='op'>=</span> <span class='st'>"knn_interaction_graph"</span>,</span>
+<span class='r-in'>                         <span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> DataFrame with 24 rows and 10 columns</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      group_by  from_label   to_label        ct        p_gt        p_lt</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;integer&gt; &lt;character&gt;   &lt;factor&gt; &lt;numeric&gt;   &lt;numeric&gt;   &lt;numeric&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1           1  celltype_A celltype_A  0.235294 0.000999001 1.000000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2           1  celltype_A celltype_B  0.000000 1.000000000 0.997002997</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3           1  celltype_A celltype_C  0.000000 1.000000000 0.000999001</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4           1  celltype_B celltype_A  0.000000 1.000000000 0.972027972</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5           1  celltype_B celltype_B  0.000000 1.000000000 1.000000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ...       ...         ...        ...       ...         ...         ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 20          3  celltype_B celltype_B 0.5151515 0.000999001 1.000000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 21          3  celltype_B celltype_C 0.0000000 1.000000000 0.000999001</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 22          3  celltype_C celltype_A        NA          NA          NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 23          3  celltype_C celltype_B 0.0655738 0.981018981 0.057942058</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 24          3  celltype_C celltype_C 0.5737705 0.000999001 1.000000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     interaction           p       sig    sigval</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;logical&gt;   &lt;numeric&gt; &lt;logical&gt; &lt;numeric&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1          TRUE 0.000999001      TRUE         1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2         FALSE 0.997002997     FALSE         0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3         FALSE 0.000999001      TRUE        -1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4         FALSE 0.972027972     FALSE         0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5         FALSE 1.000000000     FALSE         0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ...         ...         ...       ...       ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 20         TRUE 0.000999001      TRUE         1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 21        FALSE 0.000999001      TRUE        -1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 22           NA          NA        NA        NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 23        FALSE 0.057942058     FALSE         0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 24         TRUE 0.000999001      TRUE         1</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

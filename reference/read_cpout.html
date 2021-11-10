@@ -124,7 +124,7 @@ pipeline." />
     <div class="ref-description">
     <p>Reader function to generate a
 <code>SpatialExperiment</code> or
-<code>SingleCellExperiment</code> object from single-cell data
+<code><a href='https://rdrr.io/pkg/SingleCellExperiment/man/SingleCellExperiment.html'>SingleCellExperiment</a></code> object from single-cell data
 obtained by the 
 <a href='https://github.com/BodenmillerGroup/ImcSegmentationPipeline'>ImcSegmentationPipeline</a>
 pipeline.</p>
@@ -250,7 +250,7 @@ entries of the <code>image_file</code> contain the image specific scaling factor
       <th>return_as</th>
       <td><p>should the object be returned as
 <code>SpatialExperiment</code> (<code>return_as = "spe"</code>) or
-<code>SingleCellExperiment</code> (<code>return_as = "sce"</code>).</p></td>
+<code><a href='https://rdrr.io/pkg/SingleCellExperiment/man/SingleCellExperiment.html'>SingleCellExperiment</a></code> (<code>return_as = "sce"</code>).</p></td>
     </tr>
     </table>
 
@@ -291,43 +291,45 @@ with the cell-cell interaction graphs</p></div>
 <p>Nils Eling (<a href='mailto:nils.eling@dqbm.uzh.ch'>nils.eling@dqbm.uzh.ch</a>)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>path</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata/mockData/cpout"</span>, package <span class='op'>=</span> <span class='st'>"imcRtools"</span><span class='op'>)</span>
-
-<span class='co'># Read in as SpatialExperiment object</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>read_cpout</span><span class='op'>(</span><span class='va'>path</span>, graph_file <span class='op'>=</span> <span class='st'>"Object_relationships.csv"</span><span class='op'>)</span>
-<span class='va'>x</span>
-</div><div class='output co'>#&gt; class: SpatialExperiment 
-#&gt; dim: 5 219 
-#&gt; metadata(0):
-#&gt; assays(1): counts
-#&gt; rownames(5): Ag107 Pr141 Sm147 Eu153 Yb172
-#&gt; rowData names(5): Tube.Number Metal.Tag Target ilastik full
-#&gt; colnames: NULL
-#&gt; colData names(6): sample_id ObjectNumber ... Metadata_acid
-#&gt;   Metadata_description
-#&gt; reducedDimNames(0):
-#&gt; mainExpName: NULL
-#&gt; altExpNames(0):
-#&gt; spatialData names(0) :
-#&gt; spatialCoords names(2) : Pos_X Pos_Y
-#&gt; imgData names(1): sample_id</div><div class='input'>
-<span class='co'># Read in as SingleCellExperiment object</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>read_cpout</span><span class='op'>(</span><span class='va'>path</span>, graph_file <span class='op'>=</span> <span class='st'>"Object_relationships.csv"</span>, 
-                return_as <span class='op'>=</span> <span class='st'>"sce"</span><span class='op'>)</span>
-<span class='va'>x</span>
-</div><div class='output co'>#&gt; class: SingleCellExperiment 
-#&gt; dim: 5 219 
-#&gt; metadata(0):
-#&gt; assays(1): counts
-#&gt; rownames(5): Ag107 Pr141 Sm147 Eu153 Yb172
-#&gt; rowData names(5): Tube.Number Metal.Tag Target ilastik full
-#&gt; colnames: NULL
-#&gt; colData names(8): sample_id ObjectNumber ... Metadata_acid
-#&gt;   Metadata_description
-#&gt; reducedDimNames(0):
-#&gt; mainExpName: NULL
-#&gt; altExpNames(0):</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>path</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata/mockData/cpout"</span>, package <span class='op'>=</span> <span class='st'>"imcRtools"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Read in as SpatialExperiment object</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>read_cpout</span><span class='op'>(</span><span class='va'>path</span>, graph_file <span class='op'>=</span> <span class='st'>"Object_relationships.csv"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> class: SpatialExperiment </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> dim: 5 219 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> metadata(0):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> assays(1): counts</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> rownames(5): Ag107 Pr141 Sm147 Eu153 Yb172</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> rowData names(5): Tube.Number Metal.Tag Target ilastik full</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> colnames: NULL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> colData names(6): sample_id ObjectNumber ... Metadata_acid</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Metadata_description</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> reducedDimNames(0):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> mainExpName: NULL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> altExpNames(0):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> spatialData names(0) :</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> spatialCoords names(2) : Pos_X Pos_Y</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> imgData names(1): sample_id</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Read in as SingleCellExperiment object</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>read_cpout</span><span class='op'>(</span><span class='va'>path</span>, graph_file <span class='op'>=</span> <span class='st'>"Object_relationships.csv"</span>, </span>
+<span class='r-in'>                return_as <span class='op'>=</span> <span class='st'>"sce"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> class: SingleCellExperiment </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> dim: 5 219 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> metadata(0):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> assays(1): counts</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> rownames(5): Ag107 Pr141 Sm147 Eu153 Yb172</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> rowData names(5): Tube.Number Metal.Tag Target ilastik full</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> colnames: NULL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> colData names(8): sample_id ObjectNumber ... Metadata_acid</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Metadata_description</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> reducedDimNames(0):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> mainExpName: NULL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> altExpNames(0):</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

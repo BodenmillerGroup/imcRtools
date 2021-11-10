@@ -174,31 +174,38 @@ criteria.</p>
 Nils Eling (<a href='mailto:nils.eling@dqbm.uzh.ch'>nils.eling@dqbm.uzh.ch</a>)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>path</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata/spillover"</span>, package <span class='op'>=</span> <span class='st'>"imcRtools"</span><span class='op'>)</span>
-<span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'><a href='readSCEfromTXT.html'>readSCEfromTXT</a></span><span class='op'>(</span><span class='va'>path</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Spotted channels:  Dy161, Dy162, Dy163, Dy164
-#&gt; Acquired channels:  Dy161, Dy162, Dy163, Dy164
-#&gt; Channels spotted but not acquired:  
-#&gt; Channels acquired but not spotted:  </div><div class='input'><span class='fu'>assay</span><span class='op'>(</span><span class='va'>sce</span>, <span class='st'>"exprs"</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Hyperbolic.html'>asinh</a></span><span class='op'>(</span><span class='fu'>counts</span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span><span class='op'>/</span><span class='fl'>5</span><span class='op'>)</span>
-
-<span class='co'># Pre-process via CATALYST</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/HelenaLC/CATALYST'>CATALYST</a></span><span class='op'>)</span>
-
-<span class='va'>bc_key</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>$</span><span class='va'>sample_mass</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/CATALYST/man/assignPrelim.html'>assignPrelim</a></span><span class='op'>(</span><span class='va'>sce</span>, bc_key <span class='op'>=</span> <span class='va'>bc_key</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Debarcoding data...</span></div><div class='output co'>#&gt; <span class='message'> o ordering</span></div><div class='output co'>#&gt; <span class='message'> o classifying events</span></div><div class='output co'>#&gt; <span class='message'>Normalizing...</span></div><div class='output co'>#&gt; <span class='message'>Computing deltas...</span></div><div class='input'><span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/CATALYST/man/estCutoffs.html'>estCutoffs</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span>
-<span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/CATALYST/man/applyCutoffs.html'>applyCutoffs</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span>
-
-<span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'>filterPixels</span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span>
-
-<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>$</span><span class='va'>sample_mass</span>, <span class='va'>sce</span><span class='op'>$</span><span class='va'>bc_id</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;      
-#&gt;         0 161 162 163 164
-#&gt;   161   0 100   0   0   0
-#&gt;   162   0   0 100   0   0
-#&gt;   163   0   0   0 100   0
-#&gt;   164   2   0   0   0  98</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>path</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata/spillover"</span>, package <span class='op'>=</span> <span class='st'>"imcRtools"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'><a href='readSCEfromTXT.html'>readSCEfromTXT</a></span><span class='op'>(</span><span class='va'>path</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Spotted channels:  Dy161, Dy162, Dy163, Dy164</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Acquired channels:  Dy161, Dy162, Dy163, Dy164</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Channels spotted but not acquired:  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Channels acquired but not spotted:  </span>
+<span class='r-in'><span class='fu'>assay</span><span class='op'>(</span><span class='va'>sce</span>, <span class='st'>"exprs"</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Hyperbolic.html'>asinh</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/SingleCellExperiment/man/assays.html'>counts</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span><span class='op'>/</span><span class='fl'>5</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Pre-process via CATALYST</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/HelenaLC/CATALYST'>CATALYST</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>bc_key</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>$</span><span class='va'>sample_mass</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/CATALYST/man/assignPrelim.html'>assignPrelim</a></span><span class='op'>(</span><span class='va'>sce</span>, bc_key <span class='op'>=</span> <span class='va'>bc_key</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Debarcoding data...</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>  o ordering</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>  o classifying events</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Normalizing...</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Computing deltas...</span>
+<span class='r-in'><span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/CATALYST/man/estCutoffs.html'>estCutoffs</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/CATALYST/man/applyCutoffs.html'>applyCutoffs</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'>filterPixels</span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>$</span><span class='va'>sample_mass</span>, <span class='va'>sce</span><span class='op'>$</span><span class='va'>bc_id</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         0 161 162 163 164</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   161   0 100   0   0   0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   162   0   0 100   0   0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   163   0   0   0 100   0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   164   2   0   0   0  98</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

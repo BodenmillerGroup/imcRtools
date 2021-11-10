@@ -124,7 +124,7 @@ pipeline." />
     <div class="ref-description">
     <p>Reader function to generate a
 <code>SpatialExperiment</code> or
-<code>SingleCellExperiment</code> object from single-cell data
+<code><a href='https://rdrr.io/pkg/SingleCellExperiment/man/SingleCellExperiment.html'>SingleCellExperiment</a></code> object from single-cell data
 obtained by the 
 <a href='https://github.com/BodenmillerGroup/steinbock'>steinbock</a>
 pipeline.</p>
@@ -212,7 +212,7 @@ file containing the channel names.</p></td>
       <th>return_as</th>
       <td><p>should the object be returned as 
 <code>SpatialExperiment</code> (<code>return_as = "spe"</code>) or
-<code>SingleCellExperiment</code> (<code>return_as = "sce"</code>).</p></td>
+<code><a href='https://rdrr.io/pkg/SingleCellExperiment/man/SingleCellExperiment.html'>SingleCellExperiment</a></code> (<code>return_as = "sce"</code>).</p></td>
     </tr>
     <tr>
       <th>BPPARAM</th>
@@ -254,77 +254,81 @@ with the cell-cell interaction graphs</p>
     <p>Nils Eling (<a href='mailto:nils.eling@dqbm.uzh.ch'>nils.eling@dqbm.uzh.ch</a>)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>path</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata/mockData/steinbock"</span>, package <span class='op'>=</span> <span class='st'>"imcRtools"</span><span class='op'>)</span>
-
-<span class='co'># Read in as SpatialExperiment object</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>read_steinbock</span><span class='op'>(</span><span class='va'>path</span><span class='op'>)</span>
-<span class='va'>x</span>
-</div><div class='output co'>#&gt; class: SpatialExperiment 
-#&gt; dim: 5 218 
-#&gt; metadata(0):
-#&gt; assays(1): counts
-#&gt; rownames(5): Ag107 Cytokeratin 5 Laminin YBX1 H3K27Ac
-#&gt; rowData names(6): channel name ... deepcell Tube.Number
-#&gt; colnames: NULL
-#&gt; colData names(8): sample_id ObjectNumber ... width_px height_px
-#&gt; reducedDimNames(0):
-#&gt; mainExpName: NULL
-#&gt; altExpNames(0):
-#&gt; spatialData names(0) :
-#&gt; spatialCoords names(2) : Pos_X Pos_Y
-#&gt; imgData names(1): sample_id</div><div class='input'>
-<span class='co'># Read in as SingleCellExperiment object</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>read_steinbock</span><span class='op'>(</span><span class='va'>path</span>, return_as <span class='op'>=</span> <span class='st'>"sce"</span><span class='op'>)</span>
-<span class='va'>x</span>
-</div><div class='output co'>#&gt; class: SingleCellExperiment 
-#&gt; dim: 5 218 
-#&gt; metadata(0):
-#&gt; assays(1): counts
-#&gt; rownames(5): Ag107 Cytokeratin 5 Laminin YBX1 H3K27Ac
-#&gt; rowData names(6): channel name ... deepcell Tube.Number
-#&gt; colnames: NULL
-#&gt; colData names(10): sample_id ObjectNumber ... width_px height_px
-#&gt; reducedDimNames(0):
-#&gt; mainExpName: NULL
-#&gt; altExpNames(0):</div><div class='input'>
-<span class='co'># Read in a subset of files</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>read_steinbock</span><span class='op'>(</span><span class='va'>path</span>, pattern <span class='op'>=</span> <span class='st'>"mockData1"</span><span class='op'>)</span>
-<span class='va'>x</span>
-</div><div class='output co'>#&gt; class: SpatialExperiment 
-#&gt; dim: 5 32 
-#&gt; metadata(0):
-#&gt; assays(1): counts
-#&gt; rownames(5): Ag107 Cytokeratin 5 Laminin YBX1 H3K27Ac
-#&gt; rowData names(6): channel name ... deepcell Tube.Number
-#&gt; colnames: NULL
-#&gt; colData names(8): sample_id ObjectNumber ... width_px height_px
-#&gt; reducedDimNames(0):
-#&gt; mainExpName: NULL
-#&gt; altExpNames(0):
-#&gt; spatialData names(0) :
-#&gt; spatialCoords names(2) : Pos_X Pos_Y
-#&gt; imgData names(1): sample_id</div><div class='input'>
-<span class='co'># Only read in intensities</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>read_steinbock</span><span class='op'>(</span><span class='va'>path</span>, graphs_folder <span class='op'>=</span> <span class='cn'>NULL</span>, regionprops_folder <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
-<span class='va'>x</span>
-</div><div class='output co'>#&gt; class: SpatialExperiment 
-#&gt; dim: 5 218 
-#&gt; metadata(0):
-#&gt; assays(1): counts
-#&gt; rownames(5): Ag107 Cytokeratin 5 Laminin YBX1 H3K27Ac
-#&gt; rowData names(6): channel name ... deepcell Tube.Number
-#&gt; colnames: NULL
-#&gt; colData names(4): sample_id ObjectNumber width_px height_px
-#&gt; reducedDimNames(0):
-#&gt; mainExpName: NULL
-#&gt; altExpNames(0):
-#&gt; spatialData names(0) :
-#&gt; spatialCoords names(0) :
-#&gt; imgData names(1): sample_id</div><div class='input'>
-<span class='co'># Parallelisation</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>read_steinbock</span><span class='op'>(</span><span class='va'>path</span>, BPPARAM <span class='op'>=</span> <span class='fu'>BiocParallel</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/BiocParallel/man/register.html'>bpparam</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>path</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata/mockData/steinbock"</span>, package <span class='op'>=</span> <span class='st'>"imcRtools"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Read in as SpatialExperiment object</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>read_steinbock</span><span class='op'>(</span><span class='va'>path</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> class: SpatialExperiment </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> dim: 5 218 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> metadata(0):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> assays(1): counts</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> rownames(5): Ag107 Cytokeratin 5 Laminin YBX1 H3K27Ac</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> rowData names(6): channel name ... deepcell Tube.Number</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> colnames: NULL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> colData names(8): sample_id ObjectNumber ... width_px height_px</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> reducedDimNames(0):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> mainExpName: NULL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> altExpNames(0):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> spatialData names(0) :</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> spatialCoords names(2) : Pos_X Pos_Y</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> imgData names(1): sample_id</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Read in as SingleCellExperiment object</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>read_steinbock</span><span class='op'>(</span><span class='va'>path</span>, return_as <span class='op'>=</span> <span class='st'>"sce"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> class: SingleCellExperiment </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> dim: 5 218 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> metadata(0):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> assays(1): counts</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> rownames(5): Ag107 Cytokeratin 5 Laminin YBX1 H3K27Ac</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> rowData names(6): channel name ... deepcell Tube.Number</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> colnames: NULL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> colData names(10): sample_id ObjectNumber ... width_px height_px</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> reducedDimNames(0):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> mainExpName: NULL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> altExpNames(0):</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Read in a subset of files</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>read_steinbock</span><span class='op'>(</span><span class='va'>path</span>, pattern <span class='op'>=</span> <span class='st'>"mockData1"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> class: SpatialExperiment </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> dim: 5 32 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> metadata(0):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> assays(1): counts</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> rownames(5): Ag107 Cytokeratin 5 Laminin YBX1 H3K27Ac</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> rowData names(6): channel name ... deepcell Tube.Number</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> colnames: NULL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> colData names(8): sample_id ObjectNumber ... width_px height_px</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> reducedDimNames(0):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> mainExpName: NULL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> altExpNames(0):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> spatialData names(0) :</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> spatialCoords names(2) : Pos_X Pos_Y</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> imgData names(1): sample_id</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Only read in intensities</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>read_steinbock</span><span class='op'>(</span><span class='va'>path</span>, graphs_folder <span class='op'>=</span> <span class='cn'>NULL</span>, regionprops_folder <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> class: SpatialExperiment </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> dim: 5 218 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> metadata(0):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> assays(1): counts</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> rownames(5): Ag107 Cytokeratin 5 Laminin YBX1 H3K27Ac</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> rowData names(6): channel name ... deepcell Tube.Number</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> colnames: NULL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> colData names(4): sample_id ObjectNumber width_px height_px</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> reducedDimNames(0):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> mainExpName: NULL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> altExpNames(0):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> spatialData names(0) :</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> spatialCoords names(0) :</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> imgData names(1): sample_id</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Parallelisation</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>read_steinbock</span><span class='op'>(</span><span class='va'>path</span>, BPPARAM <span class='op'>=</span> <span class='fu'>BiocParallel</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/BiocParallel/man/register.html'>bpparam</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
