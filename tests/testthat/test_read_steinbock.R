@@ -715,7 +715,7 @@ test_that("read_steinbock function works", {
 })
 
 test_that("read_steinbock function works when files are missing", {
-    skip_on_os(os = "windows", arch = "x86_64")
+    skip_on_os(os = "windows")
     path <- system.file("extdata/mockData/steinbock", package = "imcRtools")
     
     # Move files to tmp location
