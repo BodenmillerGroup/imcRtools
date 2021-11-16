@@ -24,7 +24,7 @@
     dat_temp <- dcast.data.table(dat_table, 
                                     "group_by + from_label + from ~ to_label",
                                     value.var = "ct", fun.aggregate = sum,
-                                    fill = 0) 
+                                    fill = 0, drop = FALSE) 
     dat_temp <- melt.data.table(dat_temp, id.vars = c("group_by", "from_label", 
                                                         "from"),
                         variable.name = "to_label",
@@ -64,7 +64,7 @@
     dat_temp <- dcast.data.table(dat_table, 
                                     "group_by + from_label + from ~ to_label",
                                     value.var = "ct", fun.aggregate = sum, 
-                                    fill = 0) 
+                                    fill = 0, drop = FALSE) 
     dat_temp <- melt.data.table(dat_temp, id.vars = c("group_by", "from_label", 
                                                         "from"),
                         variable.name = "to_label",

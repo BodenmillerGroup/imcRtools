@@ -181,6 +181,22 @@ test_that("testInteractions function works", {
     expect_equal(cur_test$p < 0.5, cur_test$sig)
     expect_equal(cur_test$sig * sign(cur_test$interaction - 0.5), cur_test$sigval)  
     
+    # Corner case settings
+    # one cell of a given cell-type and no neighbors
+    cur_sce <- pancreasSCE
+    cur_sce$CellType[123] <- "test"
+    cur_sce <- buildSpatialGraph(cur_sce, img_id = "ImageNb", 
+                                 type = "expansion", threshold = 7)
+    
+    plotSpatial(cur_sce, node_color_by = "CellType", img_id = "ImageNb", 
+                draw_edges = TRUE, colPairName = "expansion_interaction_graph")
+    
+    expect_silent(cur_out <- testInteractions(cur_sce, 
+                                              group_by = "ImageNb", 
+                                              label = "CellType",
+                                              colPairName = "expansion_interaction_graph",
+                                              iter = 100))
+    
     # Fail
     expect_error(testInteractions("test"),
                  regexp = "'object' not of type 'SingleCellExperiment'.",

@@ -162,7 +162,7 @@ testInteractions <- function(object,
                                         patch_size, colPairName)
     .valid.testInteractions.input(iter, p_threshold)
 
-    cur_label <- colData(object)[[label]]
+    cur_label <- factor(colData(object)[[label]])
     cur_table <- .prepare_table(object, group_by, cur_label, colPairName)
     
     # Count interactions
