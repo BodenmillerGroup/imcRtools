@@ -112,7 +112,7 @@ countInteractions <- function(object,
     .valid.countInteractions.input(object, group_by, label, method,
                                         patch_size, colPairName)
     
-    cur_label <- colData(object)[[label]]
+    cur_label <- factor(colData(object)[[label]])
     cur_table <- .prepare_table(object, group_by, cur_label, colPairName)
     
     # Count interactions

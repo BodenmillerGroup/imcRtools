@@ -1,20 +1,25 @@
 # Helper functions for the neighbourhood permutation test
 #' @importFrom data.table as.data.table
 .prepare_table <- function(object, group_by, cur_label, colPairName) {
-    cur_tab <- as.data.frame(colPair(object, colPairName))
+    cur_tab <- as.data.table(colPair(object, colPairName))
     cur_tab$group_by <- colData(object)[[group_by]][cur_tab$from]
     cur_tab$from_label <- cur_label[cur_tab$from]
     cur_tab$to_label <- cur_label[cur_tab$to]
     cur_tab$ct <- 1
-    return(as.data.table(cur_tab))
+    return(cur_tab)
 }
 
+#' @importFrom data.table CJ
 .aggregate_histo <- function(dat_table) {
     . <- ct <- .N <- NULL
     dat_temp <- dat_table[, .(ct=.N), by = c("group_by", "from_label", 
                                                 "to_label", "from")]
     dat_temp <- dat_temp[, .(ct=mean(ct)), by = c("group_by", "from_label", 
                                                     "to_label")]
+    dat_temp <- dat_temp[CJ(group_by = unique(dat_temp$group_by),
+                            from_label = as.factor(levels(dat_temp$from_label)),
+                            to_label = as.factor(levels(dat_temp$to_label))), 
+                         on = c("group_by", "from_label", "to_label")]
     return(dat_temp)
 }
 
@@ -24,13 +29,27 @@
     dat_temp <- dcast.data.table(dat_table, 
                                     "group_by + from_label + from ~ to_label",
                                     value.var = "ct", fun.aggregate = sum,
-                                    fill = 0, drop = FALSE) 
+                                    fill = 0) 
     dat_temp <- melt.data.table(dat_temp, id.vars = c("group_by", "from_label", 
                                                         "from"),
                         variable.name = "to_label",
                         value.name = "ct") 
     
+    dat_temp <- dcast.data.table(dat_temp, "group_by + from_label ~ to_label",
+                                 value.var = "ct",
+                                 fun.aggregate = mean, 
+                                 fill = 0, drop = FALSE) 
+    
+    dat_temp <- melt.data.table(dat_temp, id.vars = c("group_by", "from_label"),
+                                variable.name = "to_label",
+                                value.name = "ct")
+    
     if (check_missing) {
+        dat_temp <- dat_temp[CJ(group_by = unique(dat_table$group_by),
+                                from_label = as.factor(levels(dat_table$from_label)),
+                                to_label = as.factor(levels(dat_table$to_label))), 
+                             on = c("group_by", "from_label", "to_label")]
+        
         # Set all cells that are not contained in specific groups to NA
         cur_dat <- unclass(table(colData(object)[[group_by]], 
                                     colData(object)[[label]]))
@@ -48,14 +67,6 @@
         }
     }
     
-    dat_temp <- dcast.data.table(dat_temp, "group_by + from_label ~ to_label",
-                            value.var = "ct",
-                            fun.aggregate = mean, 
-                            fill = 0) 
-    
-    dat_temp <- melt.data.table(dat_temp, id.vars = c("group_by", "from_label"),
-                            variable.name = "to_label",
-                            value.name = "ct")
     return(dat_temp)
 }
 
@@ -64,13 +75,27 @@
     dat_temp <- dcast.data.table(dat_table, 
                                     "group_by + from_label + from ~ to_label",
                                     value.var = "ct", fun.aggregate = sum, 
-                                    fill = 0, drop = FALSE) 
+                                    fill = 0) 
     dat_temp <- melt.data.table(dat_temp, id.vars = c("group_by", "from_label", 
                                                         "from"),
                         variable.name = "to_label",
                         value.name = "ct")
     
+    dat_temp[, ct := patch_size <= ct ]
+    
+    dat_temp <- dcast.data.table(dat_temp, "group_by + from_label ~ to_label",
+                                 value.var = "ct",
+                                 fun.aggregate = mean, fill = 0, drop = FALSE) 
+    dat_temp <- melt.data.table(dat_temp, id.vars = c("group_by", "from_label"),
+                                variable.name = "to_label",
+                                value.name = "ct")
+    
     if (check_missing) {
+        dat_temp <- dat_temp[CJ(group_by = unique(dat_table$group_by),
+                                from_label = as.factor(levels(dat_table$from_label)),
+                                to_label = as.factor(levels(dat_table$to_label))), 
+                             on = c("group_by", "from_label", "to_label")]
+        
         # Set all cells that are not contained in specific groups to NA
         cur_dat <- unclass(table(colData(object)[[group_by]], 
                                     colData(object)[[label]]))
@@ -88,14 +113,6 @@
         }
     }
     
-    dat_temp[, ct := patch_size <= ct ]
-    
-    dat_temp <- dcast.data.table(dat_temp, "group_by + from_label ~ to_label",
-                        value.var = "ct",
-                        fun.aggregate = mean, fill = 0) 
-    dat_temp <- melt.data.table(dat_temp, id.vars = c("group_by", "from_label"),
-                                variable.name = "to_label",
-                                value.name = "ct")
     return(dat_temp)
 }
 
@@ -103,7 +120,7 @@
 .permute_labels <- function(object, group_by, label, iter, patch_size,
                             colPairName, method, BPPARAM) {
     
-    cur_lab_table <- data.table(label = colData(object)[[label]],
+    cur_lab_table <- data.table(label = as.factor(colData(object)[[label]]),
                                 group_by = colData(object)[[group_by]])
     
     . <- label <- NULL

@@ -241,36 +241,38 @@ test_that("testInteractions gives same results as neighbouRhood", {
     histocat_aggregation <- as.data.frame(histocat_aggregation)
     histocat_aggregation <- histocat_aggregation[order(paste(histocat_aggregation[,1], histocat_aggregation[,2], histocat_aggregation[,3])),]
     
-    expect_equal(cur_histo$group_by, as.character(histocat_aggregation$group))
-    expect_equal(cur_histo$from_label, histocat_aggregation$FirstLabel)
-    expect_equal(cur_histo$to_label, histocat_aggregation$SecondLabel)
-    expect_equal(cur_histo$ct, histocat_aggregation$ct)
+    expect_equal(cur_histo$group_by[!is.na(cur_histo$ct)], as.character(histocat_aggregation$group))
+    expect_equal(as.character(cur_histo$from_label[!is.na(cur_histo$ct)]), as.character(histocat_aggregation$FirstLabel))
+    expect_equal(as.character(cur_histo$to_label[!is.na(cur_histo$ct)]), as.character(histocat_aggregation$SecondLabel))
+    expect_equal(cur_histo$ct[!is.na(cur_histo$ct)], histocat_aggregation$ct)
     
     classic_aggregation <- aggregate_classic(labels_applied)
     cur_classic <- .aggregate_classic(cur_table, object = cur_spe, group_by = "sample_id", label = "label")
     
-    cur_classic <- as.data.frame(cur_classic)
-    cur_classic <- cur_classic[order(paste(cur_classic[,1], cur_classic[,2], cur_classic[,3])),]
-    classic_aggregation <- as.data.frame(classic_aggregation)
-    classic_aggregation <- classic_aggregation[order(paste(classic_aggregation[,1], classic_aggregation[,2], classic_aggregation[,3])),]
+    setorder(classic_aggregation, "group", "FirstLabel", "SecondLabel")
+    cur_classic$group_by <- as.numeric(cur_classic$group_by)
+    cur_classic <- cur_classic[classic_aggregation,, on = c("group_by==group", "from_label==FirstLabel", "to_label==SecondLabel")]
+    setorder(cur_classic, "group_by", "from_label", "to_label")
     
-    expect_equal(cur_classic$group_by, as.character(classic_aggregation$group))
+    expect_equal(cur_classic$group_by, classic_aggregation$group)
     expect_equal(cur_classic$from_label, classic_aggregation$FirstLabel)
     expect_equal(cur_classic$to_label, classic_aggregation$SecondLabel)
     expect_equal(cur_classic$ct[!is.na(cur_classic$ct)], classic_aggregation$ct[!is.na(cur_classic$ct)])
+    expect_true(all(classic_aggregation$ct[is.na(cur_classic$ct)] == 0))
     
     patch_aggregation <- aggregate_classic_patch(labels_applied, patch_size = 3)
     cur_patch <- .aggregate_classic_patch(cur_table, patch_size = 3, object = cur_spe, group_by = "sample_id", label = "label")
     
-    cur_patch <- as.data.frame(cur_patch)
-    cur_patch <- cur_patch[order(paste(cur_patch[,1], cur_patch[,2], cur_patch[,3])),]
-    patch_aggregation <- as.data.frame(patch_aggregation)
-    patch_aggregation <- patch_aggregation[order(paste(patch_aggregation[,1], patch_aggregation[,2], patch_aggregation[,3])),]
+    setorder(patch_aggregation, "group", "FirstLabel", "SecondLabel")
+    cur_patch$group_by <- as.numeric(cur_patch$group_by)
+    cur_patch <- cur_patch[patch_aggregation,, on = c("group_by==group", "from_label==FirstLabel", "to_label==SecondLabel")]
+    setorder(cur_patch, "group_by", "from_label", "to_label")
     
-    expect_equal(cur_patch$group_by, as.character(patch_aggregation$group))
+    expect_equal(cur_patch$group_by, patch_aggregation$group)
     expect_equal(cur_patch$from_label, patch_aggregation$FirstLabel)
     expect_equal(cur_patch$to_label, patch_aggregation$SecondLabel)
     expect_equal(cur_patch$ct[!is.na(cur_patch$ct)], patch_aggregation$ct[!is.na(cur_patch$ct)])
+    expect_true(all(patch_aggregation$ct[is.na(cur_patch$ct)] == 0))
     
     # With cytomapper data
     ###################################### classic #############################
@@ -306,8 +308,11 @@ test_that("testInteractions gives same results as neighbouRhood", {
                                                label = "CellType",
                                                colPairName = "knn_interaction_graph")
     
+    imcRtools_classic <- as.data.table(imcRtools_classic)[cur_classic,, on = c("group_by==group", "from_label==FirstLabel", "to_label==SecondLabel")]
+    setorder(imcRtools_classic, "group_by", "from_label", "to_label")
+    
     expect_equal(cur_classic$group, imcRtools_classic$group_by)
-    expect_equal(as.character(cur_classic$FirstLabel), imcRtools_classic$from_label)
+    expect_equal(cur_classic$FirstLabel, imcRtools_classic$from_label)
     expect_equal(cur_classic$SecondLabel, imcRtools_classic$to_label)
     expect_equal(cur_classic$ct[!is.na(imcRtools_classic$ct)], imcRtools_classic$ct[!is.na(imcRtools_classic$ct)])
 
@@ -331,8 +336,11 @@ test_that("testInteractions gives same results as neighbouRhood", {
                                                    iter = 100,
                                                BPPARAM = SerialParam(RNGseed = 123))
     
+    imcRtools_classic_perm <- as.data.table(imcRtools_classic_perm)[dat_p,, on = c("group_by==group", "from_label==FirstLabel", "to_label==SecondLabel")]
+    setorder(imcRtools_classic_perm, "group_by", "from_label", "to_label")
+    
     expect_equal(dat_p$group, imcRtools_classic_perm$group_by)
-    expect_equal(as.character(dat_p$FirstLabel), imcRtools_classic_perm$from_label)
+    expect_equal(dat_p$FirstLabel, imcRtools_classic_perm$from_label)
     expect_equal(dat_p$SecondLabel, imcRtools_classic_perm$to_label)
     expect_equal(dat_p$p_gt[!is.na(imcRtools_classic$ct)], imcRtools_classic_perm$p_gt[!is.na(imcRtools_classic$ct)])
     expect_equal(dat_p$p_lt[!is.na(imcRtools_classic$ct)], imcRtools_classic_perm$p_lt[!is.na(imcRtools_classic$ct)])
@@ -355,9 +363,12 @@ test_that("testInteractions gives same results as neighbouRhood", {
                                                colPairName = "knn_interaction_graph",
                                                method = "histocat")
     
+    imcRtools_histo <- as.data.table(imcRtools_histo)[cur_histo,, on = c("group_by==group", "from_label==FirstLabel", "to_label==SecondLabel")]
+    setorder(imcRtools_histo, "group_by", "from_label", "to_label")
+    
     expect_equal(cur_histo$group, imcRtools_histo$group_by)
-    expect_equal(as.character(cur_histo$FirstLabel), imcRtools_histo$from_label)
-    expect_equal(as.character(cur_histo$SecondLabel), imcRtools_histo$to_label)
+    expect_equal(cur_histo$FirstLabel, imcRtools_histo$from_label)
+    expect_equal(cur_histo$SecondLabel, imcRtools_histo$to_label)
     expect_equal(cur_histo$ct, imcRtools_histo$ct)
     
     # Perturbation
@@ -381,9 +392,12 @@ test_that("testInteractions gives same results as neighbouRhood", {
                                             method = "histocat", 
                                             BPPARAM = SerialParam(RNGseed = 123))
     
+    imcRtools_histo_perm <- as.data.table(imcRtools_histo_perm)[dat_p,, on = c("group_by==group", "from_label==FirstLabel", "to_label==SecondLabel")]
+    setorder(imcRtools_histo_perm, "group_by", "from_label", "to_label")
+    
     expect_equal(dat_p$group, imcRtools_histo_perm$group_by)
-    expect_equal(as.character(dat_p$FirstLabel), imcRtools_histo_perm$from_label)
-    expect_equal(as.character(dat_p$SecondLabel), imcRtools_histo_perm$to_label)
+    expect_equal(dat_p$FirstLabel, imcRtools_histo_perm$from_label)
+    expect_equal(dat_p$SecondLabel, imcRtools_histo_perm$to_label)
     expect_equal(dat_p$p_gt, imcRtools_histo_perm$p_gt)
     expect_equal(dat_p$p_lt, imcRtools_histo_perm$p_lt)
     expect_equal(dat_p$direction, imcRtools_histo_perm$interaction)
@@ -406,8 +420,11 @@ test_that("testInteractions gives same results as neighbouRhood", {
                                              method = "patch",
                                              patch_size = 3)
     
+    imcRtools_patch <- as.data.table(imcRtools_patch)[cur_patch,, on = c("group_by==group", "from_label==FirstLabel", "to_label==SecondLabel")]
+    setorder(imcRtools_patch, "group_by", "from_label", "to_label")
+    
     expect_equal(cur_patch$group, imcRtools_patch$group_by)
-    expect_equal(as.character(cur_patch$FirstLabel), imcRtools_patch$from_label)
+    expect_equal(cur_patch$FirstLabel, imcRtools_patch$from_label)
     expect_equal(cur_patch$SecondLabel, imcRtools_patch$to_label)
     expect_equal(cur_patch$ct[!is.na(imcRtools_patch$ct)], imcRtools_patch$ct[!is.na(imcRtools_patch$ct)])
     
@@ -433,8 +450,11 @@ test_that("testInteractions gives same results as neighbouRhood", {
                                                  patch_size = 3,
                                              BPPARAM = SerialParam(RNGseed = 123))
     
+    imcRtools_patch_perm <- as.data.table(imcRtools_patch_perm)[dat_p,, on = c("group_by==group", "from_label==FirstLabel", "to_label==SecondLabel")]
+    setorder(imcRtools_patch_perm, "group_by", "from_label", "to_label")
+    
     expect_equal(dat_p$group, imcRtools_patch_perm$group_by)
-    expect_equal(as.character(dat_p$FirstLabel), imcRtools_patch_perm$from_label)
+    expect_equal(dat_p$FirstLabel, imcRtools_patch_perm$from_label)
     expect_equal(dat_p$SecondLabel, imcRtools_patch_perm$to_label)
     expect_equal(dat_p$p_gt[!is.na(imcRtools_patch_perm$ct)], imcRtools_patch_perm$p_gt[!is.na(imcRtools_patch_perm$ct)])
     expect_equal(dat_p$p_lt[!is.na(imcRtools_patch_perm$ct)], imcRtools_patch_perm$p_lt[!is.na(imcRtools_patch_perm$ct)])

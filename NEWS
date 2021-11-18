@@ -82,3 +82,7 @@ Changes in version 0.99.8 (2021-10-11):
 Changes in version 0.99.9 (2021-10-22):
 
 + Removed certain unit tests for 64-bit windows
+
+Changes in version 1.1.1 (2021-11-16):
+
++ Bug fix in testInteractions: consider now all possible combinations of cell types

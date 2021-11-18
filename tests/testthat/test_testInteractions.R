@@ -121,7 +121,6 @@ test_that("testInteractions function works", {
     expect_equal(cur_test$p < 0.5, cur_test$sig)
     expect_equal(cur_test$sig * sign(cur_test$interaction - 0.5), cur_test$sigval)  
     
-    
     ################################ patch ###################################
     expect_silent(cur_out <- testInteractions(pancreasSCE, 
                                                   group_by = "ImageNb", 
@@ -196,6 +195,74 @@ test_that("testInteractions function works", {
                                               label = "CellType",
                                               colPairName = "expansion_interaction_graph",
                                               iter = 100))
+    
+    # Check against countInteractions
+    expect_silent(cur_sn <- countInteractions(cur_sce, 
+                                              group_by = "ImageNb", 
+                                              label = "CellType",
+                                              colPairName = "expansion_interaction_graph"))
+    expect_equal(cur_out$group_by, cur_sn$group_by)
+    expect_equal(cur_out$from_label, cur_sn$from_label)
+    expect_equal(cur_out$to_label, cur_sn$to_label)
+    expect_equal(cur_out$ct, cur_sn$ct)
+    
+    cur_test <- cur_out[!is.na(cur_out$ct),]
+    expect_equal(rowMin(as.matrix(cur_test[,c("p_gt", "p_lt")])), cur_test$p)
+    expect_equal(cur_test$p_gt < cur_test$p_lt, cur_test$interaction)
+    expect_equal(cur_test$p < 0.01, cur_test$sig)
+    expect_equal(cur_test$sig * sign(cur_test$interaction - 0.5), cur_test$sigval)
+    
+    ## histocat
+    expect_silent(cur_out <- testInteractions(cur_sce, 
+                                              group_by = "ImageNb", 
+                                              label = "CellType",
+                                              method = "histocat",
+                                              colPairName = "expansion_interaction_graph",
+                                              iter = 100))
+    
+    # Check against countInteractions
+    expect_silent(cur_sn <- countInteractions(cur_sce, 
+                                              group_by = "ImageNb", 
+                                              label = "CellType",
+                                              method = "histocat",
+                                              colPairName = "expansion_interaction_graph"))
+    expect_equal(cur_out$group_by, cur_sn$group_by)
+    expect_equal(cur_out$from_label, cur_sn$from_label)
+    expect_equal(cur_out$to_label, cur_sn$to_label)
+    expect_equal(cur_out$ct, cur_sn$ct)
+    
+    cur_test <- cur_out[!is.na(cur_out$ct),]
+    expect_equal(rowMin(as.matrix(cur_test[,c("p_gt", "p_lt")])), cur_test$p)
+    expect_equal(cur_test$p_gt < cur_test$p_lt, cur_test$interaction)
+    expect_equal(cur_test$p < 0.01, cur_test$sig)
+    expect_equal(cur_test$sig * sign(cur_test$interaction - 0.5), cur_test$sigval)
+    
+    ## patch
+    expect_silent(cur_out <- testInteractions(cur_sce, 
+                                              group_by = "ImageNb", 
+                                              label = "CellType",
+                                              method = "patch",
+                                              patch_size = 1,
+                                              colPairName = "expansion_interaction_graph",
+                                              iter = 100))
+    
+    # Check against countInteractions
+    expect_silent(cur_sn <- countInteractions(cur_sce, 
+                                              group_by = "ImageNb", 
+                                              label = "CellType",
+                                              method = "patch",
+                                              patch_size = 1,
+                                              colPairName = "expansion_interaction_graph"))
+    expect_equal(cur_out$group_by, cur_sn$group_by)
+    expect_equal(cur_out$from_label, cur_sn$from_label)
+    expect_equal(cur_out$to_label, cur_sn$to_label)
+    expect_equal(cur_out$ct, cur_sn$ct)
+    
+    cur_test <- cur_out[!is.na(cur_out$ct),]
+    expect_equal(rowMin(as.matrix(cur_test[,c("p_gt", "p_lt")])), cur_test$p)
+    expect_equal(cur_test$p_gt < cur_test$p_lt, cur_test$interaction)
+    expect_equal(cur_test$p < 0.01, cur_test$sig)
+    expect_equal(cur_test$sig * sign(cur_test$interaction - 0.5), cur_test$sigval)
     
     # Fail
     expect_error(testInteractions("test"),
