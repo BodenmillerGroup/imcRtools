@@ -74,7 +74,7 @@ of these clusters are detected as well." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
       </span>
     </div>
 
@@ -207,10 +207,12 @@ cell in <code>colData(object)[[name]]</code>.</p>
 detection.</p>
 <p>2. Patches of connected cells are detected. Here, cell-to-cell connections
 are defined by the interaction graph stored in 
-<code>colPair(object, colPairName)</code>.</p>
+<code>colPair(object, colPairName)</code>. At this point, patches that contain 
+fewer than <code>min_patch_size</code> cells are removed.</p>
 <p>3. If <code>expand_by &gt; 0</code>, a concave (default) or convex hull is constructed
 around each patch. This is is then expanded by <code>expand_by</code> and cells
-within the expanded hull are detected and assigned to the patch.</p>
+within the expanded hull are detected and assigned to the patch. This 
+expansion only works if a patch contains at least 3 cells.</p>
 <p>The returned object contains an additional entry 
 <code>colData(object)[[name]]</code>, which stores the patch ID per cell. <code>NA</code>
 indicate cells that are not part of a patch.</p>

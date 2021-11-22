@@ -73,7 +73,7 @@ a cell of type A has using different approaches." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
       </span>
     </div>
 
@@ -231,20 +231,20 @@ interactions per grouping level.</p></div>
 <span class='r-in'>                                label <span class='op'>=</span> <span class='st'>"CellType"</span>, </span>
 <span class='r-in'>                                method <span class='op'>=</span> <span class='st'>"classic"</span>,</span>
 <span class='r-in'>                                colPairName <span class='op'>=</span> <span class='st'>"knn_interaction_graph"</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> DataFrame with 24 rows and 4 columns</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>      group_by  from_label   to_label        ct</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;integer&gt; &lt;character&gt;   &lt;factor&gt; &lt;numeric&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1           1  celltype_A celltype_A  1.823529</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2           1  celltype_A celltype_B  0.470588</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3           1  celltype_A celltype_C  0.705882</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4           1  celltype_B celltype_A  0.875000</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5           1  celltype_B celltype_B  0.250000</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> ...       ...         ...        ...       ...</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 20          3  celltype_B celltype_B  2.363636</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 21          3  celltype_B celltype_C  0.636364</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 22          3  celltype_C celltype_A        NA</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 23          3  celltype_C celltype_B  0.704918</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 24          3  celltype_C celltype_C  2.295082</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> DataFrame with 27 rows and 4 columns</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      group_by from_label   to_label        ct</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;integer&gt;   &lt;factor&gt;   &lt;factor&gt; &lt;numeric&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1           1 celltype_A celltype_A  1.823529</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2           1 celltype_A celltype_B  0.470588</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3           1 celltype_A celltype_C  0.705882</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4           1 celltype_B celltype_A  0.875000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5           1 celltype_B celltype_B  0.250000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ...       ...        ...        ...       ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 23          3 celltype_B celltype_B  2.363636</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 24          3 celltype_B celltype_C  0.636364</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 25          3 celltype_C celltype_A        NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 26          3 celltype_C celltype_B  0.704918</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 27          3 celltype_C celltype_C  2.295082</span>
 <span class='r-in'>                                </span>
 <span class='r-in'><span class='co'># Histocat style calculation</span></span>
 <span class='r-in'><span class='op'>(</span><span class='va'>out</span> <span class='op'>&lt;-</span> <span class='fu'>countInteractions</span><span class='op'>(</span><span class='va'>pancreasSCE</span>, </span>
@@ -252,20 +252,20 @@ interactions per grouping level.</p></div>
 <span class='r-in'>                                label <span class='op'>=</span> <span class='st'>"CellType"</span>, </span>
 <span class='r-in'>                                method <span class='op'>=</span> <span class='st'>"histocat"</span>,</span>
 <span class='r-in'>                                colPairName <span class='op'>=</span> <span class='st'>"knn_interaction_graph"</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> DataFrame with 22 rows and 4 columns</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>      group_by  from_label    to_label        ct</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;integer&gt; &lt;character&gt; &lt;character&gt; &lt;numeric&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1           1  celltype_A  celltype_A   1.93750</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2           1  celltype_A  celltype_B   1.14286</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3           1  celltype_A  celltype_C   1.33333</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4           1  celltype_B  celltype_A   1.16667</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5           1  celltype_B  celltype_B   1.00000</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> ...       ...         ...         ...       ...</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 18          2  celltype_C  celltype_C   2.63636</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 19          3  celltype_B  celltype_B   2.36364</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 20          3  celltype_B  celltype_C   1.31250</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 21          3  celltype_C  celltype_B   1.65385</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 22          3  celltype_C  celltype_C   2.45614</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> DataFrame with 27 rows and 4 columns</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      group_by from_label   to_label        ct</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;integer&gt;   &lt;factor&gt;   &lt;factor&gt; &lt;numeric&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1           1 celltype_A celltype_A   1.93750</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2           1 celltype_A celltype_B   1.14286</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3           1 celltype_A celltype_C   1.33333</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4           1 celltype_B celltype_A   1.16667</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5           1 celltype_B celltype_B   1.00000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ...       ...        ...        ...       ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 23          3 celltype_B celltype_B   2.36364</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 24          3 celltype_B celltype_C   1.31250</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 25          3 celltype_C celltype_A        NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 26          3 celltype_C celltype_B   1.65385</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 27          3 celltype_C celltype_C   2.45614</span>
 <span class='r-in'>                                </span>
 <span class='r-in'><span class='co'># Patch style calculation</span></span>
 <span class='r-in'><span class='op'>(</span><span class='va'>out</span> <span class='op'>&lt;-</span> <span class='fu'>countInteractions</span><span class='op'>(</span><span class='va'>pancreasSCE</span>, </span>
@@ -274,20 +274,20 @@ interactions per grouping level.</p></div>
 <span class='r-in'>                                method <span class='op'>=</span> <span class='st'>"patch"</span>,</span>
 <span class='r-in'>                                patch_size <span class='op'>=</span> <span class='fl'>3</span>,</span>
 <span class='r-in'>                                colPairName <span class='op'>=</span> <span class='st'>"knn_interaction_graph"</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> DataFrame with 24 rows and 4 columns</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>      group_by  from_label   to_label        ct</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;integer&gt; &lt;character&gt;   &lt;factor&gt; &lt;numeric&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1           1  celltype_A celltype_A  0.235294</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2           1  celltype_A celltype_B  0.000000</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3           1  celltype_A celltype_C  0.000000</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4           1  celltype_B celltype_A  0.000000</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5           1  celltype_B celltype_B  0.000000</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> ...       ...         ...        ...       ...</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 20          3  celltype_B celltype_B 0.5151515</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 21          3  celltype_B celltype_C 0.0000000</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 22          3  celltype_C celltype_A        NA</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 23          3  celltype_C celltype_B 0.0655738</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 24          3  celltype_C celltype_C 0.5737705</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> DataFrame with 27 rows and 4 columns</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      group_by from_label   to_label        ct</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;integer&gt;   &lt;factor&gt;   &lt;factor&gt; &lt;numeric&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1           1 celltype_A celltype_A  0.235294</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2           1 celltype_A celltype_B  0.000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3           1 celltype_A celltype_C  0.000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4           1 celltype_B celltype_A  0.000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5           1 celltype_B celltype_B  0.000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ...       ...        ...        ...       ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 23          3 celltype_B celltype_B 0.5151515</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 24          3 celltype_B celltype_C 0.0000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 25          3 celltype_C celltype_A        NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 26          3 celltype_C celltype_B 0.0655738</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 27          3 celltype_C celltype_C 0.5737705</span>
 <span class='r-in'>                                </span>
 </pre>
   </div>
