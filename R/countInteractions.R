@@ -112,14 +112,14 @@ countInteractions <- function(object,
     .valid.countInteractions.input(object, group_by, label, method,
                                         patch_size, colPairName)
     
-    cur_label <- colData(object)[[label]]
+    cur_label <- factor(colData(object)[[label]])
     cur_table <- .prepare_table(object, group_by, cur_label, colPairName)
     
     # Count interactions
     if (method == "classic") {
         cur_count <- .aggregate_classic(cur_table, object, group_by, label)
     } else if (method == "histocat") {
-        cur_count <- .aggregate_histo(cur_table)
+        cur_count <- .aggregate_histo(cur_table, object, group_by, label)
     } else if (method == "patch") {
         cur_count <- .aggregate_classic_patch(cur_table, 
                                                 patch_size = patch_size,

@@ -87,6 +87,15 @@ Bioconductor package provides functions and data structure to handle and
 analyse highly multiplexed imaging data (images, masks and single-cell data)
 natively in R.
 
+## Citation
+
+Please cite `imcRtools` as:
+
+```
+Jonas Windhager, Bernd Bodenmiller, Nils Eling (2020). An end-to-end workflow for multiplexed image processing and analysis. 
+    bioRxiv, doi: 10.1101/2021.11.12.468357
+```
+
 ## Contributing
 
 For feature requests, please open an issue [here](https://github.com/BodenmillerGroup/imcRtools/issues).
