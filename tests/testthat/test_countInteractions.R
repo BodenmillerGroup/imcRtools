@@ -25,8 +25,12 @@ test_that("countInteractions function works", {
     
     test <- as.data.frame(test)
     test <- test[order(test$image, test$from_label, test$`as.factor(to_label)`),]
+    
+    cur_out_2 <- cur_out
+    cur_out_2 <- cur_out_2[match(paste(test$image, test$from_label, test$`as.factor(to_label)`),
+                                 paste(cur_out_2$group_by, cur_out_2$from_label, cur_out_2$to_label)),]
 
-    expect_equal(cur_out$ct[!is.na(cur_out$ct)], test$ct[!is.na(cur_out$ct)])   
+    expect_equal(cur_out_2$ct[!is.na(cur_out_2$ct)], test$ct[!is.na(cur_out_2$ct)])   
 
     # As factor
     pancreasSCE$CellType <- as.factor(pancreasSCE$CellType)
@@ -101,7 +105,11 @@ test_that("countInteractions function works", {
         count(as.factor(to_label), .drop = FALSE) %>% ungroup() %>% 
         group_by(image, from_label, `as.factor(to_label)`) %>% summarize(ct = mean(n))
     
-    expect_equal(cur_out_3$ct[!is.na(cur_out_3$ct)], test$ct[!is.na(cur_out_3$ct)]) 
+    cur_out_4 <- cur_out_3
+    cur_out_4 <- cur_out_4[match(paste(test$image, test$from_label, test$`as.factor(to_label)`),
+                                 paste(cur_out_4$group_by, cur_out_4$from_label, cur_out_4$to_label)),]
+    
+    expect_equal(cur_out_4$ct[!is.na(cur_out_4$ct)], test$ct[!is.na(cur_out_4$ct)]) 
     expect_equal(cur_out_3$ct[!is.na(cur_out_3$ct) & cur_out_3$group_by != 3], cur_out$ct[!is.na(cur_out$ct) & cur_out$group_by != 3]) 
     
     data(pancreasSCE)
@@ -149,7 +157,7 @@ test_that("countInteractions function works", {
     test <- as.data.frame(test)
     test <- test[order(test$image, test$from_label, test$`as.factor(to_label)`),]
     
-    expect_equal(cur_out$ct, test$ct)
+    expect_equal(cur_out$ct[!is.na(cur_out$ct)], test$ct)
     
     # As factor
     pancreasSCE$CellType <- as.factor(pancreasSCE$CellType)
@@ -224,8 +232,9 @@ test_that("countInteractions function works", {
         count(as.factor(to_label)) %>% ungroup() %>% 
         group_by(image, from_label, `as.factor(to_label)`) %>% summarize(ct = mean(n))
     
-    expect_equal(cur_out_3$ct, test$ct) 
-    expect_equal(cur_out_3$ct[cur_out_3$group_by != 3], cur_out$ct[cur_out$group_by != 3]) 
+    expect_equal(cur_out_3$ct[!is.na(cur_out_3$ct)], test$ct) 
+    expect_equal(cur_out_3$ct[cur_out_3$group_by != 3 & !is.na(cur_out_3$ct)], 
+                 cur_out$ct[cur_out$group_by != 3]) 
     
     data(pancreasSCE)
     pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn",
@@ -274,7 +283,11 @@ test_that("countInteractions function works", {
     test <- as.data.frame(test)
     test <- test[order(test$image, test$from_label, test$`as.factor(to_label)`),]
     
-    expect_equal(cur_out$ct[!is.na(cur_out$ct)], test$ct[!is.na(cur_out$ct)])
+    cur_out_2 <- cur_out
+    cur_out_2 <- cur_out_2[match(paste(test$image, test$from_label, test$`as.factor(to_label)`),
+                                 paste(cur_out_2$group_by, cur_out_2$from_label, cur_out_2$to_label)),]
+    
+    expect_equal(cur_out_2$ct[!is.na(cur_out_2$ct)], test$ct[!is.na(cur_out_2$ct)])
     
     # As factor
     pancreasSCE$CellType <- as.factor(pancreasSCE$CellType)
@@ -356,7 +369,11 @@ test_that("countInteractions function works", {
         mutate(ct = n >= 3) %>% ungroup() %>% 
         group_by(image, from_label, `as.factor(to_label)`) %>% summarize(ct = mean(ct))
     
-    expect_equal(cur_out_3$ct[!is.na(cur_out_3$ct)], test$ct[!is.na(cur_out_3$ct)]) 
+    cur_out_4 <- cur_out_3
+    cur_out_4 <- cur_out_4[match(paste(test$image, test$from_label, test$`as.factor(to_label)`),
+                                 paste(cur_out_4$group_by, cur_out_4$from_label, cur_out_4$to_label)),]
+    
+    expect_equal(cur_out_4$ct[!is.na(cur_out_4$ct)], test$ct[!is.na(cur_out_4$ct)]) 
     expect_equal(cur_out_3$ct[!is.na(cur_out_3$ct) & cur_out_3$group_by != 3], cur_out$ct[!is.na(cur_out$ct) & cur_out$group_by != 3]) 
     
     data(pancreasSCE)
@@ -393,7 +410,11 @@ test_that("countInteractions function works", {
         mutate(ct = n >= 1) %>% ungroup() %>% 
         group_by(image, from_label, `as.factor(to_label)`) %>% summarize(ct = mean(ct))
     
-    expect_equal(cur_out$ct[!is.na(cur_out$ct)], test$ct[!is.na(cur_out$ct)]) 
+    cur_out_2 <- cur_out
+    cur_out_2 <- cur_out_2[match(paste(test$image, test$from_label, test$`as.factor(to_label)`),
+                                 paste(cur_out_2$group_by, cur_out_2$from_label, cur_out_2$to_label)),]
+    
+    expect_equal(cur_out_2$ct[!is.na(cur_out_2$ct)], test$ct[!is.na(cur_out_2$ct)]) 
     
     data(pancreasSCE)
     pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn",
