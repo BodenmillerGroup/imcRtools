@@ -91,8 +91,7 @@
 #' }
 #' 
 #' \code{NA} is returned if a certain label is not present in this grouping 
-#' level (methods \code{classic} and \code{patch}) and if cells with certain
-#' labels are not interacting (method \code{histocat}).
+#' level.
 #'  
 #' @examples 
 #' library(cytomapper)
@@ -170,7 +169,7 @@ testInteractions <- function(object,
     if (method == "classic") {
         cur_count <- .aggregate_classic(cur_table, object, group_by, label)
     } else if (method == "histocat") {
-        cur_count <- .aggregate_histo(cur_table)
+        cur_count <- .aggregate_histo(cur_table, object, group_by, label)
     } else if (method == "patch") {
         cur_count <- .aggregate_classic_patch(cur_table, 
                                             patch_size = patch_size, 

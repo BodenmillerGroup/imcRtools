@@ -10,16 +10,37 @@
 }
 
 #' @importFrom data.table CJ
-.aggregate_histo <- function(dat_table) {
+.aggregate_histo <- function(dat_table, object, group_by, label,
+                             check_missing = TRUE) {
     . <- ct <- .N <- NULL
     dat_temp <- dat_table[, .(ct=.N), by = c("group_by", "from_label", 
                                                 "to_label", "from")]
     dat_temp <- dat_temp[, .(ct=mean(ct)), by = c("group_by", "from_label", 
                                                     "to_label")]
-    dat_temp <- dat_temp[CJ(group_by = unique(dat_temp$group_by),
-                            from_label = as.factor(levels(dat_temp$from_label)),
-                            to_label = as.factor(levels(dat_temp$to_label))), 
-                         on = c("group_by", "from_label", "to_label")]
+    
+    if (check_missing) {
+        dat_temp <- dat_temp[CJ(group_by = unique(dat_temp$group_by),
+                                from_label = as.factor(levels(dat_temp$from_label)),
+                                to_label = as.factor(levels(dat_temp$to_label))), 
+                             on = c("group_by", "from_label", "to_label")]
+        ct <- from_label <- to_label <- NULL
+        dat_temp[is.na(dat_temp$ct), ct := 0]
+        
+        # Set all cells that are not contained in specific groups to NA
+        cur_dat <- unclass(table(colData(object)[[group_by]], 
+                                 colData(object)[[label]]))
+        cur_ind <- which(cur_dat == 0, arr.ind = TRUE)
+        
+        if (nrow(cur_ind) > 0) {
+            apply(cur_ind, 1 , function(x){
+                dat_temp[group_by == rownames(cur_dat)[x[1]] & 
+                             (from_label == colnames(cur_dat)[x[2]] |
+                                  to_label == colnames(cur_dat)[x[2]]), 
+                         ct := NA]
+            })
+        }
+        
+    }
     return(dat_temp)
 }
 
@@ -49,13 +70,13 @@
                                 from_label = as.factor(levels(dat_table$from_label)),
                                 to_label = as.factor(levels(dat_table$to_label))), 
                              on = c("group_by", "from_label", "to_label")]
+        ct <- from_label <- to_label <- NULL
+        dat_temp[is.na(dat_temp$ct), ct := 0]
         
         # Set all cells that are not contained in specific groups to NA
         cur_dat <- unclass(table(colData(object)[[group_by]], 
                                     colData(object)[[label]]))
         cur_ind <- which(cur_dat == 0, arr.ind = TRUE)
-        
-        ct <- from_label <- to_label <- NULL
         
         if (nrow(cur_ind) > 0) {
             apply(cur_ind, 1 , function(x){
@@ -95,13 +116,13 @@
                                 from_label = as.factor(levels(dat_table$from_label)),
                                 to_label = as.factor(levels(dat_table$to_label))), 
                              on = c("group_by", "from_label", "to_label")]
+        ct <- from_label <- to_label <- NULL
+        dat_temp[is.na(dat_temp$ct), ct := 0]
         
         # Set all cells that are not contained in specific groups to NA
         cur_dat <- unclass(table(colData(object)[[group_by]], 
                                     colData(object)[[label]]))
         cur_ind <- which(cur_dat == 0, arr.ind = TRUE)
-    
-        ct <- from_label <- to_label <- NULL
     
         if (nrow(cur_ind) > 0) {
             apply(cur_ind, 1 , function(x){
@@ -138,7 +159,9 @@
                                                         group_by, label,
                                                         check_missing = FALSE)
                             } else if (method == "histocat") {
-                                cur_perm <- .aggregate_histo(cur_perm)
+                                cur_perm <- .aggregate_histo(cur_perm, object, 
+                                                        group_by, label,
+                                                        check_missing = FALSE)
                             } else if (method == "patch") {
                                 cur_perm <- .aggregate_classic_patch(cur_perm, 
                                                         patch_size = patch_size,

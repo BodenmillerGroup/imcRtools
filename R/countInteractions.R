@@ -119,7 +119,7 @@ countInteractions <- function(object,
     if (method == "classic") {
         cur_count <- .aggregate_classic(cur_table, object, group_by, label)
     } else if (method == "histocat") {
-        cur_count <- .aggregate_histo(cur_table)
+        cur_count <- .aggregate_histo(cur_table, object, group_by, label)
     } else if (method == "patch") {
         cur_count <- .aggregate_classic_patch(cur_table, 
                                                 patch_size = patch_size,
