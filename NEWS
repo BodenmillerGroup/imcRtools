@@ -86,3 +86,7 @@ Changes in version 0.99.9 (2021-10-22):
 Changes in version 1.1.1 (2021-11-16):
 
 + Bug fix in testInteractions: consider now all possible combinations of cell types
+
+Changes in version 1.1.2 (2021-11-28):
+
++ Moved all helper functions to single script

@@ -71,8 +71,7 @@ greater than \code{p_gt}?}
 }
 
 \code{NA} is returned if a certain label is not present in this grouping 
-level (methods \code{classic} and \code{patch}) and if cells with certain
-labels are not interacting (method \code{histocat}).
+level.
 }
 \description{
 Cell-cell interactions are summarized in different ways and
