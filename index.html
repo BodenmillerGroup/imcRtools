@@ -31,6 +31,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -43,18 +45,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="articles/imcRtools.html">Get started</a>
 </li>
@@ -64,7 +60,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/BodenmillerGroup/imcRtools/">
+  <a href="https://github.com/BodenmillerGroup/imcRtools/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -83,16 +79,16 @@
   <div class="contents col-md-9">
 
 <p><img src="inst/imgs/imcRtools_sticker.png" align="right" alt="" width="200"></p>
-<div id="imcrtools" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#imcrtools" class="anchor"></a>imcRtools</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="imcrtools">imcRtools<a class="anchor" aria-label="anchor" href="#imcrtools"></a>
+</h1></div>
 <!-- badges: start -->
-<p><a href="https://codecov.io/gh/BodenmillerGroup/imcRtools"><img src="https://codecov.io/gh/BodenmillerGroup/imcRtools/branch/master/graph/badge.svg" alt="codecov"></a> <a href="https://github.com/BodenmillerGroup/imcRtools/actions/workflows/docs.yml"><img src="https://github.com/BodenmillerGroup/imcRtools/actions/workflows/docs.yml/badge.svg?branch=master" alt="docs"></a> <!-- badges: end --></p>
+
 <p>This R/Bioconductor package contains helper functions to analyse IMC (or other multiplexed imaging) data.</p>
-<p>Its official package page can be found here: <a href="https://bioconductor.org/packages/imcRtools">https://bioconductor.org/packages/imcRtools</a></p>
-<div id="check-status" class="section level2">
-<h2 class="hasAnchor">
-<a href="#check-status" class="anchor"></a>Check status</h2>
+<p>Its official package page can be found here: <a href="https://bioconductor.org/packages/imcRtools" class="external-link">https://bioconductor.org/packages/imcRtools</a></p>
+<div class="section level2">
+<h2 id="check-status">Check status<a class="anchor" aria-label="anchor" href="#check-status"></a>
+</h2>
 <table class="table">
 <thead><tr class="header">
 <th align="center">Bioc branch</th>
@@ -101,67 +97,67 @@
 <tbody>
 <tr class="odd">
 <td align="center">Release</td>
-<td align="center"><a href="https://github.com/BodenmillerGroup/imcRtools/actions/workflows/build-checks-release.yml"><img src="https://github.com/BodenmillerGroup/imcRtools/actions/workflows/build-checks-release.yml/badge.svg?branch=master" alt="build-check-release"></a></td>
+<td align="center"><a href="https://github.com/BodenmillerGroup/imcRtools/actions/workflows/build-checks-release.yml" class="external-link"><img src="https://github.com/BodenmillerGroup/imcRtools/actions/workflows/build-checks-release.yml/badge.svg?branch=master" alt="build-check-release"></a></td>
 </tr>
 <tr class="even">
 <td align="center">Devel</td>
-<td align="center"><a href="https://github.com/BodenmillerGroup/imcRtools/actions/workflows/build-checks-devel.yml"><img src="https://github.com/BodenmillerGroup/imcRtools/actions/workflows/build-checks-devel.yml/badge.svg?branch=master" alt="build-check-devel"></a></td>
+<td align="center"><a href="https://github.com/BodenmillerGroup/imcRtools/actions/workflows/build-checks-devel.yml" class="external-link"><img src="https://github.com/BodenmillerGroup/imcRtools/actions/workflows/build-checks-devel.yml/badge.svg?branch=master" alt="build-check-devel"></a></td>
 </tr>
 </tbody>
 </table>
 </div>
-<div id="introduction" class="section level2">
-<h2 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h2>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
 <p>Highly multiplexed imaging techniques such as imaging mass cytometry (IMC), multiplexed ion beam imaging (MIBI) and cyclic immunofluorescence techniques acquire read-outs of the expression of tens of protein in a spatially resolved manner.</p>
 <p>This R package supports the handling and analysis of imaging mass cytometry and other highly multiplexed imaging data. The main functionality includes reading in single-cell data after image segmentation and measurement, data formatting to perform channel spillover correction and a number of spatial analysis approaches. First, cell-cell interactions are detected via spatial graph construction; these graphs can be visualized with cells representing nodes and interactions representing edges. Furthermore, per cell, its direct neighbours are summarized to allow spatial clustering. Per image/grouping level, interactions between types of cells are counted, averaged and compared against random permutations. In that way, types of cells that interact more (attraction) or less (avoidance) frequently than expected by chance are detected.</p>
 </div>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <p>The <code>imcRtools</code> package can be installed from <code>Bioconductor</code> via:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
-    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span>
 
 <span class="co"># The following initializes usage of Bioc devel</span>
-<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span>version<span class="op">=</span><span class="st">'devel'</span><span class="op">)</span>
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span>version<span class="op">=</span><span class="st">'devel'</span><span class="op">)</span>
 
-<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span><span class="st">"imcRtools"</span><span class="op">)</span></code></pre></div>
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"imcRtools"</span><span class="op">)</span></code></pre></div>
 <p>The development version of <code>imcRtools</code> can be installed from Github via:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span><span class="op">(</span><span class="st">"remotes"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
-    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"remotes"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>
 
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"BodenmillerGroup/imcRtools"</span><span class="op">)</span></code></pre></div>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"BodenmillerGroup/imcRtools"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="getting-help" class="section level2">
-<h2 class="hasAnchor">
-<a href="#getting-help" class="anchor"></a>Getting help</h2>
+<div class="section level2">
+<h2 id="getting-help">Getting help<a class="anchor" aria-label="anchor" href="#getting-help"></a>
+</h2>
 <p>The analysis of highly multiplexed imaging data requires multiple pre-processing and diverese analysis steps.</p>
-<ol>
-<li><p>Processing of raw data and segmentation: The <a href="https://github.com/BodenmillerGroup/ImcSegmentationPipeline">ImcSegmentationPipeline</a> and the <a href="https://github.com/BodenmillerGroup/steinbock">steinbock</a> library can be used to process and segment IMC data. The <code>imcRtools</code> package provides reader functions for outputs generated by these approaches.</p></li>
-<li><p>Single-cell analysis using the <a href="https://www.bioconductor.org/">Bioconductor</a> framework: The <a href="https://bioconductor.org/books/release/OSCA/">Orchestrating Single-Cell Analysis with Bioconductor</a> book is an excellent resource for beginners and advanced analysis concerning single-cell data. Common analysis steps include dimensionality reduction, unsupervised clustering for cell type detection and data visualization. The <code>imcRtools</code> package supports data structures that fully integrate with the analysis presented in the OSCA book.</p></li>
-<li><p>Handling multiplexed images in R: the <a href="https://www.bioconductor.org/packages/release/bioc/html/cytomapper.html">cytomapper</a> Bioconductor package provides functions and data structure to handle and analyse highly multiplexed imaging data (images, masks and single-cell data) natively in R.</p></li>
+<ol style="list-style-type: decimal">
+<li><p>Processing of raw data and segmentation: The <a href="https://github.com/BodenmillerGroup/ImcSegmentationPipeline" class="external-link">ImcSegmentationPipeline</a> and the <a href="https://github.com/BodenmillerGroup/steinbock" class="external-link">steinbock</a> library can be used to process and segment IMC data. The <code>imcRtools</code> package provides reader functions for outputs generated by these approaches.</p></li>
+<li><p>Single-cell analysis using the <a href="https://www.bioconductor.org/" class="external-link">Bioconductor</a> framework: The <a href="https://bioconductor.org/books/release/OSCA/" class="external-link">Orchestrating Single-Cell Analysis with Bioconductor</a> book is an excellent resource for beginners and advanced analysis concerning single-cell data. Common analysis steps include dimensionality reduction, unsupervised clustering for cell type detection and data visualization. The <code>imcRtools</code> package supports data structures that fully integrate with the analysis presented in the OSCA book.</p></li>
+<li><p>Handling multiplexed images in R: the <a href="https://www.bioconductor.org/packages/release/bioc/html/cytomapper.html" class="external-link">cytomapper</a> Bioconductor package provides functions and data structure to handle and analyse highly multiplexed imaging data (images, masks and single-cell data) natively in R.</p></li>
 </ol>
 </div>
-<div id="citation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#citation" class="anchor"></a>Citation</h2>
+<div class="section level2">
+<h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
+</h2>
 <p>Please cite <code>imcRtools</code> as:</p>
 <pre><code>Jonas Windhager, Bernd Bodenmiller, Nils Eling (2020). An end-to-end workflow for multiplexed image processing and analysis. 
     bioRxiv, doi: 10.1101/2021.11.12.468357</code></pre>
 </div>
-<div id="contributing" class="section level2">
-<h2 class="hasAnchor">
-<a href="#contributing" class="anchor"></a>Contributing</h2>
-<p>For feature requests, please open an issue <a href="https://github.com/BodenmillerGroup/imcRtools/issues">here</a>.</p>
+<div class="section level2">
+<h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
+</h2>
+<p>For feature requests, please open an issue <a href="https://github.com/BodenmillerGroup/imcRtools/issues" class="external-link">here</a>.</p>
 <p>Alternatively, you can fork the repository, add your change and issue a pull request.</p>
 </div>
-<div id="maintainer" class="section level2">
-<h2 class="hasAnchor">
-<a href="#maintainer" class="anchor"></a>Maintainer</h2>
-<p><a href="https://github.com/nilseling">Nils Eling</a></p>
+<div class="section level2">
+<h2 id="maintainer">Maintainer<a class="anchor" aria-label="anchor" href="#maintainer"></a>
+</h2>
+<p><a href="https://github.com/nilseling" class="external-link">Nils Eling</a></p>
 </div>
 </div>
 
@@ -169,33 +165,42 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from BIOC at <br><a href="https://www.bioconductor.org/packages/imcRtools">https://​www.bioconductor.org/​packages/​imcRtools</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/BodenmillerGroup/imcRtools/">https://​github.com/​BodenmillerGroup/​imcRtools/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/BodenmillerGroup/imcRtools/issues">https://​github.com/​BodenmillerGroup/​imcRtools/​issues</a>
-</li>
+<li><a href="https://www.bioconductor.org/packages/imcRtools" class="external-link">View on Bioconductor</a></li>
+<li><a href="https://github.com/BodenmillerGroup/imcRtools/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/BodenmillerGroup/imcRtools/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
+<li><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></li>
 </ul>
 </div>
+
+
 <div class="citation">
-<h2>Citation</h2>
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li><a href="authors.html">Citing imcRtools</a></li>
+<li><a href="authors.html#citation">Citing imcRtools</a></li>
 </ul>
 </div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Nils Eling <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-4711-1176" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li><a href="authors.html">All authors...</a></li>
+<li>Nils Eling <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-4711-1176" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html">More about authors...</a></li>
+</ul>
+</div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://codecov.io/gh/BodenmillerGroup/imcRtools" class="external-link"><img src="https://codecov.io/gh/BodenmillerGroup/imcRtools/branch/master/graph/badge.svg" alt="codecov"></a></li>
+<li><a href="https://github.com/BodenmillerGroup/imcRtools/actions/workflows/docs.yml" class="external-link"><img src="https://github.com/BodenmillerGroup/imcRtools/actions/workflows/docs.yml/badge.svg?branch=master" alt="docs"></a></li>
 </ul>
 </div>
 
@@ -204,11 +209,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Nils Eling.</p>
+  <p></p>
+<p>Developed by Nils Eling.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -216,6 +223,8 @@
 
   
 
+
+  
 
   </body>
 </html>
