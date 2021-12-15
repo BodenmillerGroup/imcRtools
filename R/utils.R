@@ -645,6 +645,8 @@
     cur_tab$to_label <- cur_label[cur_tab$to]
     cur_tab$ct <- 1
     
+    . <- .N <- NULL
+    
     cur_tab_2 <- data.table(group_by = colData(object)[[group_by]],
                             from_label = cur_label)
     cur_tab_2 <- cur_tab_2[,.(total = .N), by = c("group_by", "from_label")]
@@ -700,6 +702,9 @@
                                                       "from", "total"),
                                 variable.name = "to_label",
                                 value.name = "ct") 
+    
+    total <- NULL
+    
     dat_temp[,ct := ct/total]
     
     dat_temp <- dcast.data.table(dat_temp, "group_by + from_label ~ to_label",
@@ -747,6 +752,8 @@
                                                       "from", "total"),
                                 variable.name = "to_label",
                                 value.name = "ct")
+    
+    total <- NULL
     
     dat_temp[, ct := patch_size <= ct ]
     dat_temp[, ct := ct/total]
