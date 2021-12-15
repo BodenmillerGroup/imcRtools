@@ -644,6 +644,13 @@
     cur_tab$from_label <- cur_label[cur_tab$from]
     cur_tab$to_label <- cur_label[cur_tab$to]
     cur_tab$ct <- 1
+    
+    cur_tab_2 <- data.table(group_by = colData(object)[[group_by]],
+                            from_label = cur_label)
+    cur_tab_2 <- cur_tab_2[,.(total = .N), by = c("group_by", "from_label")]
+    cur_tab <- merge(cur_tab, cur_tab_2, by = c("group_by", "from_label"),
+                     sort = FALSE)
+    
     return(cur_tab)
 }
 
@@ -686,17 +693,18 @@
 .aggregate_classic <- function(dat_table, object, group_by, label, 
                                check_missing = TRUE){
     dat_temp <- dcast.data.table(dat_table, 
-                                 "group_by + from_label + from ~ to_label",
+                                 "group_by + from_label + total + from ~ to_label",
                                  value.var = "ct", fun.aggregate = sum,
                                  fill = 0) 
     dat_temp <- melt.data.table(dat_temp, id.vars = c("group_by", "from_label", 
-                                                      "from"),
+                                                      "from", "total"),
                                 variable.name = "to_label",
                                 value.name = "ct") 
+    dat_temp[,ct := ct/total]
     
     dat_temp <- dcast.data.table(dat_temp, "group_by + from_label ~ to_label",
                                  value.var = "ct",
-                                 fun.aggregate = mean, 
+                                 fun.aggregate = sum, 
                                  fill = 0, drop = FALSE) 
     
     dat_temp <- melt.data.table(dat_temp, id.vars = c("group_by", "from_label"),
@@ -732,15 +740,16 @@
 .aggregate_classic_patch <- function(dat_table, patch_size, object, group_by, 
                                      label, check_missing = TRUE){
     dat_temp <- dcast.data.table(dat_table, 
-                                 "group_by + from_label + from ~ to_label",
+                                 "group_by + from_label + total + from ~ to_label",
                                  value.var = "ct", fun.aggregate = sum, 
                                  fill = 0) 
     dat_temp <- melt.data.table(dat_temp, id.vars = c("group_by", "from_label", 
-                                                      "from"),
+                                                      "from", "total"),
                                 variable.name = "to_label",
                                 value.name = "ct")
     
     dat_temp[, ct := patch_size <= ct ]
+    dat_temp[, ct := ct/total]
     
     dat_temp <- dcast.data.table(dat_temp, "group_by + from_label ~ to_label",
                                  value.var = "ct",
