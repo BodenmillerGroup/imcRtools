@@ -753,7 +753,7 @@
     
     dat_temp <- dcast.data.table(dat_temp, "group_by + from_label ~ to_label",
                                  value.var = "ct",
-                                 fun.aggregate = mean, fill = 0, drop = FALSE) 
+                                 fun.aggregate = sum, fill = 0, drop = FALSE) 
     dat_temp <- melt.data.table(dat_temp, id.vars = c("group_by", "from_label"),
                                 variable.name = "to_label",
                                 value.name = "ct")
