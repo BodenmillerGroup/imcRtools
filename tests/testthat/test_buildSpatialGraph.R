@@ -37,6 +37,25 @@ test_that("buildSpatialGraph function works", {
     
     expect_equal(sum(isRedundantHit(colPair(cur_sce))), length(colPair(cur_sce))/2)
     
+    # Max dist
+    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                               type = "delaunay", max_dist = 20))
+    expect_equal(colPairNames(cur_sce), "delaunay_interaction_graph")
+    expect_true(!is.null(colPair(cur_sce)))
+    expect_equal(length(colPair(cur_sce)), 1956)
+    p <- plotSpatial(cur_sce, img_id = "ImageNb", draw_edges = TRUE,
+                     colPairName = "delaunay_interaction_graph")
+    expect_silent(print(p))
+    expect_equal(from(colPair(cur_sce))[10:20], c(3L, 4L, 4L, 4L, 4L, 5L, 5L, 5L, 5L, 5L, 5L))
+    expect_equal(to(colPair(cur_sce))[10:20], c(12L, 3L, 7L, 8L, 10L, 2L, 9L, 13L, 14L, 19L, 24L))
+    
+    cur_edges_1 <- paste(from(colPair(cur_sce)), to(colPair(cur_sce)))
+    cur_edges_2 <- paste(to(colPair(cur_sce)), from(colPair(cur_sce)))
+    
+    expect_equal(sort(cur_edges_1), sort(cur_edges_2))
+    
+    expect_equal(sum(isRedundantHit(colPair(cur_sce))), length(colPair(cur_sce))/2)
+    
     # KNN
     expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
                                  type = "knn", k = 5))
