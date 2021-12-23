@@ -288,7 +288,7 @@ test_that("buildSpatialGraph function works", {
     
     # Max dist
     expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-                                               type = "knn", k = 5, k_max_dist = 10))
+                                               type = "knn", k = 5, max_dist = 10))
     expect_equal(colPairNames(cur_sce), "knn_interaction_graph")
     expect_true(!is.null(colPair(cur_sce)))
     expect_equal(length(colPair(cur_sce)), 711)
@@ -508,8 +508,8 @@ test_that("buildSpatialGraph function works", {
                  regexp = "'k' must be a single numeric",
                  fixed = TRUE)
     expect_error(buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn",
-                                   k = 10, k_max_dist = "test"),
-                 regexp = "'k_max_dist' must be a single numeric",
+                                   k = 10, max_dist = "test"),
+                 regexp = "'max_dist' must be a single numeric",
                  fixed = TRUE)
     expect_error(buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "delaunay",
                                    coords = "test"),

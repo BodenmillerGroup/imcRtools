@@ -114,6 +114,7 @@
 #' @importFrom igraph graph_from_adj_list graph_from_edgelist as.undirected
 #' simplify as_edgelist as.directed
 #' @importFrom RTriangle triangulate pslg
+#' @importFrom stats dist
 #' @export
 buildSpatialGraph <- function(object,
                                 img_id,

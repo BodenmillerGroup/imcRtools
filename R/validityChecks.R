@@ -531,7 +531,7 @@
 #' @importFrom SpatialExperiment spatialCoordsNames
 .valid.buildSpatialGraph.input <- function(object, type, img_id, k, 
                                     threshold, coords, name, 
-                                    directed, k_max_dist){
+                                    directed, max_dist){
 
     if (!is(object, "SingleCellExperiment")) {
         stop("'object' not of type 'SingleCellExperiment'.")
@@ -569,9 +569,9 @@
             stop("'k' must be a single numeric")
         }
         
-        if (!is.null(k_max_dist) & (length(k_max_dist) != 1 || 
-                                    !is.numeric(k_max_dist))) {
-            stop("'k_max_dist' must be a single numeric")
+        if (!is.null(max_dist) & (length(max_dist) != 1 || 
+                                    !is.numeric(max_dist))) {
+            stop("'max_dist' must be a single numeric")
         }
         
     }
