@@ -18,7 +18,7 @@ expansion, delaunay triangulation or k nearest neighbor detection."><!-- mathjax
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.4</span>
       </span>
     </div>
 
@@ -61,7 +61,7 @@ expansion, delaunay triangulation or k nearest neighbor detection.</p>
   type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"expansion"</span>, <span class="st">"knn"</span>, <span class="st">"delaunay"</span><span class="op">)</span>,
   k <span class="op">=</span> <span class="cn">NULL</span>,
   directed <span class="op">=</span> <span class="cn">TRUE</span>,
-  k_max_dist <span class="op">=</span> <span class="cn">NULL</span>,
+  max_dist <span class="op">=</span> <span class="cn">NULL</span>,
   threshold <span class="op">=</span> <span class="cn">NULL</span>,
   coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pos_X"</span>, <span class="st">"Pos_Y"</span><span class="op">)</span>,
   name <span class="op">=</span> <span class="cn">NULL</span>,
@@ -91,10 +91,11 @@ number of nearest neighbors to search for.</p></dd>
 <dt>directed</dt>
 <dd><p>(when <code>type = "knn"</code>) should the returned graph be 
 directed? (see details).</p></dd>
-<dt>k_max_dist</dt>
-<dd><p>(when <code>type = "knn"</code>) the maximum distance at which to
-consider neighboring cells. All neighbors within a distance larger than 
-<code>k_max_dist</code> will be excluded from graph construction.</p></dd>
+<dt>max_dist</dt>
+<dd><p>(when <code>type = "knn"</code> or <code>type = "delaunay"</code>) the
+maximum distance at which to consider neighboring cells. All neighbors
+within a distance larger than <code>max_dist</code> will be excluded from graph
+construction.</p></dd>
 <dt>threshold</dt>
 <dd><p>(when <code>type = "expansion"</code>) single numeric specifying
 the maximum distance for considering neighbors</p></dd>
