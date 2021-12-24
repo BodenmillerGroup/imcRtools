@@ -22,9 +22,10 @@
 #' @param name single character specifying the name of the graph.
 #' @param directed (when \code{type = "knn"}) should the returned graph be 
 #' directed? (see details).
-#' @param k_max_dist (when \code{type = "knn"}) the maximum distance at which to
-#' consider neighboring cells. All neighbors within a distance larger than 
-#' \code{k_max_dist} will be excluded from graph construction.
+#' @param max_dist (when \code{type = "knn"} or \code{type = "delaunay"}) the
+#' maximum distance at which to consider neighboring cells. All neighbors
+#' within a distance larger than \code{max_dist} will be excluded from graph
+#' construction.
 #' @param BNPARAM a \code{\link[BiocNeighbors]{BiocNeighborParam}} object
 #' defining the algorithm to use.
 #' @param BPPARAM a \code{\link[BiocParallel]{BiocParallelParam-class}} object
@@ -113,13 +114,14 @@
 #' @importFrom igraph graph_from_adj_list graph_from_edgelist as.undirected
 #' simplify as_edgelist as.directed
 #' @importFrom RTriangle triangulate pslg
+#' @importFrom stats dist
 #' @export
 buildSpatialGraph <- function(object,
                                 img_id,
                                 type = c("expansion", "knn", "delaunay"),
                                 k = NULL,
                                 directed = TRUE,
-                                k_max_dist = NULL,
+                                max_dist = NULL,
                                 threshold = NULL,
                                 coords = c("Pos_X", "Pos_Y"),
                                 name = NULL,
@@ -129,7 +131,7 @@ buildSpatialGraph <- function(object,
     type <- match.arg(type)
     
     .valid.buildSpatialGraph.input(object, type, img_id, k, threshold, coords,
-                                    name, directed, k_max_dist)
+                                    name, directed, max_dist)
     
     name <- ifelse(is.null(name), paste0(type, "_interaction_graph"), name)
     
@@ -160,13 +162,22 @@ buildSpatialGraph <- function(object,
                                 cur_graph <- triangulate(pslg(P = cur_coords),
                                                     ...)
                                 
-                                cur_graph <- graph_from_edgelist(cur_graph$E, 
+                                cur_edges <- cur_graph$E
+                                
+                                if (!is.null(max_dist)) {
+                                    cur_dist <- apply(cur_edges, 1, function(y){
+                                        dist(cur_coords[y,])
+                                    })
+                                    cur_edges <- cur_edges[cur_dist <= max_dist,]
+                                }
+                                
+                                cur_graph <- graph_from_edgelist(cur_edges, 
                                                             directed = FALSE)
                                 cur_graph <- as.directed(cur_graph,
                                                         mode = "mutual")
                                 
                             } else {
-                                if (is.null(k_max_dist)) {
+                                if (is.null(max_dist)) {
                                     cur_graph <- findKNN(cur_coords,
                                                     k = k,
                                                     BNPARAM = BNPARAM,
@@ -185,7 +196,7 @@ buildSpatialGraph <- function(object,
                                         seq_len(nrow(cur_graph$index)),
                                             function(i){
                                                 cur_graph$index[i,
-                                        cur_graph$distance[i,] <= k_max_dist] 
+                                        cur_graph$distance[i,] <= max_dist] 
                                             })
                                     cur_graph <- graph_from_adj_list(cur_graph)
                                 }
