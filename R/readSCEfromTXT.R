@@ -106,7 +106,7 @@ readSCEfromTXT <- function(x,
         }
         
         if (read_metal_from_filename) {
-            cur_names <- str_extract(cur_names, "[A-Za-z]{1,2}[0-9]{2,3}")
+            cur_names <- str_extract(cur_names, "[A-Z]{1}[a-z]{0,1}[0-9]{2,3}")
         } else {
             cur_names <- sub("\\.[^.]*$", "", basename(cur_names))
         }
@@ -140,20 +140,20 @@ readSCEfromTXT <- function(x,
     
     if (read_metal_from_filename) {
         cell_meta$sample_id <- str_extract(rownames(cell_meta), 
-                                            "^[A-Za-z]{1,2}[0-9]{2,3}")
+                                            "^[A-Z]{1}[a-z]{0,1}[0-9]{2,3}")
         cell_meta$sample_metal <- str_extract(cell_meta$sample_id, 
-                                                "^[A-Za-z]{1,2}")
+                                                "^[A-Z]{1}[a-z]{0,1}")
         cell_meta$sample_mass <- str_extract(cell_meta$sample_id, "[0-9]{2,3}$")
     } else {
         cell_meta$sample_id <- str_split(rownames(cell_meta), "\\.", 
                                             simplify = TRUE)[,1]
     }
     
-    cur_counts <- cur_out[grepl("[A-Za-z]{1,2}[0-9]{2,3}", colnames(cur_out))]
+    cur_counts <- cur_out[grepl("[A-Z]{1}[a-z]{0,1}[0-9]{2,3}", colnames(cur_out))]
     cur_counts <- t(cur_counts)
     
     channel_name <- str_extract(rownames(cur_counts), 
-                                "[A-Za-z]{1,2}[0-9]{2,3}Di")
+                                "[A-Z]{1}[a-z]{0,1}[0-9]{2,3}Di")
     
     channel_meta <- DataFrame(channel_name = channel_name,
                               marker_name = sub("Di", "", channel_name))
