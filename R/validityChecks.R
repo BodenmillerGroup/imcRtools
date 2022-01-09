@@ -10,13 +10,13 @@
         cur_mass <- str_extract(cur_names, "[0-9]{2,3}$")
         cur_names <- cur_names[order(as.numeric(cur_mass))]
         
-        if (!all(grepl("^[A-Za-z]{2}[0-9]{2,3}$", cur_names))) {
+        if (!all(grepl("^[A-Z]{1}[a-z]{0,1}[0-9]{2,3}$", cur_names))) {
             stop("Not all names match the pattern (mt)(mass).")
         }
         
         # Check if spotted channel is also open
         cur_channels <- str_extract(colnames(txt_list[[1]]),
-                                    "[A-Za-z]{1,2}[0-9]{2,3}Di")
+                                    "[A-Z]{1}[a-z]{0,1}[0-9]{2,3}Di")
         cur_channels <- cur_channels[!is.na(cur_channels)]
         cur_channels <- sub("Di", "", cur_channels)
         
