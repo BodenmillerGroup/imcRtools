@@ -105,8 +105,10 @@
                                                  col_types = cols()) %>%
                                  as.data.frame()
                              
-                             cur_hits <- SelfHits(from = cur_graphs[,1],
-                                                  to = cur_graphs[,2],
+                             cur_hits <- SelfHits(from = match(cur_graphs[,1], 
+                                                                y$ObjectNumber),
+                                                  to = match(cur_graphs[,2], 
+                                                                y$ObjectNumber),
                                                   nnode = ncol(y))
                              
                              colPair(y, "neighborhood") <- cur_hits
