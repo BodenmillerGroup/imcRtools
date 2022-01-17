@@ -47,7 +47,7 @@
                              cur_sample <- unique(y$sample_id)
                              
                              cur_file <- list.files(cur_path, 
-                                                    pattern = paste0(cur_sample, ".csv"),
+                                                    pattern = paste0("^", cur_sample, ".csv", "$"),
                                                     full.names = TRUE)
                              
                              if (length(cur_file) == 0) {
@@ -93,7 +93,7 @@
                              cur_sample <- unique(y$sample_id)
                              
                              cur_file <- list.files(cur_path, 
-                                                    pattern = paste0(cur_sample, ".csv"), 
+                                                    pattern = paste0("^", cur_sample, ".csv", "$"), 
                                                     full.names = TRUE)
                              
                              if (length(cur_file) == 0) {
