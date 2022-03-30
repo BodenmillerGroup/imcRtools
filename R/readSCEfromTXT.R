@@ -82,7 +82,7 @@
 #' @importFrom SingleCellExperiment SingleCellExperiment
 #' @importFrom S4Vectors DataFrame
 #' @importFrom SummarizedExperiment colData<- rowData<-
-#' @importFrom stringr str_extract str_split
+#' @importFrom stringr str_extract str_split str_extract_all
 #' @importFrom readr read_delim
 #' @export
 readSCEfromTXT <- function(x, 
@@ -106,7 +106,8 @@ readSCEfromTXT <- function(x,
         }
         
         if (read_metal_from_filename) {
-            cur_names <- str_extract(cur_names, "[A-Z]{1}[a-z]{0,1}[0-9]{2,3}")
+            cur_names <- str_extract_all(cur_names, "[A-Z]{1}[a-z]{0,1}[0-9]{2,3}")
+            cur_names <- unlist(lapply(cur_names, function(y){y[length(y)]}))
         } else {
             cur_names <- sub("\\.[^.]*$", "", basename(cur_names))
         }
