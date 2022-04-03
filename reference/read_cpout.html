@@ -22,7 +22,7 @@ pipeline."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/m
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.8</span>
       </span>
     </div>
 
@@ -70,11 +70,13 @@ pipeline.</p>
   panel_file <span class="op">=</span> <span class="st">"panel.csv"</span>,
   graph_file <span class="op">=</span> <span class="st">"Object relationships.csv"</span>,
   object_feature_file <span class="op">=</span> <span class="st">"var_cell.csv"</span>,
-  intensities <span class="op">=</span> <span class="st">"Intensity_MeanIntensity_FullStackFiltered"</span>,
+  intensities <span class="op">=</span> <span class="st">"Intensity_MeanIntensity_FullStack"</span>,
   extract_imgid_from <span class="op">=</span> <span class="st">"ImageNumber"</span>,
   extract_cellid_from <span class="op">=</span> <span class="st">"ObjectNumber"</span>,
   extract_coords_from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Location_Center_X"</span>, <span class="st">"Location_Center_Y"</span><span class="op">)</span>,
-  extract_cellmetadata_from <span class="op">=</span> <span class="st">"Neighbors_NumberOfNeighbors_8"</span>,
+  extract_cellmetadata_from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AreaShape_Area"</span>, <span class="st">"Neighbors_NumberOfNeighbors_8"</span>,
+    <span class="st">"AreaShape_Eccentricity"</span>, <span class="st">"AreaShape_MajorAxisLength"</span>, <span class="st">"AreaShape_MinorAxisLength"</span>,
+    <span class="st">"AreaShape_MeanRadius"</span><span class="op">)</span>,
   extract_imagemetadata_from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Metadata_acname"</span>, <span class="st">"Metadata_acid"</span>,
     <span class="st">"Metadata_description"</span><span class="op">)</span>,
   extract_graphimageid_from <span class="op">=</span> <span class="st">"First Image Number"</span>,
@@ -197,13 +199,13 @@ with the cell-cell interaction graphs</p></div>
 <span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">read_cpout</span><span class="op">(</span><span class="va">path</span>, graph_file <span class="op">=</span> <span class="st">"Object_relationships.csv"</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">x</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> class: SpatialExperiment </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> dim: 5 219 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dim: 5 209 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> metadata(0):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> assays(1): counts</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> rownames(5): Ag107 Pr141 Sm147 Eu153 Yb172</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rownames(5): Sm147 Yb172 Pr141 Eu153 Ag107</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> rowData names(5): Tube.Number Metal.Tag Target ilastik full</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> colnames: NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> colData names(6): sample_id ObjectNumber ... Metadata_acid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> colData names(11): sample_id ObjectNumber ... Metadata_acid</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Metadata_description</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> reducedDimNames(0):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> mainExpName: NULL</span>
@@ -217,13 +219,13 @@ with the cell-cell interaction graphs</p></div>
 <span class="r-in">                return_as <span class="op">=</span> <span class="st">"sce"</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">x</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> class: SingleCellExperiment </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> dim: 5 219 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dim: 5 209 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> metadata(0):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> assays(1): counts</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> rownames(5): Ag107 Pr141 Sm147 Eu153 Yb172</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rownames(5): Sm147 Yb172 Pr141 Eu153 Ag107</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> rowData names(5): Tube.Number Metal.Tag Target ilastik full</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> colnames: NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> colData names(8): sample_id ObjectNumber ... Metadata_acid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> colData names(13): sample_id ObjectNumber ... Metadata_acid</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Metadata_description</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> reducedDimNames(0):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> mainExpName: NULL</span>
