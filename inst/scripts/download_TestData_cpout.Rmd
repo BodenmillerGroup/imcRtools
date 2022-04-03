@@ -20,7 +20,7 @@ Here, we will first download the output of the standard [ImcSegmentationPipeline
 For this, we an use the automatically generated Github assets.
 
 ```{r download-cpout}
-cur_url <- "https://github.com/BodenmillerGroup/TestData/releases/download/v1.0.6/210308_ImcTestData_analysis_cpout.tar.gz"
+cur_url <- "https://github.com/BodenmillerGroup/TestData/releases/download/v1.0.9/210308_ImcTestData_analysis_cpout.tar.gz"
 
 download.file(cur_url, "210308_ImcTestData_analysis_cpout.tar.gz")
 untar("210308_ImcTestData_analysis_cpout.tar.gz")
