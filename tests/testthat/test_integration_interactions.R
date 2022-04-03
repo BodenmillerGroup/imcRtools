@@ -190,7 +190,7 @@ test_that("testInteractions gives same results as neighbouRhood", {
     dat_cells <- fread(fn_cells)
     dat_relation <- fread(fn_relationship)
     
-    set.seed(123)
+    set.seed(1234)
     cur_label <- sample.int(10, size=nrow(dat_cells), replace = TRUE)
     dat_cells[, label := cur_label]
     dat_cells[, group := ImageNumber]

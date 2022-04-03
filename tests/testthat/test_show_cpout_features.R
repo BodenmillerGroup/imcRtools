@@ -9,8 +9,8 @@ test_that("show_cpout_features function works", {
     cur_df <- cur_tab$x$data
     expect_equal(colnames(cur_df), c(" ", "column_name", "category", "image_name", "object_name", "feature_name", "channel", 
                                      "parameters", "channel_id", "data_type"))
-    expect_equal(unique(cur_df$channel_id), c(NA, "Ag107", "Pr141", "Sm147", "Eu153",
-                                              "Yb172", "CellCenter", "CellBorder", "Background"))
+    expect_equal(unique(cur_df$channel_id), c(NA, "Sm147", "Yb172", "Pr141", "Eu153", "Ag107", "CellCenter", 
+                                              "CellBorder", "Background"))
     expect_equal(head(cur_df$column_name), c("Location_Center_X", "Location_Center_Y", "Location_Center_Z",
                                              "Number_Object_Number", "Neighbors_NumberOfNeighbors_8",
                                              "Neighbors_PercentTouching_8"))
@@ -22,11 +22,10 @@ test_that("show_cpout_features function works", {
     cur_df <- cur_tab$x$data
     expect_equal(colnames(cur_df), c(" ", "column_name", "category", "image_name", "object_name", "feature_name", "channel", 
                                      "parameters", "channel_id", "data_type"))
-    expect_equal(unique(cur_df$channel_id), c(NA, "Ag107", "Pr141", "Sm147", "Eu153",
-                                              "Yb172", "CellCenter", "CellBorder", "Background"))
-    expect_equal(head(cur_df$column_name), c("Group_Number", "Group_Index",
-                                             "ModuleError_01Images", "ExecutionTime_01Images", "Metadata_template",     
-                                             "Metadata_acname"))
+    expect_equal(unique(cur_df$channel_id), c(NA, "Sm147", "Yb172", "Pr141", "Eu153", "Ag107", "CellCenter", 
+                                              "CellBorder", "Background"))
+    expect_equal(head(cur_df$column_name), c("Group_Number", "Group_Index", "ModuleError_01Images", "ExecutionTime_01Images", 
+                                             "Metadata_", "Metadata_template"))
     
     
     # Error

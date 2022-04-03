@@ -154,9 +154,9 @@
         
         cur_panel <- as.data.frame(cur_panel)
         
-        rownames(cur_panel) <- cur_panel[,extract_names_from]
+        cur_ind <- match(rownames(x), cur_panel[,extract_names_from])
         
-        cur_panel <- cur_panel[rownames(x),]
+        cur_panel <- cur_panel[cur_ind,]
         
         rowData(x) <- cur_panel
     }
