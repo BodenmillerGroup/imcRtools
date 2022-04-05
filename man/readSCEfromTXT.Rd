@@ -61,7 +61,7 @@ By default all .txt files are read in from the specified path. Here, the path
 should indicate the location of the spillover slide measurement. The file
 names of the .txt file must contain the spotted metal isotope name in the
 format \code{(mt)(mass)} (e.g. \code{Sm152} for Samarium isotope with the
-atomic mass 152). Internally, the first occurrence of such a pattern is read
+atomic mass 152). Internally, the last occurrence of such a pattern is read
 in as the metal isotope name and stored in the \code{colData(sce)$sample_id}
 slot.
 
