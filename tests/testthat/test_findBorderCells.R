@@ -100,7 +100,14 @@ test_that("findBorderCells function works", {
     out <- do.call("cbind", out)
     
     expect_equal(sce$border_cells, out$border_cells, check.attributes = FALSE)
+    
+    # SingleCellExperiment
+    library(cytomapper)
+    data(pancreasSCE)
 
+    expect_silent(sce  <- findBorderCells(pancreasSCE, img_id = "ImageNb", border_dist = 10))
+    plotSpatial(sce, img_id = "ImageNb", node_color_by = "border_cells")
+    
     # Error
     expect_error(findBorderCells("test"), 
                  regexp = "'object' not of type 'SingleCellExperiment'.",
