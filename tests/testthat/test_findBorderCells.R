@@ -105,8 +105,8 @@ test_that("findBorderCells function works", {
     library(cytomapper)
     data(pancreasSCE)
 
-    expect_silent(sce  <- findBorderCells(pancreasSCE, img_id = "ImageNb", border_dist = 10))
-    plotSpatial(sce, img_id = "ImageNb", node_color_by = "border_cells")
+    expect_silent(pancreasSCE  <- findBorderCells(pancreasSCE, img_id = "ImageNb", border_dist = 10))
+    plotSpatial(pancreasSCE, img_id = "ImageNb", node_color_by = "border_cells")
     
     # Error
     expect_error(findBorderCells("test"), 
