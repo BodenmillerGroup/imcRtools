@@ -570,6 +570,7 @@ test_that("plotSpatial function works", {
     cur_spe <- SpatialExperiment(assays = list(counts = counts(cur_sce)),
                                  sample_id = cur_sce$ImageName) 
     colData(cur_spe) <- colData(cur_sce)
+    colData(cur_spe)[,c("Pos_X", "Pos_Y")] <- NULL
     colPairs(cur_spe) <- colPairs(cur_sce)
     
     # Error

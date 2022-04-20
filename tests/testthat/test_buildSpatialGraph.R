@@ -457,6 +457,7 @@ test_that("buildSpatialGraph function works", {
     pancreasSPE <- SpatialExperiment(assays = list(counts = counts(pancreasSCE)),
                                  sample_id = pancreasSCE$ImageName) 
     colData(pancreasSPE) <- colData(pancreasSCE)
+    colData(pancreasSPE)[,c("Pos_X", "Pos_Y")] <- NULL
     colPairs(pancreasSPE) <- colPairs(pancreasSCE)
     
     expect_error(cur_sce <- buildSpatialGraph(pancreasSPE, img_id = "ImageNb", 

@@ -544,16 +544,29 @@
             
             data <- polygon <- NULL
             
-            cur_out <- colData(cur_obj) %>% as_tibble %>%
-                filter(!is.na(!!sym(name))) %>% 
-                nest_by(!!sym(name)) %>%
-                summarize(
-                    polygon = list(.polygon_function(x = data, 
+            if (is(cur_obj, "SpatialExperiment")) {
+                cur_out <- cbind(colData(cur_obj), cur_coords) %>% as_tibble %>%
+                    filter(!is.na(!!sym(name))) %>% 
+                    nest_by(!!sym(name)) %>%
+                    summarize(
+                        polygon = list(.polygon_function(x = data, 
                                                      coords = coords, 
                                                      convex = convex)),
-                    cells = list(.milieu_function(x = polygon,
+                        cells = list(.milieu_function(x = polygon,
                                                   distance = expand_by,
                                                   cells = cells_sfc)))
+            } else {
+                cur_out <- colData(cur_obj) %>% as_tibble %>%
+                    filter(!is.na(!!sym(name))) %>% 
+                    nest_by(!!sym(name)) %>%
+                    summarize(
+                        polygon = list(.polygon_function(x = data, 
+                                                    coords = coords, 
+                                                    convex = convex)),
+                        cells = list(.milieu_function(x = polygon,
+                                                    distance = expand_by,
+                                                    cells = cells_sfc)))
+            }
             
             # Find cells that are not unique in extended patches
             cur_cells <- do.call(c, cur_out$cells)

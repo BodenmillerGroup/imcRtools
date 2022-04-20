@@ -162,17 +162,29 @@ test_that("patchDetection function works", {
     # Spatial Experiment
     cur_spe <- SpatialExperiment:::.sce_to_spe(pancreasSCE, sample_id = as.character(pancreasSCE$ImageNb))
     spatialCoords(cur_spe) <- as.matrix(colData(pancreasSCE)[,c("Pos_X", "Pos_Y")])
+    colData(cur_spe)[c("Pos_X", "Pos_Y")] <- NULL
     
     cur_spe <- buildSpatialGraph(cur_spe, img_id = "ImageNb", 
                                      type = "expansion", threshold = 20)
     
     expect_silent(cur_spe_2 <- patchDetection(cur_spe, 
-                                            patch_cells = pancreasSCE$CellType == "celltype_B",
+                                            patch_cells = cur_spe$CellType == "celltype_B",
                                             colPairName = "expansion_interaction_graph",
                                             expand_by = 10, img_id = "ImageNb",
                                             name = "patch_id_2"))
     expect_equal(unique(cur_spe_2$patch_id_2), c(NA, "1", "2", "3", "4", "5", "6", "7", "8"))
     plotSpatial(cur_spe_2, img_id = "ImageNb", node_color_by = "patch_id_2")
+    
+    cur_spe_3 <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                 type = "expansion", threshold = 20)
+    
+    expect_silent(cur_spe_3 <- patchDetection(cur_spe_3, 
+                                              patch_cells = cur_spe_3$CellType == "celltype_B",
+                                              colPairName = "expansion_interaction_graph",
+                                              expand_by = 10, img_id = "ImageNb",
+                                              name = "patch_id_2"))
+    expect_equal(cur_spe_3$patch_id_2, cur_spe_2$patch_id_2)
+    plotSpatial(cur_spe_3, img_id = "ImageNb", node_color_by = "patch_id_2")
     
     # Error
     expect_error(patchDetection("test"),
