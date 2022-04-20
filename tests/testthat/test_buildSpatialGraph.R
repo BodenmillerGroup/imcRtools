@@ -438,20 +438,6 @@ test_that("buildSpatialGraph function works", {
                      directed = FALSE)
     expect_silent(print(p))
     
-    # Parallelisation
-    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-                                               type = "expansion", threshold = 15,
-                                               BPPARAM = BiocParallel::bpparam()))
-    expect_equal(colPairNames(cur_sce), "expansion_interaction_graph")
-    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-                                               type = "delaunay",
-                                               BPPARAM = BiocParallel::bpparam()))
-    expect_equal(colPairNames(cur_sce), "delaunay_interaction_graph")
-    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-                                               type = "knn", k = 5,
-                                               BPPARAM = BiocParallel::bpparam()))
-    expect_equal(colPairNames(cur_sce), "knn_interaction_graph")
-    
     # SpatialExperiment
     library(SpatialExperiment)
     pancreasSPE <- SpatialExperiment(assays = list(counts = counts(pancreasSCE)),
@@ -536,4 +522,27 @@ test_that("buildSpatialGraph function works", {
                                    directed = 1),
                  regexp = "'directed' must be a single logical.",
                  fixed = TRUE)
+})
+
+test_that("buildSpatialGraph function works", {
+    
+    skip_on_os(os = "windows")
+    
+    library(cytomapper)
+    data("pancreasSCE")
+    
+    # Parallelisation
+    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                               type = "expansion", threshold = 15,
+                                               BPPARAM = BiocParallel::bpparam()))
+    expect_equal(colPairNames(cur_sce), "expansion_interaction_graph")
+    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                               type = "delaunay",
+                                               BPPARAM = BiocParallel::bpparam()))
+    expect_equal(colPairNames(cur_sce), "delaunay_interaction_graph")
+    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                               type = "knn", k = 5,
+                                               BPPARAM = BiocParallel::bpparam()))
+    expect_equal(colPairNames(cur_sce), "knn_interaction_graph")
+    
 })
