@@ -10,7 +10,7 @@ on:
 jobs:
   R-CMD-check:
     runs-on: ubuntu-latest
-    container: rocker/r-ver:4.1.0
+    container: rocker/r-ver:4.2
 
     steps:
       - uses: actions/checkout@v2
@@ -35,6 +35,7 @@ jobs:
          remotes::install_deps(dependencies = TRUE, repos = BiocManager::repositories(), Ncpu = 2L)
          install.packages("https://cran.rstudio.com/src/contrib/matrixStats_0.61.0.tar.gz")
          BiocManager::install("matrixStats", force = TRUE)
+         BiocManager::install("CATALYST", force = TRUE)
         shell: Rscript {0}
         
       - name: Check
