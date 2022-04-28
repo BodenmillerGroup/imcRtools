@@ -161,6 +161,11 @@ testInteractions <- function(object,
     .valid.countInteractions.input(object, group_by, label, method,
                                         patch_size, colPairName)
     .valid.testInteractions.input(iter, p_threshold)
+    
+    # Re-level group_by label
+    if(is.factor(colData(object)[[group_by]])) {
+        colData(object)[[group_by]] <- as.factor(as.character(colData(object)[[group_by]]))
+    }
 
     cur_label <- as.factor(colData(object)[[label]])
     cur_table <- .prepare_table(object, group_by, cur_label, colPairName)
