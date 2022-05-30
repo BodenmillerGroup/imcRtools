@@ -186,6 +186,17 @@ test_that("patchDetection function works", {
     expect_equal(cur_spe_3$patch_id_2, cur_spe_2$patch_id_2)
     plotSpatial(cur_spe_3, img_id = "ImageNb", node_color_by = "patch_id_2")
     
+    # Check that metadata is not duplicated
+    cur_sce <- pancreasSCE
+    metadata(cur_sce) <- list(test = c(1,2))
+    
+    cur_sce <- patchDetection(cur_sce, 
+                              patch_cells = cur_sce$CellType == "celltype_B",
+                              colPairName = "expansion_interaction_graph")
+    
+    expect_equal(length(metadata(cur_sce)), 1)
+    expect_equal(metadata(cur_sce), list(test = c(1, 2)))
+    
     # Error
     expect_error(patchDetection("test"),
                  regexp = "'object' not of type 'SingleCellExperiment'.",
