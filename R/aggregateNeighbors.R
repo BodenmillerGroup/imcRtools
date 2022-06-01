@@ -73,11 +73,11 @@ aggregateNeighbors <- function(object,
                             statistic = c("mean", "median", "sd", "var"),
                             name = NULL){
 
-    summarize_by = match.arg(aggregate_by)
+    summarize_by <- match.arg(aggregate_by)
   
-    summaryStats = match.arg(statistic)
+    summaryStats <- match.arg(statistic)
 
-    .valid.aggregateNeighbors.input(object, colPairName, aggregate_by, 
+    .valid.aggregateNeighbors.input(object, colPairName, summarize_by, 
                                 count_by, proportions, assay_type, subset_row,
                                 name)
 
