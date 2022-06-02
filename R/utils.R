@@ -515,6 +515,7 @@
 # Helper function for the patch detection method
 #' @importFrom sf st_multipoint st_cast st_sfc st_distance
 #' @importFrom dplyr as_tibble filter sym nest_by summarize
+#' @importFrom S4Vectors metadata
 .expand_patch <- function(object, 
                           name,
                           expand_by,
@@ -522,6 +523,11 @@
                           convex,
                           img_id,
                           BPPARAM){
+    
+    cur_meta <- metadata(object)
+    metadata(object) <- list()
+    
+    cur_intmeta <- int_metadata(object)
     
     cur_out <- bplapply(
         unique(colData(object)[[img_id]]),
@@ -603,7 +609,11 @@
             
         }, BPPARAM = BPPARAM)
     
-    return(do.call("cbind", cur_out))
+    cur_out <- do.call("cbind", cur_out)
+    metadata(cur_out) <- cur_meta
+    int_metadata(cur_out) <- cur_intmeta
+    
+    return(cur_out)
     
 }
 #' @importFrom concaveman concaveman

@@ -137,6 +137,11 @@ buildSpatialGraph <- function(object,
     
     cur_ind <- unique(as.character(colData(object)[[img_id]]))
     
+    cur_meta <- metadata(object)
+    metadata(object) <- list()
+    
+    cur_intmeta <- int_metadata(object)
+    
     cur_out <- bplapply(cur_ind,
                         function(x){
                             
@@ -222,6 +227,9 @@ buildSpatialGraph <- function(object,
                         }, BPPARAM = BPPARAM)
     
     cur_out <- do.call("cbind", cur_out)
+    
+    metadata(cur_out) <- cur_meta
+    int_metadata(cur_out) <- cur_intmeta
                                
     return(cur_out)
 }

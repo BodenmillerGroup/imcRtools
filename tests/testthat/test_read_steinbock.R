@@ -4,6 +4,8 @@ test_that("read_steinbock function works", {
     # SpatialExperiment
     cur_spe <- read_steinbock(path)
     
+    expect_equal(length(int_metadata(cur_spe)), 3)
+    
     expect_s4_class(cur_spe, "SpatialExperiment")
     
     expect_equal(rownames(cur_spe), c("Ag107", "Cytokeratin 5", "Laminin", 

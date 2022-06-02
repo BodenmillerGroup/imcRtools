@@ -464,6 +464,24 @@ test_that("buildSpatialGraph function works", {
                                                type = "knn", k = 5))
     expect_equal(colPairNames(cur_spe), "knn_interaction_graph")
     
+    # Check that metadata is not duplicated
+    cur_sce <- pancreasSCE
+    metadata(cur_sce) <- list(test = c(1,2))
+    
+    cur_sce <- buildSpatialGraph(cur_sce, img_id = "ImageNb", 
+                                 type = "knn", k = 5)
+    
+    expect_equal(length(metadata(cur_sce)), 1)
+    expect_equal(metadata(cur_sce), list(test = c(1, 2)))
+    
+    int_metadata(cur_sce) <- list(version = "1.16.0")
+    
+    cur_sce <- buildSpatialGraph(cur_sce, img_id = "ImageNb", 
+                                 type = "knn", k = 5)
+    
+    expect_equal(length(int_metadata(cur_sce)), 1)
+    expect_equal(int_metadata(cur_sce), list(version = "1.16.0"))
+    
     # Fail
     expect_error(buildSpatialGraph("test"),
                  regexp = "'object' not of type 'SingleCellExperiment'.",

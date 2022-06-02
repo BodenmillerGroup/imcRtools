@@ -123,3 +123,7 @@ Changes in version 1.1.9 (2022-04-19):
 Changes in version 1.2.1 (2022-04-28):
 
 + Bug fix: avoid using factors in testInteraction function for group_by
+
+Changes in version 1.2.2 (2022-06-02):
+
++ Bug fix: avoid accumulation of metadata and int_metadata entries
