@@ -527,7 +527,7 @@
     metadata(object) <- list()
     
     cur_intmeta <- int_metadata(object)
-    int_metadata(object) <- list()
+    int_metadata(object) <- list(version = cur_intmeta$version)
 
     cur_out <- bplapply(
         unique(colData(object)[[img_id]]),
