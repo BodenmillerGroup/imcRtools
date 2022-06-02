@@ -147,7 +147,9 @@ read_steinbock <- function(path,
     }
     
     # Merge objects
+    cur_intmeta <- int_metadata(object[[1]])
     object <- do.call("cbind", object)
+    int_metadata(object) <- cur_intmeta
     
     # Add image metadata
     if (!is.null(image_file)) {

@@ -515,6 +515,7 @@
 # Helper function for the patch detection method
 #' @importFrom sf st_multipoint st_cast st_sfc st_distance
 #' @importFrom dplyr as_tibble filter sym nest_by summarize
+#' @importFrom S4Vectors metadata
 .expand_patch <- function(object,
                           name,
                           expand_by,
