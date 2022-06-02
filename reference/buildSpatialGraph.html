@@ -89,7 +89,7 @@ cells.</p></dd>
 <dd><p>(when <code>type = "knn"</code>) single numeric integer defining the
 number of nearest neighbors to search for.</p></dd>
 <dt>directed</dt>
-<dd><p>(when <code>type = "knn"</code>) should the returned graph be 
+<dd><p>(when <code>type = "knn"</code>) should the returned graph be
 directed? (see details).</p></dd>
 <dt>max_dist</dt>
 <dd><p>(when <code>type = "knn"</code> or <code>type = "delaunay"</code>) the
@@ -127,9 +127,9 @@ function (<code>type = "knn"</code>)).</p></dd>
     <h2>Building an interaction graph</h2>
     
 
-<p>This function defines interacting cells in different ways. They are based 
+<p>This function defines interacting cells in different ways. They are based
 on the cells' centroids and do not incorporate cell shape or area.</p>
-<p>1. When <code>type = "expansion"</code>, all cells within the radius 
+<p>1. When <code>type = "expansion"</code>, all cells within the radius
 <code>threshold</code> are considered interacting cells.</p>
 <p>2. When <code>type = "delaunay"</code>, interacting cells are found via a delaunay
 triangulation of the cells' centroids.</p>
@@ -138,31 +138,31 @@ nearest neighbors in the 2D spatial plane.</p>
 <p>The <code>directed</code> parameter only affects graph construction via k nearest
 neighbor search. For <code>directed = FALSE</code>, each interaction will be
 stored as mutual edge (e.g. node 2 is connected to node 10 and vise versa).
-For <code>type = "expansion"</code> and <code>type = "delaunay"</code>, each edge is 
+For <code>type = "expansion"</code> and <code>type = "delaunay"</code>, each edge is
 stored as mutual edge by default.</p>
 <p>The graph is stored in form of a <code>SelfHits</code> object in
 <code>colPair(object, name)</code>. This object can be regarded as an edgelist
-and coerced to an <code>igraph</code> object via 
+and coerced to an <code>igraph</code> object via
 <code>graph_from_edgelist(as.matrix(colPair(object, name)))</code>.</p>
     </div>
     <div id="choosing-the-graph-construction-method">
     <h2>Choosing the graph construction method</h2>
     
 
-<p>When finding interactions via <code>expansion</code> or <code>knn</code>, the 
-<code><a href="https://rdrr.io/pkg/BiocNeighbors/man/findNeighbors-methods.html" class="external-link">findNeighbors</a></code> or 
+<p>When finding interactions via <code>expansion</code> or <code>knn</code>, the
+<code><a href="https://rdrr.io/pkg/BiocNeighbors/man/findNeighbors-methods.html" class="external-link">findNeighbors</a></code> or
 <code><a href="https://rdrr.io/pkg/BiocNeighbors/man/findKNN-methods.html" class="external-link">findKNN</a></code> functions are used, respectively. Both
 functions accept the <code>BNPARAM</code> parameter via which the graph
 construction method can be defined (default
 <code><a href="https://rdrr.io/pkg/BiocNeighbors/man/KmknnParam.html" class="external-link">KmknnParam</a></code>). For an overview on the different
 algorithms, see
-<code><a href="https://rdrr.io/pkg/BiocNeighbors/man/BiocNeighborParam.html" class="external-link">BiocNeighborParam</a></code>. Within the 
+<code><a href="https://rdrr.io/pkg/BiocNeighbors/man/BiocNeighborParam.html" class="external-link">BiocNeighborParam</a></code>. Within the
 <code>BiocNeighborParam</code> object, <code>distance</code> can be set to
 <code>"Euclidean"</code> (default), <code>"Manhattan"</code> or <code>"Cosine"</code>.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/BiocNeighbors/man/findNeighbors-methods.html" class="external-link">findNeighbors</a></code> for the function finding 
+    <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/BiocNeighbors/man/findNeighbors-methods.html" class="external-link">findNeighbors</a></code> for the function finding
 interactions via expansion</p>
 <p><code><a href="https://rdrr.io/pkg/BiocNeighbors/man/findKNN-methods.html" class="external-link">findKNN</a></code> for the function finding interactions
 via nearest neighbor search</p>
@@ -181,7 +181,7 @@ via delaunay triangulation</p>
 <span class="r-in"><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu"><a href="read_steinbock.html">read_steinbock</a></span><span class="op">(</span><span class="va">path</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Constructing a graph via expansion</span></span>
-<span class="r-in"><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu">buildSpatialGraph</span><span class="op">(</span><span class="va">spe</span>, img_id <span class="op">=</span> <span class="st">"sample_id"</span>, </span>
+<span class="r-in"><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu">buildSpatialGraph</span><span class="op">(</span><span class="va">spe</span>, img_id <span class="op">=</span> <span class="st">"sample_id"</span>,</span>
 <span class="r-in">                         type <span class="op">=</span> <span class="st">"expansion"</span>, threshold <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/colPairs.html" class="external-link">colPair</a></span><span class="op">(</span><span class="va">spe</span>, <span class="st">"expansion_interaction_graph"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SelfHits object with 278 hits and 0 metadata columns:</span>
@@ -202,7 +202,7 @@ via delaunay triangulation</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   nnode: 218</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Constructing a graph via delaunay triangulation</span></span>
-<span class="r-in"><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu">buildSpatialGraph</span><span class="op">(</span><span class="va">spe</span>, img_id <span class="op">=</span> <span class="st">"sample_id"</span>, </span>
+<span class="r-in"><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu">buildSpatialGraph</span><span class="op">(</span><span class="va">spe</span>, img_id <span class="op">=</span> <span class="st">"sample_id"</span>,</span>
 <span class="r-in">                         type <span class="op">=</span> <span class="st">"delaunay"</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/colPairs.html" class="external-link">colPair</a></span><span class="op">(</span><span class="va">spe</span>, <span class="st">"delaunay_interaction_graph"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SelfHits object with 1002 hits and 0 metadata columns:</span>
@@ -223,7 +223,7 @@ via delaunay triangulation</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   nnode: 218</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Constructing a graph via k nearest neighbor search</span></span>
-<span class="r-in"><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu">buildSpatialGraph</span><span class="op">(</span><span class="va">spe</span>, img_id <span class="op">=</span> <span class="st">"sample_id"</span>, </span>
+<span class="r-in"><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu">buildSpatialGraph</span><span class="op">(</span><span class="va">spe</span>, img_id <span class="op">=</span> <span class="st">"sample_id"</span>,</span>
 <span class="r-in">                         type <span class="op">=</span> <span class="st">"knn"</span>, k <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/colPairs.html" class="external-link">colPair</a></span><span class="op">(</span><span class="va">spe</span>, <span class="st">"knn_interaction_graph"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SelfHits object with 1090 hits and 0 metadata columns:</span>
