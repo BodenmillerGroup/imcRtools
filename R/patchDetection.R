@@ -86,7 +86,7 @@
 #' Metastatic Melanoma Characterizes Features of Response to Immunotherapy., 
 #' bioRxiv 2021}
 #' 
-#' @importFrom igraph graph_from_edgelist components 
+#' @importFrom igraph graph_from_data_frame components 
 #' @export
 patchDetection <- function(object, 
                            patch_cells,
@@ -102,9 +102,12 @@ patchDetection <- function(object,
     .valid.patchDetection.input(object, patch_cells, colPairName, 
                                 min_patch_size, name, expand_by, coords,
                                 convex, img_id)
+    node_id <- seq_len(sum(patch_cells))
     
-    cur_graph <- graph_from_edgelist(as.matrix(colPair(object[,patch_cells], 
-                                                       colPairName)))
+    cur_graph <- graph_from_data_frame(colPair(object[,patch_cells], 
+                                                       colPairName),
+                                       vertices = data.frame(row.names = node_id,
+                                                             id = node_id))
     cur_components <- components(cur_graph)
     
     if (length(cur_components$membership) == 0) {

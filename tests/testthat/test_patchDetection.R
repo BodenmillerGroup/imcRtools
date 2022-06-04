@@ -125,14 +125,6 @@ test_that("patchDetection function works", {
                  fixed = TRUE)
     
     pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-                                     type = "expansion", threshold = 5)
-    expect_error(cur_sce <- patchDetection(pancreasSCE, 
-                                           patch_cells = pancreasSCE$CellType == "celltype_B",
-                                           colPairName = "expansion_interaction_graph"),
-                 regexp = "No connected components found.",
-                 fixed = TRUE)
-    
-    pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
                                      type = "expansion", threshold = 10)
     expect_silent(cur_sce <- patchDetection(pancreasSCE, 
                                             patch_cells = pancreasSCE$CellType == "celltype_B",
@@ -204,6 +196,15 @@ test_that("patchDetection function works", {
     
     expect_equal(length(int_metadata(cur_sce)), 1)
     expect_equal(int_metadata(cur_sce), list(version = "1.16.0"))
+    
+    # Check for sparse graphs
+    cur_sce <- pancreasSCE
+    cur_sce <- buildSpatialGraph(cur_sce, img_id = "ImageNb", 
+                                     type = "expansion", threshold = 10)
+    
+    expect_silent(cur_sce <- patchDetection(cur_sce, 
+                                            patch_cells = cur_sce$CellType == "celltype_C",
+                                            colPairName = "expansion_interaction_graph"))
     
     # Error
     expect_error(patchDetection("test"),
