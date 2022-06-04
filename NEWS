@@ -127,3 +127,7 @@ Changes in version 1.2.1 (2022-04-28):
 Changes in version 1.2.2 (2022-06-02):
 
 + Bug fix: avoid accumulation of metadata and int_metadata entries
+
+Changes in version 1.2.3 (2022-06-04):
+
++ Bug fix: specify the number of nodes in patchDetection function
