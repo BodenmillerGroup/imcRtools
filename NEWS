@@ -131,3 +131,7 @@ Changes in version 1.3.2 (2022-05-30):
 Changes in version 1.3.3 (2022-06-03):
 
 + Bug fix: specify the number of nodes in patchDetection function
+
+Changes in version 1.3.4 (2022-06-14):
+
++ Avoid duplicated columns when generating nodes for plotSpatial
