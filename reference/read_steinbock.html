@@ -22,7 +22,7 @@ pipeline."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/m
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.4</span>
       </span>
     </div>
 
@@ -84,51 +84,81 @@ pipeline.</p>
     <h2>Arguments</h2>
     <dl><dt>path</dt>
 <dd><p>full path to the steinbock output folder</p></dd>
+
+
 <dt>intensities_folder</dt>
 <dd><p>name of the folder containing the intensity 
 measurements per image</p></dd>
+
+
 <dt>regionprops_folder</dt>
 <dd><p>name of the folder containing the cell-specific
 morphology and spatial measurements per image. Can be set to <code>NULL</code> to 
 exclude reading in morphology measures.</p></dd>
+
+
 <dt>graphs_folder</dt>
 <dd><p>name of the folder containing the spatial connectivity
 graphs per image. Can be set to <code>NULL</code> to exclude reading in graphs.</p></dd>
+
+
 <dt>pattern</dt>
 <dd><p>regular expression specifying a subset of files that should 
 be read in.</p></dd>
+
+
 <dt>extract_cellid_from</dt>
 <dd><p>single character indicating which column entry in 
 the intensity files contains the integer cell id.</p></dd>
+
+
 <dt>extract_coords_from</dt>
 <dd><p>character vector indicating which column entries 
 in the regionprops files contain the x (first entry) and y (second entry) 
 coordinates.</p></dd>
+
+
 <dt>image_file</dt>
 <dd><p>single character indicating the file name storing meta data
 per image (can be <code>NULL</code>).</p></dd>
+
+
 <dt>extract_imagemetadata_from</dt>
 <dd><p>character vector indicating which
 additional image specific metadata to extract from the <code>image_file</code>.
 These will be stored in the <code>colData(x)</code> slot as object/cell-specific
 entries.</p></dd>
+
+
 <dt>panel_file</dt>
 <dd><p>single character containing the name of the panel file. 
 This can either be inside the steinbock path (recommended) or located 
 somewhere else.</p></dd>
+
+
 <dt>extract_names_from</dt>
 <dd><p>single character indicating the column of the panel
 file containing the channel names.</p></dd>
+
+
 <dt>return_as</dt>
 <dd><p>should the object be returned as 
 <code>SpatialExperiment</code> (<code>return_as = "spe"</code>) or
 <code><a href="https://rdrr.io/pkg/SingleCellExperiment/man/SingleCellExperiment.html" class="external-link">SingleCellExperiment</a></code> (<code>return_as = "sce"</code>).</p></dd>
+
+
 <dt>BPPARAM</dt>
 <dd><p>parameters for parallelised processing.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>returns a <code>SpatialExperiment</code> or <code>SingleCellExperiment</code>object markers in rows and cells in columns.</p>
+    
+
+<p>returns a <code>SpatialExperiment</code> or <code>SingleCellExperiment</code></p>
+
+
+<p>object markers in rows and cells in columns.</p>
     </div>
     <div id="the-returned-data-container">
     <h2>The returned data container</h2>
@@ -252,7 +282,7 @@ with the cell-cell interaction graphs</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

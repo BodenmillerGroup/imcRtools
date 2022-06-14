@@ -18,7 +18,7 @@ expansion, delaunay triangulation or k nearest neighbor detection."><!-- mathjax
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.4</span>
       </span>
     </div>
 
@@ -76,51 +76,79 @@ expansion, delaunay triangulation or k nearest neighbor detection.</p>
     <dl><dt>object</dt>
 <dd><p>a <code>SingleCellExperiment</code> or <code>SpatialExperiment</code>
 object</p></dd>
+
+
 <dt>img_id</dt>
 <dd><p>single character indicating the <code>colData(object)</code> entry
 containing the unique image identifiers.</p></dd>
+
+
 <dt>type</dt>
 <dd><p>single character specifying the type of graph to be build.
 Supported entries are <code>"expansion"</code> (default) to find interacting
 cells via distance thresholding; <code>"delaunay"</code> to find interactions via
 delaunay triangulation; <code>"knn"</code> to find the k nearest neighboring
 cells.</p></dd>
+
+
 <dt>k</dt>
 <dd><p>(when <code>type = "knn"</code>) single numeric integer defining the
 number of nearest neighbors to search for.</p></dd>
+
+
 <dt>directed</dt>
 <dd><p>(when <code>type = "knn"</code>) should the returned graph be
 directed? (see details).</p></dd>
+
+
 <dt>max_dist</dt>
 <dd><p>(when <code>type = "knn"</code> or <code>type = "delaunay"</code>) the
 maximum distance at which to consider neighboring cells. All neighbors
 within a distance larger than <code>max_dist</code> will be excluded from graph
 construction.</p></dd>
+
+
 <dt>threshold</dt>
 <dd><p>(when <code>type = "expansion"</code>) single numeric specifying
 the maximum distance for considering neighbors</p></dd>
+
+
 <dt>coords</dt>
 <dd><p>character vector of length 2 specifying the names of the
 <code>colData</code> (for a <code>SingleCellExperiment</code> object) or the
 <code>spatialCoords</code> entries of the cells' x and y locations.</p></dd>
+
+
 <dt>name</dt>
 <dd><p>single character specifying the name of the graph.</p></dd>
+
+
 <dt>BNPARAM</dt>
 <dd><p>a <code><a href="https://rdrr.io/pkg/BiocNeighbors/man/BiocNeighborParam.html" class="external-link">BiocNeighborParam</a></code> object
 defining the algorithm to use.</p></dd>
+
+
 <dt>BPPARAM</dt>
 <dd><p>a <code><a href="https://rdrr.io/pkg/BiocParallel/man/BiocParallelParam-class.html" class="external-link">BiocParallelParam-class</a></code> object
 defining how to parallelize computations.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>additional parameters passed to the
 <code><a href="https://rdrr.io/pkg/BiocNeighbors/man/findNeighbors-methods.html" class="external-link">findNeighbors</a></code> function (<code>type =
 "expansion"</code>), the <code><a href="https://rdrr.io/pkg/RTriangle/man/triangulate.html" class="external-link">triangulate</a></code> function
 (<code>type = "delaunay"</code>) or the <code><a href="https://rdrr.io/pkg/BiocNeighbors/man/findKNN-methods.html" class="external-link">findKNN</a></code>
 function (<code>type = "knn"</code>)).</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>returns a <code>SpatialExperiment</code> or <code>SingleCellExperiment</code>containing the graph in form of a <code>SelfHits</code> object in
+    
+
+<p>returns a <code>SpatialExperiment</code> or <code>SingleCellExperiment</code></p>
+
+
+<p>containing the graph in form of a <code>SelfHits</code> object in
 <code>colPair(object, name)</code>.</p>
     </div>
     <div id="building-an-interaction-graph">
@@ -257,7 +285,7 @@ via delaunay triangulation</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

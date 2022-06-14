@@ -18,7 +18,7 @@ neighbors of each cell."><!-- mathjax --><script src="https://cdnjs.cloudflare.c
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.4</span>
       </span>
     </div>
 
@@ -73,42 +73,61 @@ neighbors of each cell.</p>
     <dl><dt>object</dt>
 <dd><p>a <code>SingleCellExperiment</code> or <code>SpatialExperiment</code>
 object</p></dd>
+
+
 <dt>colPairName</dt>
 <dd><p>single character indicating the <code>colPair(object)</code>
 entry containing the neighbor information.</p></dd>
+
+
 <dt>aggregate_by</dt>
 <dd><p>character specifying whether the neighborhood should be
 summarized by cellular features stored in <code>colData(object)</code>
 (<code>aggregate_by = "metdata"</code>) or by marker expression of the
 neighboring cells (<code>aggregate_by = "expression"</code>).</p></dd>
+
+
 <dt>count_by</dt>
 <dd><p>for <code>summarize_by = "metadata"</code>, a single character
 specifying the <code>colData(object)</code> entry containing the cellular
 metadata that should be summarized across each cell's neighborhood.</p></dd>
+
+
 <dt>proportions</dt>
 <dd><p>single logical indicating whether aggregated metadata
 should be returned in form of proportions instead of absolute counts.</p></dd>
+
+
 <dt>assay_type</dt>
 <dd><p>for <code>summarize_by = "expression"</code>, single character
 indicating the assay slot to use.</p></dd>
+
+
 <dt>subset_row</dt>
 <dd><p>for <code>summarize_by = "expression"</code>, an integer, logical
 or character vector specifying the features to use. If NULL, defaults to
 all features.</p></dd>
+
+
 <dt>statistic</dt>
 <dd><p>for <code>summarize_by = "expression"</code>, a single character
 specifying the statistic to be used for summarizing the expression values
 across all neighboring cells. Supported entries are "mean", "median", "sd",
 "var". Defaults to "mean" if not specified.</p></dd>
+
+
 <dt>name</dt>
 <dd><p>single character specifying the name of the data frame to be
 saved in the <code>colData(object)</code>. Defaults to "aggregatedNeighbors" when
 <code>summarize_by = "metadata"</code> or "statistic_aggregatedExpression" when
 <code>summarize_by = "expression"</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>returns an object of <code>class(object)</code> containing the aggregated
+    
+
+<p>returns an object of <code>class(object)</code> containing the aggregated
 values in form of a <code>DataFrame</code> object in
 <code>colData(object)[[name]]</code>.</p>
     </div>
@@ -202,7 +221,7 @@ values in form of a <code>DataFrame</code> object in
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

@@ -18,7 +18,7 @@ a cell of type A has using different approaches."><!-- mathjax --><script src="h
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.4</span>
       </span>
     </div>
 
@@ -70,28 +70,41 @@ a cell of type A has using different approaches.</p>
     <dl><dt>object</dt>
 <dd><p>a <code>SingleCellExperiment</code> or <code>SpatialExperiment</code>
 object .</p></dd>
+
+
 <dt>group_by</dt>
 <dd><p>a single character indicating the <code>colData(object)</code>
 entry by which interactions are grouped. This is usually the image ID or
 patient ID.</p></dd>
+
+
 <dt>label</dt>
 <dd><p>single character specifying the <code>colData(object)</code> entry
 which stores the cell labels. These can be cell-types labels or other
 metadata.</p></dd>
+
+
 <dt>colPairName</dt>
 <dd><p>single character indicating the <code>colPair(object)</code>
 entry containing cell-cell interactions in form of an edge list.</p></dd>
+
+
 <dt>method</dt>
 <dd><p>which cell-cell interaction counting method to use 
 (see details)</p></dd>
+
+
 <dt>patch_size</dt>
 <dd><p>if <code>method = "patch"</code>, a single numeric specifying
 the minimum number of neighbors of the same type to be considered a patch
 (see details)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a DataFrame containing one row per <code>group_by</code> entry and unique
+    
+
+<p>a DataFrame containing one row per <code>group_by</code> entry and unique
 <code>label</code> entry combination (<code>from_label</code>, <code>to_label</code>). The
 <code>ct</code> entry stores the interaction count as described in the details.
 <code>NA</code> is returned if a certain label is not present in this grouping
@@ -229,7 +242,7 @@ interactions per grouping level.</p></div>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

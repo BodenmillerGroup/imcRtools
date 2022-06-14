@@ -19,7 +19,7 @@ incorrectly assigned pixels and remove small pixel sets."><!-- mathjax --><scrip
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.4</span>
       </span>
     </div>
 
@@ -72,22 +72,33 @@ incorrectly assigned pixels and remove small pixel sets.</p>
 <dd><p>a <code>SingleCellExperiment</code> object containing pixel
 intensities per channel. Individual pixels are stored as columns and
 channels are stored as rows.</p></dd>
+
+
 <dt>bc_id</dt>
 <dd><p>character string indicating which <code>colData(object)</code> entry
 stores the estimated mass</p></dd>
+
+
 <dt>spot_mass</dt>
 <dd><p>character string indicating which <code>colData(object)</code> 
 entry stores the true isotope mass of the spotted metal.</p></dd>
+
+
 <dt>minevents</dt>
 <dd><p>single numeric indicating the threshold under which pixel
 sets are excluded from spillover estimation.</p></dd>
+
+
 <dt>correct_pixels</dt>
 <dd><p>logical indicating if incorrectly assigned pixels 
 should be excluded from spillover estimation.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>returns a SingleCellExperiment object in which
+    
+
+<p>returns a SingleCellExperiment object in which
 <code>colData(object)$bc_id</code> has been adjusted based on the filter
 criteria.</p>
     </div>
@@ -145,7 +156,7 @@ Nils Eling (<a href="mailto:nils.eling@dqbm.uzh.ch">nils.eling@dqbm.uzh.ch</a>)<
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

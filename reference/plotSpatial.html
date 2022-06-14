@@ -19,7 +19,7 @@ in form of edges between points."><!-- mathjax --><script src="https://cdnjs.clo
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.4</span>
       </span>
     </div>
 
@@ -91,78 +91,129 @@ in form of edges between points.</p>
     <dl><dt>object</dt>
 <dd><p>a <code>SingleCellExperiment</code> or <code>SpatialExperiment</code>
 object.</p></dd>
+
+
 <dt>img_id</dt>
 <dd><p>single character indicating the <code>colData(object)</code> entry
 containing the unique image identifiers.</p></dd>
+
+
 <dt>coords</dt>
 <dd><p>character vector of length 2 specifying the names of the
 <code>colData</code> (for a <code>SingleCellExperiment</code> object) or the
 <code>spatialCoords</code> entries indicating the the cells' x and y locations.</p></dd>
+
+
 <dt>node_color_by</dt>
 <dd><p>single character indicating the <code>colData(object)</code>
 entry or marker name by which the nodes (cell locations) should be colored.</p></dd>
+
+
 <dt>node_shape_by</dt>
 <dd><p>single character indicating the <code>colData(object)</code>
 entry by which the shape of the nodes are defined.</p></dd>
+
+
 <dt>node_size_by</dt>
 <dd><p>single character indicating the <code>colData(object)</code>
 entry by which the size of the nodes are defined.</p></dd>
+
+
 <dt>node_color_fix</dt>
 <dd><p>single character or numeric specifying the color of all 
 nodes.</p></dd>
+
+
 <dt>node_shape_fix</dt>
 <dd><p>single numeric or character specifying the shape of all 
 nodes.</p></dd>
+
+
 <dt>node_size_fix</dt>
 <dd><p>single numeric specifying the size of all nodes</p></dd>
+
+
 <dt>assay_type</dt>
 <dd><p>single character indicating the assay slot from which
 to extract the expression data when <code>node_color_by</code> is set to one of
 <code>rownames(object)</code>.</p></dd>
+
+
 <dt>draw_edges</dt>
 <dd><p>should cell-cell interactions be drawn as edges between
 nodes?</p></dd>
+
+
 <dt>directed</dt>
 <dd><p>should cell-cell interactions be handled as a directed graph?</p></dd>
+
+
 <dt>edge_color_by</dt>
 <dd><p>single character indicating by which to color the edges.
 See details for more information.</p></dd>
+
+
 <dt>edge_width_by</dt>
 <dd><p>single character determining the size of the edges.
 See details for more information.</p></dd>
+
+
 <dt>edge_color_fix</dt>
 <dd><p>single character or numeric specifying the color of all 
 edges.</p></dd>
+
+
 <dt>edge_width_fix</dt>
 <dd><p>single numeric specifying the size of all edges.</p></dd>
+
+
 <dt>arrow</dt>
 <dd><p>an <code><a href="https://rdrr.io/r/grid/arrow.html" class="external-link">arrow</a></code> object specifying how to draw
 arrows between cells.</p></dd>
+
+
 <dt>end_cap</dt>
 <dd><p>a <code><a href="https://ggraph.data-imaginist.com/reference/geometry.html" class="external-link">geometry</a></code> object specifying how long
 the edges are. This only takes effect when drawing arrows. Default:
 <code>end_cap = circle(0.1, 'cm')</code></p></dd>
+
+
 <dt>colPairName</dt>
 <dd><p>single character specifying the 
 <code>colPair(object)</code> slot to retrieve the cell-cell pairings.</p></dd>
+
+
 <dt>nodes_first</dt>
 <dd><p>should the nodes be plotted first and then the edges?</p></dd>
+
+
 <dt>ncols</dt>
 <dd><p>number of columns of the grid to arrange individual images.</p></dd>
+
+
 <dt>nrows</dt>
 <dd><p>number of rows of the grid to arrange individual images.</p></dd>
+
+
 <dt>scales</dt>
 <dd><p>one of <code>"free"</code>, <code>"fixed"</code>, <code>"free_x"</code> or 
 <code>"free_y"</code> indicating if x- and y-axis ranges should be fixed across
 all images.</p></dd>
+
+
 <dt>flip_x</dt>
 <dd><p>flip the x-axis?</p></dd>
+
+
 <dt>flip_y</dt>
 <dd><p>flip the y-axis?</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>returns a <code>ggplot</code> object.</p>
+    
+
+<p>returns a <code>ggplot</code> object.</p>
     </div>
     <div id="visualizing-cell-locations-and-cell-cell-interactions">
     <h2>Visualizing cell locations and cell-cell interactions</h2>
@@ -255,7 +306,7 @@ parameter can be used.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

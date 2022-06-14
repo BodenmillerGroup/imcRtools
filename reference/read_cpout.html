@@ -22,7 +22,7 @@ pipeline."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/m
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.4</span>
       </span>
     </div>
 
@@ -92,69 +92,109 @@ pipeline.</p>
     <h2>Arguments</h2>
     <dl><dt>path</dt>
 <dd><p>full path to the CellProfiler output folder.</p></dd>
+
+
 <dt>object_file</dt>
 <dd><p>single character indicating the file name storing the
 object/cell-specific intensities and metadata.</p></dd>
+
+
 <dt>image_file</dt>
 <dd><p>single character indicating the file name storing meta data
 per image (can be <code>NULL</code>).</p></dd>
+
+
 <dt>panel_file</dt>
 <dd><p>single character indicating the file name storing the panel
 information (can be <code>NULL</code>).</p></dd>
+
+
 <dt>graph_file</dt>
 <dd><p>single character indicating the file name storing the
 object/cell interaction information (can be <code>NULL</code>).</p></dd>
+
+
 <dt>object_feature_file</dt>
 <dd><p>single character indicating the file name storing
 object/cell feature information.</p></dd>
+
+
 <dt>intensities</dt>
 <dd><p>single character indicating which column entries of the
 <code>object_file</code> contain the intensity features of interest. See details.</p></dd>
+
+
 <dt>extract_imgid_from</dt>
 <dd><p>single character indicating which column entries of
 the <code>object_file</code> and <code>image_file</code> contain the image integer ID.</p></dd>
+
+
 <dt>extract_cellid_from</dt>
 <dd><p>single character indicating which column entry
 of the <code>object_file</code> contains the object/cell integer ID.</p></dd>
+
+
 <dt>extract_coords_from</dt>
 <dd><p>character vector indicating which column entries
 of the <code>object_file</code> contain the x and y location of the
 objects/cells.</p></dd>
+
+
 <dt>extract_cellmetadata_from</dt>
 <dd><p>character vector indicating which additional
 object/cell specific metadata to extract from the <code>object_file</code>.</p></dd>
+
+
 <dt>extract_imagemetadata_from</dt>
 <dd><p>character vector indicating which
 additional image specific metadata to extract from the <code>image_file</code>.
 These will be stored in the <code>colData(x)</code> slot as object/cell-specific
 entries.</p></dd>
+
+
 <dt>extract_graphimageid_from</dt>
 <dd><p>single character indicating  which column
 entries of the <code>graph_file</code> contain the image integer ID.</p></dd>
+
+
 <dt>extract_graphcellids_from</dt>
 <dd><p>character vector indicating which column
 entries of the <code>graph_file</code> contain the first and second object/cell
 integer IDs. These will be stored as the <code>from</code> and <code>to</code> entry of
 the <code>SelfHits</code> object in colPair(x, "neighborhood").</p></dd>
+
+
 <dt>extract_metal_from</dt>
 <dd><p>single character indicating which column entry of
 the <code>panel_file</code> contains the metal isotopes of the used antibodies.
 This entry is used to match the panel information to the acquired channel
 information.</p></dd>
+
+
 <dt>scale_intensities</dt>
 <dd><p>single logical. Should the measured intensity
 features be scaled by <code>extract_scalingfactor_from</code>.</p></dd>
+
+
 <dt>extract_scalingfactor_from</dt>
 <dd><p>single character indicating which column
 entries of the <code>image_file</code> contain the image specific scaling factor.</p></dd>
+
+
 <dt>return_as</dt>
 <dd><p>should the object be returned as
 <code>SpatialExperiment</code> (<code>return_as = "spe"</code>) or
 <code><a href="https://rdrr.io/pkg/SingleCellExperiment/man/SingleCellExperiment.html" class="external-link">SingleCellExperiment</a></code> (<code>return_as = "sce"</code>).</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>returns a <code>SpatialExperiment</code> or <code>SingleCellExperiment</code>object with markers in rows and cells in columns.</p>
+    
+
+<p>returns a <code>SpatialExperiment</code> or <code>SingleCellExperiment</code></p>
+
+
+<p>object with markers in rows and cells in columns.</p>
     </div>
     <div id="the-returned-data-container">
     <h2>The returned data container</h2>
@@ -245,7 +285,7 @@ with the cell-cell interaction graphs</p></div>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

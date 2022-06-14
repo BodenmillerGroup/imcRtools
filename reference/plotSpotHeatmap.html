@@ -19,7 +19,7 @@ channel (columns) in form of a heatmap."><!-- mathjax --><script src="https://cd
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.4</span>
       </span>
     </div>
 
@@ -81,44 +81,73 @@ channel (columns) in form of a heatmap.</p>
 <dd><p>a <code>SingleCellExperiment</code> object containing pixel
 intensities per channel. Individual pixels are stored as columns and
 channels are stored as rows.</p></dd>
+
+
 <dt>spot_id</dt>
 <dd><p>character string indicating which <code>colData(object)</code> entry
 stores the isotope names of the spotted metal. Entries should be of the 
 form (mt)(mass) (e.g. Sm152 for Samarium isotope with the atomic mass 152).</p></dd>
+
+
 <dt>channel_id</dt>
 <dd><p>character string indicating which <code>rowData(object)</code> 
 entry contains the isotope names of the acquired channels.</p></dd>
+
+
 <dt>assay_type</dt>
 <dd><p>character string indicating which assay to use (default
 <code>counts</code>).</p></dd>
+
+
 <dt>statistic</dt>
 <dd><p>the statistic to use when aggregating channels per spot
 (default <code>median</code>)</p></dd>
+
+
 <dt>log</dt>
 <dd><p>should the aggregated pixel intensities be <code>log10(x + 1)</code> 
 transformed?</p></dd>
+
+
 <dt>threshold</dt>
 <dd><p>single numeric indicating a threshold after pixel
 aggregation. All aggregated values larger than <code>threshold</code> will be
 labeled as <code>1</code>.</p></dd>
+
+
 <dt>order_metals</dt>
 <dd><p>should the metals be ordered based on spotted mass?</p></dd>
+
+
 <dt>color</dt>
 <dd><p>see parameter in <code><a href="https://rdrr.io/pkg/pheatmap/man/pheatmap.html" class="external-link">pheatmap</a></code></p></dd>
+
+
 <dt>breaks</dt>
 <dd><p>see parameter in <code><a href="https://rdrr.io/pkg/pheatmap/man/pheatmap.html" class="external-link">pheatmap</a></code></p></dd>
+
+
 <dt>legend_breaks</dt>
 <dd><p>see parameter in <code><a href="https://rdrr.io/pkg/pheatmap/man/pheatmap.html" class="external-link">pheatmap</a></code></p></dd>
+
+
 <dt>cluster_cols</dt>
 <dd><p>see parameter in <code><a href="https://rdrr.io/pkg/pheatmap/man/pheatmap.html" class="external-link">pheatmap</a></code></p></dd>
+
+
 <dt>cluster_rows</dt>
 <dd><p>see parameter in <code><a href="https://rdrr.io/pkg/pheatmap/man/pheatmap.html" class="external-link">pheatmap</a></code></p></dd>
+
+
 <dt>...</dt>
 <dd><p>other arguments passed to <code>pheatmap</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a <code><a href="https://rdrr.io/pkg/pheatmap/man/pheatmap.html" class="external-link">pheatmap</a></code> object</p>
+    
+
+<p>a <code><a href="https://rdrr.io/pkg/pheatmap/man/pheatmap.html" class="external-link">pheatmap</a></code> object</p>
     </div>
     <div id="quality-control-for-spillover-estimation">
     <h2>Quality control for spillover estimation</h2>
@@ -177,7 +206,7 @@ function</p></div>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>
