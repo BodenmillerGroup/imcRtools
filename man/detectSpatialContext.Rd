@@ -15,7 +15,7 @@ entry containing the \code{aggregateNeighbors} DataFrame output. If NULL,
 defaults to "aggregatedNeighbors".}
 
 \item{threshold}{single numeric between 0 and 1 that specifies the fraction 
-threshold for SC assignment.}
+threshold for SC assignment. Defaults to 0.9.}
 
 \item{name}{single character specifying the name of the output saved in 
 \code{colData(object)}.}
@@ -29,6 +29,7 @@ Function to detect the spatial context (SC) of each cell.
 Based on its sorted (high-to-low) cellular neighborhood (CN) fractions in a 
 k-nearest neighbor graph, the SC of each cell is assigned as the set of CNs 
 that cumulatively exceed a user-defined fraction threshold. 
+
 The term was coined by Bhates et al. (Cell Systems, 2022) and describes 
 tissue regions in which distinct CNs may be interacting.
 }

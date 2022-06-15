@@ -13,7 +13,7 @@
 #' "spatial_context".
 #' @param img_id single character specifying the \code{colData(object)} entry 
 #' containing the unique image identifiers. If NULL, defaults to "sample_id".
-#' @param combined was the provided edge list created on cohort-level (two 
+#' @param combined Is the provided edge list created on cohort-level (two 
 #' columns) and not image-level (three columns)? If NULL, defaults to TRUE.
 #' @param directed should the created graph be directed? Defaults to TRUE.
 #' @param node_color_by single character from \code{c("name","freq","n_samples")} 
@@ -32,8 +32,7 @@
 #' 
 #' @return returns a \code{ggplot} object. 
 #' 
-#' @examples
-#' TO DO
+#' @examples TO DO
 #' 
 #' @author Lasse Meyer (\email{lasse.meyer@@uzh.ch})
 #' 
@@ -43,37 +42,39 @@
 #' @importFrom igraph graph_from_data_frame
 #' @importFrom cowplot plot_grid
 #' @importFrom Biobase listLen
+#' @importFrom BiocGenerics table
 #' @export
 
-
-plotSpatialContext <- function(edges, 
+plotSpatialContext <- function(edges,
                                object,
                                entry = NULL,
                                img_id = NULL,
-                               combined = NULL, 
+                               combined = NULL,
                                #build graph
                                directed = TRUE,
                                #nodes
-                               node_color_by = NULL, #c("name","freq","n_samples"),
-                               node_size_by = NULL, #c("freq","n_samples"),
+                               node_color_by = NULL,#c("name","freq","n_samples"),
+                               node_size_by = NULL,#c("freq","n_samples"),
                                node_color_fix = NULL,
                                node_size_fix = NULL,
                                #node labels
                                node_label_repel = TRUE,
-                               node_label_color_by = NULL, #c("name","freq","n_samples"),
-                               node_label_color_fix = NULL,  
+                               node_label_color_by = NULL,#c("name","freq","n_samples"),
+                               node_label_color_fix = NULL,
                                #plot graph - edges
                                draw_edges = TRUE,
                                edge_color_fix = NULL){
   
   entry <- ifelse(is.null(entry), "spatial_context", entry) #default
-  name <- ifelse(is.null(name), "sample_id", name) #default
+  img_id <- ifelse(is.null(img_id), "sample_id", img_id) #default
   combined <- ifelse(is.null(combined), TRUE, combined) #default
   
   .valid.plotSpatialContext.input(edges, object, entry, img_id, combined, directed, node_color_by, node_size_by, node_color_fix, node_size_fix, node_label_repel, node_label_color_by, node_label_color_fix, draw_edges, edge_color_fix)
   
   #data
-  data <- colData(object)[,colnames(colData(sce)) %in% c(entry,img_id)] %>% table() %>% as.data.frame
+  data <- colData(object)[,colnames(colData(object)) %in% c(entry,img_id)] %>% table() %>% as.data.frame
+  Freq <- as.name("Freq")
+  n <- as.name("n")
   
   if(combined == TRUE){ # For combined samples
     anno <- data.frame(spatial_context = unique(data[,entry]), 
@@ -85,7 +86,7 @@ plotSpatialContext <- function(edges,
     g <- graph_from_data_frame(edges, directed = directed,vertices = anno)
     
     #Plot using ggraph
-    p <- .generatePlot(graph = g, node_color_by, node_size_by, node_color_fix, node_size_fix, node_label_repel, node_label_color_by, node_label_color_fix, draw_edges, edge_color_fix) #hidden function
+    p <- .generateSpatialContextPlot(graph = g, node_color_by, node_size_by, node_color_fix, node_size_fix, node_label_repel, node_label_color_by, node_label_color_fix, draw_edges, edge_color_fix) #hidden function
     
     return(p)
     
@@ -109,7 +110,7 @@ plotSpatialContext <- function(edges,
     
     #generate plots
     all_plots <- lapply(g, function(x){
-      p <- .generatePlot(graph = x, node_color_by, node_size_by, node_color_fix, node_size_fix, node_label_repel, node_label_color_by, node_label_color_fix, draw_edges, edge_color_fix) #hidden function
+      p <- .generateSpatialContextPlot(graph = x, node_color_by, node_size_by, node_color_fix, node_size_fix, node_label_repel, node_label_color_by, node_label_color_fix, draw_edges, edge_color_fix) #hidden function
       return(p)
     })
     

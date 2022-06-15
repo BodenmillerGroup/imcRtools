@@ -927,7 +927,7 @@
 #' @importFrom ggraph geom_edge_link geom_node_label geom_node_point ggraph
 #' @importFrom igraph layout.sugiyama vertex_attr
 
-.generatePlot <- function(graph,
+.generateSpatialContextPlot <- function(graph,
                           node_color_by,
                           node_size_by,
                           node_color_fix,

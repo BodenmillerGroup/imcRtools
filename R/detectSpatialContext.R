@@ -4,6 +4,7 @@
 #' Based on its sorted (high-to-low) cellular neighborhood (CN) fractions in a 
 #' k-nearest neighbor graph, the SC of each cell is assigned as the set of CNs 
 #' that cumulatively exceed a user-defined fraction threshold. 
+#' 
 #' The term was coined by Bhates et al. (Cell Systems, 2022) and describes 
 #' tissue regions in which distinct CNs may be interacting. 
 #'
@@ -13,23 +14,22 @@
 #' entry containing the \code{aggregateNeighbors} DataFrame output. If NULL, 
 #' defaults to "aggregatedNeighbors". 
 #' @param threshold single numeric between 0 and 1 that specifies the fraction 
-#' threshold for SC assignment.
+#' threshold for SC assignment. Defaults to 0.9.
 #' @param name single character specifying the name of the output saved in 
 #'  \code{colData(object)}.
 #'
 #' @return returns an object of \code{class(object)} containing a new column 
 #' entry to \code{colData(object)[[name]]}
 #' 
-#' @examples
-#' TO DO
+#' @examples TO DO
 #' 
 #' @author Lasse Meyer (\email{lasse.meyer@@uzh.ch})
 #' 
 #' @importFrom SingleCellExperiment colData
 #' @export
 
-detectSpatialContext <- function(object, 
-                                 entry = NULL, 
+detectSpatialContext <- function(object,
+                                 entry = NULL,
                                  threshold = 0.9,
                                  name = NULL){
   
@@ -38,7 +38,7 @@ detectSpatialContext <- function(object,
   
   .valid.detectSpatialContext.input(object, entry, threshold, name) #validity check
   
-  cur_dat <- colData(sce)[,entry]
+  cur_dat <- colData(object)[,entry]
   
   out_dat <- apply(cur_dat, 1, function(x){
     

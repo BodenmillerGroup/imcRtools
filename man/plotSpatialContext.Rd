@@ -36,7 +36,7 @@ containing the \code{detectSpatialContext} output. If NULL, defaults to
 \item{img_id}{single character specifying the \code{colData(object)} entry 
 containing the unique image identifiers. If NULL, defaults to "sample_id".}
 
-\item{combined}{was the provided edge list created on cohort-level (two 
+\item{combined}{Is the provided edge list created on cohort-level (two 
 columns) and not image-level (three columns)? If NULL, defaults to TRUE.}
 
 \item{directed}{should the created graph be directed? Defaults to TRUE.}
