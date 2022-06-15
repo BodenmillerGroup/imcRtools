@@ -331,6 +331,8 @@
     if (!is.null(node_shape_by)) {
         nodes[,node_shape_by] <- as.character(nodes[,node_shape_by])
     }
+    
+    nodes <- nodes[,unique(colnames(nodes)), drop = FALSE]
 
     return(nodes)
 }
