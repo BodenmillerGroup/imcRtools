@@ -16,14 +16,14 @@
 #' @param combined Is the provided edge list created on cohort-level (two 
 #' columns) and not image-level (three columns)? If NULL, defaults to TRUE.
 #' @param directed should the created graph be directed? Defaults to TRUE.
-#' @param node_color_by single character from \code{c("name","freq","n_samples")} 
+#' @param node_color_by single character from \code{c("name","Freq","n_samples")} 
 #' by which the nodes should be colored.
-#' @param node_size_by single character from \code{c("freq","n_samples")} 
+#' @param node_size_by single character from \code{c("Freq","n_samples")} 
 #' by which the size of the nodes are defined.
 #' @param node_color_fix single character specifying the color of all nodes.
 #' @param node_size_fix single numeric specifying the size of all nodes.
 #' @param node_label_repel should nodes be labelled? Defaults to TRUE.
-#' @param node_label_color_by single character from \code{c("name","freq","n_samples")} 
+#' @param node_label_color_by single character from \code{c("name","Freq","n_samples")} 
 #' by which the node labels should be colored.
 #' @param node_label_color_fix single character specifying the color of all node 
 #' labels.

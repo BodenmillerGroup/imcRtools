@@ -54,6 +54,7 @@ Imports:
     data.table,
     sf,
     concaveman,
+    BiocGenerics,
     Biobase,
     cowplot,
     ggnetwork, 

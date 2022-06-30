@@ -5,8 +5,9 @@
 #' k-nearest neighbor graph, the SC of each cell is assigned as the set of CNs 
 #' that cumulatively exceed a user-defined fraction threshold. 
 #' 
-#' The term was coined by Bhates et al. (Cell Systems, 2022) and describes 
-#' tissue regions in which distinct CNs may be interacting. 
+#' The term was coined by Bhates et al. (Cell Systems, 2022) 
+#' <https://doi.org/10.1016/j.cels.2021.09.012> and describes tissue regions 
+#' in which distinct CNs may be interacting. 
 #'
 #' @param object a \code{SingleCellExperiment} or \code{SpatialExperiment}
 #' object
@@ -44,7 +45,11 @@ detectSpatialContext <- function(object,
     
     out <- cumsum(sort(x, decreasing = TRUE))
     
+    if(sum(out) != 0){
     return(paste(sort(as.numeric(names(out[seq_len(sum(out < threshold) + 1)]))), collapse = "_"))
+    }else{
+    return(NA)
+    }
   })
   
   colData(object)[[name]] <- out_dat
