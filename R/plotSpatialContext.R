@@ -1,8 +1,8 @@
 #' @title Plot spatial context graph
 #'
-#' @description Function to splot spatial context graphs based on edge-lists, 
-#' which operates on image- and cohort-level. User can specify node, node_label 
-#' and edge aesthetics.  
+#' @description Function to plot directed spatial context graphs based on symbolic
+#' edge-lists, which operates on image- and cohort-level. User can specify node, 
+#' node_label and edge aesthetics.  
 #'
 #' @param edges data frame containing a symbolic edge list in the first two 
 #' columns. 
@@ -15,7 +15,6 @@
 #' containing the unique image identifiers. If NULL, defaults to "sample_id".
 #' @param combined Is the provided edge list created on cohort-level (two 
 #' columns) and not image-level (three columns)? If NULL, defaults to TRUE.
-#' @param directed should the created graph be directed? Defaults to TRUE.
 #' @param node_color_by single character from \code{c("name","Freq","n_samples")} 
 #' by which the nodes should be colored.
 #' @param node_size_by single character from \code{c("Freq","n_samples")} 
@@ -50,16 +49,14 @@ plotSpatialContext <- function(edges,
                                entry = NULL,
                                img_id = NULL,
                                combined = NULL,
-                               #build graph
-                               directed = TRUE,
                                #nodes
-                               node_color_by = NULL,#c("name","freq","n_samples"),
-                               node_size_by = NULL,#c("freq","n_samples"),
+                               node_color_by = NULL,#c("name","Freq","n_samples"),
+                               node_size_by = NULL,#c("Freq","n_samples"),
                                node_color_fix = NULL,
                                node_size_fix = NULL,
                                #node labels
                                node_label_repel = TRUE,
-                               node_label_color_by = NULL,#c("name","freq","n_samples"),
+                               node_label_color_by = NULL,#c("name","Freq","n_samples"),
                                node_label_color_fix = NULL,
                                #plot graph - edges
                                draw_edges = TRUE,
@@ -69,8 +66,8 @@ plotSpatialContext <- function(edges,
   img_id <- ifelse(is.null(img_id), "sample_id", img_id) #default
   combined <- ifelse(is.null(combined), TRUE, combined) #default
   
-  .valid.plotSpatialContext.input(edges, object, entry, img_id, combined, directed, node_color_by, node_size_by, node_color_fix, node_size_fix, node_label_repel, node_label_color_by, node_label_color_fix, draw_edges, edge_color_fix)
-  
+  .valid.plotSpatialContext.input(edges, object, entry, img_id, combined, node_color_by, node_size_by, node_color_fix, node_size_fix, node_label_repel, node_label_color_by, node_label_color_fix, draw_edges, edge_color_fix)
+
   #data
   data <- colData(object)[,colnames(colData(object)) %in% c(entry,img_id)] %>% table() %>% as.data.frame
   Freq <- as.name("Freq")
@@ -83,7 +80,7 @@ plotSpatialContext <- function(edges,
                        n_samples = data %>% group_by_at(entry) %>% filter(Freq != 0) %>% count() %>% pull(n) %>% as.character()
     )
     
-    g <- graph_from_data_frame(edges, directed = directed,vertices = anno)
+    g <- graph_from_data_frame(edges, directed = TRUE,vertices = anno)
     
     #Plot using ggraph
     p <- .generateSpatialContextPlot(graph = g, node_color_by, node_size_by, node_color_fix, node_size_fix, node_label_repel, node_label_color_by, node_label_color_fix, draw_edges, edge_color_fix) #hidden function

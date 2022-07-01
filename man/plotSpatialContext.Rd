@@ -10,7 +10,6 @@ plotSpatialContext(
   entry = NULL,
   img_id = NULL,
   combined = NULL,
-  directed = TRUE,
   node_color_by = NULL,
   node_size_by = NULL,
   node_color_fix = NULL,
@@ -39,12 +38,10 @@ containing the unique image identifiers. If NULL, defaults to "sample_id".}
 \item{combined}{Is the provided edge list created on cohort-level (two 
 columns) and not image-level (three columns)? If NULL, defaults to TRUE.}
 
-\item{directed}{should the created graph be directed? Defaults to TRUE.}
-
-\item{node_color_by}{single character from \code{c("name","freq","n_samples")} 
+\item{node_color_by}{single character from \code{c("name","Freq","n_samples")} 
 by which the nodes should be colored.}
 
-\item{node_size_by}{single character from \code{c("freq","n_samples")} 
+\item{node_size_by}{single character from \code{c("Freq","n_samples")} 
 by which the size of the nodes are defined.}
 
 \item{node_color_fix}{single character specifying the color of all nodes.}
@@ -53,7 +50,7 @@ by which the size of the nodes are defined.}
 
 \item{node_label_repel}{should nodes be labelled? Defaults to TRUE.}
 
-\item{node_label_color_by}{single character from \code{c("name","freq","n_samples")} 
+\item{node_label_color_by}{single character from \code{c("name","Freq","n_samples")} 
 by which the node labels should be colored.}
 
 \item{node_label_color_fix}{single character specifying the color of all node 
@@ -67,9 +64,9 @@ labels.}
 returns a \code{ggplot} object.
 }
 \description{
-Function to splot spatial context graphs based on edge-lists, 
-which operates on image- and cohort-level. User can specify node, node_label 
-and edge aesthetics.
+Function to plot directed spatial context graphs based on symbolic
+edge-lists, which operates on image- and cohort-level. User can specify node, 
+node_label and edge aesthetics.
 }
 \examples{
 TO DO

@@ -57,7 +57,6 @@ Imports:
     BiocGenerics,
     Biobase,
     cowplot,
-    ggnetwork, 
     tibble,
     tidyr
 Suggests:

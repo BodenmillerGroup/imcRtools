@@ -1049,14 +1049,13 @@
                                             entry,
                                             img_id,
                                             combined, 
-                                            directed,
                                             node_color_by, 
                                             node_size_by,
                                             node_color_fix,
                                             node_size_fix,
                                             node_label_repel,
                                             node_label_color_by,
-                                            node_label_color_fix,  
+                                            node_label_color_fix, 
                                             draw_edges,
                                             edge_color_fix){
   
@@ -1087,10 +1086,6 @@
         stop("When 'combined' is set to FALSE, ncol('edges') has to be 3.")
       }}
   
-  if (!is.logical(directed)) {
-    stop("'directed' has to be logical'.")
-  }
-  
   if (!is.null(node_color_by) &&
       (!node_color_by %in% c("name","Freq","n_samples"))){
     stop("'node_color_by' has to be one off 'name','Freq','n_samples'.")
@@ -1109,6 +1104,11 @@
   if (!is.logical(node_label_repel)) {
     stop("'node_label_repel' has to be logical'.")
   }
+  
+  if(node_label_repel == FALSE){
+    if(!is.null(node_label_color_by) | (!is.null(node_label_color_fix))){
+    stop("'node_label_color_by' and 'node_label_color_fix' can not be defined when node_label_repel == TRUE")
+  }} 
   
   if (!is.logical(draw_edges)) {
     stop("'draw_edges' has to be logical'.")
