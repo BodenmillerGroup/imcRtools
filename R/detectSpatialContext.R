@@ -5,19 +5,20 @@
 #' k-nearest neighbor graph, the SC of each cell is assigned as the set of CNs 
 #' that cumulatively exceed a user-defined fraction threshold. 
 #' 
-#' The term was coined by Bhates et al. (Cell Systems, 2022) 
-#' <https://doi.org/10.1016/j.cels.2021.09.012> and describes tissue regions 
-#' in which distinct CNs may be interacting. 
+#' The term was coined by \href{https://doi.org/10.1016/j.cels.2021.09.012}{
+#' Salil S. et al., Tissue schematics map the specialization of immune tissue 
+#' motifs and their appropriation by tumors, Cell Systems,2022} and describes 
+#' tissue regions in which distinct CNs may be interacting. 
 #'
 #' @param object a \code{SingleCellExperiment} or \code{SpatialExperiment}
 #' object
 #' @param entry single character specifying the \code{colData(object)}
-#' entry containing the \code{aggregateNeighbors} DataFrame output. If NULL, 
-#' defaults to "aggregatedNeighbors". 
+#' entry containing the \code{aggregateNeighbors} DataFrame output. 
+#' Defaults to "aggregatedNeighbors". 
 #' @param threshold single numeric between 0 and 1 that specifies the fraction 
 #' threshold for SC assignment. Defaults to 0.9.
 #' @param name single character specifying the name of the output saved in 
-#'  \code{colData(object)}.
+#'  \code{colData(object)}. Defaults to "spatial_context"
 #'
 #' @return returns an object of \code{class(object)} containing a new column 
 #' entry to \code{colData(object)[[name]]}
@@ -26,18 +27,20 @@
 #' 
 #' @author Lasse Meyer (\email{lasse.meyer@@uzh.ch})
 #' 
+#' @references
+#' \href{https://doi.org/10.1016/j.cels.2021.09.012}{
+#' Salil S. et al., Tissue schematics map the specialization of immune tissue 
+#' motifs and their appropriation by tumors, Cell Systems,2022}
+#' 
 #' @importFrom SingleCellExperiment colData
 #' @export
 
 detectSpatialContext <- function(object,
-                                 entry = NULL,
+                                 entry = "aggregatedNeighbors",
                                  threshold = 0.9,
-                                 name = NULL){
+                                 name = "spatial_context"){
   
-  entry <- ifelse(is.null(entry), "aggregatedNeighbors", entry) #default
-  name <- ifelse(is.null(name), "spatial_context", name) #default
-  
-  .valid.detectSpatialContext.input(object, entry, threshold, name) #validity check
+  .valid.detectSpatialContext.input(object, entry, threshold, name) 
   
   cur_dat <- colData(object)[,entry]
   
@@ -45,10 +48,12 @@ detectSpatialContext <- function(object,
     
     out <- cumsum(sort(x, decreasing = TRUE))
     
-    if(sum(out) != 0){
-    return(paste(sort(as.numeric(names(out[seq_len(sum(out < threshold) + 1)]))), collapse = "_"))
-    }else{
-    return(NA)
+    if (sum(out) != 0) {
+      cur_out <- names(out[seq_len(sum(out < threshold) + 1)])
+      cur_out <- paste(sort(as.numeric(cur_out)), collapse = "_")
+      return(cur_out)
+    } else {
+        return(NA)
     }
   })
   

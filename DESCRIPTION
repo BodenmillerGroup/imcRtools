@@ -54,11 +54,7 @@ Imports:
     data.table,
     sf,
     concaveman,
-    BiocGenerics,
-    Biobase,
-    cowplot,
-    tibble,
-    tidyr
+    BiocGenerics
 Suggests:
     CATALYST,
     grid,

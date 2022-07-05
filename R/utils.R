@@ -981,8 +981,14 @@
     cur_geom_edge+
     cur_geom_node+
     cur_geom_node_label+
-    guides(color = "none", size = guide_legend(as.character(node_size_by)))+
     theme_graph(base_family = "")
+  
+  #color guide post-processing
+  if(node_label_repel == FALSE){
+    p <- p + guides(size = guide_legend(as.character(node_size_by)))
+  }else{
+    p <- p + guides(color = "none", size = guide_legend(as.character(node_size_by)))
+  }
   
   #node size post-processing
   if (is.null(node_size_by)){
