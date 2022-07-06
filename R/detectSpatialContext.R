@@ -7,7 +7,7 @@
 #' 
 #' The term was coined by \href{https://doi.org/10.1016/j.cels.2021.09.012}{
 #' Salil S. et al., Tissue schematics map the specialization of immune tissue 
-#' motifs and their appropriation by tumors, Cell Systems,2022} and describes 
+#' motifs and their appropriation by tumors, Cell Systems, 2022} and describes 
 #' tissue regions in which distinct CNs may be interacting. 
 #'
 #' @param object a \code{SingleCellExperiment} or \code{SpatialExperiment}
@@ -18,19 +18,62 @@
 #' @param threshold single numeric between 0 and 1 that specifies the fraction 
 #' threshold for SC assignment. Defaults to 0.9.
 #' @param name single character specifying the name of the output saved in 
-#'  \code{colData(object)}. Defaults to "spatial_context"
+#'  \code{colData(object)}. Defaults to "spatial_context".
 #'
 #' @return returns an object of \code{class(object)} containing a new column 
 #' entry to \code{colData(object)[[name]]}
 #' 
-#' @examples TO DO
+#' @examples 
+#' library(cytomapper)
+#' data(pancreasSCE)
+#' 
+#' ## 1. Cellular neighborhood (CN)
+#' sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+#'                          type = "knn", 
+#'                          name = "knn_cn_graph", 
+#'                          k = 5)
+#' 
+#' sce <- aggregateNeighbors(sce, colPairName = "knn_cn_graph", 
+#'                           aggregate_by = "metadata", 
+#'                           count_by = "CellType")
+#' 
+#' cur_cluster <- kmeans(sce$aggregatedNeighbors, centers = 3)
+#' sce$cellular_neighborhood <- factor(cur_cluster$cluster)
+#' 
+#' plotSpatial(sce, img_id = "ImageNb", 
+#'             colPairName = "knn_cn_graph", 
+#'             node_color_by = "cellular_neighborhood")
+#' 
+#' ## 2. Spatial context (SC)
+#' sce <- buildSpatialGraph(sce, img_id = "ImageNb", 
+#'                          type = "knn", 
+#'                          name = "knn_sc_graph", 
+#'                          k = 15)
+#' 
+#' sce <- aggregateNeighbors(sce, colPairName = "knn_sc_graph", 
+#'                           aggregate_by = "metadata", 
+#'                          count_by = "cellular_neighborhood")
+#' 
+#' # Detect spatial context 
+#' sce <- detectSpatialContext(sce, threshold = 0.9)
+#' 
+#' plotSpatial(sce, img_id = "ImageNb", 
+#'             colPairName = "knn_sc_graph", 
+#'             node_color_by = "spatial_context")
+#'             
+#' @seealso 
+#' \code{\link[imcRtools]{filterSpatialContext}} for the function to filter 
+#' spatial contexts
+#'
+#' \code{\link[imcRtools]{plotSpatialContext}} for the function to plot 
+#' spatial context graphs 
 #' 
 #' @author Lasse Meyer (\email{lasse.meyer@@uzh.ch})
 #' 
 #' @references
 #' \href{https://doi.org/10.1016/j.cels.2021.09.012}{
 #' Salil S. et al., Tissue schematics map the specialization of immune tissue 
-#' motifs and their appropriation by tumors, Cell Systems,2022}
+#' motifs and their appropriation by tumors, Cell Systems, 2022}
 #' 
 #' @importFrom SingleCellExperiment colData
 #' @export

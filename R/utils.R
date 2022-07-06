@@ -951,7 +951,7 @@
   }else{cur_geom_edge <- NULL}
   
   ## node geom
-  if(!is.null(node_color_by)){color = as.character(vertex_attr(graph, node_color_by)) #node color
+  if(!is.null(node_color_by)){color = vertex_attr(graph, node_color_by) #node color
   }else{color = as.character(node_color_fix)}
   if(!is.null(node_size_by)){size = vertex_attr(graph, node_size_by) #node size
   }else{size = as.character(node_size_fix)}
@@ -968,9 +968,9 @@
   
   if(node_label_repel){
     if(!is.null(node_label_color_by)){
-      cur_geom_node_label <- geom_node_label(aes_(color = color_label, label = vertex_attr(graph, "name")), repel = TRUE)
+      cur_geom_node_label <- geom_node_label(aes_(color = color_label, label = vertex_attr(graph, "name")), repel = TRUE, show.legend = FALSE)
     }else{
-      cur_geom_node_label <- geom_node_label(aes_(label = vertex_attr(graph, "name")), color = color_label, repel = TRUE)
+      cur_geom_node_label <- geom_node_label(aes_(label = vertex_attr(graph, "name")), color = color_label, repel = TRUE, show.legend = FALSE)
     }
   }else{cur_geom_node_label = NULL}  
   
@@ -984,8 +984,9 @@
     theme_graph(base_family = "")
   
   #color guide post-processing
-  if(node_label_repel == FALSE){
-    p <- p + guides(size = guide_legend(as.character(node_size_by)))
+  if(node_label_repel == FALSE || #TO BE UPDATED
+     (!is.null(node_label_color_by))){ #TO BE UPDATED
+    p <- p + guides(color = guide_colorbar(node_color_by), size = guide_legend(node_size_by))
   }else{
     p <- p + guides(color = "none", size = guide_legend(as.character(node_size_by)))
   }

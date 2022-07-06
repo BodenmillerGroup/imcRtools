@@ -1000,8 +1000,6 @@
     }
 }
 
-#' @importFrom SummarizedExperiment colData
-#' @importFrom methods is
 .valid.detectSpatialContext.input <- function(object,
                                               entry,
                                               threshold,
@@ -1016,33 +1014,53 @@
   ) {
     stop("'threshold' needs to be a single numeric between 0-1.")
   }
-  if (!is.character(name)) {
-    stop("'name' has to be a character'.")
+  if (length(name) != 1 | !is.character(name)) {
+    stop("'name' has to be a single character'.")
   }
 }
 
-#' @importFrom SummarizedExperiment colData
-#' @importFrom methods is
-.valid.buildEdgeList.input <- function(object,
-                                       entry,
-                                       img_id){
+.valid.filterSpatialContext.input <- function(object, 
+                                              entry, 
+                                              sample_id, 
+                                              n_cells_threshold, 
+                                              n_samples_threshold, 
+                                              name){
   
   if (!is(object, "SingleCellExperiment")) {
     stop("'object' needs to be a SingleCellExperiment object.")
   }
+  
   if (!entry %in% names(colData(object))) {
     stop("'entry' not in 'colData(object)'.")
   }
-  if (!img_id %in% names(colData(object))) { 
-    stop("'img_id' not in 'colData(object)'.")
+  if (!sample_id %in% names(colData(object))) { 
+    stop("'sample_id' not in 'colData(object)'.")
+  }
+  
+  if (!is.null(n_cells_threshold) &&
+     (!is.numeric(n_cells_threshold))) {
+    stop("'n_cells_threshold' needs to be a single numeric.")
+  }
+  
+  if (!is.null(n_samples_threshold) &&
+     (!is.numeric(n_samples_threshold))) {
+    stop("'n_samples_threshold' needs to be a single numeric.")
+  }
+  
+  if (is.null(n_samples_threshold) &&
+     (is.null(n_cells_threshold))) {
+    stop("One of 'n_samples_threshold' and 'n_cells_threshold' ", 
+         "has to be defined.")
+  }
+  
+  if (length(name) != 1 | !is.character(name)) {
+    stop("'name' has to be a single character'.")
   }
 }
 
-#' @importFrom SummarizedExperiment colData
-#' @importFrom methods is
 .valid.plotSpatialContext.input <- function(object,
                                             entry,
-                                            img_id,
+                                            sample_id,
                                             node_color_by, 
                                             node_size_by,
                                             node_color_fix,
@@ -1060,8 +1078,8 @@
   if (!entry %in% names(colData(object))) {
     stop("'entry' not in 'colData(object)'.")
   }
-  if (!img_id %in% names(colData(object))) { 
-    stop("'img_id' not in 'colData(object)'.")
+  if (!sample_id %in% names(colData(object))) { 
+    stop("'sample_id' not in 'colData(object)'.")
   }
   
   if (!is.null(node_color_by) &&
@@ -1085,7 +1103,8 @@
   
   if(node_label_repel == FALSE){
     if(!is.null(node_label_color_by) | (!is.null(node_label_color_fix))){
-    stop("'node_label_color_by' and 'node_label_color_fix' can not be defined when node_label_repel == TRUE")
+    stop("'node_label_color_by' and 'node_label_color_fix' can not be defined ", 
+         "when node_label_repel == FALSE")
   }} 
   
   if (!is.logical(draw_edges)) {
@@ -1114,17 +1133,26 @@
   
   if(!is.null(node_color_by) &&
      (!is.null(node_color_fix))){
-    stop("'node_color_by' and 'node_color_fix' can not be defined at the same time.")
+    stop("'node_color_by' and 'node_color_fix' can not be defined ", 
+         "at the same time.")
   }
   
   if(!is.null(node_label_color_by) &&
      (!is.null(node_label_color_fix))){
-    stop("'node_label_color_by' and 'node_label_color_fix' can not be defined at the same time.")
+    stop("'node_label_color_by' and 'node_label_color_fix' can not be defined ", 
+         "at the same time.")
   }  
   
+  if(!is.null(node_label_color_by) &&
+     (!is.null(node_color_by)) && 
+     (node_label_color_by != node_color_by)){
+    stop("'node_label_color_by' and 'node_color_by' have to be identical.")
+  }
+    
   if(!is.null(node_size_by) &&
      (!is.null(node_size_fix))){
-    stop("'node_size_by' and 'node_size_fix' can not be defined at the same time.")
+    stop("'node_size_by' and 'node_size_fix' can not be defined ", 
+         "at the same time.")
   } 
   
   if (!is.logical(return_data)) {

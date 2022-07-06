@@ -5,11 +5,9 @@
 \title{Plot spatial context graph}
 \usage{
 plotSpatialContext(
-  edges,
   object,
-  entry = NULL,
-  img_id = NULL,
-  combined = NULL,
+  entry = "spatial_context",
+  sample_id = "sample_id",
   node_color_by = NULL,
   node_size_by = NULL,
   node_color_fix = NULL,
@@ -18,30 +16,26 @@ plotSpatialContext(
   node_label_color_by = NULL,
   node_label_color_fix = NULL,
   draw_edges = TRUE,
-  edge_color_fix = NULL
+  edge_color_fix = NULL,
+  return_data = FALSE
 )
 }
 \arguments{
-\item{edges}{data frame containing a symbolic edge list in the first two 
-columns.}
-
 \item{object}{a \code{SingleCellExperiment} or \code{SpatialExperiment}
 object}
 
 \item{entry}{single character specifying the \code{colData(object)} entry 
-containing the \code{detectSpatialContext} output. If NULL, defaults to 
+containing the \code{detectSpatialContext} output. Defaults to 
 "spatial_context".}
 
-\item{img_id}{single character specifying the \code{colData(object)} entry 
-containing the unique image identifiers. If NULL, defaults to "sample_id".}
+\item{sample_id}{single character specifying the \code{colData(object)} entry 
+containing the sample identifiers. Defaults to "sample_id".}
 
-\item{combined}{Is the provided edge list created on cohort-level (two 
-columns) and not image-level (three columns)? If NULL, defaults to TRUE.}
+\item{node_color_by}{single character from
+\code{c("name","n_cells","n_samples")} by which the nodes should be
+colored.}
 
-\item{node_color_by}{single character from \code{c("name","Freq","n_samples")} 
-by which the nodes should be colored.}
-
-\item{node_size_by}{single character from \code{c("Freq","n_samples")} 
+\item{node_size_by}{single character from \code{c("n_cells","n_samples")} 
 by which the size of the nodes are defined.}
 
 \item{node_color_fix}{single character specifying the color of all nodes.}
@@ -50,27 +44,92 @@ by which the size of the nodes are defined.}
 
 \item{node_label_repel}{should nodes be labelled? Defaults to TRUE.}
 
-\item{node_label_color_by}{single character from \code{c("name","Freq","n_samples")} 
-by which the node labels should be colored.}
+\item{node_label_color_by}{single character from
+\code{c("name","n_cells","n_samples")} by which the node labels should be
+colored.}
 
-\item{node_label_color_fix}{single character specifying the color of all node 
+\item{node_label_color_fix}{single character specifying the color of all node
 labels.}
 
 \item{draw_edges}{should edges be drawn between nodes? Defaults to TRUE.}
 
 \item{edge_color_fix}{single character specifying the color of all edges.}
+
+\item{return_data}{should the edge list and vertex metadata for graph
+construction be returned as a \code{list} of two \code{data.frames}?}
 }
 \value{
-returns a \code{ggplot} object.
+returns a \code{ggplot} object or a \code{list} of two
+\code{data.frames}.
 }
 \description{
-Function to plot directed spatial context graphs based on symbolic
-edge-lists, which operates on image- and cohort-level. User can specify node, 
-node_label and edge aesthetics.
+Function to plot directed spatial context graphs based on
+symbolic edge-lists and vertex metadata, which operates on cohort-level.
+The user can specify node, node_label and edge aesthetics.
 }
 \examples{
-TO DO
+library(cytomapper)
+data(pancreasSCE)
 
+## 1. Cellular neighborhood (CN)
+sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                         type = "knn", 
+                         name = "knn_cn_graph", 
+                         k = 5)
+
+sce <- aggregateNeighbors(sce, colPairName = "knn_cn_graph", 
+                          aggregate_by = "metadata", 
+                          count_by = "CellType")
+
+cur_cluster <- kmeans(sce$aggregatedNeighbors, centers = 3)
+sce$cellular_neighborhood <- factor(cur_cluster$cluster)
+
+plotSpatial(sce, img_id = "ImageNb", 
+            colPairName = "knn_cn_graph", 
+            node_color_by = "cellular_neighborhood")
+
+## 2. Spatial context (SC)
+sce <- buildSpatialGraph(sce, img_id = "ImageNb", 
+                         type = "knn", 
+                         name = "knn_sc_graph", 
+                         k = 15)
+
+sce <- aggregateNeighbors(sce, colPairName = "knn_sc_graph", 
+                          aggregate_by = "metadata", 
+                         count_by = "cellular_neighborhood")
+
+# Detect spatial context 
+sce <- detectSpatialContext(sce, threshold = 0.9)
+
+plotSpatial(sce, img_id = "ImageNb", 
+            colPairName = "knn_sc_graph", 
+            node_color_by = "spatial_context")
+            
+# Plot spatial context
+plotSpatialContext(sce, sample_id = "ImageNb")
+
+# Plot spatial context - adjust aesthetics
+plotSpatialContext(sce, sample_id = "ImageNb",
+                   node_color_by = "name",
+                   node_size_by = "n_cells",
+                   node_label_color_by = "name")
+                   
+# Plot spatial context - return data
+plotSpatialContext(sce, sample_id = "ImageNb",
+                  return_data = TRUE)          
+                  
+}
+\references{
+\href{https://doi.org/10.1016/j.cels.2021.09.012}{
+Salil S. et al., Tissue schematics map the specialization of immune tissue 
+motifs and their appropriation by tumors, Cell Systems,2022}
+}
+\seealso{
+\code{\link[imcRtools]{detectSpatialContext}} for the function to detect
+spatial contexts
+
+\code{\link[imcRtools]{filterSpatialContext}} for the function to filter 
+spatial contexts
 }
 \author{
 Lasse Meyer (\email{lasse.meyer@uzh.ch})
