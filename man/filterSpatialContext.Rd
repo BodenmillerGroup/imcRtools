@@ -31,7 +31,7 @@ of cells in a SC.}
 samples in which a SC is detected.}
 
 \item{name}{single character specifying the name of the output saved in 
-\code{colData(object)}. Defaults to "spatial_context_filtered"}
+\code{colData(object)}. Defaults to "spatial_context_filtered".}
 }
 \value{
 returns an object of \code{class(object)} containing a new column 
@@ -100,7 +100,7 @@ plotSpatial(sce, img_id = "ImageNb",
 \references{
 \href{https://doi.org/10.1016/j.cels.2021.09.012}{
 Salil S. et al., Tissue schematics map the specialization of immune tissue 
-motifs and their appropriation by tumors, Cell Systems,2022}
+motifs and their appropriation by tumors, Cell Systems, 2022}
 }
 \seealso{
 \code{\link[imcRtools]{detectSpatialContext}} for the function to detect

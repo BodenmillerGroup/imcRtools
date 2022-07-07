@@ -942,9 +942,9 @@
   node_label_color_by <- if(is.null(node_label_color_by)) NULL else node_label_color_by
   
   edge_color_fix <- if(is.null(edge_color_fix)) "black" else edge_color_fix #defaults
-  node_color_fix <- if(is.null(node_color_fix)) "cornflowerblue" else node_color_fix #defaults
+  node_color_fix <- if(is.null(node_color_fix)) "darkgrey" else node_color_fix #defaults
   node_size_fix <- if(is.null(node_size_fix)) "3" else node_size_fix #defaults
-  node_label_color_fix <- if(is.null(node_label_color_fix)) "cornflowerblue" else node_label_color_fix #defaults
+  node_label_color_fix <- if(is.null(node_label_color_fix)) "black" else node_label_color_fix #defaults
   
   ## edge geom  
   if(draw_edges){cur_geom_edge <- geom_edge_link(color = edge_color_fix)
@@ -983,11 +983,18 @@
     cur_geom_node_label+
     theme_graph(base_family = "")
   
-  #color guide post-processing
-  if(node_label_repel == FALSE || #TO BE UPDATED
-     (!is.null(node_label_color_by))){ #TO BE UPDATED
-    p <- p + guides(color = guide_colorbar(node_color_by), size = guide_legend(node_size_by))
-  }else{
+  #legend post-processing
+  if (!is.null(node_color_by)) {
+    if (node_color_by %in% c("n_cells","n_samples")) {
+      p <- p + guides(color = guide_colorbar(node_color_by), size = guide_legend(node_size_by))
+    } else {
+      if (node_label_repel == FALSE) {
+        p <- p + guides(color = guide_legend(node_color_by), size = guide_legend(node_size_by))
+        } else {
+        p <- p + guides(color = "none", size = guide_legend(as.character(node_size_by)))
+      }
+    }
+  } else {
     p <- p + guides(color = "none", size = guide_legend(as.character(node_size_by)))
   }
   

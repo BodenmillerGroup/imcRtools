@@ -79,6 +79,10 @@
 #'                    node_size_by = "n_cells",
 #'                    node_label_color_by = "name")
 #'                    
+#' plotSpatialContext(sce, sample_id = "ImageNb",
+#'                    node_color_by = "n_cells",
+#'                    node_size_by = "n_samples")
+#'                    
 #' # Plot spatial context - return data
 #' plotSpatialContext(sce, sample_id = "ImageNb",
 #'                   return_data = TRUE)          
@@ -108,19 +112,15 @@
 plotSpatialContext <- function(object,
                                entry = "spatial_context",
                                sample_id = "sample_id",
-                               #nodes
                                node_color_by = NULL,
                                node_size_by = NULL,
                                node_color_fix = NULL,
                                node_size_fix = NULL,
-                               #node labels
                                node_label_repel = TRUE,
                                node_label_color_by = NULL,
                                node_label_color_fix = NULL,
-                               #plot graph - edges
                                draw_edges = TRUE,
                                edge_color_fix = NULL,
-                               #return data
                                return_data = FALSE){
   
   .valid.plotSpatialContext.input(object, entry, sample_id, node_color_by, 

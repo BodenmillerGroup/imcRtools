@@ -22,7 +22,7 @@ plotSpatialContext(
 }
 \arguments{
 \item{object}{a \code{SingleCellExperiment} or \code{SpatialExperiment}
-object}
+object.}
 
 \item{entry}{single character specifying the \code{colData(object)} entry 
 containing the \code{detectSpatialContext} output. Defaults to 
@@ -114,6 +114,10 @@ plotSpatialContext(sce, sample_id = "ImageNb",
                    node_size_by = "n_cells",
                    node_label_color_by = "name")
                    
+plotSpatialContext(sce, sample_id = "ImageNb",
+                   node_color_by = "n_cells",
+                   node_size_by = "n_samples")
+                   
 # Plot spatial context - return data
 plotSpatialContext(sce, sample_id = "ImageNb",
                   return_data = TRUE)          
@@ -122,7 +126,7 @@ plotSpatialContext(sce, sample_id = "ImageNb",
 \references{
 \href{https://doi.org/10.1016/j.cels.2021.09.012}{
 Salil S. et al., Tissue schematics map the specialization of immune tissue 
-motifs and their appropriation by tumors, Cell Systems,2022}
+motifs and their appropriation by tumors, Cell Systems, 2022}
 }
 \seealso{
 \code{\link[imcRtools]{detectSpatialContext}} for the function to detect

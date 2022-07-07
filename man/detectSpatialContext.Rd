@@ -23,7 +23,7 @@ Defaults to "aggregatedNeighbors".}
 threshold for SC assignment. Defaults to 0.9.}
 
 \item{name}{single character specifying the name of the output saved in 
-\code{colData(object)}. Defaults to "spatial_context"}
+\code{colData(object)}. Defaults to "spatial_context".}
 }
 \value{
 returns an object of \code{class(object)} containing a new column 
@@ -37,7 +37,7 @@ that cumulatively exceed a user-defined fraction threshold.
 
 The term was coined by \href{https://doi.org/10.1016/j.cels.2021.09.012}{
 Salil S. et al., Tissue schematics map the specialization of immune tissue 
-motifs and their appropriation by tumors, Cell Systems,2022} and describes 
+motifs and their appropriation by tumors, Cell Systems, 2022} and describes 
 tissue regions in which distinct CNs may be interacting.
 }
 \examples{
@@ -82,7 +82,7 @@ plotSpatial(sce, img_id = "ImageNb",
 \references{
 \href{https://doi.org/10.1016/j.cels.2021.09.012}{
 Salil S. et al., Tissue schematics map the specialization of immune tissue 
-motifs and their appropriation by tumors, Cell Systems,2022}
+motifs and their appropriation by tumors, Cell Systems, 2022}
 }
 \seealso{
 \code{\link[imcRtools]{filterSpatialContext}} for the function to filter 
