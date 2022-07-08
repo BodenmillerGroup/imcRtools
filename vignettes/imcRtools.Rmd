@@ -550,6 +550,13 @@ plotSpatial(pancreasSCE,
     scale_edge_color_brewer(palette = "Set1")
 ```
 
+
+## Spatial context detection
+
+TO DO
+
+## Border cells
+
 To exclude cells that are close to the image border, the `imcRtools` package
 exports the `findBorderCells` function.
 

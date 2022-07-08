@@ -1,4 +1,4 @@
-test_that("filterSpatialContext function works", {
+test_that("plotSpatialContext function works", {
   set.seed(22)
   library(cytomapper)
   data(pancreasSCE)
@@ -28,8 +28,22 @@ test_that("filterSpatialContext function works", {
   
   sce <- detectSpatialContext(sce, threshold = 0.9)
   
-  ## Filter spatial context - tests
+  ## Plot spatial context - tests
+  
   # basics
+  expect_silent(p <- plotSpatialContext(sce, sample_id = "ImageNb"))
+  expect_s3_class(p, "ggraph")
+  expect_silent(print(p))
+  expect_equal(p$data$name, sort(unique(sce$spatial_context)))
+  expect_equal(p$data$, sort(unique(sce$)))
+  
+  sapply(str_split(sort(unique(sce$spatial_context)),"_"),length)
+  
+  expect_equal(p$data$y, pancreasSCE$Pos_Y)
+  expect_equal(p$data$ImageNb, pancreasSCE$ImageNb)
+  expect_equal(p$data$CellType, pancreasSCE$CellType)
+  
+ 
   expect_silent(cur_sce <- filterSpatialContext(sce, sample_id = "ImageNb", n_samples_threshold = 2))
   
   expect_equal(names(colData(cur_sce)), 
@@ -65,10 +79,10 @@ test_that("filterSpatialContext function works", {
   # manual filtering should give the same results
   cur_anno <- colData(sce) %>% as.data.frame() %>% select("spatial_context", "ImageNb") %>% table() %>% as.data.frame()
   cur_anno <- data.frame(spatial_context = unique(cur_anno$spatial_context) %>% unfactor(), 
-                     n_cells = cur_anno %>% group_by_at("spatial_context") %>% 
-                       summarise(sum = sum(Freq)) %>% pull(sum), 
-                     n_samples = cur_anno %>% group_by_at("spatial_context") %>% 
-                       filter(Freq != 0) %>% count() %>% pull(n)
+                         n_cells = cur_anno %>% group_by_at("spatial_context") %>% 
+                           summarise(sum = sum(Freq)) %>% pull(sum), 
+                         n_samples = cur_anno %>% group_by_at("spatial_context") %>% 
+                           filter(Freq != 0) %>% count() %>% pull(n)
   )
   
   manual_selected <- cur_anno %>% filter(n_samples >= 2 & n_cells >= 15) %>% pull(spatial_context) %>% sort()
@@ -78,7 +92,7 @@ test_that("filterSpatialContext function works", {
                                                  n_cells_threshold = 15))
   
   function_selected <- unique(cur_sce5$spatial_context_filtered) %>% sort()
-
+  
   expect_true(identical(manual_selected, function_selected))
   
   
@@ -86,15 +100,15 @@ test_that("filterSpatialContext function works", {
   expect_error(filterSpatialContext(colData(sce)),
                regexp = "'object' needs to be a SingleCellExperiment object.",
                fixed = TRUE)
-
+  
   expect_error(filterSpatialContext(sce, entry = "spatialcontext"),
                regexp = "'entry' not in 'colData(object)'.",
                fixed = TRUE)
-
+  
   expect_error(filterSpatialContext(sce, sample_id = "ImageNb", n_cells_threshold = "10"),
                regexp = "'n_cells_threshold' needs to be a single numeric.",
                fixed = TRUE)
-
+  
   expect_error(filterSpatialContext(sce, sample_id = "ImageNb", n_samples_threshold = "2"),
                regexp = "'n_samples_threshold' needs to be a single numeric.",
                fixed = TRUE)
@@ -108,4 +122,3 @@ test_that("filterSpatialContext function works", {
                fixed = TRUE)
 }
 )
-  

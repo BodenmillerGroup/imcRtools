@@ -24,43 +24,47 @@
 #' entry to \code{colData(object)[[name]]}
 #' 
 #' @examples 
+#' set.seed(22)
 #' library(cytomapper)
 #' data(pancreasSCE)
-#' 
+#'
 #' ## 1. Cellular neighborhood (CN)
-#' sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-#'                          type = "knn", 
-#'                          name = "knn_cn_graph", 
-#'                          k = 5)
-#' 
-#' sce <- aggregateNeighbors(sce, colPairName = "knn_cn_graph", 
-#'                           aggregate_by = "metadata", 
-#'                           count_by = "CellType")
-#' 
-#' cur_cluster <- kmeans(sce$aggregatedNeighbors, centers = 3)
+#' sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",
+#'                         type = "knn",
+#'                         name = "knn_cn_graph",
+#'                         k = 5)
+#'
+#' sce <- aggregateNeighbors(sce, colPairName = "knn_cn_graph",
+#'                          aggregate_by = "metadata",
+#'                          count_by = "CellType",
+#'                          name = "aggregatedCellTypes")
+#'
+#' cur_cluster <- kmeans(sce$aggregatedCellTypes, centers = 3)
 #' sce$cellular_neighborhood <- factor(cur_cluster$cluster)
-#' 
-#' plotSpatial(sce, img_id = "ImageNb", 
-#'             colPairName = "knn_cn_graph", 
-#'             node_color_by = "cellular_neighborhood")
-#' 
+#'
+#' plotSpatial(sce, img_id = "ImageNb",
+#'            colPairName = "knn_cn_graph",
+#'            node_color_by = "cellular_neighborhood")
+#'
 #' ## 2. Spatial context (SC)
-#' sce <- buildSpatialGraph(sce, img_id = "ImageNb", 
-#'                          type = "knn", 
-#'                          name = "knn_sc_graph", 
-#'                          k = 15)
-#' 
-#' sce <- aggregateNeighbors(sce, colPairName = "knn_sc_graph", 
-#'                           aggregate_by = "metadata", 
-#'                          count_by = "cellular_neighborhood")
-#' 
-#' # Detect spatial context 
-#' sce <- detectSpatialContext(sce, threshold = 0.9)
-#' 
-#' plotSpatial(sce, img_id = "ImageNb", 
-#'             colPairName = "knn_sc_graph", 
-#'             node_color_by = "spatial_context")
-#'             
+#' sce <- buildSpatialGraph(sce, img_id = "ImageNb",
+#'                         type = "knn",
+#'                         name = "knn_sc_graph",
+#'                         k = 15)
+#'
+#' sce <- aggregateNeighbors(sce, colPairName = "knn_sc_graph",
+#'                          aggregate_by = "metadata",
+#'                          count_by = "cellular_neighborhood",
+#'                          name = "aggregatedNeighborhood")
+#'
+#' # Detect spatial context
+#' sce <- detectSpatialContext(sce, entry = "aggregatedNeighborhood",
+#'                            threshold = 0.9)
+#'
+#' plotSpatial(sce, img_id = "ImageNb",
+#'            colPairName = "knn_sc_graph",
+#'            node_color_by = "spatial_context")
+#'            
 #' @seealso 
 #' \code{\link[imcRtools]{filterSpatialContext}} for the function to filter 
 #' spatial contexts

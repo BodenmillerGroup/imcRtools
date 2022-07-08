@@ -1021,9 +1021,9 @@
 
 .valid.filterSpatialContext.input <- function(object, 
                                               entry, 
-                                              sample_id, 
-                                              n_cells_threshold, 
-                                              n_samples_threshold, 
+                                              group_by,
+                                              group_threshold,
+                                              cells_threshold, 
                                               name){
   
   if (!is(object, "SingleCellExperiment")) {
@@ -1033,23 +1033,24 @@
   if (!entry %in% names(colData(object))) {
     stop("'entry' not in 'colData(object)'.")
   }
-  if (!sample_id %in% names(colData(object))) { 
-    stop("'sample_id' not in 'colData(object)'.")
+  
+  if (!group_by %in% names(colData(object))) { 
+    stop("'group_by' not in 'colData(object)'.")
   }
   
-  if (!is.null(n_cells_threshold) &&
-     (!is.numeric(n_cells_threshold))) {
-    stop("'n_cells_threshold' needs to be a single numeric.")
+  if (!is.null(group_threshold) &&
+      (!is.numeric(group_threshold))) {
+    stop("'group_threshold' needs to be a single numeric.")
   }
   
-  if (!is.null(n_samples_threshold) &&
-     (!is.numeric(n_samples_threshold))) {
-    stop("'n_samples_threshold' needs to be a single numeric.")
+  if (!is.null(cells_threshold) &&
+     (!is.numeric(cells_threshold))) {
+    stop("'cells_threshold' needs to be a single numeric.")
   }
   
-  if (is.null(n_samples_threshold) &&
-     (is.null(n_cells_threshold))) {
-    stop("One of 'n_samples_threshold' and 'n_cells_threshold' ", 
+  if (is.null(group_threshold) &&
+     (is.null(cells_threshold))) {
+    stop("One of 'group_threshold' and 'cells_threshold' ", 
          "has to be defined.")
   }
   
@@ -1060,7 +1061,7 @@
 
 .valid.plotSpatialContext.input <- function(object,
                                             entry,
-                                            sample_id,
+                                            group_by,
                                             node_color_by, 
                                             node_size_by,
                                             node_color_fix,
@@ -1078,23 +1079,24 @@
   if (!entry %in% names(colData(object))) {
     stop("'entry' not in 'colData(object)'.")
   }
-  if (!sample_id %in% names(colData(object))) { 
-    stop("'sample_id' not in 'colData(object)'.")
+  
+  if (!group_by %in% names(colData(object))) { 
+    stop("'group_by' not in 'colData(object)'.")
   }
   
   if (!is.null(node_color_by) &&
-      (!node_color_by %in% c("name","n_cells","n_samples"))){
-    stop("'node_color_by' has to be one off 'name','n_cells','n_samples'.")
+      (!node_color_by %in% c("name","n_cells","n_group"))){
+    stop("'node_color_by' has to be one off 'name','n_cells','n_group'.")
   }
   
   if (!is.null(node_size_by) &&
-      (!node_size_by %in% c("n_cells","n_samples"))){
-    stop("'node_size_by' has to be 'n_cells' or 'n_samples'.")
+      (!node_size_by %in% c("n_cells","n_group"))){
+    stop("'node_size_by' has to be 'n_cells' or 'n_group'.")
   }
   
   if (!is.null(node_label_color_by) && 
-      (!node_label_color_by %in% c("name","n_cells","n_samples"))){
-    stop("'node_label_color_by' has to be one off 'name','n_cells','n_samples'.")
+      (!node_label_color_by %in% c("name","n_cells","n_group"))){
+    stop("'node_label_color_by' has to be one off 'name','n_cells','n_group'.")
   }
   
   if (!is.logical(node_label_repel)) {

@@ -1,75 +1,81 @@
 #' @title Filter spatial contexts
 #'
 #' @description Function to filter detected spatial contexts (SCs) based on a
-#' user-defined threshold for number of samples and/or cells.
+#' user-defined threshold for number of group entries and/or cells.
 #'
 #' @param object a \code{SingleCellExperiment} or \code{SpatialExperiment}
 #' object
-#' @param entry single character specifying the \code{colData(object)} entry 
+#' @param entry a single character specifying the \code{colData(object)} entry 
 #' containing the \code{detectSpatialContext} output. Defaults to 
 #' "spatial_context".
-#' @param sample_id single character specifying the \code{colData(object)} entry 
-#' containing the sample identifiers. Defaults to "sample_id".
-#' @param n_cells_threshold single numeric specifying the minimum total number
+#' @param group_by a single character indicating the \code{colData(object)}
+#' entry by which SCs are grouped. This is usually the image or patient ID. 
+#' Defaults to "sample_id".
+#' @param group_threshold a single numeric specifying the minimum number of
+#' group entries in which a SC is detected.
+#' @param cells_threshold a single numeric specifying the minimum total number
 #' of cells in a SC.
-#' @param n_samples_threshold single numeric specifying the minimum number of
-#' samples in which a SC is detected.
-#' @param name single character specifying the name of the output saved in 
+#' @param name a single character specifying the name of the output saved in 
 #'  \code{colData(object)}. Defaults to "spatial_context_filtered".
-#'
-#' @return returns an object of \code{class(object)} containing a new column 
-#' entry to \code{colData(object)[[name]]}
+#' 
+#' @return returns an object of \code{class(object)} containing a new column
+#' entry to \code{colData(object)[[name]]} and a new \code{dataframe} entry to
+#' \code{metadata(object)[["filterSpatialContext"]]}.
 #' 
 #' @examples 
+#' set.seed(22)
 #' library(cytomapper)
 #' data(pancreasSCE)
-#' 
+#'
 #' ## 1. Cellular neighborhood (CN)
-#' sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-#'                          type = "knn", 
-#'                          name = "knn_cn_graph", 
-#'                          k = 5)
-#' 
-#' sce <- aggregateNeighbors(sce, colPairName = "knn_cn_graph", 
-#'                           aggregate_by = "metadata", 
-#'                           count_by = "CellType")
-#' 
-#' cur_cluster <- kmeans(sce$aggregatedNeighbors, centers = 3)
+#' sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",
+#'                         type = "knn",
+#'                         name = "knn_cn_graph",
+#'                         k = 5)
+#'
+#' sce <- aggregateNeighbors(sce, colPairName = "knn_cn_graph",
+#'                          aggregate_by = "metadata",
+#'                          count_by = "CellType",
+#'                          name = "aggregatedCellTypes")
+#'
+#' cur_cluster <- kmeans(sce$aggregatedCellTypes, centers = 3)
 #' sce$cellular_neighborhood <- factor(cur_cluster$cluster)
-#' 
-#' plotSpatial(sce, img_id = "ImageNb", 
-#'             colPairName = "knn_cn_graph", 
-#'             node_color_by = "cellular_neighborhood")
-#' 
+#'
+#' plotSpatial(sce, img_id = "ImageNb",
+#'            colPairName = "knn_cn_graph",
+#'            node_color_by = "cellular_neighborhood")
+#'
 #' ## 2. Spatial context (SC)
-#' sce <- buildSpatialGraph(sce, img_id = "ImageNb", 
-#'                          type = "knn", 
-#'                          name = "knn_sc_graph", 
-#'                          k = 15)
-#' 
-#' sce <- aggregateNeighbors(sce, colPairName = "knn_sc_graph", 
-#'                           aggregate_by = "metadata", 
-#'                          count_by = "cellular_neighborhood")
-#' 
-#' # Detect spatial context 
-#' sce <- detectSpatialContext(sce, threshold = 0.9)
-#' 
-#' plotSpatial(sce, img_id = "ImageNb", 
-#'             colPairName = "knn_sc_graph", 
-#'             node_color_by = "spatial_context")
+#' sce <- buildSpatialGraph(sce, img_id = "ImageNb",
+#'                         type = "knn",
+#'                         name = "knn_sc_graph",
+#'                         k = 15)
+#'
+#' sce <- aggregateNeighbors(sce, colPairName = "knn_sc_graph",
+#'                          aggregate_by = "metadata",
+#'                          count_by = "cellular_neighborhood",
+#'                          name = "aggregatedNeighborhood")
+#'
+#' # Detect spatial context
+#' sce <- detectSpatialContext(sce, entry = "aggregatedNeighborhood",
+#'                            threshold = 0.9)
+#'
+#' plotSpatial(sce, img_id = "ImageNb",
+#'            colPairName = "knn_sc_graph",
+#'            node_color_by = "spatial_context")
 #'             
 #' # Filter spatial context
-#' # By samples
-#' sce <- filterSpatialContext(sce, sample_id = "ImageNb", 
-#'                             n_samples_threshold = 2)
+#' # By group
+#' sce <- filterSpatialContext(sce, group_by = "ImageNb", 
+#'                             group_threshold = 2)
 #' 
 #' plotSpatial(sce, img_id = "ImageNb", 
 #'             colPairName = "knn_sc_graph", 
 #'             node_color_by = "spatial_context_filtered")
 #'
 #' # By cells
-#' sce <- filterSpatialContext(sce, sample_id = "ImageNb", 
-#'                             n_cells_threshold = 15)
+#' sce <- filterSpatialContext(sce, group_by = "ImageNb", 
+#'                             cells_threshold = 15)
 #'
 #' plotSpatial(sce, img_id = "ImageNb", 
 #'            colPairName = "knn_sc_graph", 
@@ -91,47 +97,46 @@
 #' 
 #' @importFrom SingleCellExperiment colData
 #' @importFrom BiocGenerics table
-#' @importFrom dplyr count filter group_by_at pull summarise
+#' @importFrom dplyr all_of count n filter group_by_at pull summarise
 #' @importFrom S4Vectors unfactor
 #' 
 #' @export
 
 filterSpatialContext <- function(object,
                                entry = "spatial_context",
-                               sample_id = "sample_id",
-                               n_cells_threshold = NULL,
-                               n_samples_threshold = NULL,
+                               group_by = "sample_id",
+                               group_threshold = NULL,
+                               cells_threshold = NULL,
                                name = "spatial_context_filtered"
                                ){
   
-  .valid.filterSpatialContext.input(object, entry, sample_id, n_cells_threshold,
-                                    n_samples_threshold, name)
+  .valid.filterSpatialContext.input(object, entry, group_by, group_threshold,
+                                    cells_threshold, name)
   
-  data <- colData(object)[,colnames(colData(object)) %in% c(entry,sample_id)] %>% 
-  table() %>% as.data.frame
-  Freq <- as.name("Freq")
-  n <- as.name("n")
+  anno <- colData(object) %>% 
+    as.data.frame %>% 
+    select(all_of(entry), all_of(group_by)) %>% 
+    group_by_all() %>% 
+    count() %>% 
+    group_by_at(entry) %>% 
+    summarise(n_cells = sum(n), n_group = n()) %>%
+    as.data.frame
   
-  anno <- data.frame(spatial_context = unfactor(unique(data[,entry])), 
-                     n_cells = data %>% group_by_at(entry) %>% 
-                       summarise(sum = sum(Freq)) %>% pull(sum), 
-                     n_samples = data %>% group_by_at(entry) %>% 
-                       filter(Freq != 0) %>% count() %>% pull(n)
-                     )
-  
-  if (!is.null(n_cells_threshold)) {
-  anno <- anno[anno$n_cells >= n_cells_threshold,]
+  if (!is.null(group_threshold)) {
+    anno <- anno[anno$n_group >= group_threshold,]
   }
   
-  if (!is.null(n_samples_threshold)) {
-  anno <- anno[anno$n_samples >= n_samples_threshold,]
+  if (!is.null(cells_threshold)) {
+      anno <- anno[anno$n_cells >= cells_threshold,]
   }
   
-  selected <- anno$spatial_context
+  selected <- anno %>% pull(entry)
   
-  out_dat <- ifelse(colData(object)[[entry]] %in% selected, 
-                    colData(object)[[entry]], NA)
+  out_dat <- colData(object)[[entry]]
+  out_dat[!out_dat %in% selected] <- NA 
   
   colData(object)[[name]] <- out_dat
+  metadata(object)[["filterSpatialContext"]] <- anno
+  
   return(object)
 }
