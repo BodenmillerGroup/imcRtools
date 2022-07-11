@@ -30,7 +30,7 @@ test_that("filterSpatialContext function works", {
   
   ## Filter spatial context - tests
   # basics
-  expect_silent(cur_sce <- filterSpatialContext(sce, sample_id = "ImageNb", n_samples_threshold = 2))
+  expect_silent(cur_sce <- filterSpatialContext(sce, group_by = "ImageNb", n_samples_threshold = 2))
   
   expect_equal(names(colData(cur_sce)), 
                c("ImageName", "Pos_X", "Pos_Y", "Area", "CellType", "ImageNb", 
@@ -45,19 +45,19 @@ test_that("filterSpatialContext function works", {
   expect_equal(cur_sce$spatial_context_filtered[200:210], c("3", NA, NA, "1_3", "1_3", "1_3", "1_3", NA, NA, "3", "1_3"))
   
   # change filtering
-  expect_silent(cur_sce2 <- filterSpatialContext(sce, sample_id = "ImageNb", n_cells_threshold = 15))
+  expect_silent(cur_sce2 <- filterSpatialContext(sce, group_by = "ImageNb", n_cells_threshold = 15))
   
   expect_false(identical(cur_sce$spatial_context_filtered, cur_sce2$spatial_context_filtered))
   expect_true(identical(cur_sce$spatial_context, cur_sce2$spatial_context))
   
   # filtering with 0
-  expect_silent(cur_sce3 <- filterSpatialContext(sce, sample_id = "ImageNb", 
+  expect_silent(cur_sce3 <- filterSpatialContext(sce, group_by = "ImageNb", 
                                                  n_samples_threshold = 0, 
                                                  n_cells_threshold = 0))
   expect_true(identical(cur_sce3$spatial_context, cur_sce3$spatial_context_filtered))
   
   # filtering with values higher than input
-  expect_silent(cur_sce4 <- filterSpatialContext(sce, sample_id = "ImageNb", 
+  expect_silent(cur_sce4 <- filterSpatialContext(sce, group_by = "ImageNb", 
                                                  n_samples_threshold = 4, 
                                                  n_cells_threshold = 100))
   expect_identical(cur_sce4$spatial_context_filtered, rep(NA, length(cur_sce4$spatial_context_filtered)))
@@ -73,7 +73,7 @@ test_that("filterSpatialContext function works", {
   
   manual_selected <- cur_anno %>% filter(n_samples >= 2 & n_cells >= 15) %>% pull(spatial_context) %>% sort()
   
-  expect_silent(cur_sce5 <- filterSpatialContext(sce, sample_id = "ImageNb", 
+  expect_silent(cur_sce5 <- filterSpatialContext(sce, group_by = "ImageNb", 
                                                  n_samples_threshold = 2, 
                                                  n_cells_threshold = 15))
   
@@ -91,19 +91,19 @@ test_that("filterSpatialContext function works", {
                regexp = "'entry' not in 'colData(object)'.",
                fixed = TRUE)
 
-  expect_error(filterSpatialContext(sce, sample_id = "ImageNb", n_cells_threshold = "10"),
+  expect_error(filterSpatialContext(sce, group_by = "ImageNb", n_cells_threshold = "10"),
                regexp = "'n_cells_threshold' needs to be a single numeric.",
                fixed = TRUE)
 
-  expect_error(filterSpatialContext(sce, sample_id = "ImageNb", n_samples_threshold = "2"),
+  expect_error(filterSpatialContext(sce, group_by = "ImageNb", n_samples_threshold = "2"),
                regexp = "'n_samples_threshold' needs to be a single numeric.",
                fixed = TRUE)
   
-  expect_error(filterSpatialContext(sce, sample_id = "ImageNb"),
+  expect_error(filterSpatialContext(sce, group_by = "ImageNb"),
                regexp = "One of 'n_samples_threshold' and 'n_cells_threshold' has to be defined.",
                fixed = TRUE)
   
-  expect_error(filterSpatialContext(sce, sample_id = "ImageNb", n_cells_threshold = 10, name = c("spatial","context","filtered")),
+  expect_error(filterSpatialContext(sce, group_by = "ImageNb", n_cells_threshold = 10, name = c("spatial","context","filtered")),
                regexp = "'name' has to be a single character'.",
                fixed = TRUE)
 }
