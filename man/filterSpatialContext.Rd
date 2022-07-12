@@ -7,9 +7,9 @@
 filterSpatialContext(
   object,
   entry = "spatial_context",
-  sample_id = "sample_id",
-  n_cells_threshold = NULL,
-  n_samples_threshold = NULL,
+  group_by = "sample_id",
+  group_threshold = NULL,
+  cells_threshold = NULL,
   name = "spatial_context_filtered"
 )
 }
@@ -17,80 +17,86 @@ filterSpatialContext(
 \item{object}{a \code{SingleCellExperiment} or \code{SpatialExperiment}
 object}
 
-\item{entry}{single character specifying the \code{colData(object)} entry 
+\item{entry}{a single character specifying the \code{colData(object)} entry 
 containing the \code{detectSpatialContext} output. Defaults to 
 "spatial_context".}
 
-\item{sample_id}{single character specifying the \code{colData(object)} entry 
-containing the sample identifiers. Defaults to "sample_id".}
+\item{group_by}{a single character indicating the \code{colData(object)}
+entry by which SCs are grouped. This is usually the image or patient ID. 
+Defaults to "sample_id".}
 
-\item{n_cells_threshold}{single numeric specifying the minimum total number
+\item{group_threshold}{a single numeric specifying the minimum number of
+group entries in which a SC is detected.}
+
+\item{cells_threshold}{a single numeric specifying the minimum total number
 of cells in a SC.}
 
-\item{n_samples_threshold}{single numeric specifying the minimum number of
-samples in which a SC is detected.}
-
-\item{name}{single character specifying the name of the output saved in 
+\item{name}{a single character specifying the name of the output saved in 
 \code{colData(object)}. Defaults to "spatial_context_filtered".}
 }
 \value{
-returns an object of \code{class(object)} containing a new column 
-entry to \code{colData(object)[[name]]}
+returns an object of \code{class(object)} containing a new column
+entry to \code{colData(object)[[name]]} and a new \code{dataframe} entry to
+\code{metadata(object)[["filterSpatialContext"]]}.
 }
 \description{
 Function to filter detected spatial contexts (SCs) based on a
-user-defined threshold for number of samples and/or cells.
+user-defined threshold for number of group entries and/or cells.
 }
 \examples{
+set.seed(22)
 library(cytomapper)
 data(pancreasSCE)
 
 ## 1. Cellular neighborhood (CN)
-sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-                         type = "knn", 
-                         name = "knn_cn_graph", 
-                         k = 5)
+sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",
+                        type = "knn",
+                        name = "knn_cn_graph",
+                        k = 5)
 
-sce <- aggregateNeighbors(sce, colPairName = "knn_cn_graph", 
-                          aggregate_by = "metadata", 
-                          count_by = "CellType")
+sce <- aggregateNeighbors(sce, colPairName = "knn_cn_graph",
+                         aggregate_by = "metadata",
+                         count_by = "CellType",
+                         name = "aggregatedCellTypes")
 
-cur_cluster <- kmeans(sce$aggregatedNeighbors, centers = 3)
+cur_cluster <- kmeans(sce$aggregatedCellTypes, centers = 3)
 sce$cellular_neighborhood <- factor(cur_cluster$cluster)
 
-plotSpatial(sce, img_id = "ImageNb", 
-            colPairName = "knn_cn_graph", 
-            node_color_by = "cellular_neighborhood")
+plotSpatial(sce, img_id = "ImageNb",
+           colPairName = "knn_cn_graph",
+           node_color_by = "cellular_neighborhood")
 
 ## 2. Spatial context (SC)
-sce <- buildSpatialGraph(sce, img_id = "ImageNb", 
-                         type = "knn", 
-                         name = "knn_sc_graph", 
-                         k = 15)
+sce <- buildSpatialGraph(sce, img_id = "ImageNb",
+                        type = "knn",
+                        name = "knn_sc_graph",
+                        k = 15)
 
-sce <- aggregateNeighbors(sce, colPairName = "knn_sc_graph", 
-                          aggregate_by = "metadata", 
-                         count_by = "cellular_neighborhood")
+sce <- aggregateNeighbors(sce, colPairName = "knn_sc_graph",
+                         aggregate_by = "metadata",
+                         count_by = "cellular_neighborhood",
+                         name = "aggregatedNeighborhood")
 
-# Detect spatial context 
-sce <- detectSpatialContext(sce, threshold = 0.9)
+# Detect spatial context
+sce <- detectSpatialContext(sce, entry = "aggregatedNeighborhood",
+                           threshold = 0.9)
 
-plotSpatial(sce, img_id = "ImageNb", 
-            colPairName = "knn_sc_graph", 
-            node_color_by = "spatial_context")
+plotSpatial(sce, img_id = "ImageNb",
+           colPairName = "knn_sc_graph",
+           node_color_by = "spatial_context")
             
 # Filter spatial context
-# By samples
-sce <- filterSpatialContext(sce, sample_id = "ImageNb", 
-                            n_samples_threshold = 2)
+# By group
+sce <- filterSpatialContext(sce, group_by = "ImageNb", 
+                            group_threshold = 2)
 
 plotSpatial(sce, img_id = "ImageNb", 
             colPairName = "knn_sc_graph", 
             node_color_by = "spatial_context_filtered")
 
 # By cells
-sce <- filterSpatialContext(sce, sample_id = "ImageNb", 
-                            n_cells_threshold = 15)
+sce <- filterSpatialContext(sce, group_by = "ImageNb", 
+                            cells_threshold = 15)
 
 plotSpatial(sce, img_id = "ImageNb", 
            colPairName = "knn_sc_graph", 

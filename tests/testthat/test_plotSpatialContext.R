@@ -149,5 +149,12 @@ test_that("plotSpatialContext function works", {
   expect_error(plotSpatialContext(sce, group_by = "ImageNb", return_data = "TRUE"),
                regexp = "'return_data' has to be logical'.",
                fixed = TRUE)
+  
+  #spatial context is NA vector
+  sce$spatial_context <- NA
+  expect_error(plotSpatialContext(sce, group_by = "ImageNb"), 
+               regexp = "the data frame should contain at least two columns", 
+               fixed = TRUE)
+  
 }
 )

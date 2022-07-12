@@ -20,7 +20,8 @@
 #' 
 #' @return returns an object of \code{class(object)} containing a new column
 #' entry to \code{colData(object)[[name]]} and a new \code{dataframe} entry to
-#' \code{metadata(object)[["filterSpatialContext"]]}.
+#' \code{metadata(object)[["filterSpatialContext"]]} containing the group and
+#' cell counts per SC.
 #' 
 #' @examples 
 #' set.seed(22)
@@ -97,7 +98,7 @@
 #' 
 #' @importFrom SingleCellExperiment colData
 #' @importFrom BiocGenerics table
-#' @importFrom dplyr all_of count n filter group_by_at pull summarise
+#' @importFrom dplyr all_of count n filter group_by_at group_by_all pull summarise
 #' @importFrom S4Vectors unfactor
 #' 
 #' @export
