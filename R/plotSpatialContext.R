@@ -110,7 +110,6 @@
 #' @importFrom stringr str_split
 #' @importFrom dplyr count filter group_by_at group_by_all pull select summarise
 #' @importFrom igraph graph_from_data_frame
-#' @importFrom BiocGenerics table
 #' @importFrom S4Vectors unfactor
 #' @export
 

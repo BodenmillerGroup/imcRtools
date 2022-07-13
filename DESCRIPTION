@@ -53,8 +53,7 @@ Imports:
     ggplot2,
     data.table,
     sf,
-    concaveman,
-    BiocGenerics
+    concaveman
 Suggests:
     CATALYST,
     grid,

@@ -97,7 +97,6 @@
 #' motifs and their appropriation by tumors, Cell Systems, 2022}
 #' 
 #' @importFrom SingleCellExperiment colData
-#' @importFrom BiocGenerics table
 #' @importFrom dplyr all_of count n filter group_by_at group_by_all pull summarise
 #' @importFrom S4Vectors unfactor
 #' 
