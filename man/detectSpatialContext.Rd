@@ -36,7 +36,7 @@ k-nearest neighbor graph, the SC of each cell is assigned as the set of CNs
 that cumulatively exceed a user-defined fraction threshold. 
 
 The term was coined by \href{https://doi.org/10.1016/j.cels.2021.09.012}{
-Salil S. et al., Tissue schematics map the specialization of immune tissue 
+Bhate S. et al., Tissue schematics map the specialization of immune tissue 
 motifs and their appropriation by tumors, Cell Systems, 2022} and describes 
 tissue regions in which distinct CNs may be interacting.
 }
@@ -85,7 +85,7 @@ plotSpatial(sce, img_id = "ImageNb",
 }
 \references{
 \href{https://doi.org/10.1016/j.cels.2021.09.012}{
-Salil S. et al., Tissue schematics map the specialization of immune tissue 
+Bhate S. et al., Tissue schematics map the specialization of immune tissue 
 motifs and their appropriation by tumors, Cell Systems, 2022}
 }
 \seealso{

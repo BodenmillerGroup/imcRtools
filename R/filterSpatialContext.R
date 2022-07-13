@@ -93,7 +93,7 @@
 #' 
 #' @references
 #' \href{https://doi.org/10.1016/j.cels.2021.09.012}{
-#' Salil S. et al., Tissue schematics map the specialization of immune tissue 
+#' Bhate S. et al., Tissue schematics map the specialization of immune tissue 
 #' motifs and their appropriation by tumors, Cell Systems, 2022}
 #' 
 #' @importFrom SingleCellExperiment colData

@@ -88,6 +88,9 @@ test_that("filterSpatialContext function works", {
 
   expect_equal(manual_selected, function_selected)
   
+  #metadata entry check
+  manual_anno <- cur_anno[cur_anno$n_group >= 2,]
+  expect_equal(metadata(cur_sce)$filterSpatialContext, manual_anno)
   
   #Errors
   expect_error(filterSpatialContext(colData(sce)),

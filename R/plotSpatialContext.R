@@ -103,7 +103,7 @@
 #' 
 #' @references
 #' \href{https://doi.org/10.1016/j.cels.2021.09.012}{
-#' Salil S. et al., Tissue schematics map the specialization of immune tissue 
+#' Bhate S. et al., Tissue schematics map the specialization of immune tissue 
 #' motifs and their appropriation by tumors, Cell Systems, 2022}
 #' 
 #' @importFrom SingleCellExperiment colData
@@ -142,7 +142,7 @@ plotSpatialContext <- function(object,
    as.data.frame
   
   list <- str_split(unique(cur_dat[,entry]), "_")
-  list_length <- sapply(list, length)
+  list_length <- vapply(list, length, numeric(1))
   edges <- .createEdgeList(list, list_length)
   
   anno <- cur_dat %>% 
@@ -150,7 +150,7 @@ plotSpatialContext <- function(object,
     summarise(n_cells = sum(n), n_group = n()) %>% 
     as.data.frame
   
-  anno$length <- sapply(str_split(anno[,entry],"_"),length)
+  anno$length <- vapply(str_split(anno[,entry],"_"),length,numeric(1))
   
   graph <- graph_from_data_frame(d = edges, directed = TRUE,vertices = anno)
     

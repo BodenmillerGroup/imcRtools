@@ -903,11 +903,15 @@
     list_options <- list[length(x)+1 == list_length]
     
     if (length(list_options) != 0) {
-      list_select <- list_options[sapply(list_options,function(y){length(intersect(y,x)) == length(x)})]  
+      list_select <- list_options[vapply(list_options,
+                                         function(y){length(intersect(y,x)) == length(x)},
+                                         logical(1))]  
       
       if (length(list_select) != 0) { 
         out <- data.frame("from" = paste(x, collapse = "_"),
-                          "to" = sapply(list_select, paste, collapse = "_"), 
+                          "to" = vapply(list_select, 
+                                        paste, collapse = "_",
+                                        character(1)), 
                           row.names = NULL)
         return(out)
       } else {
@@ -956,15 +960,15 @@
   
   ## node geom
   if (!is.null(node_color_by)){
-    color = vertex_attr(graph, node_color_by) 
+    color <- vertex_attr(graph, node_color_by) 
   } else {
-    color = as.character(node_color_fix)
+    color <- as.character(node_color_fix)
   }
   
   if (!is.null(node_size_by)) {
-    size = vertex_attr(graph, node_size_by) 
+    size <- vertex_attr(graph, node_size_by) 
   } else {
-    size = as.character(node_size_fix)
+    size <- as.character(node_size_fix)
   }
   
   if (!is.null(node_color_by)) {
@@ -975,9 +979,9 @@
   
   ## node geom label
   if (!is.null(node_label_color_by)) {
-    color_label = vertex_attr(graph, node_label_color_by) 
+    color_label <- vertex_attr(graph, node_label_color_by) 
   } else {
-    color_label = as.character(node_label_color_fix)
+    color_label <- as.character(node_label_color_fix)
   }
   
   if(node_label_repel){

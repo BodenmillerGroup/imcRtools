@@ -37,7 +37,8 @@ of cells in a SC.}
 \value{
 returns an object of \code{class(object)} containing a new column
 entry to \code{colData(object)[[name]]} and a new \code{dataframe} entry to
-\code{metadata(object)[["filterSpatialContext"]]}.
+\code{metadata(object)[["filterSpatialContext"]]} containing the group and
+cell counts per SC.
 }
 \description{
 Function to filter detected spatial contexts (SCs) based on a
@@ -105,7 +106,7 @@ plotSpatial(sce, img_id = "ImageNb",
 }
 \references{
 \href{https://doi.org/10.1016/j.cels.2021.09.012}{
-Salil S. et al., Tissue schematics map the specialization of immune tissue 
+Bhate S. et al., Tissue schematics map the specialization of immune tissue 
 motifs and their appropriation by tumors, Cell Systems, 2022}
 }
 \seealso{

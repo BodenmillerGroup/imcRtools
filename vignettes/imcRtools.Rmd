@@ -565,6 +565,7 @@ on their environment (either by aggregated categorical features or
 expression).
 
 ```{r aggregateNeigbors-clustering}
+set.seed(22)
 cur_cluster <- kmeans(pancreasSCE$aggregatedNeighbors, centers = 3)
 pancreasSCE$clustered_neighbors <- factor(cur_cluster$cluster)
 
@@ -595,13 +596,11 @@ plotSpatial(pancreasSCE,
     scale_color_brewer(palette = "Set1")
 ```
 
-## Spatial context analysis
+## Spatial context analysis {#spatial-context}
 
-The cell assignments derived from clustering cells based on their
-environment can be interpreted as **cellular neighborhoods (CNs)** (
-\href{https://doi.org/10.1016/j.cell.2020.07.005}{ Schürch C. et al.,
-Coordinated Cellular Neighborhoods Orchestrate Antitumoral Immunity at the
-Colorectal Cancer Invasive Front, Cell, 2020}).
+The single cell assignments derived from clustering cells based on their
+environment can be interpreted as **cellular neighborhoods (CNs)**
+[@Schürch2020].
 
 Downstream of CNs, imcRtools exports three functions to detect and
 analyze the **spatial context (SC)** of each cell.
@@ -610,21 +609,20 @@ analyze the **spatial context (SC)** of each cell.
 2.  `filterSpatialContext`: for the function to filter SCs
 3.  `plotSpatialContext`: for the function to plot SC graphs
 
-The term SC was coined by
-\href{https://doi.org/10.1016/j.cels.2021.09.012}{
-Salil S. et al., Tissue schematics map the specialization of immune tissue
-motifs and their appropriation by tumors, Cell Systems, 2022} and
+The term SC was coined by Bhate and colleagues [@Bhate2022] and
 describes tissue regions in which distinct CNs may be interacting.
 
-The `detectSpatialContext` function relies on CN fractions for each cell
-in a k-nearest neighbor graph, which we can retrieve using the
-`buildSpatialGraph` and `aggregateNeighbors` functions. Subsequently,
-the CN fractions are sorted from high-to-low and the SC of each cell is
-assigned as the set of CNs that cumulatively exceed a user-defined
+The `detectSpatialContext` function relies on CN fractions for each cell in a
+k-nearest neighbor (KNN) graph, which we can retrieve using the
+`buildSpatialGraph` and `aggregateNeighbors` functions. It is recommended to use
+a higher k in the KNN graph for SC than for CN detection [@Bhate2022].
+
+Subsequently, the CN fractions are sorted from high-to-low and the SC of each
+cell is assigned as the set of CNs that cumulatively exceed a user-defined
 fraction threshold.
 
 ```{r detectSpatialContext}
-# Generate additional k-nearest neighbor graph with higher k
+# Generate k-nearest neighbor graph
 pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",
                                  type = "knn",
                                  name = "knn_spatialcontext_graph",
@@ -643,6 +641,9 @@ pancreasSCE <- detectSpatialContext(pancreasSCE,
                                     entry = "aggregatedNeighborhood",
                                     threshold = 0.9,
                                     name = "spatial_context")
+# Define SC color scheme
+col_SC <- setNames(c("#A6CEE3", "#1F78B4", "#B2DF8A", "#33A02C", "#FB9A99", "#E31A1C", "#FDBF6F"), 
+                   sort(unique(pancreasSCE$spatial_context)))
 
 # Visualize spatial contexts on images
 plotSpatial(pancreasSCE,
@@ -654,7 +655,7 @@ plotSpatial(pancreasSCE,
             colPairName = "knn_spatialcontext_graph",
             directed = FALSE,
             nodes_first = FALSE) +
-    scale_color_brewer(palette = "Paired")
+    scale_color_manual(values = col_SC)
 ```
 
 After SC assignment for each individual cell, the `filterSpatialContext`
@@ -675,6 +676,8 @@ pancreasSCE <- filterSpatialContext(pancreasSCE,
                             group_threshold = 2,
                             name = "spatial_context_filtered_group")
 
+metadata(pancreasSCE)$filterSpatialContext
+
 plotSpatial(pancreasSCE,
             img_id = "ImageNb",
             node_color_by = "spatial_context_filtered_group",
@@ -684,7 +687,7 @@ plotSpatial(pancreasSCE,
             colPairName = "knn_spatialcontext_graph",
             directed = FALSE,
             nodes_first = FALSE) +
-    scale_color_brewer(palette = "Paired")
+    scale_color_manual(values = col_SC)
 
 # By total number of cells
 pancreasSCE <- filterSpatialContext(pancreasSCE, 
@@ -692,6 +695,8 @@ pancreasSCE <- filterSpatialContext(pancreasSCE,
                             group_by = "ImageNb", 
                             cells_threshold = 15,
                             name = "spatial_context_filtered_cells")
+
+metadata(pancreasSCE)$filterSpatialContext
 
 plotSpatial(pancreasSCE,
             img_id = "ImageNb",
@@ -702,14 +707,11 @@ plotSpatial(pancreasSCE,
             colPairName = "knn_spatialcontext_graph",
             directed = FALSE,
             nodes_first = FALSE) +
-    scale_color_brewer(palette = "Paired")
+    scale_color_manual(values = col_SC)
 ```
 
 Lastly, the `plotSpatialContext` function plots directed *SC graphs*,
-akin to *CN combination maps* in
-href{<https://doi.org/10.1016/j.cels.2021.09.012>}{ Salil S. et al.,
-Tissue schematics map the specialization of immune tissue motifs and
-their appropriation by tumors, Cell Systems, 2022}, based on symbolic
+akin to *CN combination maps* in [@Bhate2022], based on symbolic
 edge-lists and vertex metadata, which operates on cohort-level.
 
 ```{r plotSpatialContext}
