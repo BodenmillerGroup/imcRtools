@@ -25,14 +25,14 @@
         spot_not_ac <- cur_names[!(cur_names %in% cur_channels)]
         ac_not_spot <- cur_channels[!(cur_channels %in% cur_names)]
         if (verbose) {
-            cat("Spotted channels: ", paste(cur_names, collapse = ", "))
-            cat("\n")
-            cat("Acquired channels: ", paste(cur_channels, collapse = ", "))
-            cat("\n")
-            cat("Channels spotted but not acquired: ",
+            message("Spotted channels: ", paste(cur_names, collapse = ", "))
+            message("\n")
+            message("Acquired channels: ", paste(cur_channels, collapse = ", "))
+            message("\n")
+            message("Channels spotted but not acquired: ",
                 paste(spot_not_ac, collapse = ", "))
-            cat("\n")
-            cat("Channels acquired but not spotted: ",
+            message("\n")
+            message("Channels acquired but not spotted: ",
                 paste(ac_not_spot, collapse = ", "))
         }
         

@@ -19,7 +19,7 @@
 #'  \code{colData(object)}. Defaults to "spatial_context_filtered".
 #' 
 #' @return returns an object of \code{class(object)} containing a new column
-#' entry to \code{colData(object)[[name]]} and a new \code{dataframe} entry to
+#' entry to \code{colData(object)[[name]]} and a new \code{data.frame} entry to
 #' \code{metadata(object)[["filterSpatialContext"]]} containing the group and
 #' cell counts per SC.
 #' 

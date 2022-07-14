@@ -1,27 +1,27 @@
 #' @title Plot spatial context graph
 #'
 #' @description Function to plot directed spatial context graphs based on
-#' symbolic edge-lists and vertex metadata, which operates on cohort-level.
+#' symbolic edge-lists and vertex metadata, which operates on the cohort-level.
 #' The user can specify node, node_label and edge aesthetics.
 #'
 #' @param object a \code{SingleCellExperiment} or \code{SpatialExperiment}
 #' object.
-#' @param entry single character specifying the \code{colData(object)} entry 
-#' containing the \code{detectSpatialContext} output. Defaults to 
-#' "spatial_context".
+#' @param entry single character specifying the \code{colData(object)} entry
+#' containing the \code{\link[imcRtools]{detectSpatialContext}} output.
+#' Defaults to "spatial_context".
 #' @param group_by a single character indicating the \code{colData(object)}
 #' entry by which SCs are grouped. This is usually the image or patient ID. 
 #' Defaults to "sample_id".
-#' @param node_color_by single character from
-#' \code{c("name","n_cells","n_group")} by which the nodes should be
+#' @param node_color_by single character either
+#' \code{NULL, "name","n_cells", "n_group"} by which the nodes should be
 #' colored.
-#' @param node_size_by single character from \code{c("n_cells","n_group")} 
+#' @param node_size_by single character either \code{NULL, "n_cells","n_group"} 
 #' by which the size of the nodes are defined.
 #' @param node_color_fix single character specifying the color of all nodes.
 #' @param node_size_fix single numeric specifying the size of all nodes.
 #' @param node_label_repel should nodes be labelled? Defaults to TRUE.
-#' @param node_label_color_by single character from
-#' \code{c("name","n_cells","n_group")} by which the node labels should be
+#' @param node_label_color_by single character either
+#' \code{NULL, "name","n_cells","n_group"} by which the node labels should be
 #' colored.
 #' @param node_label_color_fix single character specifying the color of all node
 #' labels.
@@ -149,9 +149,9 @@ plotSpatialContext <- function(object,
     summarise(n_cells = sum(n), n_group = n()) %>% 
     as.data.frame
   
-  anno$length <- vapply(str_split(anno[,entry],"_"),length,numeric(1))
+  anno$length <- vapply(str_split(anno[,entry],"_"), length, numeric(1))
   
-  graph <- graph_from_data_frame(d = edges, directed = TRUE,vertices = anno)
+  graph <- graph_from_data_frame(d = edges, directed = TRUE, vertices = anno)
     
   plot <- .generateSpatialContextPlot(graph = graph, node_color_by, 
                                       node_size_by, node_color_fix, 

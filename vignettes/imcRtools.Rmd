@@ -600,7 +600,7 @@ plotSpatial(pancreasSCE,
 
 The single cell assignments derived from clustering cells based on their
 environment can be interpreted as **cellular neighborhoods (CNs)**
-[@Schürch2020].
+[@Schurch2020].
 
 Downstream of CNs, imcRtools exports three functions to detect and
 analyze the **spatial context (SC)** of each cell.

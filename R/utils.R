@@ -631,8 +631,8 @@
         hull <- chull(x = x[[coords[1]]], y = x[[coords[2]]])
 
         # cells that build the border of a patch
-        border_cells = x[hull,]
-        coordinates = as.matrix(border_cells[,coords])
+        border_cells <- x[hull,]
+        coordinates <- as.matrix(border_cells[,coords])
         coordinates <- rbind(coordinates, coordinates[1,])
 
         polygon <- st_polygon(list(coordinates))
