@@ -8,6 +8,11 @@ author:
   - Department for Quantitative Biomedicine, University of Zurich
   - Institute for Molecular Health Sciences, ETH Zurich
   email: nils.eling@dqbm.uzh.ch
+- name: Lasse Meyer
+  affiliation: 
+  - Department for Quantitative Biomedicine, University of Zurich
+  - Institute for Molecular Health Sciences, ETH Zurich
+  email: lasse.meyer@@uzh.ch
 output:
     BiocStyle::html_document:
         toc_float: yes

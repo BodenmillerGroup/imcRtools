@@ -900,7 +900,7 @@
 .createEdgeList <- function(list, list_length){
   
   out <- lapply(list, function(x){
-    list_options <- list[length(x)+1 == list_length]
+    list_options <- list[length(x) + 1 == list_length]
     
     if (length(list_options) != 0) {
       list_select <- list_options[vapply(list_options,
@@ -953,28 +953,28 @@
   
   ## edge geom  
   if (draw_edges) {
-    cur_geom_edge <- geom_edge_link(color = edge_color_fix)
+      cur_geom_edge <- geom_edge_link(color = edge_color_fix)
   } else {
-    cur_geom_edge <- NULL
+      cur_geom_edge <- NULL
   }
   
   ## node geom
   if (!is.null(node_color_by)){
-    color <- vertex_attr(graph, node_color_by) 
+      color <- vertex_attr(graph, node_color_by) 
   } else {
-    color <- as.character(node_color_fix)
+      color <- as.character(node_color_fix)
   }
   
   if (!is.null(node_size_by)) {
-    size <- vertex_attr(graph, node_size_by) 
+      size <- vertex_attr(graph, node_size_by) 
   } else {
-    size <- as.character(node_size_fix)
+      size <- as.character(node_size_fix)
   }
   
   if (!is.null(node_color_by)) {
-    cur_geom_node <- geom_node_point(aes_(color = color, size = size))
+      cur_geom_node <- geom_node_point(aes_(color = color, size = size))
   } else {
-    cur_geom_node <- geom_node_point(aes_(size = size), color = color)
+      cur_geom_node <- geom_node_point(aes_(size = size), color = color)
   }
   
   ## node geom label
@@ -998,16 +998,16 @@
     cur_geom_node_label = NULL
   }  
   
-  #specify vertical layout with sugiyama
-  LO <- layout.sugiyama(graph,vertex_attr(graph,"length"))
+  # specify vertical layout with sugiyama
+  LO <- layout.sugiyama(graph, vertex_attr(graph,"length"))
   
-  p <- ggraph(graph, layout = LO$layout)+
-    cur_geom_edge+
-    cur_geom_node+
-    cur_geom_node_label+
-    theme_graph(base_family = "")
+  p <- ggraph(graph, layout = LO$layout) +
+      cur_geom_edge +
+      cur_geom_node +
+      cur_geom_node_label +
+      theme_graph(base_family = "")
   
-  #legend post-processing
+  # legend post-processing
   if (!is.null(node_color_by)) {
     if (node_color_by %in% c("n_cells","n_group")) {
       p <- p + guides(color = guide_colorbar(node_color_by), 
@@ -1024,7 +1024,7 @@
     p <- p + guides(color = "none", size = guide_legend(as.character(node_size_by)))
   }
   
-  #node size post-processing
+  # node size post-processing
   if (is.null(node_size_by)) {
     p <- p + guides(size = "none") + scale_size_manual(values = as.numeric(node_size_fix))
   }

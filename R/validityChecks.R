@@ -1085,18 +1085,18 @@
   }
   
   if (!is.null(node_color_by) &&
-      (!node_color_by %in% c("name","n_cells","n_group"))){
-    stop("'node_color_by' has to be one off 'name','n_cells','n_group'.")
+      (!node_color_by %in% c("name", "n_cells", "n_group"))){
+    stop("'node_color_by' has to be one off 'name', 'n_cells' or 'n_group'.")
   }
   
   if (!is.null(node_size_by) &&
-      (!node_size_by %in% c("n_cells","n_group"))){
+      (!node_size_by %in% c("n_cells", "n_group"))){
     stop("'node_size_by' has to be 'n_cells' or 'n_group'.")
   }
   
   if (!is.null(node_label_color_by) && 
       (!node_label_color_by %in% c("name","n_cells","n_group"))){
-    stop("'node_label_color_by' has to be one off 'name','n_cells','n_group'.")
+    stop("'node_label_color_by' has to be one off 'name', 'n_cells', 'n_group'.")
   }
   
   if (!is.logical(node_label_repel)) {
