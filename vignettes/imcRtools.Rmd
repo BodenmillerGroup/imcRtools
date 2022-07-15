@@ -604,8 +604,8 @@ plotSpatial(pancreasSCE,
 ## Spatial context analysis {#spatial-context}
 
 The single cell assignments derived from clustering cells based on their
-environment can be interpreted as **cellular neighborhoods (CNs)**
-[@Schurch2020].
+environment can be interpreted as **cellular neighborhoods (CNs)**, which can 
+represent sites of unique local processes [@Schurch2020].
 
 Downstream of CNs, imcRtools exports three functions to detect and
 analyze the **spatial context (SC)** of each cell.
@@ -615,16 +615,26 @@ analyze the **spatial context (SC)** of each cell.
 3.  `plotSpatialContext`: for the function to plot SC graphs
 
 The term SC was coined by Bhate and colleagues [@Bhate2022] and
-describes tissue regions in which distinct CNs may be interacting.
+describes tissue regions in which distinct CNs may be interacting, which 
+can lead to specialized local biological events.
 
-The `detectSpatialContext` function relies on CN fractions for each cell in a
-k-nearest neighbor (KNN) graph, which we can retrieve using the
-`buildSpatialGraph` and `aggregateNeighbors` functions. It is recommended to use
-a higher k in the KNN graph for SC than for CN detection [@Bhate2022].
+The `detectSpatialContext` function relies on CN fractions for each cell in 
+a spatial interaction graph (originally a k-nearest neighbor (KNN) graph).
+
+We can retrieve the CN fractions using the above-described `buildSpatialGraph`
+and `aggregateNeighbors` functions. The window size (k for KNN) for
+`buildSpatialGraph` should reflect a length scale on which biological signals
+can be exchanged and depends, among others, on cell density and tissue area. 
+In view of their divergent functionality, we recommend to use a larger 
+window size for SC (interaction between local processes) than for CN 
+(local processes) detection.
 
 Subsequently, the CN fractions are sorted from high-to-low and the SC of each
-cell is assigned as the set of CNs that cumulatively exceed a user-defined
-fraction threshold.
+cell is assigned the minimal combination of SCs that additively surpass a
+user-defined threshold. The default threshold of 0.9 aims to represent the
+dominant CNs, hence the most prevalent signals, in a given window.
+
+For more details, please refer to [@Bhate2022].
 
 ```{r detectSpatialContext}
 # Generate k-nearest neighbor graph
@@ -914,7 +924,8 @@ has written the first version of reading in the
 `ImcSegmentationPipeline` output and the `patchDetection` function.
 [Daniel Schulz](https://github.com/SchulzDan) has build the
 `aggregateNeighbors` function and contributed to developing the spatial
-clustering approach.
+clustering approach. [Lasse Meyer](https://github.com/lassedochreden) has 
+implemented the functions for spatial context analysis.
 
 # Session info {.unnumbered}
 

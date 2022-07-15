@@ -93,10 +93,29 @@ test_that("plotSpatialContext function works", {
   expect_equal(p$data$name, sort(unique(sce$spatial_context)))
   expect_equal(p$data$length, sapply(str_split(sort(unique(sce$spatial_context)),"_"),length))
   
+  p <- plotSpatialContext(sce, group_by = "ImageNb", draw_edges = FALSE)
+  expect_s3_class(p, "ggraph")
+  expect_silent(print(p))
+  expect_equal(p$data$name, sort(unique(sce$spatial_context)))
+  expect_equal(p$data$length, sapply(str_split(sort(unique(sce$spatial_context)),"_"),length))
+  
+  p <- plotSpatialContext(sce, group_by = "ImageNb", node_color_by = "name",
+                          node_label_repel = FALSE)
+  expect_s3_class(p, "ggraph")
+  expect_silent(print(p))
+  expect_equal(p$data$name, sort(unique(sce$spatial_context)))
+  expect_equal(p$data$length, sapply(str_split(sort(unique(sce$spatial_context)),"_"),length))
+  
   #return data - tests
   p <- plotSpatialContext(sce, group_by = "ImageNb", return_data = TRUE) 
   expect_type(p, "list")
   expect_equal(names(p), c("edges", "vertices"))
+  expect_equal(p$edges[,1], c("1", "1", "1_2", "1_3", "2", "2", "2_3", "3", "3"))
+  expect_equal(p$edges[,2], c("1_2", "1_3", "1_2_3", "1_2_3", "1_2", "2_3", "1_2_3", 
+                              "1_3", "2_3"))
+  expect_equal(p$vertices[,1], c("1", "1_2", "1_2_3", "1_3", "2", "2_3", "3"))
+  expect_equal(p$vertices[,2], c(87L, 71L, 16L, 90L, 55L, 29L, 14L))
+  
   #metadata entry and vertices comp
   sce_fil <- filterSpatialContext(sce, group_by = "ImageNb", group_threshold = 0)
   expect_equal(metadata(sce_fil)$filterSpatialContext, p$vertices[,1:3])
@@ -110,8 +129,12 @@ test_that("plotSpatialContext function works", {
                regexp = "'entry' not in 'colData(object)'.",
                fixed = TRUE)
   
+  expect_error(plotSpatialContext(sce, group_by = "Image"),
+               regexp = "'group_by' not in 'colData(object)'.",
+               fixed = TRUE)
+  
   expect_error(plotSpatialContext(sce, group_by = "ImageNb", node_color_by = "NAME"),
-               regexp = "'node_color_by' has to be one off 'name','n_cells','n_group'.",
+               regexp = "'node_color_by' has to be one off 'name', 'n_cells' or 'n_group'.",
                fixed = TRUE)
   
   expect_error(plotSpatialContext(sce, group_by = "ImageNb", node_size_by = "name"),
@@ -131,7 +154,7 @@ test_that("plotSpatialContext function works", {
                fixed = TRUE)
   
   expect_error(plotSpatialContext(sce, group_by = "ImageNb", node_label_color_by = "NAME"),
-               regexp = "'node_label_color_by' has to be one off 'name','n_cells','n_group'.",
+               regexp = "'node_label_color_by' has to be one off 'name', 'n_cells' or 'n_group'.",
                fixed = TRUE)
   
   expect_error(plotSpatialContext(sce, group_by = "ImageNb", node_label_color_fix = factor("black")),
@@ -149,6 +172,37 @@ test_that("plotSpatialContext function works", {
   expect_error(plotSpatialContext(sce, group_by = "ImageNb", return_data = "TRUE"),
                regexp = "'return_data' has to be logical'.",
                fixed = TRUE)
+  
+  expect_error(plotSpatialContext(sce, group_by = "ImageNb", node_label_repel = FALSE, 
+                                  node_label_color_by = "name"),
+               regexp = "'node_label_color_by' and 'node_label_color_fix' can not be defined when node_label_repel == FALSE",
+               fixed = TRUE)
+  
+  expect_error(plotSpatialContext(sce, group_by = "ImageNb", node_label_repel = FALSE, 
+                                  node_label_color_by = "name"),
+               regexp = "'node_label_color_by' and 'node_label_color_fix' can not be defined when node_label_repel == FALSE",
+               fixed = TRUE)
+  
+  expect_error(plotSpatialContext(sce, group_by = "ImageNb", node_color_by = "name", 
+                                  node_color_fix = "blue"),
+               regexp = "'node_color_by' and 'node_color_fix' can not be defined at the same time.",
+               fixed = TRUE)
+  
+  expect_error(plotSpatialContext(sce, group_by = "ImageNb", node_label_color_by = "name", 
+                                  node_label_color_fix = "blue"),
+               regexp = "'node_label_color_by' and 'node_label_color_fix' can not be defined at the same time.",
+               fixed = TRUE)
+  
+  expect_error(plotSpatialContext(sce, group_by = "ImageNb", node_color_by = "name", 
+                                  node_label_color_by = "n_cells"),
+               regexp = "'node_label_color_by' and 'node_color_by' have to be identical.",
+               fixed = TRUE)
+  
+  expect_error(plotSpatialContext(sce, group_by = "ImageNb", node_size_by = "n_group", 
+                                  node_size_fix = "22"),
+               regexp = "'node_size_by' and 'node_size_fix' can not be defined at the same time.",
+               fixed = TRUE)
+  
   
   #spatial context is NA vector
   sce$spatial_context <- NA

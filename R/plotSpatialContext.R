@@ -108,9 +108,9 @@
 #' 
 #' @importFrom SingleCellExperiment colData
 #' @importFrom stringr str_split
-#' @importFrom dplyr count filter group_by_at group_by_all pull select summarise
+#' @importFrom dplyr count group_by_all group_by_at n select summarise
+#' @importFrom tidyselect all_of
 #' @importFrom igraph graph_from_data_frame
-#' @importFrom S4Vectors unfactor
 #' @export
 
 plotSpatialContext <- function(object,

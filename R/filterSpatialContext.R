@@ -98,7 +98,8 @@
 #' 
 #' @importFrom SingleCellExperiment colData
 #' @importFrom dplyr all_of count n filter group_by_at group_by_all pull summarise
-#' @importFrom S4Vectors unfactor
+#' @importFrom tidyselect all_of
+#' @importFrom S4Vectors metadata
 #' 
 #' @export
 

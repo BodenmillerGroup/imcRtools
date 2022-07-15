@@ -104,6 +104,10 @@ test_that("filterSpatialContext function works", {
   expect_error(filterSpatialContext(sce, group_by = "ImageNb", cells_threshold = "10"),
                regexp = "'cells_threshold' needs to be a single numeric.",
                fixed = TRUE)
+  
+  expect_error(filterSpatialContext(sce, group_by = "Image", group_threshold = "2"),
+               regexp = "'group_by' not in 'colData(object)'.",
+               fixed = TRUE)
 
   expect_error(filterSpatialContext(sce, group_by = "ImageNb", group_threshold = "2"),
                regexp = "'group_threshold' needs to be a single numeric.",

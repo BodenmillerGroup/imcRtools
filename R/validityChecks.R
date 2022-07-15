@@ -1007,14 +1007,20 @@
   if (!is(object, "SingleCellExperiment")) {
     stop("'object' needs to be a SingleCellExperiment object.")
   }
+  
   if (!entry %in% names(colData(object))) {
     stop("'entry' not in 'colData(object)'.")
   }
-  if (!(is.numeric(threshold) & (0 <= threshold && threshold <= 1)) 
-  ) {
+  
+  if (!is(colData(object)[,entry],"DFrame")) {
+    stop("'colData(object)[,entry]' needs to be a DFrame object.")
+  }
+    
+  if (!(is.numeric(threshold) & (0 <= threshold && threshold <= 1))){
     stop("'threshold' needs to be a single numeric between 0-1.")
   }
-  if (length(name) != 1 | !is.character(name)) {
+  
+    if (length(name) != 1 | !is.character(name)) {
     stop("'name' has to be a single character'.")
   }
 }
@@ -1039,12 +1045,12 @@
   }
   
   if (!is.null(group_threshold) &&
-      (!is.numeric(group_threshold))) {
+      (!is.numeric(group_threshold) | length(group_threshold) != 1)){
     stop("'group_threshold' needs to be a single numeric.")
   }
   
   if (!is.null(cells_threshold) &&
-     (!is.numeric(cells_threshold))) {
+     (!is.numeric(cells_threshold) | length(cells_threshold) != 1)){
     stop("'cells_threshold' needs to be a single numeric.")
   }
   
@@ -1096,7 +1102,7 @@
   
   if (!is.null(node_label_color_by) && 
       (!node_label_color_by %in% c("name","n_cells","n_group"))){
-    stop("'node_label_color_by' has to be one off 'name', 'n_cells', 'n_group'.")
+    stop("'node_label_color_by' has to be one off 'name', 'n_cells' or 'n_group'.")
   }
   
   if (!is.logical(node_label_repel)) {
