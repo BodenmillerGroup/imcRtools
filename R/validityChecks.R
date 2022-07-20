@@ -999,3 +999,171 @@
         }
     }
 }
+
+.valid.detectSpatialContext.input <- function(object,
+                                              entry,
+                                              threshold,
+                                              name){
+  if (!is(object, "SingleCellExperiment")) {
+    stop("'object' needs to be a SingleCellExperiment object.")
+  }
+  
+  if (!entry %in% names(colData(object))) {
+    stop("'entry' not in 'colData(object)'.")
+  }
+  
+  if (!is(colData(object)[,entry],"DFrame")) {
+    stop("'colData(object)[,entry]' needs to be a DFrame object.")
+  }
+    
+  if (!(is.numeric(threshold) & (0 <= threshold && threshold <= 1))){
+    stop("'threshold' needs to be a single numeric between 0-1.")
+  }
+  
+    if (length(name) != 1 | !is.character(name)) {
+    stop("'name' has to be a single character'.")
+  }
+}
+
+.valid.filterSpatialContext.input <- function(object, 
+                                              entry, 
+                                              group_by,
+                                              group_threshold,
+                                              cells_threshold, 
+                                              name){
+  
+  if (!is(object, "SingleCellExperiment")) {
+    stop("'object' needs to be a SingleCellExperiment object.")
+  }
+  
+  if (!entry %in% names(colData(object))) {
+    stop("'entry' not in 'colData(object)'.")
+  }
+  
+  if (!group_by %in% names(colData(object))) { 
+    stop("'group_by' not in 'colData(object)'.")
+  }
+  
+  if (!is.null(group_threshold) &&
+      (!is.numeric(group_threshold) | length(group_threshold) != 1)){
+    stop("'group_threshold' needs to be a single numeric.")
+  }
+  
+  if (!is.null(cells_threshold) &&
+     (!is.numeric(cells_threshold) | length(cells_threshold) != 1)){
+    stop("'cells_threshold' needs to be a single numeric.")
+  }
+  
+  if (is.null(group_threshold) &&
+     (is.null(cells_threshold))) {
+    stop("One of 'group_threshold' and 'cells_threshold' ", 
+         "has to be defined.")
+  }
+  
+  if (length(name) != 1 | !is.character(name)) {
+    stop("'name' has to be a single character'.")
+  }
+}
+
+.valid.plotSpatialContext.input <- function(object,
+                                            entry,
+                                            group_by,
+                                            node_color_by, 
+                                            node_size_by,
+                                            node_color_fix,
+                                            node_size_fix,
+                                            node_label_repel,
+                                            node_label_color_by,
+                                            node_label_color_fix, 
+                                            draw_edges,
+                                            edge_color_fix,
+                                            return_data){
+  if (!is(object, "SingleCellExperiment")) {
+    stop("'object' needs to be a SingleCellExperiment object.")
+  }
+  
+  if (!entry %in% names(colData(object))) {
+    stop("'entry' not in 'colData(object)'.")
+  }
+  
+  if (!group_by %in% names(colData(object))) { 
+    stop("'group_by' not in 'colData(object)'.")
+  }
+  
+  if (!is.null(node_color_by) &&
+      (!node_color_by %in% c("name", "n_cells", "n_group"))){
+    stop("'node_color_by' has to be one off 'name', 'n_cells' or 'n_group'.")
+  }
+  
+  if (!is.null(node_size_by) &&
+      (!node_size_by %in% c("n_cells", "n_group"))){
+    stop("'node_size_by' has to be 'n_cells' or 'n_group'.")
+  }
+  
+  if (!is.null(node_label_color_by) && 
+      (!node_label_color_by %in% c("name","n_cells","n_group"))){
+    stop("'node_label_color_by' has to be one off 'name', 'n_cells' or 'n_group'.")
+  }
+  
+  if (!is.logical(node_label_repel)) {
+    stop("'node_label_repel' has to be logical'.")
+  }
+  
+  if(node_label_repel == FALSE){
+    if(!is.null(node_label_color_by) | (!is.null(node_label_color_fix))){
+    stop("'node_label_color_by' and 'node_label_color_fix' can not be defined ", 
+         "when node_label_repel == FALSE")
+  }} 
+  
+  if (!is.logical(draw_edges)) {
+    stop("'draw_edges' has to be logical'.")
+  }
+  
+  if (!is.null(node_color_fix) && 
+      (!is.character(node_color_fix))){
+    stop("'node_color_fix' has to be a character'.")
+  }
+  
+  if (!is.null(node_size_fix) &&
+      (!is.character(node_size_fix))){
+    stop("'node_size_fix' has to be a character'.")
+  }
+  
+  if (!is.null(node_label_color_fix) &&
+      (!is.character(node_label_color_fix))){
+    stop("'node_label_color_fix' has to be a character'.")
+  }
+  
+  if (!is.null(edge_color_fix) &&
+      (!is.character(edge_color_fix))){
+    stop("'edge_color_fix' has to be a character'.")
+  }
+  
+  if(!is.null(node_color_by) &&
+     (!is.null(node_color_fix))){
+    stop("'node_color_by' and 'node_color_fix' can not be defined ", 
+         "at the same time.")
+  }
+  
+  if(!is.null(node_label_color_by) &&
+     (!is.null(node_label_color_fix))){
+    stop("'node_label_color_by' and 'node_label_color_fix' can not be defined ", 
+         "at the same time.")
+  }  
+  
+  if(!is.null(node_label_color_by) &&
+     (!is.null(node_color_by)) && 
+     (node_label_color_by != node_color_by)){
+    stop("'node_label_color_by' and 'node_color_by' have to be identical.")
+  }
+    
+  if(!is.null(node_size_by) &&
+     (!is.null(node_size_fix))){
+    stop("'node_size_by' and 'node_size_fix' can not be defined ", 
+         "at the same time.")
+  } 
+  
+  if (!is.logical(return_data)) {
+    stop("'return_data' has to be logical'.")
+  }
+}

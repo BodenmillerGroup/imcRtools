@@ -631,8 +631,8 @@
         hull <- chull(x = x[[coords[1]]], y = x[[coords[2]]])
 
         # cells that build the border of a patch
-        border_cells = x[hull,]
-        coordinates = as.matrix(border_cells[,coords])
+        border_cells <- x[hull,]
+        coordinates <- as.matrix(border_cells[,coords])
         coordinates <- rbind(coordinates, coordinates[1,])
 
         polygon <- st_polygon(list(coordinates))
@@ -895,4 +895,139 @@
     return(dat_stat)
 }
 
+#### SpatialContext helpers ####
 
+.createEdgeList <- function(list, list_length){
+  
+  out <- lapply(list, function(x){
+    list_options <- list[length(x) + 1 == list_length]
+    
+    if (length(list_options) != 0) {
+      list_select <- list_options[vapply(list_options,
+                                         function(y){length(intersect(y,x)) == length(x)},
+                                         logical(1))]  
+      
+      if (length(list_select) != 0) { 
+        out <- data.frame("from" = paste(x, collapse = "_"),
+                          "to" = vapply(list_select, 
+                                        paste, collapse = "_",
+                                        character(1)), 
+                          row.names = NULL)
+        return(out)
+      } else {
+        return(NULL)
+      }
+    } else {
+      return(NULL)
+    }
+  })
+  
+  edges <- do.call(rbind, out)
+  
+  return(edges)
+}
+
+#' @importFrom ggplot2 aes_ guide_legend guide_colorbar guides scale_size_manual
+#' @importFrom ggraph geom_edge_link geom_node_label geom_node_point ggraph
+#' @importFrom igraph layout.sugiyama vertex_attr
+
+.generateSpatialContextPlot <- function(graph,
+                                        node_color_by,
+                                        node_size_by,
+                                        node_color_fix,
+                                        node_size_fix,
+                                        node_label_repel,
+                                        node_label_color_by, 
+                                        node_label_color_fix,  
+                                        draw_edges,
+                                        edge_color_fix){
+  
+  node_color_by <- if (is.null(node_color_by)) NULL else node_color_by
+  node_size_by <- if (is.null(node_size_by)) NULL else node_size_by
+  node_label_color_by <- if (is.null(node_label_color_by)) NULL else node_label_color_by
+  
+  edge_color_fix <- if (is.null(edge_color_fix)) "black" else edge_color_fix 
+  node_color_fix <- if (is.null(node_color_fix)) "darkgrey" else node_color_fix 
+  node_size_fix <- if (is.null(node_size_fix)) "3" else node_size_fix 
+  node_label_color_fix <- if (is.null(node_label_color_fix)) "black" else node_label_color_fix
+  
+  ## edge geom  
+  if (draw_edges) {
+      cur_geom_edge <- geom_edge_link(color = edge_color_fix)
+  } else {
+      cur_geom_edge <- NULL
+  }
+  
+  ## node geom
+  if (!is.null(node_color_by)){
+      color <- vertex_attr(graph, node_color_by) 
+  } else {
+      color <- as.character(node_color_fix)
+  }
+  
+  if (!is.null(node_size_by)) {
+      size <- vertex_attr(graph, node_size_by) 
+  } else {
+      size <- as.character(node_size_fix)
+  }
+  
+  if (!is.null(node_color_by)) {
+      cur_geom_node <- geom_node_point(aes_(color = color, size = size))
+  } else {
+      cur_geom_node <- geom_node_point(aes_(size = size), color = color)
+  }
+  
+  ## node geom label
+  if (!is.null(node_label_color_by)) {
+    color_label <- vertex_attr(graph, node_label_color_by) 
+  } else {
+    color_label <- as.character(node_label_color_fix)
+  }
+  
+  if(node_label_repel){
+    if (!is.null(node_label_color_by)) {
+      cur_geom_node_label <- geom_node_label(aes_(color = color_label, 
+                                             label = vertex_attr(graph, "name")), 
+                                             repel = TRUE, show.legend = FALSE)
+    } else {
+      cur_geom_node_label <- geom_node_label(aes_(label = vertex_attr(graph, "name")), 
+                                             color = color_label, 
+                                             repel = TRUE, show.legend = FALSE)
+    }
+  } else {
+    cur_geom_node_label = NULL
+  }  
+  
+  # specify vertical layout with sugiyama
+  LO <- layout.sugiyama(graph, vertex_attr(graph,"length"))
+  
+  p <- ggraph(graph, layout = LO$layout) +
+      cur_geom_edge +
+      cur_geom_node +
+      cur_geom_node_label +
+      theme_graph(base_family = "")
+  
+  # legend post-processing
+  if (!is.null(node_color_by)) {
+    if (node_color_by %in% c("n_cells","n_group")) {
+      p <- p + guides(color = guide_colorbar(node_color_by), 
+                      size = guide_legend(node_size_by))
+    } else {
+      if (node_label_repel == FALSE) {
+        p <- p + guides(color = guide_legend(node_color_by), 
+                        size = guide_legend(node_size_by))
+        } else {
+        p <- p + guides(color = "none", size = guide_legend(as.character(node_size_by)))
+      }
+    }
+  } else {
+    p <- p + guides(color = "none", size = guide_legend(as.character(node_size_by)))
+  }
+  
+  # node size post-processing
+  if (is.null(node_size_by)) {
+    p <- p + guides(size = "none") + scale_size_manual(values = as.numeric(node_size_fix))
+  }
+  
+  return(p)
+}
