@@ -19,7 +19,7 @@ incorrectly assigned pixels and remove small pixel sets."><!-- mathjax --><scrip
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.5</span>
       </span>
     </div>
 
@@ -57,13 +57,13 @@ incorrectly assigned pixels and remove small pixel sets.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">filterPixels</span><span class="op">(</span>
-  <span class="va">object</span>,
-  bc_id <span class="op">=</span> <span class="st">"bc_id"</span>,
-  spot_mass <span class="op">=</span> <span class="st">"sample_mass"</span>,
-  minevents <span class="op">=</span> <span class="fl">40</span>,
-  correct_pixels <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">filterPixels</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  bc_id <span class="op">=</span> <span class="st">"bc_id"</span>,</span>
+<span>  spot_mass <span class="op">=</span> <span class="st">"sample_mass"</span>,</span>
+<span>  minevents <span class="op">=</span> <span class="fl">40</span>,</span>
+<span>  correct_pixels <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -110,38 +110,38 @@ Nils Eling (<a href="mailto:nils.eling@dqbm.uzh.ch">nils.eling@dqbm.uzh.ch</a>)<
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/spillover"</span>, package <span class="op">=</span> <span class="st">"imcRtools"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="readSCEfromTXT.html">readSCEfromTXT</a></span><span class="op">(</span><span class="va">path</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/spillover"</span>, package <span class="op">=</span> <span class="st">"imcRtools"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="readSCEfromTXT.html">readSCEfromTXT</a></span><span class="op">(</span><span class="va">path</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Spotted channels:  Dy161, Dy162, Dy163, Dy164</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Acquired channels:  Dy161, Dy162, Dy163, Dy164</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Channels spotted but not acquired:  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Channels acquired but not spotted:  </span>
-<span class="r-in"><span class="fu">assay</span><span class="op">(</span><span class="va">sce</span>, <span class="st">"exprs"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Hyperbolic.html" class="external-link">asinh</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/assays.html" class="external-link">counts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">/</span><span class="fl">5</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Pre-process via CATALYST</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/HelenaLC/CATALYST" class="external-link">CATALYST</a></span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">assay</span><span class="op">(</span><span class="va">sce</span>, <span class="st">"exprs"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Hyperbolic.html" class="external-link">asinh</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/dge.html" class="external-link">counts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">/</span><span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Pre-process via CATALYST</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/HelenaLC/CATALYST" class="external-link">CATALYST</a></span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>package ‘CATALYST’ was built under R version 4.1.2</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">bc_key</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">sce</span><span class="op">$</span><span class="va">sample_mass</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CATALYST/man/assignPrelim.html" class="external-link">assignPrelim</a></span><span class="op">(</span><span class="va">sce</span>, bc_key <span class="op">=</span> <span class="va">bc_key</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">bc_key</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">sce</span><span class="op">$</span><span class="va">sample_mass</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CATALYST/man/assignPrelim.html" class="external-link">assignPrelim</a></span><span class="op">(</span><span class="va">sce</span>, bc_key <span class="op">=</span> <span class="va">bc_key</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Debarcoding data...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  o ordering</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  o classifying events</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Normalizing...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Computing deltas...</span>
-<span class="r-in"><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CATALYST/man/estCutoffs.html" class="external-link">estCutoffs</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CATALYST/man/applyCutoffs.html" class="external-link">applyCutoffs</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu">filterPixels</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">sce</span><span class="op">$</span><span class="va">sample_mass</span>, <span class="va">sce</span><span class="op">$</span><span class="va">bc_id</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CATALYST/man/estCutoffs.html" class="external-link">estCutoffs</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CATALYST/man/applyCutoffs.html" class="external-link">applyCutoffs</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu">filterPixels</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">sce</span><span class="op">$</span><span class="va">sample_mass</span>, <span class="va">sce</span><span class="op">$</span><span class="va">bc_id</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         0 161 162 163 164</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   161   0 100   0   0   0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   162   0   0 100   0   0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   163   0   0   0 100   0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   164   2   0   0   0  98</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -156,7 +156,7 @@ Nils Eling (<a href="mailto:nils.eling@dqbm.uzh.ch">nils.eling@dqbm.uzh.ch</a>)<
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

@@ -22,7 +22,7 @@ pipeline."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/m
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.5</span>
       </span>
     </div>
 
@@ -63,21 +63,21 @@ pipeline.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">read_steinbock</span><span class="op">(</span>
-  <span class="va">path</span>,
-  intensities_folder <span class="op">=</span> <span class="st">"intensities"</span>,
-  regionprops_folder <span class="op">=</span> <span class="st">"regionprops"</span>,
-  graphs_folder <span class="op">=</span> <span class="st">"neighbors"</span>,
-  pattern <span class="op">=</span> <span class="cn">NULL</span>,
-  extract_cellid_from <span class="op">=</span> <span class="st">"Object"</span>,
-  extract_coords_from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"centroid-1"</span>, <span class="st">"centroid-0"</span><span class="op">)</span>,
-  image_file <span class="op">=</span> <span class="st">"images.csv"</span>,
-  extract_imagemetadata_from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"width_px"</span>, <span class="st">"height_px"</span><span class="op">)</span>,
-  panel_file <span class="op">=</span> <span class="st">"panel.csv"</span>,
-  extract_names_from <span class="op">=</span> <span class="st">"name"</span>,
-  return_as <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"spe"</span>, <span class="st">"sce"</span><span class="op">)</span>,
-  BPPARAM <span class="op">=</span> <span class="fu">SerialParam</span><span class="op">(</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">read_steinbock</span><span class="op">(</span></span>
+<span>  <span class="va">path</span>,</span>
+<span>  intensities_folder <span class="op">=</span> <span class="st">"intensities"</span>,</span>
+<span>  regionprops_folder <span class="op">=</span> <span class="st">"regionprops"</span>,</span>
+<span>  graphs_folder <span class="op">=</span> <span class="st">"neighbors"</span>,</span>
+<span>  pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  extract_cellid_from <span class="op">=</span> <span class="st">"Object"</span>,</span>
+<span>  extract_coords_from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"centroid-1"</span>, <span class="st">"centroid-0"</span><span class="op">)</span>,</span>
+<span>  image_file <span class="op">=</span> <span class="st">"images.csv"</span>,</span>
+<span>  extract_imagemetadata_from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"width_px"</span>, <span class="st">"height_px"</span><span class="op">)</span>,</span>
+<span>  panel_file <span class="op">=</span> <span class="st">"panel.csv"</span>,</span>
+<span>  extract_names_from <span class="op">=</span> <span class="st">"name"</span>,</span>
+<span>  return_as <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"spe"</span>, <span class="st">"sce"</span><span class="op">)</span>,</span>
+<span>  BPPARAM <span class="op">=</span> <span class="fu">SerialParam</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -194,11 +194,11 @@ with the cell-cell interaction graphs</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/mockData/steinbock"</span>, package <span class="op">=</span> <span class="st">"imcRtools"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Read in as SpatialExperiment object</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">read_steinbock</span><span class="op">(</span><span class="va">path</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/mockData/steinbock"</span>, package <span class="op">=</span> <span class="st">"imcRtools"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Read in as SpatialExperiment object</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">read_steinbock</span><span class="op">(</span><span class="va">path</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> class: SpatialExperiment </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> dim: 5 218 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> metadata(0):</span>
@@ -213,10 +213,10 @@ with the cell-cell interaction graphs</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> spatialData names(0) :</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> spatialCoords names(2) : Pos_X Pos_Y</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> imgData names(1): sample_id</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Read in as SingleCellExperiment object</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">read_steinbock</span><span class="op">(</span><span class="va">path</span>, return_as <span class="op">=</span> <span class="st">"sce"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Read in as SingleCellExperiment object</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">read_steinbock</span><span class="op">(</span><span class="va">path</span>, return_as <span class="op">=</span> <span class="st">"sce"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> class: SingleCellExperiment </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> dim: 5 218 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> metadata(0):</span>
@@ -228,10 +228,10 @@ with the cell-cell interaction graphs</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> reducedDimNames(0):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> mainExpName: NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> altExpNames(0):</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Read in a subset of files</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">read_steinbock</span><span class="op">(</span><span class="va">path</span>, pattern <span class="op">=</span> <span class="st">"mockData1"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Read in a subset of files</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">read_steinbock</span><span class="op">(</span><span class="va">path</span>, pattern <span class="op">=</span> <span class="st">"mockData1"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> class: SpatialExperiment </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> dim: 5 32 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> metadata(0):</span>
@@ -246,10 +246,10 @@ with the cell-cell interaction graphs</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> spatialData names(0) :</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> spatialCoords names(2) : Pos_X Pos_Y</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> imgData names(1): sample_id</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Only read in intensities</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">read_steinbock</span><span class="op">(</span><span class="va">path</span>, graphs_folder <span class="op">=</span> <span class="cn">NULL</span>, regionprops_folder <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Only read in intensities</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">read_steinbock</span><span class="op">(</span><span class="va">path</span>, graphs_folder <span class="op">=</span> <span class="cn">NULL</span>, regionprops_folder <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> class: SpatialExperiment </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> dim: 5 218 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> metadata(0):</span>
@@ -264,10 +264,10 @@ with the cell-cell interaction graphs</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> spatialData names(0) :</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> spatialCoords names(0) :</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> imgData names(1): sample_id</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Parallelisation</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">read_steinbock</span><span class="op">(</span><span class="va">path</span>, BPPARAM <span class="op">=</span> <span class="fu">BiocParallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/register.html" class="external-link">bpparam</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Parallelisation</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">read_steinbock</span><span class="op">(</span><span class="va">path</span>, BPPARAM <span class="op">=</span> <span class="fu">BiocParallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/register.html" class="external-link">bpparam</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -282,7 +282,7 @@ with the cell-cell interaction graphs</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

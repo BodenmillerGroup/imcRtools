@@ -22,7 +22,7 @@ pipeline."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/m
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.5</span>
       </span>
     </div>
 
@@ -63,29 +63,29 @@ pipeline.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">read_cpout</span><span class="op">(</span>
-  <span class="va">path</span>,
-  object_file <span class="op">=</span> <span class="st">"cell.csv"</span>,
-  image_file <span class="op">=</span> <span class="st">"Image.csv"</span>,
-  panel_file <span class="op">=</span> <span class="st">"panel.csv"</span>,
-  graph_file <span class="op">=</span> <span class="st">"Object relationships.csv"</span>,
-  object_feature_file <span class="op">=</span> <span class="st">"var_cell.csv"</span>,
-  intensities <span class="op">=</span> <span class="st">"Intensity_MeanIntensity_FullStack"</span>,
-  extract_imgid_from <span class="op">=</span> <span class="st">"ImageNumber"</span>,
-  extract_cellid_from <span class="op">=</span> <span class="st">"ObjectNumber"</span>,
-  extract_coords_from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Location_Center_X"</span>, <span class="st">"Location_Center_Y"</span><span class="op">)</span>,
-  extract_cellmetadata_from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AreaShape_Area"</span>, <span class="st">"Neighbors_NumberOfNeighbors_8"</span>,
-    <span class="st">"AreaShape_Eccentricity"</span>, <span class="st">"AreaShape_MajorAxisLength"</span>, <span class="st">"AreaShape_MinorAxisLength"</span>,
-    <span class="st">"AreaShape_MeanRadius"</span><span class="op">)</span>,
-  extract_imagemetadata_from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Metadata_acname"</span>, <span class="st">"Metadata_acid"</span>,
-    <span class="st">"Metadata_description"</span><span class="op">)</span>,
-  extract_graphimageid_from <span class="op">=</span> <span class="st">"First Image Number"</span>,
-  extract_graphcellids_from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"First Object Number"</span>, <span class="st">"Second Object Number"</span><span class="op">)</span>,
-  extract_metal_from <span class="op">=</span> <span class="st">"Metal Tag"</span>,
-  scale_intensities <span class="op">=</span> <span class="cn">TRUE</span>,
-  extract_scalingfactor_from <span class="op">=</span> <span class="st">"Scaling_FullStack"</span>,
-  return_as <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"spe"</span>, <span class="st">"sce"</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">read_cpout</span><span class="op">(</span></span>
+<span>  <span class="va">path</span>,</span>
+<span>  object_file <span class="op">=</span> <span class="st">"cell.csv"</span>,</span>
+<span>  image_file <span class="op">=</span> <span class="st">"Image.csv"</span>,</span>
+<span>  panel_file <span class="op">=</span> <span class="st">"panel.csv"</span>,</span>
+<span>  graph_file <span class="op">=</span> <span class="st">"Object relationships.csv"</span>,</span>
+<span>  object_feature_file <span class="op">=</span> <span class="st">"var_cell.csv"</span>,</span>
+<span>  intensities <span class="op">=</span> <span class="st">"Intensity_MeanIntensity_FullStack"</span>,</span>
+<span>  extract_imgid_from <span class="op">=</span> <span class="st">"ImageNumber"</span>,</span>
+<span>  extract_cellid_from <span class="op">=</span> <span class="st">"ObjectNumber"</span>,</span>
+<span>  extract_coords_from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Location_Center_X"</span>, <span class="st">"Location_Center_Y"</span><span class="op">)</span>,</span>
+<span>  extract_cellmetadata_from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AreaShape_Area"</span>, <span class="st">"Neighbors_NumberOfNeighbors_8"</span>,</span>
+<span>    <span class="st">"AreaShape_Eccentricity"</span>, <span class="st">"AreaShape_MajorAxisLength"</span>, <span class="st">"AreaShape_MinorAxisLength"</span>,</span>
+<span>    <span class="st">"AreaShape_MeanRadius"</span><span class="op">)</span>,</span>
+<span>  extract_imagemetadata_from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Metadata_acname"</span>, <span class="st">"Metadata_acid"</span>,</span>
+<span>    <span class="st">"Metadata_description"</span><span class="op">)</span>,</span>
+<span>  extract_graphimageid_from <span class="op">=</span> <span class="st">"First Image Number"</span>,</span>
+<span>  extract_graphcellids_from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"First Object Number"</span>, <span class="st">"Second Object Number"</span><span class="op">)</span>,</span>
+<span>  extract_metal_from <span class="op">=</span> <span class="st">"Metal Tag"</span>,</span>
+<span>  scale_intensities <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  extract_scalingfactor_from <span class="op">=</span> <span class="st">"Scaling_FullStack"</span>,</span>
+<span>  return_as <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"spe"</span>, <span class="st">"sce"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -233,11 +233,11 @@ with the cell-cell interaction graphs</p></div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/mockData/cpout"</span>, package <span class="op">=</span> <span class="st">"imcRtools"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Read in as SpatialExperiment object</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">read_cpout</span><span class="op">(</span><span class="va">path</span>, graph_file <span class="op">=</span> <span class="st">"Object_relationships.csv"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/mockData/cpout"</span>, package <span class="op">=</span> <span class="st">"imcRtools"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Read in as SpatialExperiment object</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">read_cpout</span><span class="op">(</span><span class="va">path</span>, graph_file <span class="op">=</span> <span class="st">"Object_relationships.csv"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> class: SpatialExperiment </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> dim: 5 209 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> metadata(0):</span>
@@ -253,11 +253,11 @@ with the cell-cell interaction graphs</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> spatialData names(0) :</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> spatialCoords names(2) : Pos_X Pos_Y</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> imgData names(1): sample_id</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Read in as SingleCellExperiment object</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">read_cpout</span><span class="op">(</span><span class="va">path</span>, graph_file <span class="op">=</span> <span class="st">"Object_relationships.csv"</span>, </span>
-<span class="r-in">                return_as <span class="op">=</span> <span class="st">"sce"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Read in as SingleCellExperiment object</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">read_cpout</span><span class="op">(</span><span class="va">path</span>, graph_file <span class="op">=</span> <span class="st">"Object_relationships.csv"</span>, </span></span>
+<span class="r-in"><span>                return_as <span class="op">=</span> <span class="st">"sce"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> class: SingleCellExperiment </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> dim: 5 209 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> metadata(0):</span>
@@ -270,7 +270,7 @@ with the cell-cell interaction graphs</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> reducedDimNames(0):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> mainExpName: NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> altExpNames(0):</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -285,7 +285,7 @@ with the cell-cell interaction graphs</p></div>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

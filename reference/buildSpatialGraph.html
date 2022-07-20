@@ -18,7 +18,7 @@ expansion, delaunay triangulation or k nearest neighbor detection."><!-- mathjax
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.5</span>
       </span>
     </div>
 
@@ -55,20 +55,20 @@ expansion, delaunay triangulation or k nearest neighbor detection.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">buildSpatialGraph</span><span class="op">(</span>
-  <span class="va">object</span>,
-  <span class="va">img_id</span>,
-  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"expansion"</span>, <span class="st">"knn"</span>, <span class="st">"delaunay"</span><span class="op">)</span>,
-  k <span class="op">=</span> <span class="cn">NULL</span>,
-  directed <span class="op">=</span> <span class="cn">TRUE</span>,
-  max_dist <span class="op">=</span> <span class="cn">NULL</span>,
-  threshold <span class="op">=</span> <span class="cn">NULL</span>,
-  coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pos_X"</span>, <span class="st">"Pos_Y"</span><span class="op">)</span>,
-  name <span class="op">=</span> <span class="cn">NULL</span>,
-  BNPARAM <span class="op">=</span> <span class="fu">KmknnParam</span><span class="op">(</span><span class="op">)</span>,
-  BPPARAM <span class="op">=</span> <span class="fu">SerialParam</span><span class="op">(</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">buildSpatialGraph</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  <span class="va">img_id</span>,</span>
+<span>  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"expansion"</span>, <span class="st">"knn"</span>, <span class="st">"delaunay"</span><span class="op">)</span>,</span>
+<span>  k <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  directed <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  max_dist <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  threshold <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pos_X"</span>, <span class="st">"Pos_Y"</span><span class="op">)</span>,</span>
+<span>  name <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  BNPARAM <span class="op">=</span> <span class="fu">KmknnParam</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  BPPARAM <span class="op">=</span> <span class="fu">SerialParam</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -205,13 +205,13 @@ via delaunay triangulation</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/mockData/steinbock"</span>, package <span class="op">=</span> <span class="st">"imcRtools"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu"><a href="read_steinbock.html">read_steinbock</a></span><span class="op">(</span><span class="va">path</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Constructing a graph via expansion</span></span>
-<span class="r-in"><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu">buildSpatialGraph</span><span class="op">(</span><span class="va">spe</span>, img_id <span class="op">=</span> <span class="st">"sample_id"</span>,</span>
-<span class="r-in">                         type <span class="op">=</span> <span class="st">"expansion"</span>, threshold <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/colPairs.html" class="external-link">colPair</a></span><span class="op">(</span><span class="va">spe</span>, <span class="st">"expansion_interaction_graph"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/mockData/steinbock"</span>, package <span class="op">=</span> <span class="st">"imcRtools"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu"><a href="read_steinbock.html">read_steinbock</a></span><span class="op">(</span><span class="va">path</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Constructing a graph via expansion</span></span></span>
+<span class="r-in"><span><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu">buildSpatialGraph</span><span class="op">(</span><span class="va">spe</span>, img_id <span class="op">=</span> <span class="st">"sample_id"</span>,</span></span>
+<span class="r-in"><span>                         type <span class="op">=</span> <span class="st">"expansion"</span>, threshold <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/colPairs.html" class="external-link">colPair</a></span><span class="op">(</span><span class="va">spe</span>, <span class="st">"expansion_interaction_graph"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SelfHits object with 278 hits and 0 metadata columns:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              from        to</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;integer&gt; &lt;integer&gt;</span>
@@ -228,11 +228,11 @@ via delaunay triangulation</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [278]       218       215</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   nnode: 218</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Constructing a graph via delaunay triangulation</span></span>
-<span class="r-in"><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu">buildSpatialGraph</span><span class="op">(</span><span class="va">spe</span>, img_id <span class="op">=</span> <span class="st">"sample_id"</span>,</span>
-<span class="r-in">                         type <span class="op">=</span> <span class="st">"delaunay"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/colPairs.html" class="external-link">colPair</a></span><span class="op">(</span><span class="va">spe</span>, <span class="st">"delaunay_interaction_graph"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Constructing a graph via delaunay triangulation</span></span></span>
+<span class="r-in"><span><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu">buildSpatialGraph</span><span class="op">(</span><span class="va">spe</span>, img_id <span class="op">=</span> <span class="st">"sample_id"</span>,</span></span>
+<span class="r-in"><span>                         type <span class="op">=</span> <span class="st">"delaunay"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/colPairs.html" class="external-link">colPair</a></span><span class="op">(</span><span class="va">spe</span>, <span class="st">"delaunay_interaction_graph"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SelfHits object with 1002 hits and 0 metadata columns:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>               from        to</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;integer&gt; &lt;integer&gt;</span>
@@ -249,11 +249,11 @@ via delaunay triangulation</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [1002]       218       217</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   nnode: 218</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Constructing a graph via k nearest neighbor search</span></span>
-<span class="r-in"><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu">buildSpatialGraph</span><span class="op">(</span><span class="va">spe</span>, img_id <span class="op">=</span> <span class="st">"sample_id"</span>,</span>
-<span class="r-in">                         type <span class="op">=</span> <span class="st">"knn"</span>, k <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/colPairs.html" class="external-link">colPair</a></span><span class="op">(</span><span class="va">spe</span>, <span class="st">"knn_interaction_graph"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Constructing a graph via k nearest neighbor search</span></span></span>
+<span class="r-in"><span><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu">buildSpatialGraph</span><span class="op">(</span><span class="va">spe</span>, img_id <span class="op">=</span> <span class="st">"sample_id"</span>,</span></span>
+<span class="r-in"><span>                         type <span class="op">=</span> <span class="st">"knn"</span>, k <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/colPairs.html" class="external-link">colPair</a></span><span class="op">(</span><span class="va">spe</span>, <span class="st">"knn_interaction_graph"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SelfHits object with 1090 hits and 0 metadata columns:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>               from        to</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;integer&gt; &lt;integer&gt;</span>
@@ -270,7 +270,7 @@ via delaunay triangulation</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [1090]       218       217</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   nnode: 218</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -285,7 +285,7 @@ via delaunay triangulation</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

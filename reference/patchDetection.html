@@ -19,7 +19,7 @@ of these clusters are detected as well."><!-- mathjax --><script src="https://cd
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.5</span>
       </span>
     </div>
 
@@ -57,18 +57,18 @@ of these clusters are detected as well.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">patchDetection</span><span class="op">(</span>
-  <span class="va">object</span>,
-  <span class="va">patch_cells</span>,
-  <span class="va">colPairName</span>,
-  min_patch_size <span class="op">=</span> <span class="fl">1</span>,
-  name <span class="op">=</span> <span class="st">"patch_id"</span>,
-  expand_by <span class="op">=</span> <span class="fl">0</span>,
-  coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pos_X"</span>, <span class="st">"Pos_Y"</span><span class="op">)</span>,
-  convex <span class="op">=</span> <span class="cn">FALSE</span>,
-  img_id <span class="op">=</span> <span class="cn">NULL</span>,
-  BPPARAM <span class="op">=</span> <span class="fu">SerialParam</span><span class="op">(</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">patchDetection</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  <span class="va">patch_cells</span>,</span>
+<span>  <span class="va">colPairName</span>,</span>
+<span>  min_patch_size <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"patch_id"</span>,</span>
+<span>  expand_by <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pos_X"</span>, <span class="st">"Pos_Y"</span><span class="op">)</span>,</span>
+<span>  convex <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  img_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  BPPARAM <span class="op">=</span> <span class="fu">SerialParam</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -166,35 +166,35 @@ bioRxiv 2021</a></p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BodenmillerGroup/cytomapper" class="external-link">cytomapper</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/CATALYST/man/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">pancreasSCE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Visualize cell types</span></span>
-<span class="r-in"><span class="fu"><a href="plotSpatial.html">plotSpatial</a></span><span class="op">(</span><span class="va">pancreasSCE</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span>, node_color_by <span class="op">=</span> <span class="st">"CellType"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BodenmillerGroup/cytomapper" class="external-link">cytomapper</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">pancreasSCE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Visualize cell types</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plotSpatial.html">plotSpatial</a></span><span class="op">(</span><span class="va">pancreasSCE</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span>, node_color_by <span class="op">=</span> <span class="st">"CellType"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="patchDetection-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Build interaction graph</span></span>
-<span class="r-in"><span class="va">pancreasSCE</span> <span class="op">&lt;-</span> <span class="fu"><a href="buildSpatialGraph.html">buildSpatialGraph</a></span><span class="op">(</span><span class="va">pancreasSCE</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span>, </span>
-<span class="r-in">                                 type <span class="op">=</span> <span class="st">"expansion"</span>, threshold <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Detect patches of "celltype_B" cells</span></span>
-<span class="r-in"><span class="va">pancreasSCE</span> <span class="op">&lt;-</span> <span class="fu">patchDetection</span><span class="op">(</span><span class="va">pancreasSCE</span>, </span>
-<span class="r-in">                              patch_cells <span class="op">=</span> <span class="va">pancreasSCE</span><span class="op">$</span><span class="va">CellType</span> <span class="op">==</span> <span class="st">"celltype_B"</span>,</span>
-<span class="r-in">                              colPairName <span class="op">=</span> <span class="st">"expansion_interaction_graph"</span><span class="op">)</span></span>
-<span class="r-in">                              </span>
-<span class="r-in"><span class="fu"><a href="plotSpatial.html">plotSpatial</a></span><span class="op">(</span><span class="va">pancreasSCE</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span>, node_color_by <span class="op">=</span> <span class="st">"patch_id"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Build interaction graph</span></span></span>
+<span class="r-in"><span><span class="va">pancreasSCE</span> <span class="op">&lt;-</span> <span class="fu"><a href="buildSpatialGraph.html">buildSpatialGraph</a></span><span class="op">(</span><span class="va">pancreasSCE</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span>, </span></span>
+<span class="r-in"><span>                                 type <span class="op">=</span> <span class="st">"expansion"</span>, threshold <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Detect patches of "celltype_B" cells</span></span></span>
+<span class="r-in"><span><span class="va">pancreasSCE</span> <span class="op">&lt;-</span> <span class="fu">patchDetection</span><span class="op">(</span><span class="va">pancreasSCE</span>, </span></span>
+<span class="r-in"><span>                              patch_cells <span class="op">=</span> <span class="va">pancreasSCE</span><span class="op">$</span><span class="va">CellType</span> <span class="op">==</span> <span class="st">"celltype_B"</span>,</span></span>
+<span class="r-in"><span>                              colPairName <span class="op">=</span> <span class="st">"expansion_interaction_graph"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                              </span></span>
+<span class="r-in"><span><span class="fu"><a href="plotSpatial.html">plotSpatial</a></span><span class="op">(</span><span class="va">pancreasSCE</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span>, node_color_by <span class="op">=</span> <span class="st">"patch_id"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="patchDetection-2.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Include cells in vicinity</span></span>
-<span class="r-in"><span class="va">pancreasSCE</span> <span class="op">&lt;-</span> <span class="fu">patchDetection</span><span class="op">(</span><span class="va">pancreasSCE</span>, </span>
-<span class="r-in">                              patch_cells <span class="op">=</span> <span class="va">pancreasSCE</span><span class="op">$</span><span class="va">CellType</span> <span class="op">==</span> <span class="st">"celltype_B"</span>,</span>
-<span class="r-in">                              colPairName <span class="op">=</span> <span class="st">"expansion_interaction_graph"</span>,</span>
-<span class="r-in">                              expand_by <span class="op">=</span> <span class="fl">20</span>, </span>
-<span class="r-in">                              img_id <span class="op">=</span> <span class="st">"ImageNb"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="plotSpatial.html">plotSpatial</a></span><span class="op">(</span><span class="va">pancreasSCE</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span>, node_color_by <span class="op">=</span> <span class="st">"patch_id"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Include cells in vicinity</span></span></span>
+<span class="r-in"><span><span class="va">pancreasSCE</span> <span class="op">&lt;-</span> <span class="fu">patchDetection</span><span class="op">(</span><span class="va">pancreasSCE</span>, </span></span>
+<span class="r-in"><span>                              patch_cells <span class="op">=</span> <span class="va">pancreasSCE</span><span class="op">$</span><span class="va">CellType</span> <span class="op">==</span> <span class="st">"celltype_B"</span>,</span></span>
+<span class="r-in"><span>                              colPairName <span class="op">=</span> <span class="st">"expansion_interaction_graph"</span>,</span></span>
+<span class="r-in"><span>                              expand_by <span class="op">=</span> <span class="fl">20</span>, </span></span>
+<span class="r-in"><span>                              img_id <span class="op">=</span> <span class="st">"ImageNb"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plotSpatial.html">plotSpatial</a></span><span class="op">(</span><span class="va">pancreasSCE</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span>, node_color_by <span class="op">=</span> <span class="st">"patch_id"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="patchDetection-3.png" alt="" width="700" height="433"></span>
-<span class="r-in">  </span>
+<span class="r-in"><span>  </span></span>
 </code></pre></div>
     </div>
   </div>
@@ -209,7 +209,7 @@ bioRxiv 2021</a></p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

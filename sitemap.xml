@@ -28,7 +28,13 @@
     <loc>/reference/countInteractions.html</loc>
   </url>
   <url>
+    <loc>/reference/detectSpatialContext.html</loc>
+  </url>
+  <url>
     <loc>/reference/filterPixels.html</loc>
+  </url>
+  <url>
+    <loc>/reference/filterSpatialContext.html</loc>
   </url>
   <url>
     <loc>/reference/findBorderCells.html</loc>
@@ -41,6 +47,9 @@
   </url>
   <url>
     <loc>/reference/plotSpatial.html</loc>
+  </url>
+  <url>
+    <loc>/reference/plotSpatialContext.html</loc>
   </url>
   <url>
     <loc>/reference/plotSpotHeatmap.html</loc>
