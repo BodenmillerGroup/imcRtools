@@ -24,19 +24,19 @@ plotSpatialContext(
 \item{object}{a \code{SingleCellExperiment} or \code{SpatialExperiment}
 object.}
 
-\item{entry}{single character specifying the \code{colData(object)} entry 
-containing the \code{detectSpatialContext} output. Defaults to 
-"spatial_context".}
+\item{entry}{single character specifying the \code{colData(object)} entry
+containing the \code{\link[imcRtools]{detectSpatialContext}} output.
+Defaults to "spatial_context".}
 
 \item{group_by}{a single character indicating the \code{colData(object)}
 entry by which SCs are grouped. This is usually the image or patient ID. 
 Defaults to "sample_id".}
 
-\item{node_color_by}{single character from
-\code{c("name","n_cells","n_group")} by which the nodes should be
+\item{node_color_by}{single character either
+\code{NULL, "name","n_cells", "n_group"} by which the nodes should be
 colored.}
 
-\item{node_size_by}{single character from \code{c("n_cells","n_group")} 
+\item{node_size_by}{single character either \code{NULL, "n_cells","n_group"} 
 by which the size of the nodes are defined.}
 
 \item{node_color_fix}{single character specifying the color of all nodes.}
@@ -45,8 +45,8 @@ by which the size of the nodes are defined.}
 
 \item{node_label_repel}{should nodes be labelled? Defaults to TRUE.}
 
-\item{node_label_color_by}{single character from
-\code{c("name","n_cells","n_group")} by which the node labels should be
+\item{node_label_color_by}{single character either
+\code{NULL, "name","n_cells","n_group"} by which the node labels should be
 colored.}
 
 \item{node_label_color_fix}{single character specifying the color of all node
@@ -65,7 +65,7 @@ returns a \code{ggplot} object or a \code{list} of two
 }
 \description{
 Function to plot directed spatial context graphs based on
-symbolic edge-lists and vertex metadata, which operates on cohort-level.
+symbolic edge-lists and vertex metadata, which operates on the cohort-level.
 The user can specify node, node_label and edge aesthetics.
 }
 \examples{

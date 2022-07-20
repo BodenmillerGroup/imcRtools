@@ -615,8 +615,8 @@ analyze the **spatial context (SC)** of each cell.
 3.  `plotSpatialContext`: for the function to plot SC graphs
 
 The term SC was coined by Bhate and colleagues [@Bhate2022] and
-describes tissue regions in which distinct CNs may be interacting, which 
-can lead to specialized local biological events.
+describes tissue regions in which distinct CNs may be interacting, 
+which can lead to specialized local biological events.
 
 The `detectSpatialContext` function relies on CN fractions for each cell in 
 a spatial interaction graph (originally a k-nearest neighbor (KNN) graph).
@@ -679,7 +679,7 @@ for number of group entries (usually image or patient ID) and/or total
 number of cells per SC.
 
 In addition to a new column entry to the `colData(object)`, the function
-also returns a `data.frame` entry to `metadata(object)` containing group
+also returns a `data.frame` entry to `metadata(object)` containing filtered group
 and cell counts per SC.
 
 ```{r filterSpatialContext}

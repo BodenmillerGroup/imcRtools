@@ -111,6 +111,7 @@
 #' @importFrom dplyr count group_by_all group_by_at n select summarise
 #' @importFrom tidyselect all_of
 #' @importFrom igraph graph_from_data_frame
+#' @importFrom stats na.omit
 #' @export
 
 plotSpatialContext <- function(object,
@@ -137,7 +138,8 @@ plotSpatialContext <- function(object,
    as.data.frame %>% 
    select(all_of(entry), all_of(group_by)) %>% 
    group_by_all() %>% 
-   count() %>% 
+   count() %>%
+   na.omit() %>%
    as.data.frame
   
   list <- str_split(unique(cur_dat[,entry]), "_")

@@ -92,6 +92,17 @@ test_that("filterSpatialContext function works", {
   manual_anno <- cur_anno[cur_anno$n_group >= 2,]
   expect_equal(metadata(cur_sce)$filterSpatialContext, manual_anno)
   
+  # aggregatedNeighbors colnames as characters
+  cur_sce_6 <- sce
+  colnames(cur_sce_6$aggregatedNeighborhood) <- c("B_CN","T_CN","DC_CN")
+  expect_silent(cur_sce_6 <- detectSpatialContext(cur_sce_6, entry = "aggregatedNeighborhood",
+                                                  threshold = 0.9))
+  expect_silent(cur_sce_6 <- filterSpatialContext(cur_sce_6, group_by = "ImageNb", 
+                                                  group_threshold = 2))
+  expect_equal(cur_sce_6$spatial_context_filtered[200:210], 
+               c("DC.CN", NA, NA, "B.CN_DC.CN", "B.CN_DC.CN", "B.CN_DC.CN", 
+                 "B.CN_DC.CN", NA, NA, "DC.CN", "B.CN_DC.CN"))
+  
   #Errors
   expect_error(filterSpatialContext(colData(sce)),
                regexp = "'object' needs to be a SingleCellExperiment object.",

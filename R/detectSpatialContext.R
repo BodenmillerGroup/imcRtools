@@ -20,13 +20,13 @@
 #' @param name single character specifying the name of the output saved in 
 #'  \code{colData(object)}. Defaults to "spatial_context".
 #'
-#' @section 
-#' The `detectSpatialContext` function relies on CN fractions for each cell in a 
+#' @section Spatial context background:
+#' The function relies on CN fractions for each cell in a 
 #' spatial interaction graph (originally a k-nearest neighbor (KNN) graph).
 #'
-#' We can retrieve the CN fractions using the above-described 
-#' \link[imcRtools]{buildSpatialGraph} and \link[imcRtools]{aggregateNeighbors} 
-#' functions.
+#' We can retrieve the CN fractions using the \link[imcRtools]{buildSpatialGraph} 
+#' and \link[imcRtools]{aggregateNeighbors} functions.
+#' 
 #' The window size (k for KNN) for \link[imcRtools]{buildSpatialGraph} should 
 #' reflect a length scale on which biological signals can be exchanged and 
 #' depends, among others, on cell density and tissue area. In view of their 
@@ -103,6 +103,7 @@
 #' motifs and their appropriation by tumors, Cell Systems, 2022}
 #' 
 #' @importFrom SingleCellExperiment colData
+#' @importFrom stringr str_replace
 #' @export
 
 detectSpatialContext <- function(object,
@@ -113,6 +114,8 @@ detectSpatialContext <- function(object,
   .valid.detectSpatialContext.input(object, entry, threshold, name) 
   
   cur_dat <- colData(object)[,entry]
+  
+  colnames(cur_dat) <- str_replace(colnames(cur_dat),"_",".")
   
   out_dat <- apply(cur_dat, 1, function(x){
     

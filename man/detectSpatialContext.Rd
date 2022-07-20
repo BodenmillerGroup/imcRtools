@@ -32,7 +32,7 @@ entry to \code{colData(object)[[name]]}
 \description{
 Function to detect the spatial context (SC) of each cell. 
 Based on its sorted (high-to-low) cellular neighborhood (CN) fractions in a 
-k-nearest neighbor graph, the SC of each cell is assigned as the set of CNs 
+spatial interaction graph, the SC of each cell is assigned as the set of CNs 
 that cumulatively exceed a user-defined fraction threshold. 
 
 The term was coined by \href{https://doi.org/10.1016/j.cels.2021.09.012}{
@@ -40,6 +40,31 @@ Bhate S. et al., Tissue schematics map the specialization of immune tissue
 motifs and their appropriation by tumors, Cell Systems, 2022} and describes 
 tissue regions in which distinct CNs may be interacting.
 }
+\section{Spatial context background}{
+
+The function relies on CN fractions for each cell in a 
+spatial interaction graph (originally a k-nearest neighbor (KNN) graph).
+
+We can retrieve the CN fractions using the \link[imcRtools]{buildSpatialGraph} 
+and \link[imcRtools]{aggregateNeighbors} functions.
+
+The window size (k for KNN) for \link[imcRtools]{buildSpatialGraph} should 
+reflect a length scale on which biological signals can be exchanged and 
+depends, among others, on cell density and tissue area. In view of their 
+divergent functionality, we recommend to use a larger window size for SC 
+(interaction between local processes) than for CN (local processes) detection.
+
+Subsequently, the CN fractions are sorted from high-to-low and the SC of
+each cell is assigned the minimal combination of SCs that additively
+surpass a user-defined threshold. The default threshold of 0.9 aims to
+represent the dominant CNs, hence the most prevalent signals, in a given window.
+
+For more details, please refer to:
+\href{https://doi.org/10.1016/j.cels.2021.09.012}{ Bhate S. et al., Tissue
+schematics map the specialization of immune tissue motifs and their
+appropriation by tumors, Cell Systems, 2022}.
+}
+
 \examples{
 set.seed(22)
 library(cytomapper)

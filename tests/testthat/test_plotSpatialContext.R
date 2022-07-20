@@ -106,7 +106,16 @@ test_that("plotSpatialContext function works", {
   expect_equal(p$data$name, sort(unique(sce$spatial_context)))
   expect_equal(p$data$length, sapply(str_split(sort(unique(sce$spatial_context)),"_"),length))
   
-  #return data - tests
+  # filtered entries - tests
+  sce_fil <- filterSpatialContext(sce, group_by = "ImageNb", group_threshold = 2)
+  
+  p <- plotSpatialContext(sce_fil, group_by = "ImageNb", entry = "spatial_context_filtered")
+  expect_s3_class(p, "ggraph")
+  expect_silent(print(p))
+  expect_equal(p$data$name, sort(unique(sce_fil$spatial_context_filtered)))
+  expect_equal(p$data$length, sapply(str_split(sort(unique(sce_fil$spatial_context_filtered)),"_"),length))
+  
+  # return data - tests
   p <- plotSpatialContext(sce, group_by = "ImageNb", return_data = TRUE) 
   expect_type(p, "list")
   expect_equal(names(p), c("edges", "vertices"))
@@ -119,6 +128,26 @@ test_that("plotSpatialContext function works", {
   #metadata entry and vertices comp
   sce_fil <- filterSpatialContext(sce, group_by = "ImageNb", group_threshold = 0)
   expect_equal(metadata(sce_fil)$filterSpatialContext, p$vertices[,1:3])
+  
+  # aggregatedNeighbors colnames as characters
+  cur_sce <- sce
+  colnames(cur_sce$aggregatedNeighborhood) <- c("B_CN","T_CN","DC_CN")
+  expect_silent(cur_sce <- detectSpatialContext(cur_sce, entry = "aggregatedNeighborhood",
+                                                  threshold = 0.9))
+  expect_silent(cur_sce <- filterSpatialContext(cur_sce, group_by = "ImageNb", 
+                                                  group_threshold = 2))
+  
+  p <- plotSpatialContext(cur_sce, group_by = "ImageNb")
+  expect_s3_class(p, "ggraph")
+  expect_silent(print(p))
+  expect_equal(p$data$name, sort(unique(cur_sce$spatial_context)))
+  expect_equal(p$data$length, sapply(str_split(sort(unique(cur_sce$spatial_context)),"_"),length))
+  
+  p <- plotSpatialContext(cur_sce, group_by = "ImageNb", entry = "spatial_context_filtered")
+  expect_s3_class(p, "ggraph")
+  expect_silent(print(p))
+  expect_equal(p$data$name, sort(unique(cur_sce$spatial_context_filtered)))
+  expect_equal(p$data$length, sapply(str_split(sort(unique(cur_sce$spatial_context_filtered)),"_"),length))
   
   #Errors
   expect_error(plotSpatialContext(colData(sce)),
