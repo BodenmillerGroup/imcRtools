@@ -9,9 +9,10 @@ test_that("patchSize function works", {
                                    patch_cells = pancreasSCE$CellType == "celltype_B",
                                    colPairName = "expansion_interaction_graph"))
     
-    expect_silent(cur_sce <- patchDetection(pancreasSCE, 
-                                            patch_cells = pancreasSCE$CellType == "celltype_B",
-                                            colPairName = "expansion_interaction_graph"))
+    expect_silent(cur_out <- patchSize(cur_sce))
+    
+    
+    
     
     # SpatialExperiment
     cur_spe <- SpatialExperiment:::.sce_to_spe(cur_sce, sample_id = as.character(pancreasSCE$ImageNb))

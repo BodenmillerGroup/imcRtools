@@ -1005,28 +1005,12 @@
         stop("'object' not of type 'SingleCellExperiment'.")
     }
     
-    if (!all(is.logical(patch_cells))) {
-        stop("'patch_cells' must all be logical.")
+    if (length(patch_name) != 1 | !is.character(patch_name)) {
+        stop("'patch_name' must be a single string.")
     }
     
-    if (length(patch_cells) != ncol(object)) {
-        stop("Length of 'patch_cells' must match the number of cells in 'object'.")
-    }
-    
-    if (length(colPairName) != 1 | !is.character(colPairName)) {
-        stop("'colPairName' must be a single string.")
-    }
-    
-    if (! colPairName %in% colPairNames(object)) {
-        stop("'colPairName' not in 'colPairNames(object)'.")
-    }
-    
-    if (length(colPair(object, colPairName)) == 0) {
-        stop("No interactions found.")
-    }
-    
-    if (length(min_patch_size) != 1 | !is.numeric(min_patch_size)) {
-        stop("'min_patch_size' must be a single numeric.")
+    if (!patch_name %in% names(colData(object))) {
+        stop("'patch_name' nor in 'colData(object)'.")
     }
     
     if (length(coords) != 2 | !all(is.character(coords))) {
@@ -1043,30 +1027,8 @@
         }
     }
     
-    if (length(name) != 1 | !is.character(name)) {
-        stop("'name' must be a single string.")
-    }
-    
-    if (length(expand_by) != 1 | !is.numeric(expand_by)) {
-        stop("'expand_by' must be a single numeric.")
-    }
-    
     if (length(convex) != 1 | !is.logical(convex)) {
         stop("'convex' must be a single logical.")
-    }
-    
-    if (expand_by > 0) {
-        if (is.null(img_id)) {
-            stop("'img_id' must be specified when patch expansion is performed.")
-        }
-        
-        if (length(img_id) != 1 | !is.character(img_id)) {
-            stop("'img_id' must be a single string.")
-        }
-        
-        if (!img_id %in% names(colData(object))) {
-            stop("'img_id' not in colData(object).")
-        }
     }
 }
 
