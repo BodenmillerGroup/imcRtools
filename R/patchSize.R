@@ -42,6 +42,8 @@ patchSize <- function(object,
                       coords = c("Pos_X", "Pos_Y"),
                       convex = FALSE){
     
+    .valid.patchSize.input(object, patch_name, coords, convex)
+    
     data <- polygon <- NULL
     
     if (is(object, "SpatialExperiment")) {

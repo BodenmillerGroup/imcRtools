@@ -1,4 +1,4 @@
-test_that("patchDetection function works", {
+test_that("patchSize function works", {
     library(cytomapper)
     data(pancreasSCE)
 
