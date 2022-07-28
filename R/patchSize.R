@@ -1,6 +1,6 @@
 #' @title Function to compute the area of each patch
 #'
-#' @description This function constructs a polygons around patch cells and
+#' @description This function constructs polygons around patch cells and
 #' computes their area.
 #'
 #' @param object a \code{SingleCellExperiment} or \code{SpatialExperiment}
