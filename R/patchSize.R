@@ -1,17 +1,17 @@
-#' @title Function to compute the area of each patch
+#' @title Function to compute the area of c3ll patches
 #'
 #' @description This function constructs polygons around patch cells and
 #' computes their area.
 #'
 #' @param object a \code{SingleCellExperiment} or \code{SpatialExperiment}
 #' object
-#' @param pach_name single character indicating the \code{colData(object)} entry
+#' @param patch_name single character indicating the \code{colData(object)} entry
 #' containing the patch cell identifiers.
 #' @param coords character vector of length 2 specifying the names of the
 #' \code{colData} (for a \code{SingleCellExperiment} object) or the
 #' \code{spatialCoords} entries of the cells' x and y locations.
-#' @param convex should the convex hull be computed before expansion? Default:
-#' the concave hull is computed.
+#' @param convex should the convex hull be computed to construct the polygon?
+#'   Default: the concave hull is computed.
 #' 
 #' @return A DataFrame object containing the patch identifier, the constructed
 #' polygon and the polygon size.

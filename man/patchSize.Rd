@@ -2,7 +2,7 @@
 % Please edit documentation in R/patchSize.R
 \name{patchSize}
 \alias{patchSize}
-\title{Function to compute the area of each patch}
+\title{Function to compute the area of c3ll patches}
 \usage{
 patchSize(
   object,
@@ -15,22 +15,22 @@ patchSize(
 \item{object}{a \code{SingleCellExperiment} or \code{SpatialExperiment}
 object}
 
+\item{patch_name}{single character indicating the \code{colData(object)} entry
+containing the patch cell identifiers.}
+
 \item{coords}{character vector of length 2 specifying the names of the
 \code{colData} (for a \code{SingleCellExperiment} object) or the
 \code{spatialCoords} entries of the cells' x and y locations.}
 
-\item{convex}{should the convex hull be computed before expansion? Default:
-the concave hull is computed.}
-
-\item{pach_name}{single character indicating the \code{colData(object)} entry
-containing the patch cell identifiers.}
+\item{convex}{should the convex hull be computed to construct the polygon?
+Default: the concave hull is computed.}
 }
 \value{
 A DataFrame object containing the patch identifier, the constructed
 polygon and the polygon size.
 }
 \description{
-This function constructs a polygons around patch cells and
+This function constructs polygons around patch cells and
 computes their area.
 }
 \examples{
