@@ -2,28 +2,61 @@
 #' 
 #' @description Function to return the distance of the closest cell of interest
 #'   for each cell in the data. In the case of patched/clustered cells negative
-#'   distances can be returned which indicate the closest cell that is not of
-#'   the type of cells of interest.
-#' 
-#' function to calculate the distance to the border of patches of cells.
-# positive values are indicative of cells that are outside of an object and negative values are indicative of cells inside of an object.
-
+#'   distances are returned by default which indicate the distance of the cells
+#'   of interest to the closest cell that is not of the type of cells of
+#'   interest.
+#'
 #' @param object single cell object
 #' @param x_cells logical vector of length equal to the number of cells
-#' contained in \code{object}. \code{TRUE} entries define the cells to consider
-#' for patch detection (see Details).
-#' @param name character specifying the name of the colData entry to safe the distances in.
-#' @param coords character vector of length 2 specifying the names of the \code{colData} (for a \code{SingleCellExperiment} object) or the \code{spatialCoords} entries of the cells' x and y locations.
-#' @param img_id single character indicating the \code{colData(object)} entry containing the unique image identifiers.
-#' @param return_neg logical indicating whether negative distances are to be returned for the distances of patched/spatially clustered cells.
-#' @param BPPARAM a \code{\link[BiocParallel]{BiocParallelParam-class}} object defining how to parallelize computations.
+#'   contained in \code{object}. \code{TRUE} entries define the cells to which
+#'   distances will be calculated (see Details).
+#' @param name character specifying the name of the \code{colData} entry to safe
+#'   the distances in.
+#' @param coords character vector of length 2 specifying the names of the
+#'   \code{colData} (for a \code{SingleCellExperiment} object) or the
+#'   \code{spatialCoords} entries of the cells' x and y locations.
+#' @param img_id single character indicating the \code{colData(object)} entry
+#'   containing the unique image identifiers.
+#' @param return_neg logical indicating whether negative distances are to be
+#'   returned for the distances of patched/spatially clustered cells.
+#' @param BPPARAM a \code{\link[BiocParallel]{BiocParallelParam-class}} object
+#'   defining how to parallelize computations.
+#' 
+#' @examples
+#' # Build interaction graph
+#'pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",
+#'                                 type = "expansion", threshold = 20)
+#' Detect patches of "celltype_B" cells. we will also expand by 1 pixel to fill the gaps within patches
+#'pancreasSCE <- patchDetection(pancreasSCE,
+#'                              img_id = "ImageNb",
+#'                              patch_cells = pancreasSCE$CellType == "celltype_B",
+#'                              colPairName = "expansion_interaction_graph",
+#'                              min_patch_size = 20,
+#'                              expand_by = 1)
+#'
+#'plotSpatial(pancreasSCE, img_id = "ImageNb", node_color_by = "patch_id")
+#'
+#' Distance to celltype_B patches
+#'pancreasSCE <- minDistToCells(pancreasSCE,
+#'                              x_cells = !is.na(pancreasSCE$patch_id),
+#'                              coords = c("Pos_X","Pos_Y"),
+#'                              img_id = "ImageName")
+#'
+#'plotSpatial(pancreasSCE,img_id = "ImageName",coords = c("Pos_X","Pos_Y"),node_color_by = "distToCells")+
+#'  scale_color_gradient2(low = "darkblue",mid = "white",high = "darkred")
+#'
+#' @author Daniel Schulz
+#' @importFrom distances distances distance_columns
+#' @export
 minDistToCells <- function(object,
                            x_cells,
-                           name,
+                           name = "distToCells",
                            coords,
                            img_id,
                            return_neg = TRUE,
                            BPPARAM = SerialParam()){
+  
+  .valid.minDistToCells.input(object,x_cells,name,coords,img_id,return_neg)
   
   cur_meta <- metadata(object)
   metadata(object) <- list()
@@ -39,8 +72,6 @@ minDistToCells <- function(object,
     unique(colData(object)[[img_id]]),
     function(x){
       
-      
-      # get one image and all cells within the mask
       cur_obj <- object[,as.character(colData(object)[[img_id]]) == x]
       
       cur_obj[[name]] <- NA
@@ -48,24 +79,16 @@ minDistToCells <- function(object,
         return(cur_obj)
       }
       
-      # get cells of interest and other cells
       patch_cells <- which(cur_obj$x_cells)
       non_patch_cells <- which(!cur_obj$x_cells)
-      
-      # calculate the distances for all against all cells
       dist_mat <- distances(as.matrix(colData(cur_obj)[,coords]))
-      
-      # select only those columns (cells) that are part of the patch
-      pos_dist <- distances::distance_columns(dist_mat,column_indices = patch_cells)
-      # for each row (cell) get the minimal distance to a cell of the patch (columns)
+      pos_dist <- distance_columns(dist_mat,column_indices = patch_cells)
       dist_to_patch <- rowMins(pos_dist)
-      
-      # select only those columns (cells) that are NOT part of the patch
-      neg_dist <- distances::distance_columns(dist_mat,column_indices = non_patch_cells)
-      # # for each row (cell) get the minimal distance to a cell NOT part of the patch (columns)
+      neg_dist <- distance_columns(dist_mat,column_indices = non_patch_cells)
       dist_from_patch <- rowMins(neg_dist)
       
-      # cells that had a 0 distance to the patch can be substitutes with the negative distances from the patch
+      # cells that had a 0 distance to the cells of interest can be substitutes
+      # with the negative distances from the cells of interest
       if(return_neg == TRUE) {
         dist_to_patch[dist_to_patch == 0] <- -dist_from_patch[dist_from_patch != 0]
       }
