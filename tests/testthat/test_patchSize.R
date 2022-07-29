@@ -22,7 +22,7 @@ test_that("patchSize function works", {
     spatialCoords(cur_spe) <- as.matrix(colData(cur_sce)[,c("Pos_X", "Pos_Y")])
     colData(cur_spe)[c("Pos_X", "Pos_Y")] <- NULL
     
-    expect_silent(cur_out_2 <- patchSize(cur_sce))
+    expect_silent(cur_out_2 <- patchSize(cur_spe))
     expect_s4_class(cur_out_2, "DataFrame")
     
     expect_equal(cur_out_1, cur_out_2)
