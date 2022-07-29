@@ -1000,6 +1000,38 @@
     }
 }
 
+.valid.patchSize.input <- function(object, patch_name, coords, convex){
+    if (!is(object, "SingleCellExperiment")) {
+        stop("'object' not of type 'SingleCellExperiment'.")
+    }
+    
+    if (length(patch_name) != 1 | !is.character(patch_name)) {
+        stop("'patch_name' must be a single string.")
+    }
+    
+    if (!patch_name %in% names(colData(object))) {
+        stop("'patch_name' nor in 'colData(object)'.")
+    }
+    
+    if (length(coords) != 2 | !all(is.character(coords))) {
+        stop("'coords' must be a character vector of length 2.")
+    }
+    
+    if (is(object, "SpatialExperiment")) {
+        if (!all(coords %in% spatialCoordsNames(object))) {
+            stop("'coords' not in spatialCoords(object).")
+        }
+    } else {
+        if (!all(coords %in% names(colData(object)))) {
+            stop("'coords' not in colData(object).")
+        }
+    }
+    
+    if (length(convex) != 1 | !is.logical(convex)) {
+        stop("'convex' must be a single logical.")
+    }
+}
+
 .valid.detectSpatialContext.input <- function(object,
                                               entry,
                                               threshold,
