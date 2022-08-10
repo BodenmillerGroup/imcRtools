@@ -64,7 +64,7 @@ remotes::install_github("BodenmillerGroup/imcRtools")
 ## Getting help
 
 The analysis of highly multiplexed imaging data requires multiple pre-processing
-and diverese analysis steps.
+and diverse analysis steps.
 
 1. Processing of raw data and segmentation: The 
 [ImcSegmentationPipeline](https://github.com/BodenmillerGroup/ImcSegmentationPipeline) and 

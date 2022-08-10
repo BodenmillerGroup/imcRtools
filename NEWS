@@ -135,3 +135,11 @@ Changes in version 1.3.3 (2022-06-03):
 Changes in version 1.3.4 (2022-06-14):
 
 + Avoid duplicated columns when generating nodes for plotSpatial
+
+Changes in version 1.3.5 (2022-06-15):
+
++ Added three spatial context functions
+
+Changes in version 1.3.6 (2022-07-28):
+
++ new function to measure size of patch

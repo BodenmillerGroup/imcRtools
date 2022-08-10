@@ -1,5 +1,5 @@
 Package: imcRtools
-Version: 1.3.4
+Version: 1.3.6
 Title: Methods for imaging mass cytometry data analysis
 Description: 
     This R package supports the handling and analysis of imaging mass cytometry 
@@ -19,7 +19,8 @@ Authors@R:
       person("Tobias", "Hoch", role = "ctb"),
       person("Vito", "Zanotelli", role = "ctb"),
       person("Jana", "Fischer", role = "ctb"),
-      person("Daniel", "Schulz", role = "ctb"))
+      person("Daniel", "Schulz", role = "ctb"),
+      person("Lasse","Meyer", role = "ctb"))
 License: GPL-3
 Depends:
     R (>= 4.1),
@@ -52,11 +53,11 @@ Imports:
     ggplot2,
     data.table,
     sf,
-    concaveman
+    concaveman,
+    tidyselect
 Suggests:
     CATALYST,
     grid,
-    tidyr,
     BiocStyle,
     knitr,
     rmarkdown,
@@ -66,5 +67,5 @@ biocViews: ImmunoOncology, SingleCell, Spatial, DataImport, Clustering
 VignetteBuilder: knitr
 URL: https://github.com/BodenmillerGroup/imcRtools
 BugReports: https://github.com/BodenmillerGroup/imcRtools/issues
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1
 Encoding: UTF-8
