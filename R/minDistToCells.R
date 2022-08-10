@@ -81,7 +81,13 @@ minDistToCells <- function(object,
       
       patch_cells <- which(cur_obj$x_cells)
       non_patch_cells <- which(!cur_obj$x_cells)
-      dist_mat <- distances(as.matrix(colData(cur_obj)[,coords]))
+      
+      if (is(object, "SpatialExperiment")) {
+        dist_mat <- distances(spatialCoords(cur_obj))
+      } else {
+        dist_mat <- distances(as.matrix(colData(cur_obj)[,coords]))
+      }
+      
       pos_dist <- distance_columns(dist_mat,column_indices = patch_cells)
       dist_to_patch <- rowMins(pos_dist)
       neg_dist <- distance_columns(dist_mat,column_indices = non_patch_cells)
