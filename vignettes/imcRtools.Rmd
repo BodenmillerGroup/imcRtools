@@ -13,7 +13,7 @@ author:
   - Department for Quantitative Biomedicine, University of Zurich
   - Institute for Molecular Health Sciences, ETH Zurich
   email: lasse.meyer@@uzh.ch
-  - name: Daniel Schulz
+- name: Daniel Schulz
   affiliation: 
   - Department for Quantitative Biomedicine, University of Zurich
   - Institute for Molecular Health Sciences, ETH Zurich

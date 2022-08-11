@@ -23,27 +23,29 @@
 #'   defining how to parallelize computations.
 #' 
 #' @examples
+#' library(cytomapper)
+#' data(pancreasSCE)
+#' 
 #' # Build interaction graph
-#'pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",
-#'                                 type = "expansion", threshold = 20)
-#' Detect patches of "celltype_B" cells. we will also expand by 1 pixel to fill the gaps within patches
-#'pancreasSCE <- patchDetection(pancreasSCE,
+#' pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",type = "expansion",threshold = 20)
+#' 
+#' # Detect patches of "celltype_B" cells. we will also expand by 1 pixel to fill the gaps within patches
+#' pancreasSCE <- patchDetection(pancreasSCE,
 #'                              img_id = "ImageNb",
 #'                              patch_cells = pancreasSCE$CellType == "celltype_B",
 #'                              colPairName = "expansion_interaction_graph",
 #'                              min_patch_size = 20,
 #'                              expand_by = 1)
 #'
-#'plotSpatial(pancreasSCE, img_id = "ImageNb", node_color_by = "patch_id")
+#' plotSpatial(pancreasSCE, img_id = "ImageNb", node_color_by = "patch_id")
 #'
-#' Distance to celltype_B patches
-#'pancreasSCE <- minDistToCells(pancreasSCE,
+#' # Distance to celltype_B patches
+#' pancreasSCE <- minDistToCells(pancreasSCE,
 #'                              x_cells = !is.na(pancreasSCE$patch_id),
 #'                              coords = c("Pos_X","Pos_Y"),
 #'                              img_id = "ImageName")
 #'
-#'plotSpatial(pancreasSCE,img_id = "ImageName",coords = c("Pos_X","Pos_Y"),node_color_by = "distToCells")+
-#'  scale_color_gradient2(low = "darkblue",mid = "white",high = "darkred")
+#' plotSpatial(pancreasSCE,img_id = "ImageNb",node_color_by = "distToCells")
 #'
 #' @author Daniel Schulz
 #' @importFrom distances distances distance_columns
