@@ -1041,6 +1041,8 @@
   
   if(!is.logical(return_neg)){
     stop("'return_neg' is not of type logical.")
+  }
+}
 
 .valid.patchSize.input <- function(object, patch_name, coords, convex){
     if (!is(object, "SingleCellExperiment")) {
