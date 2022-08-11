@@ -13,6 +13,11 @@ author:
   - Department for Quantitative Biomedicine, University of Zurich
   - Institute for Molecular Health Sciences, ETH Zurich
   email: lasse.meyer@@uzh.ch
+  - name: Daniel Schulz
+  affiliation: 
+  - Department for Quantitative Biomedicine, University of Zurich
+  - Institute for Molecular Health Sciences, ETH Zurich
+  email: daniel.schulz@@uzh.ch
 output:
     BiocStyle::html_document:
         toc_float: yes
@@ -832,6 +837,28 @@ For each patch larger than 2 cells, the spatial area can be computed using the
 patchSize(pancreasSCE)
 ```
 
+## Minimal distances
+
+To calculate the minimal distance for each cell to a given cell type or class of
+cells of interest, the function `minDistToCells` is available. Cells of interest
+are defined via the `x_cells` parameter as `logical` and distances to for all
+cells to those cells will be reported in a new column in the `colData` of the
+`SingleCellExperiment`.
+
+If the cells of interest form patches the positive distances reflect the
+distances from cells outside of patches to the closest patch border and the
+negative distances reflect the distances from cells inside the patches to the
+patch border. If `return_neg` is set to `FALSE` negative distances are set to 0.
+
+```{r minDistToCells}
+pancreasSCE <- minDistToCells(pancreasSCE,
+                              x_cells = pancreasSCE$CellType == "celltype_B",
+                              coords = c("Pos_X","Pos_Y"),
+                              img_id = "ImageNb")
+
+plotSpatial(pancreasSCE,img_id = "ImageNb",node_color_by = "distToCells")
+```
+
 ## Neighborhood permutation testing {#test-neighborhood}
 
 The following section describes how to observe and test the average
@@ -930,7 +957,7 @@ counting and testing. [Tobias Hoch](https://github.com/toobiwankenobi)
 has written the first version of reading in the
 `ImcSegmentationPipeline` output and the `patchDetection` function.
 [Daniel Schulz](https://github.com/SchulzDan) has build the
-`aggregateNeighbors` function and contributed to developing the spatial
+`aggregateNeighbors` and `minDistToCells` functions and contributed to developing the spatial
 clustering approach. [Lasse Meyer](https://github.com/lassedochreden) has 
 implemented the functions for spatial context analysis.
 
