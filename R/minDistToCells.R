@@ -29,7 +29,7 @@
 #' # Build interaction graph
 #' pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",type = "expansion",threshold = 20)
 #' 
-#' # Detect patches of "celltype_B" cells. we will also expand by 1 pixel to fill the gaps within patches
+#' # Detect patches of "celltype_B" cells
 #' pancreasSCE <- patchDetection(pancreasSCE,
 #'                              img_id = "ImageNb",
 #'                              patch_cells = pancreasSCE$CellType == "celltype_B",
@@ -43,7 +43,7 @@
 #' pancreasSCE <- minDistToCells(pancreasSCE,
 #'                              x_cells = !is.na(pancreasSCE$patch_id),
 #'                              coords = c("Pos_X","Pos_Y"),
-#'                              img_id = "ImageName")
+#'                              img_id = "ImageNb")
 #'
 #' plotSpatial(pancreasSCE,img_id = "ImageNb",node_color_by = "distToCells")
 #'
@@ -66,10 +66,7 @@ minDistToCells <- function(object,
   cur_intmeta <- int_metadata(object)
   
   object$x_cells <- x_cells
-  
-  #cells <- colnames(object[,x_cells])
-  #other_cells <- colnames(object[,!x_cells])
-  
+
   cur_out <- bplapply(
     unique(colData(object)[[img_id]]),
     function(x){
