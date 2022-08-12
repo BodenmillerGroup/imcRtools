@@ -45,10 +45,13 @@ Function to return the distance of the closest cell of interest
   interest.
 }
 \examples{
+library(cytomapper)
+data(pancreasSCE)
+
 # Build interaction graph
-pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",
-                                type = "expansion", threshold = 20)
-Detect patches of "celltype_B" cells. we will also expand by 1 pixel to fill the gaps within patches
+pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",type = "expansion",threshold = 20)
+
+# Detect patches of "celltype_B" cells
 pancreasSCE <- patchDetection(pancreasSCE,
                              img_id = "ImageNb",
                              patch_cells = pancreasSCE$CellType == "celltype_B",
@@ -58,14 +61,13 @@ pancreasSCE <- patchDetection(pancreasSCE,
 
 plotSpatial(pancreasSCE, img_id = "ImageNb", node_color_by = "patch_id")
 
-Distance to celltype_B patches
+# Distance to celltype_B patches
 pancreasSCE <- minDistToCells(pancreasSCE,
                              x_cells = !is.na(pancreasSCE$patch_id),
                              coords = c("Pos_X","Pos_Y"),
-                             img_id = "ImageName")
+                             img_id = "ImageNb")
 
-plotSpatial(pancreasSCE,img_id = "ImageName",coords = c("Pos_X","Pos_Y"),node_color_by = "distToCells")+
- scale_color_gradient2(low = "darkblue",mid = "white",high = "darkred")
+plotSpatial(pancreasSCE,img_id = "ImageNb",node_color_by = "distToCells")
 
 }
 \author{

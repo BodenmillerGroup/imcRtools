@@ -55,7 +55,8 @@ Imports:
     sf,
     concaveman,
     tidyselect,
-    distances
+    distances,
+    MatrixGenerics
 Suggests:
     CATALYST,
     grid,

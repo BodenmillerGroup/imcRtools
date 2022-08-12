@@ -49,6 +49,7 @@
 #'
 #' @author Daniel Schulz
 #' @importFrom distances distances distance_columns
+#' @importFrom MatrixGenerics rowMins
 #' @export
 minDistToCells <- function(object,
                            x_cells,
@@ -88,9 +89,9 @@ minDistToCells <- function(object,
       }
       
       pos_dist <- distance_columns(dist_mat,column_indices = patch_cells)
-      dist_to_patch <- rowMin(pos_dist)
+      dist_to_patch <- rowMins(pos_dist)
       neg_dist <- distance_columns(dist_mat,column_indices = non_patch_cells)
-      dist_from_patch <- rowMin(neg_dist)
+      dist_from_patch <- rowMins(neg_dist)
       
       # cells that had a 0 distance to the cells of interest can be substitutes
       # with the negative distances from the cells of interest
