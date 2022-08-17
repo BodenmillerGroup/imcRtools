@@ -7,7 +7,6 @@ test_that("minDistToCells works",{
                  coords = c("Pos_X","Pos_Y"),
                  img_id = "ImageName"))
   
-  expect_true(is(cur_sce, "SingleCellExperiment"))
   expect_s4_class(cur_sce , class = "SingleCellExperiment")
   expect_true("distToCells" %in% names(colData(cur_sce)))
   expect_true(class(cur_sce$distToCells) == "numeric")
@@ -42,6 +41,7 @@ test_that("minDistToCells works",{
   expect_true(class(cur_sce_3$distToCells) == "numeric")
   
   expect_true(any(is.na(cur_sce_3$distToCells)))
+  expect_true(all(is.na(cur_sce_3[,cur_sce_3$ImageName == "J02_imc.tiff"]$distToCells)))
   expect_true(min(cur_sce_3[,!is.na(cur_sce_3$distToCells)]$distToCells)<0)
   
   expect_equal(length(cur_sce_3[,cur_sce_3$ImageName == "J02_imc.tiff"]$CellNb),sum(is.na(cur_sce_3$distToCells)))
@@ -59,6 +59,7 @@ test_that("minDistToCells works",{
   expect_true(class(cur_sce_4$distToCells) == "numeric")
   
   expect_true(any(is.na(cur_sce_4$distToCells)))
+  expect_true(all(is.na(cur_sce_4[,cur_sce_4$ImageName == "J02_imc.tiff"]$distToCells)))
   expect_true(min(cur_sce_4[,!is.na(cur_sce_4$distToCells)]$distToCells) == 0)
   
   expect_equal(length(cur_sce_4[,cur_sce_4$ImageName == "J02_imc.tiff"]$CellNb),sum(is.na(cur_sce_4$distToCells)))

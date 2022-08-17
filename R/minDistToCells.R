@@ -1,33 +1,34 @@
-#' @title Function to calculate minimal distance of cells of interest 
+#' @title Function to calculate minimal distance to cells of interest 
 #' 
 #' @description Function to return the distance of the closest cell of interest
-#'   for each cell in the data. In the case of patched/clustered cells negative
-#'   distances are returned by default which indicate the distance of the cells
-#'   of interest to the closest cell that is not of the type of cells of
-#'   interest.
+#' for each cell in the data. In the case of patched/clustered cells negative
+#' distances are returned by default which indicate the distance of the cells
+#' of interest to the closest cell that is not of the type of cells of
+#' interest.
 #'
-#' @param object single cell object
+#' @param object a `SingleCellExperiment` or `SpatialExperiment` object
 #' @param x_cells logical vector of length equal to the number of cells
-#'   contained in \code{object}. \code{TRUE} entries define the cells to which
-#'   distances will be calculated (see Details).
+#' contained in \code{object}. \code{TRUE} entries define the cells to which
+#' distances will be calculated (see Details).
 #' @param name character specifying the name of the \code{colData} entry to safe
-#'   the distances in.
+#' the distances in.
 #' @param coords character vector of length 2 specifying the names of the
-#'   \code{colData} (for a \code{SingleCellExperiment} object) or the
-#'   \code{spatialCoords} entries of the cells' x and y locations.
+#' \code{colData} (for a \code{SingleCellExperiment} object) or the
+#' \code{spatialCoords} entries of the cells' x and y locations.
 #' @param img_id single character indicating the \code{colData(object)} entry
-#'   containing the unique image identifiers.
+#' containing the unique image identifiers.
 #' @param return_neg logical indicating whether negative distances are to be
-#'   returned for the distances of patched/spatially clustered cells.
+#' returned for the distances of patched/spatially clustered cells.
 #' @param BPPARAM a \code{\link[BiocParallel]{BiocParallelParam-class}} object
-#'   defining how to parallelize computations.
+#' defining how to parallelize computations.
 #' 
 #' @examples
 #' library(cytomapper)
 #' data(pancreasSCE)
 #' 
 #' # Build interaction graph
-#' pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",type = "expansion",threshold = 20)
+#' pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",
+#' type = "expansion",threshold = 20)
 #' 
 #' # Detect patches of "celltype_B" cells
 #' pancreasSCE <- patchDetection(pancreasSCE,
@@ -53,9 +54,9 @@
 #' @export
 minDistToCells <- function(object,
                            x_cells,
-                           name = "distToCells",
-                           coords,
                            img_id,
+                           name = "distToCells",
+                           coords = c("Pos_X","Pos_Y"),
                            return_neg = TRUE,
                            BPPARAM = SerialParam()){
   
@@ -96,7 +97,7 @@ minDistToCells <- function(object,
       # cells that had a 0 distance to the cells of interest can be substitutes
       # with the negative distances from the cells of interest
       if(return_neg == TRUE) {
-        dist_to_patch[dist_to_patch == 0] <- -dist_from_patch[dist_from_patch != 0]
+        dist_to_patch[dist_to_patch == 0] <- -dist_from_patch[dist_to_patch == 0]
       }
       cur_obj[[name]] <- dist_to_patch
       
@@ -104,6 +105,8 @@ minDistToCells <- function(object,
     }, BPPARAM = BPPARAM)
   
   cur_out <- do.call("cbind", cur_out)
+  
+  cur_out$x_cells <- NULL
   
   metadata(cur_out) <- cur_meta
   int_metadata(cur_out) <- cur_intmeta

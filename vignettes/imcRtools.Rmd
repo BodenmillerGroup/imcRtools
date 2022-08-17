@@ -837,18 +837,20 @@ For each patch larger than 2 cells, the spatial area can be computed using the
 patchSize(pancreasSCE)
 ```
 
-## Minimal distances
+## Minimal distances to cells of interest
 
-To calculate the minimal distance for each cell to a given cell type or class of
+Calculate the minimal distance for each cell to a given cell type or class of
 cells of interest, the function `minDistToCells` is available. Cells of interest
 are defined via the `x_cells` parameter as `logical` and distances to for all
 cells to those cells will be reported in a new column in the `colData` of the
 `SingleCellExperiment`.
 
-If the cells of interest form patches the positive distances reflect the
-distances from cells outside of patches to the closest patch border and the
-negative distances reflect the distances from cells inside the patches to the
-patch border. If `return_neg` is set to `FALSE` negative distances are set to 0.
+If the cells of interest form patches (many cells of the same type next to each
+other) or similarly if a patch detection has previously been performed the
+positive distances reflect the distances from cells outside of patches to the
+closest patch border and the negative distances reflect the distances from cells
+inside the patches to the patch border. If `return_neg` is set to `FALSE`
+negative distances are set to 0.
 
 ```{r minDistToCells}
 pancreasSCE <- minDistToCells(pancreasSCE,

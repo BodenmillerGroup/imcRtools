@@ -1013,7 +1013,7 @@
     stop("Length of 'x_cells' must match the number of cells in 'object'.")
   }
   
-  if (!is.null(name) & (length(name) != 1 | !is.character(name))) {
+  if (length(name) != 1 | !is.character(name)) {
     stop("'name' must be a single string.")
   }
   
