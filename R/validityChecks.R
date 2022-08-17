@@ -1000,6 +1000,50 @@
     }
 }
 
+.valid.minDistToCells.input <- function(object,x_cells,name,coords,img_id,return_neg){
+  if(!is(object, "SingleCellExperiment")) {
+    stop("'object' not of type 'SingleCellExperiment'.")
+  }
+  
+  if (!all(is.logical(x_cells))) {
+    stop("'x_cells' must all be logical.")
+  }
+  
+  if (length(x_cells) != ncol(object)) {
+    stop("Length of 'x_cells' must match the number of cells in 'object'.")
+  }
+  
+  if (length(name) != 1 | !is.character(name)) {
+    stop("'name' must be a single string.")
+  }
+  
+  if (length(coords) != 2 | !all(is.character(coords))) {
+    stop("'coords' must be a character vector of length 2.")
+  }
+  
+  if (is(object, "SpatialExperiment")) {
+    if (!all(coords %in% spatialCoordsNames(object))) {
+      stop("'coords' not in spatialCoords(object).")
+    }
+  } else {
+    if (!all(coords %in% names(colData(object)))) {
+      stop("'coords' not in colData(object).")
+    }
+  }
+  
+  if (length(img_id) != 1 | !is.character(img_id)) {
+    stop("'img_id' must be a single string.")
+  }
+  
+  if (!img_id %in% names(colData(object))) {
+    stop("'img_id' not in colData(object).")
+  }
+  
+  if(!is.logical(return_neg)){
+    stop("'return_neg' is not of type logical.")
+  }
+}
+
 .valid.patchSize.input <- function(object, patch_name, coords, convex){
     if (!is(object, "SingleCellExperiment")) {
         stop("'object' not of type 'SingleCellExperiment'.")
