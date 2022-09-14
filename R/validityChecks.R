@@ -1243,3 +1243,42 @@
     stop("'return_data' has to be logical'.")
   }
 }
+
+.valid.detectCommunity.input <- function(object, 
+                                         colPairName, 
+                                         size_threshold, 
+                                         group_by, 
+                                         name){
+  
+  
+  if (!is(object, "SingleCellExperiment")) {
+    stop("'object' needs to be a SingleCellExperiment object.")
+  } 
+  
+  if (length(colPairName) != 1 | !is.character(colPairName)) {
+    stop("'colPairName' must be a single string.")
+  }
+  
+  if (! colPairName %in% colPairNames(object)) {
+    stop("'colPairName' not in 'colPairNames(object)'.")
+  }
+  
+  if (length(colPair(object, colPairName)) == 0) {
+    stop("No interactions found.")
+  }
+  
+  if (!is.numeric(size_threshold) | length(size_threshold) != 1 
+       | size_threshold < 0){
+    stop("'group_threshold' needs to be a positive single numeric.")
+  }
+  
+  if (!is.null(group_by) &&
+      (!group_by %in% names(colData(object)))) { 
+    stop("'group_by' not in 'colData(object)'.")
+  }
+  
+  if (length(name) != 1 | !is.character(name)) {
+    stop("'name' has to be a single character'.")
+  }
+} 
+

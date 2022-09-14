@@ -1031,3 +1031,21 @@
   
   return(p)
 }
+
+#### SpatialCommunity helpers ####
+
+#' @importFrom igraph cluster_louvain graph_from_data_frame
+#' @importFrom SingleCellExperiment colPair
+
+
+.detectCommunity_function <- function(cur_object,
+                                      colPairName){
+  
+  gr <- graph_from_data_frame(as.data.frame(colPair(cur_object, colPairName)), 
+                              directed = FALSE, 
+                              vertices = data.frame(index = seq_len(ncol(cur_object))))
+  
+  cl_comm <- cluster_louvain(gr)
+  
+  return(cl_comm)
+}
