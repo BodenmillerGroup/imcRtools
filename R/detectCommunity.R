@@ -46,18 +46,10 @@
 #' sce <- detectCommunity(sce, 
 #'                       colPairName = "neighborhood")
 #'
-#' plotSpatial(sce, img_id = "ImageNb",
-#'            colPairName = "neighborhood",
-#'            node_color_by = "spatial_community")
-#'            
-#' ## Detect spatial community - by celltype
-#' sce <- detectCommunity(sce,
-#'                       colPairName = "neighborhood,
-#'                       group_by = "CellType")
-#'
-#' plotSpatial(sce, img_id = "ImageNb",
-#'            colPairName = "neighborhood",
-#'            node_color_by = "spatial_community")
+#' plotSpatial(sce,
+#'             img_id = "ImageNb",
+#'             colPairName = "neighborhood",
+#'             node_color_by = "spatial_community")
 #'            
 #' @author Lasse Meyer (\email{lasse.meyer@@uzh.ch})
 #' 

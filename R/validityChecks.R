@@ -1269,7 +1269,7 @@
   
   if (!is.numeric(size_threshold) | length(size_threshold) != 1 
        | size_threshold < 0){
-    stop("'group_threshold' needs to be a positive single numeric.")
+    stop("'size_threshold' needs to be a positive single numeric.")
   }
   
   if (!is.null(group_by) &&
