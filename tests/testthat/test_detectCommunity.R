@@ -32,7 +32,6 @@ test_that("detectCommunity function works", {
                                                   E34_872 = "1"))
   
   # check that changing name works 
-  set.seed(22)
   expect_silent(cur_sce_3 <- detectCommunity(sce, 
                                              colPairName = "neighborhood",
                                              name = "spatial_comm"))
@@ -46,10 +45,10 @@ test_that("detectCommunity function works", {
                                              colPairName = "neighborhood",
                                              group_by = "CellType"))
   expect_false(identical(cur_sce_4$spatial_community, cur_sce$spatial_community))
-  expect_equal(cur_sce_4$spatial_community[1:10],c(E34_824 = "celltype_C_1", E34_835 = "celltype_C_2", E34_839 = "celltype_C_2", 
-                                                   E34_844 = "celltype_C_2", E34_847 = "celltype_C_2", E34_853 = "celltype_C_2", 
+  expect_equal(cur_sce_4$spatial_community[1:10],c(E34_824 = "celltype_C_1", E34_835 = "celltype_C_2", E34_839 = "celltype_C_1", 
+                                                   E34_844 = "celltype_C_1", E34_847 = "celltype_C_2", E34_853 = "celltype_C_1", 
                                                    E34_859 = "celltype_C_1", E34_864 = "celltype_C_1", E34_865 = "celltype_C_2", 
-                                                   E34_872 = "celltype_C_2"))
+                                                   E34_872 = "celltype_C_1"))
   
   
   # manual coding spatial communities gives the same result
@@ -64,6 +63,28 @@ test_that("detectCommunity function works", {
   cur_sce$spatial_community_manual <- cl_comm
   
   expect_equal(unname(cur_sce$spatial_community), cur_sce$spatial_community_manual)
+  
+  # Different cluster_fun 
+  expect_silent(cur_sce <- detectCommunity(cur_sce, 
+                                           colPairName = "neighborhood", 
+                                           name = "spatial_comm_wt", 
+                                           cluster_fun = "walktrap"))
+  expect_equal(names(colData(cur_sce)), 
+               c("ImageName", "Pos_X", "Pos_Y", "Area", "CellType", "ImageNb", 
+                 "CellNb", "MaskName", "Pattern", "spatial_community", 
+                 "spatial_community_manual","spatial_comm_wt"))
+  
+  expect_false(identical(cur_sce$spatial_community, cur_sce$spatial_comm_wt))
+  
+  # Use SerialParam()
+  set.seed(22)
+  expect_silent(cur_sce_5 <- detectCommunity(sce, 
+                                             colPairName = "neighborhood",
+                                             group_by = "CellType", 
+                                             BPPARAM = SerialParam()
+                                             ))
+  
+  expect_equal(cur_sce_5$spatial_community, cur_sce_4$spatial_community)
   
   # Errors 
   expect_error(detectCommunity(colData(sce)),
@@ -88,6 +109,10 @@ test_that("detectCommunity function works", {
   
   expect_error(detectCommunity(sce, colPairName = "neighborhood", name = c("cool","name")),
                regexp = "'name' has to be a single character'.",
+               fixed = TRUE)
+  
+  expect_error(detectCommunity(sce, colPairName = "neighborhood", cluster_fun = c("cool","function")),
+               regexp = "'cluster_fun' has to be a single character.",
                fixed = TRUE)
   
   cur_sce_5 <- sce

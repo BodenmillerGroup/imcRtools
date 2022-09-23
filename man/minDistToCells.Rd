@@ -2,24 +2,28 @@
 % Please edit documentation in R/minDistToCells.R
 \name{minDistToCells}
 \alias{minDistToCells}
-\title{Function to calculate minimal distance of cells of interest}
+\title{Function to calculate minimal distance to cells of interest}
 \usage{
 minDistToCells(
   object,
   x_cells,
-  name = "distToCells",
-  coords,
   img_id,
+  name = "distToCells",
+  coords = c("Pos_X", "Pos_Y"),
   return_neg = TRUE,
   BPPARAM = SerialParam()
 )
 }
 \arguments{
-\item{object}{single cell object}
+\item{object}{a \code{SingleCellExperiment} or \code{SpatialExperiment}
+object}
 
 \item{x_cells}{logical vector of length equal to the number of cells
 contained in \code{object}. \code{TRUE} entries define the cells to which
-distances will be calculated (see Details).}
+distances will be calculated.}
+
+\item{img_id}{single character indicating the \code{colData(object)} entry
+containing the unique image identifiers.}
 
 \item{name}{character specifying the name of the \code{colData} entry to safe
 the distances in.}
@@ -28,28 +32,30 @@ the distances in.}
 \code{colData} (for a \code{SingleCellExperiment} object) or the
 \code{spatialCoords} entries of the cells' x and y locations.}
 
-\item{img_id}{single character indicating the \code{colData(object)} entry
-containing the unique image identifiers.}
-
 \item{return_neg}{logical indicating whether negative distances are to be
 returned for the distances of patched/spatially clustered cells.}
 
 \item{BPPARAM}{a \code{\link[BiocParallel]{BiocParallelParam-class}} object
 defining how to parallelize computations.}
 }
+\value{
+returns an object of \code{class(object)} containing a new column 
+entry to \code{colData(object)[[name]]}.
+}
 \description{
 Function to return the distance of the closest cell of interest
-  for each cell in the data. In the case of patched/clustered cells negative
-  distances are returned by default which indicate the distance of the cells
-  of interest to the closest cell that is not of the type of cells of
-  interest.
+for each cell in the data. In the case of patched/clustered cells negative
+distances are returned by default which indicate the distance of the cells
+of interest to the closest cell that is not of the type of cells of
+interest.
 }
 \examples{
 library(cytomapper)
 data(pancreasSCE)
 
 # Build interaction graph
-pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",type = "expansion",threshold = 20)
+pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",
+type = "expansion",threshold = 20)
 
 # Detect patches of "celltype_B" cells
 pancreasSCE <- patchDetection(pancreasSCE,
@@ -71,5 +77,5 @@ plotSpatial(pancreasSCE,img_id = "ImageNb",node_color_by = "distToCells")
 
 }
 \author{
-Daniel Schulz
+Daniel Schulz (\email{daniel.schulz@uzh.ch})
 }

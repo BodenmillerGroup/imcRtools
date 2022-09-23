@@ -9,7 +9,9 @@ detectCommunity(
   colPairName,
   size_threshold = 10,
   group_by = NULL,
-  name = "spatial_community"
+  name = "spatial_community",
+  cluster_fun = "louvain",
+  BPPARAM = SerialParam()
 )
 }
 \arguments{
@@ -28,29 +30,40 @@ detection will be performed separately for all unique entries to
 
 \item{name}{single character specifying the name of the output saved in 
 \code{colData(object)}. Defaults to "spatial_community".}
+
+\item{cluster_fun}{single character specifying the function to use for 
+community detection. Options are all strings that contain the suffix of an 
+\code{igraph} community detection algorithm (e.g. "walktrap"). 
+Defaults to "louvain".}
+
+\item{BPPARAM}{a \code{\link[BiocParallel]{BiocParallelParam-class}} object
+defining how to parallelize computations. Applicable when \code{group_by} is 
+specified.}
 }
 \value{
 returns an object of \code{class(object)} containing a new column 
-entry to \code{colData(object)[[name]]}
+entry to \code{colData(object)[[name]]}.
 }
 \description{
 Function to detect the spatial community of each cell as 
 proposed by \href{https://www.nature.com/articles/s41586-019-1876-x}{
 Jackson et al., The single-cell pathology landscape of breast cancer, Nature, 
-2020}. Each cell is clustered (Louvain community detection) based on its 
-interactions as defined by a spatial object graph.
+2020}. Each cell is clustered based on its interactions as defined by a 
+spatial object graph.
 }
 \section{Spatial community detection procedure}{
 
 1. Create an igraph object from the edge list stored in 
-\code{colPair(object, colPairName)}
-2. Perform community detection using Louvain algorithm
+\code{colPair(object, colPairName)}.  
+
+2. Perform community detection using the specified \code{cluster_fun} algorithm.  
+  
 3. Store the community IDs in a vector and replace all communities with 
-a size smaller than \code{size_threshold} by NA
+a size smaller than \code{size_threshold} by NA.   
 
 Optional steps: Specify \code{group_by} to perform spatial community 
 detection separately for all unique entries to \code{colData(object)[,group_by]} 
-e.g. for tumor and stromal cells.
+e.g. for tumor and non-tumor cells.
 }
 
 \examples{

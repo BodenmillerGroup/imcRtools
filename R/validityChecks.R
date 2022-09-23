@@ -1248,7 +1248,8 @@
                                          colPairName, 
                                          size_threshold, 
                                          group_by, 
-                                         name){
+                                         name, 
+                                         cluster_fun){
   
   
   if (!is(object, "SingleCellExperiment")) {
@@ -1278,7 +1279,11 @@
   }
   
   if (length(name) != 1 | !is.character(name)) {
-    stop("'name' has to be a single character'.")
+    stop("'name' has to be a single character.")
+  }
+  
+  if (length(cluster_fun) != 1 | !is.character(cluster_fun)) {
+    stop("'cluster_fun' has to be a single character.")
   }
 } 
 
