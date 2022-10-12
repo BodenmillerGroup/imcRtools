@@ -11,7 +11,7 @@ detectCommunity(
   group_by = NULL,
   name = "spatial_community",
   cluster_fun = "louvain",
-  BPPARAM = SerialParam()
+  BPPARAM = SerialParam(RNGseed = 123)
 )
 }
 \arguments{

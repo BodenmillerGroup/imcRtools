@@ -46,7 +46,7 @@ test_that("detectCommunity function works", {
                                              group_by = "CellType"))
   expect_false(identical(cur_sce_4$spatial_community, cur_sce$spatial_community))
   expect_equal(cur_sce_4$spatial_community[1:10],c(E34_824 = "celltype_C_1", E34_835 = "celltype_C_2", E34_839 = "celltype_C_1", 
-                                                   E34_844 = "celltype_C_1", E34_847 = "celltype_C_2", E34_853 = "celltype_C_1", 
+                                                   E34_844 = "celltype_C_1", E34_847 = "celltype_C_2", E34_853 = "celltype_C_2", 
                                                    E34_859 = "celltype_C_1", E34_864 = "celltype_C_1", E34_865 = "celltype_C_2", 
                                                    E34_872 = "celltype_C_1"))
   
@@ -108,7 +108,7 @@ test_that("detectCommunity function works", {
                fixed = TRUE)
   
   expect_error(detectCommunity(sce, colPairName = "neighborhood", name = c("cool","name")),
-               regexp = "'name' has to be a single character'.",
+               regexp = "'name' has to be a single character.",
                fixed = TRUE)
   
   expect_error(detectCommunity(sce, colPairName = "neighborhood", cluster_fun = c("cool","function")),

@@ -79,14 +79,13 @@ detectCommunity <- function(object,
                             group_by = NULL,
                             name = "spatial_community",
                             cluster_fun = "louvain",
-                            BPPARAM = SerialParam()){
+                            BPPARAM = SerialParam(RNGseed = 123)){
   
 .valid.detectCommunity.input(object, colPairName, size_threshold, group_by, name, cluster_fun) 
 
   if (!is.null(group_by)) {
     cur_list <- bplapply(unique(colData(object)[,group_by]), function(x){
       cur_object  <- object[,colData(object)[,group_by] == x]
-      set.seed(22)
       cl_comm <- .detectCommunity_function(cur_object, colPairName, cluster_fun)
       comm <- paste0(x,"_",membership(cl_comm))  
       names(comm) <- colnames(cur_object)
