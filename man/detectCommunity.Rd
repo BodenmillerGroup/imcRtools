@@ -11,7 +11,7 @@ detectCommunity(
   group_by = NULL,
   name = "spatial_community",
   cluster_fun = "louvain",
-  BPPARAM = SerialParam(RNGseed = 123)
+  BPPARAM = SerialParam()
 )
 }
 \arguments{
@@ -38,7 +38,9 @@ Defaults to "louvain".}
 
 \item{BPPARAM}{a \code{\link[BiocParallel]{BiocParallelParam-class}} object
 defining how to parallelize computations. Applicable when \code{group_by} is 
-specified.}
+specified and defaults to \code{SerialParam()}. 
+For reproducibility between runs, we recommend defining \code{RNGseed} in the
+ \code{\link[BiocParallel]{BiocParallelParam-class}} object.}
 }
 \value{
 returns an object of \code{class(object)} containing a new column 
