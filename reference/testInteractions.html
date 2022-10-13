@@ -19,7 +19,7 @@ from random permutations."><!-- mathjax --><script src="https://cdnjs.cloudflare
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.8</span>
       </span>
     </div>
 
@@ -227,10 +227,10 @@ interactions per grouping level.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      group_by from_label   to_label        ct        p_gt        p_lt</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;integer&gt;   &lt;factor&gt;   &lt;factor&gt; &lt;numeric&gt;   &lt;numeric&gt;   &lt;numeric&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1           1 celltype_A celltype_A  1.823529 0.000999001 1.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2           1 celltype_A celltype_B  0.470588 0.024975025 0.994005994</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           1 celltype_A celltype_B  0.470588 0.026973027 0.993006993</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3           1 celltype_A celltype_C  0.705882 1.000000000 0.000999001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4           1 celltype_B celltype_A  0.875000 0.051948052 0.983016983</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5           1 celltype_B celltype_B  0.250000 0.506493506 0.781218781</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4           1 celltype_B celltype_A  0.875000 0.071928072 0.978021978</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           1 celltype_B celltype_B  0.250000 0.462537463 0.815184815</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ...       ...        ...        ...       ...         ...         ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 23          3 celltype_B celltype_B  2.363636 0.000999001 1.000000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 24          3 celltype_B celltype_C  0.636364 1.000000000 0.000999001</span>
@@ -240,10 +240,10 @@ interactions per grouping level.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     interaction           p       sig    sigval</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;logical&gt;   &lt;numeric&gt; &lt;logical&gt; &lt;numeric&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1          TRUE 0.000999001      TRUE         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          TRUE 0.024975025     FALSE         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          TRUE 0.026973027     FALSE         0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3         FALSE 0.000999001      TRUE        -1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4          TRUE 0.051948052     FALSE         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5          TRUE 0.506493506     FALSE         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          TRUE 0.071928072     FALSE         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          TRUE 0.462537463     FALSE         0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ...         ...         ...       ...       ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 23         TRUE 0.000999001      TRUE         1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 24        FALSE 0.000999001      TRUE        -1</span>
@@ -261,29 +261,29 @@ interactions per grouping level.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> DataFrame with 27 rows and 10 columns</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      group_by from_label   to_label        ct        p_gt        p_lt</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;integer&gt;   &lt;factor&gt;   &lt;factor&gt; &lt;numeric&gt;   &lt;numeric&gt;   &lt;numeric&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1           1 celltype_A celltype_A   1.93750    0.003996 0.997002997</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2           1 celltype_A celltype_B   1.14286    0.200799 0.807192807</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1           1 celltype_A celltype_A   1.93750    0.004995 0.996003996</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           1 celltype_A celltype_B   1.14286    0.190809 0.820179820</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3           1 celltype_A celltype_C   1.33333    1.000000 0.000999001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4           1 celltype_B celltype_A   1.16667    0.378621 0.634365634</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5           1 celltype_B celltype_B   1.00000    0.656344 0.929070929</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4           1 celltype_B celltype_A   1.16667    0.417582 0.598401598</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           1 celltype_B celltype_B   1.00000    0.648352 0.938061938</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ...       ...        ...        ...       ...         ...         ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 23          3 celltype_B celltype_B   2.36364 0.000999001 1.000000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 24          3 celltype_B celltype_C   1.31250 1.000000000 0.000999001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 25          3 celltype_C celltype_A        NA          NA          NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26          3 celltype_C celltype_B   1.65385 0.880119880 0.122877123</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26          3 celltype_C celltype_B   1.65385 0.851148851 0.155844156</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 27          3 celltype_C celltype_C   2.45614 0.000999001 1.000000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     interaction           p       sig    sigval</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;logical&gt;   &lt;numeric&gt; &lt;logical&gt; &lt;numeric&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1          TRUE 0.003996004      TRUE         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          TRUE 0.200799201     FALSE         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          TRUE 0.004995005      TRUE         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          TRUE 0.190809191     FALSE         0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3         FALSE 0.000999001      TRUE        -1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4          TRUE 0.378621379     FALSE         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5          TRUE 0.656343656     FALSE         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          TRUE 0.417582418     FALSE         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          TRUE 0.648351648     FALSE         0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ...         ...         ...       ...       ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 23         TRUE 0.000999001      TRUE         1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 24        FALSE 0.000999001      TRUE        -1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 25           NA          NA        NA        NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26        FALSE 0.122877123     FALSE         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26        FALSE 0.155844156     FALSE         0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 27         TRUE 0.000999001      TRUE         1</span>
 <span class="r-in"><span>                                </span></span>
 <span class="r-in"><span><span class="co"># Patch style calculation</span></span></span>
@@ -298,28 +298,28 @@ interactions per grouping level.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      group_by from_label   to_label        ct        p_gt        p_lt</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;integer&gt;   &lt;factor&gt;   &lt;factor&gt; &lt;numeric&gt;   &lt;numeric&gt;   &lt;numeric&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1           1 celltype_A celltype_A  0.235294 0.000999001 1.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2           1 celltype_A celltype_B  0.000000 1.000000000 0.992007992</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           1 celltype_A celltype_B  0.000000 1.000000000 0.998001998</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3           1 celltype_A celltype_C  0.000000 1.000000000 0.000999001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4           1 celltype_B celltype_A  0.000000 1.000000000 0.978021978</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4           1 celltype_B celltype_A  0.000000 1.000000000 0.976023976</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5           1 celltype_B celltype_B  0.000000 1.000000000 0.999000999</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ...       ...        ...        ...       ...         ...         ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23          3 celltype_B celltype_B 0.5151515 0.000999001 1.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24          3 celltype_B celltype_C 0.0000000 1.000000000 0.000999001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23          3 celltype_B celltype_B 0.5151515 0.000999001   1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24          3 celltype_B celltype_C 0.0000000 1.000000000   0.0019980</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 25          3 celltype_C celltype_A        NA          NA          NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26          3 celltype_C celltype_B 0.0655738 0.989010989 0.048951049</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27          3 celltype_C celltype_C 0.5737705 0.000999001 1.000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26          3 celltype_C celltype_B 0.0655738 0.978021978   0.0569431</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27          3 celltype_C celltype_C 0.5737705 0.000999001   1.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     interaction           p       sig    sigval</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;logical&gt;   &lt;numeric&gt; &lt;logical&gt; &lt;numeric&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1          TRUE 0.000999001      TRUE         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2         FALSE 0.992007992     FALSE         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2         FALSE 0.998001998     FALSE         0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3         FALSE 0.000999001      TRUE        -1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4         FALSE 0.978021978     FALSE         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4         FALSE 0.976023976     FALSE         0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5         FALSE 0.999000999     FALSE         0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ...         ...         ...       ...       ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 23         TRUE 0.000999001      TRUE         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24        FALSE 0.000999001      TRUE        -1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24        FALSE 0.001998002      TRUE        -1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 25           NA          NA        NA        NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26        FALSE 0.048951049     FALSE         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26        FALSE 0.056943057     FALSE         0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 27         TRUE 0.000999001      TRUE         1</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
