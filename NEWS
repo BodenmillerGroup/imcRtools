@@ -147,3 +147,7 @@ Changes in version 1.3.6 (2022-07-28):
 Changes in version 1.3.7 (2022-08-11)
 
 + new function to measure minimal distances to cells of interest
+
+Changes in version 1.3.8 (2022-10-13)
+
++ exclude a single validity check to to class changes in the ggraph package
