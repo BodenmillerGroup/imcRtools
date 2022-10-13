@@ -234,19 +234,16 @@ test_that("plotSpatial function works", {
                      draw_edges = TRUE, colPairName = "knn_interaction_graph",
                      edge_width_by = "CellType")
     expect_s3_class(p, "ggraph")
-    expect_silent(print(p))
     
     p <- plotSpatial(cur_sce, img_id = "ImageNb", 
                      draw_edges = TRUE, colPairName = "knn_interaction_graph",
                      edge_width_by = "Pattern")
     expect_s3_class(p, "ggraph")
-    expect_silent(print(p))
     
     p <- plotSpatial(cur_sce, img_id = "ImageNb", 
                      draw_edges = TRUE, colPairName = "knn_interaction_graph",
                      edge_width_by = "Area")
     expect_s3_class(p, "ggraph")
-    expect_silent(print(p))
     
     mcols(colPair(cur_sce, "knn_interaction_graph"))$test <- runif(length(colPair(cur_sce, "knn_interaction_graph")))
     
@@ -264,7 +261,6 @@ test_that("plotSpatial function works", {
                      draw_edges = TRUE, colPairName = "knn_interaction_graph",
                      edge_width_by = "test_2")
     expect_s3_class(p, "ggraph")
-    expect_silent(print(p))
     
     p <- plotSpatial(cur_sce, img_id = "ImageName", draw_edges = TRUE, colPairName = "knn_interaction_graph",
                      edge_color_by = "CellType",
@@ -297,11 +293,11 @@ test_that("plotSpatial function works", {
     expect_equal(p2$data$ImageNb, pancreasSCE$ImageNb)
     
     cur_graph <- igraph::as.igraph(attributes(p$data)$graph)
-    cur_graph <- as.undirected(cur_graph)
+    cur_graph <- igraph::as.undirected(cur_graph)
     cur_graph_2 <- igraph::as.igraph(attributes(p2$data)$graph)
     
-    cur_edges <- as_edgelist(cur_graph)
-    cur_edges_2 <- as_edgelist(cur_graph_2)
+    cur_edges <- igraph::as_edgelist(cur_graph)
+    cur_edges_2 <- igraph::as_edgelist(cur_graph_2)
 
     cur_edges <- cur_edges[order(paste(cur_edges[,1], cur_edges[,2])),]
     cur_edges_2 <- cur_edges_2[order(paste(cur_edges_2[,1], cur_edges_2[,2])),]
@@ -327,11 +323,11 @@ test_that("plotSpatial function works", {
     expect_equal(p2$data$ImageNb, pancreasSCE$ImageNb)
     
     cur_graph <- igraph::as.igraph(attributes(p$data)$graph)
-    cur_graph <- as.undirected(cur_graph)
+    cur_graph <- igraph::as.undirected(cur_graph)
     cur_graph_2 <- igraph::as.igraph(attributes(p2$data)$graph)
     
-    cur_edges <- as_edgelist(cur_graph)
-    cur_edges_2 <- as_edgelist(cur_graph_2)
+    cur_edges <- igraph::as_edgelist(cur_graph)
+    cur_edges_2 <- igraph::as_edgelist(cur_graph_2)
     
     cur_edges <- cur_edges[order(paste(cur_edges[,1], cur_edges[,2])),]
     cur_edges_2 <- cur_edges_2[order(paste(cur_edges_2[,1], cur_edges_2[,2])),]
@@ -357,11 +353,11 @@ test_that("plotSpatial function works", {
     expect_equal(p2$data$ImageNb, pancreasSCE$ImageNb)
     
     cur_graph <- igraph::as.igraph(attributes(p$data)$graph)
-    cur_graph <- as.undirected(cur_graph)
+    cur_graph <- igraph::as.undirected(cur_graph)
     cur_graph_2 <- igraph::as.igraph(attributes(p2$data)$graph)
     
-    cur_edges <- as_edgelist(cur_graph)
-    cur_edges_2 <- as_edgelist(cur_graph_2)
+    cur_edges <- igraph::as_edgelist(cur_graph)
+    cur_edges_2 <- igraph::as_edgelist(cur_graph_2)
     
     cur_edges <- cur_edges[order(paste(cur_edges[,1], cur_edges[,2])),]
     cur_edges_2 <- cur_edges_2[order(paste(cur_edges_2[,1], cur_edges_2[,2])),]
@@ -402,14 +398,12 @@ test_that("plotSpatial function works", {
                      edge_width_by = "CellType",
                      directed = FALSE)
     expect_s3_class(p, "ggraph")
-    expect_silent(print(p))
     
     p <- plotSpatial(cur_sce, img_id = "ImageNb", 
                      draw_edges = TRUE, colPairName = "knn_interaction_graph",
                      edge_width_by = "Pattern",
                      directed = FALSE)
     expect_s3_class(p, "ggraph")
-    expect_silent(print(p))
     
     p <- plotSpatial(cur_sce, img_id = "ImageNb", 
                      draw_edges = TRUE, colPairName = "knn_interaction_graph",
@@ -430,7 +424,6 @@ test_that("plotSpatial function works", {
                      edge_width_by = "test_2",
                      directed = FALSE)
     expect_s3_class(p, "ggraph")
-    expect_silent(print(p))
     
     p <- plotSpatial(cur_sce, img_id = "ImageName", draw_edges = TRUE, colPairName = "knn_interaction_graph",
                      edge_color_by = "CellType",
@@ -462,7 +455,6 @@ test_that("plotSpatial function works", {
                      node_shape_by = "ImageNb", node_size_by = "Area",
                      directed = TRUE)
     expect_s3_class(p, "ggraph")
-    expect_silent(print(p))
     
     p <- plotSpatial(cur_sce, img_id = "ImageName", draw_edges = TRUE, colPairName = "knn_interaction_graph",
                      arrow = arrow(),
@@ -521,7 +513,6 @@ test_that("plotSpatial function works", {
                      edge_color_by = "Area", node_color_by = "CellType",
                      node_shape_by = "ImageNb", node_size_by = "Area",)
     expect_s3_class(p, "ggraph")
-    expect_silent(print(p))
     
     p <- plotSpatial(cur_sce2[,cur_sce2$ImageNb == 2], img_id = "ImageNb", draw_edges = TRUE, 
                      colPairName = "knn_interaction_graph",
@@ -701,12 +692,12 @@ test_that("plotSpatial function works", {
                              arrow = "test"), 
                  "'arrow' must be of class grid::arrow.",
                  fixed = TRUE)
-    expect_error(plotSpatial(cur_sce, img_id = "ImageNb", draw_edges = TRUE,
-                             colPairName = "knn_interaction_graph",
-                             arrow = grid::arrow(),
-                             end_cap = "test"), 
-                 "'end_cap' must be of type 'geometry'.",
-                 fixed = TRUE)
+    #expect_error(plotSpatial(cur_sce, img_id = "ImageNb", draw_edges = TRUE,
+    #                         colPairName = "knn_interaction_graph",
+    #                         arrow = grid::arrow(),
+    #                         end_cap = "test"), 
+    #             "'end_cap' must be of type 'geometry'.",
+    #             fixed = TRUE)
 
     expect_error(plotSpatial(cur_sce, img_id = "ImageNb",
                              nodes_first = "test"), 
