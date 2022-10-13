@@ -23,7 +23,9 @@
 #' Defaults to "louvain".
 #' @param BPPARAM a \code{\link[BiocParallel]{BiocParallelParam-class}} object
 #' defining how to parallelize computations. Applicable when \code{group_by} is 
-#' specified.
+#' specified and defaults to \code{SerialParam()}. 
+#' For reproducibility between runs, we recommend defining \code{RNGseed} in the
+#'  \code{\link[BiocParallel]{BiocParallelParam-class}} object.
 #'
 #' @section Spatial community detection procedure:
 #' 1. Create an igraph object from the edge list stored in 
@@ -79,7 +81,7 @@ detectCommunity <- function(object,
                             group_by = NULL,
                             name = "spatial_community",
                             cluster_fun = "louvain",
-                            BPPARAM = SerialParam(RNGseed = 123)){
+                            BPPARAM = SerialParam()){
   
 .valid.detectCommunity.input(object, colPairName, size_threshold, group_by, name, cluster_fun) 
 

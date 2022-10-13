@@ -43,7 +43,9 @@ test_that("detectCommunity function works", {
   set.seed(22)
   expect_silent(cur_sce_4 <- detectCommunity(sce, 
                                              colPairName = "neighborhood",
-                                             group_by = "CellType"))
+                                             group_by = "CellType",
+                                             BPPARAM = SerialParam(RNGseed = 123)
+                                             ))
   expect_false(identical(cur_sce_4$spatial_community, cur_sce$spatial_community))
   expect_equal(cur_sce_4$spatial_community[1:10],c(E34_824 = "celltype_C_1", E34_835 = "celltype_C_2", E34_839 = "celltype_C_1", 
                                                    E34_844 = "celltype_C_1", E34_847 = "celltype_C_2", E34_853 = "celltype_C_2", 
@@ -76,15 +78,15 @@ test_that("detectCommunity function works", {
   
   expect_false(identical(cur_sce$spatial_community, cur_sce$spatial_comm_wt))
   
-  # Use SerialParam()
+  # Use different seed for SerialParam()
   set.seed(22)
   expect_silent(cur_sce_5 <- detectCommunity(sce, 
                                              colPairName = "neighborhood",
                                              group_by = "CellType", 
-                                             BPPARAM = SerialParam()
+                                             BPPARAM = SerialParam(RNGseed = 22)
                                              ))
   
-  expect_equal(cur_sce_5$spatial_community, cur_sce_4$spatial_community)
+  expect_false(identical(cur_sce_5$spatial_community, cur_sce_4$spatial_community))
   
   # Errors 
   expect_error(detectCommunity(colData(sce)),
