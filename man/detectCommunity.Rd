@@ -7,7 +7,7 @@
 detectCommunity(
   object,
   colPairName,
-  size_threshold = 10,
+  size_threshold = 0,
   group_by = NULL,
   name = "spatial_community",
   cluster_fun = "louvain",
@@ -22,7 +22,7 @@ object}
 entry containing the neighbor information.}
 
 \item{size_threshold}{single positive numeric that specifies the minimum 
-number of cells per community. Defaults to 10.}
+number of cells per community. Defaults to 0.}
 
 \item{group_by}{single character indicating that spatial community 
 detection will be performed separately for all unique entries to 
@@ -80,7 +80,8 @@ sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",
 
 ## Detect spatial community 
 sce <- detectCommunity(sce, 
-                      colPairName = "neighborhood")
+                      colPairName = "neighborhood", 
+                      size_threshold = 10)
 
 plotSpatial(sce,
             img_id = "ImageNb",

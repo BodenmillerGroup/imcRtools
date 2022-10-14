@@ -151,3 +151,7 @@ Changes in version 1.3.7 (2022-08-11)
 Changes in version 1.3.8 (2022-10-13)
 
 + exclude a single validity check to to class changes in the ggraph package
+
+Changes in version 1.3.9 (2022-10-14)
+
++ new function for spatial community detection

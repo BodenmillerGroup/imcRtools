@@ -11,7 +11,7 @@
 #' @param colPairName single character indicating the \code{colPair(object)}
 #' entry containing the neighbor information. 
 #' @param size_threshold single positive numeric that specifies the minimum 
-#' number of cells per community. Defaults to 10.
+#' number of cells per community. Defaults to 0.
 #' @param group_by single character indicating that spatial community 
 #' detection will be performed separately for all unique entries to 
 #' \code{colData(object)[,group_by]}.
@@ -55,7 +55,8 @@
 #'
 #' ## Detect spatial community 
 #' sce <- detectCommunity(sce, 
-#'                       colPairName = "neighborhood")
+#'                       colPairName = "neighborhood", 
+#'                       size_threshold = 10)
 #'
 #' plotSpatial(sce,
 #'             img_id = "ImageNb",
@@ -77,7 +78,7 @@
 
 detectCommunity <- function(object,
                             colPairName,
-                            size_threshold = 10,
+                            size_threshold = 0,
                             group_by = NULL,
                             name = "spatial_community",
                             cluster_fun = "louvain",

@@ -1256,6 +1256,11 @@
     stop("'object' needs to be a SingleCellExperiment object.")
   } 
   
+  if (is.null(colnames(object)) | 
+      length(unique(colnames(object))) != length(colnames(object))) {
+    stop("'colnames' of 'object' need to be specified and unique (e.g. as cell IDs).")
+  } 
+  
   if (length(colPairName) != 1 | !is.character(colPairName)) {
     stop("'colPairName' must be a single string.")
   }
