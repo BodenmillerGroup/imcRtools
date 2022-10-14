@@ -21,7 +21,7 @@ interest."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/m
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.9</span>
       </span>
     </div>
 
@@ -75,13 +75,14 @@ interest.</p>
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>object</dt>
-<dd><p>a `SingleCellExperiment` or `SpatialExperiment` object</p></dd>
+<dd><p>a <code>SingleCellExperiment</code> or <code>SpatialExperiment</code>
+object</p></dd>
 
 
 <dt>x_cells</dt>
 <dd><p>logical vector of length equal to the number of cells
 contained in <code>object</code>. <code>TRUE</code> entries define the cells to which
-distances will be calculated (see Details).</p></dd>
+distances will be calculated.</p></dd>
 
 
 <dt>img_id</dt>
@@ -110,9 +111,16 @@ returned for the distances of patched/spatially clustered cells.</p></dd>
 defining how to parallelize computations.</p></dd>
 
 </dl></div>
+    <div id="value">
+    <h2>Value</h2>
+    
+
+<p>returns an object of <code>class(object)</code> containing a new column 
+entry to <code>colData(object)[[name]]</code>.</p>
+    </div>
     <div id="author">
     <h2>Author</h2>
-    <p>Daniel Schulz</p>
+    <p>Daniel Schulz (<a href="mailto:daniel.schulz@uzh.ch">daniel.schulz@uzh.ch</a>)</p>
     </div>
 
     <div id="ref-examples">
