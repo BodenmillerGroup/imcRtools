@@ -6,10 +6,11 @@
 #' of interest to the closest cell that is not of the type of cells of
 #' interest.
 #'
-#' @param object a `SingleCellExperiment` or `SpatialExperiment` object
+#' @param object a \code{SingleCellExperiment} or \code{SpatialExperiment}
+#' object
 #' @param x_cells logical vector of length equal to the number of cells
 #' contained in \code{object}. \code{TRUE} entries define the cells to which
-#' distances will be calculated (see Details).
+#' distances will be calculated.
 #' @param name character specifying the name of the \code{colData} entry to safe
 #' the distances in.
 #' @param coords character vector of length 2 specifying the names of the
@@ -21,6 +22,9 @@
 #' returned for the distances of patched/spatially clustered cells.
 #' @param BPPARAM a \code{\link[BiocParallel]{BiocParallelParam-class}} object
 #' defining how to parallelize computations.
+#' 
+#' @return returns an object of \code{class(object)} containing a new column 
+#' entry to \code{colData(object)[[name]]}.
 #' 
 #' @examples
 #' library(cytomapper)
@@ -48,7 +52,7 @@
 #'
 #' plotSpatial(pancreasSCE,img_id = "ImageNb",node_color_by = "distToCells")
 #'
-#' @author Daniel Schulz
+#' @author Daniel Schulz (\email{daniel.schulz@@uzh.ch})
 #' @importFrom distances distances distance_columns
 #' @importFrom MatrixGenerics rowMins
 #' @export

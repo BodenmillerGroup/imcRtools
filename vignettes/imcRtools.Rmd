@@ -776,6 +776,98 @@ plotSpatialContext(pancreasSCE,
                    return_data = TRUE)
 ```
 
+## Community detection 
+
+In addition to cellular neighborhood and spatial context analysis, `imcRtools` exports 
+the `detectCommunity` function to detect the spatial community of each cell as 
+proposed by [@Jackson2020]. Here, each cell is clustered based on its interactions 
+as defined by a spatial object graph.
+
+In more detail, the spatial community detection procedure is as follows:
+
+1. Create an igraph object from the edge list stored in 
+\code{colPair(object, colPairName)}.  
+
+2. Perform community detection using the specified \code{cluster_fun} algorithm 
+(defaults to "louvain").
+
+3. Store the community IDs in a vector and replace all communities 
+with a size smaller than \code{size_threshold} by NA.   
+
+```{r detectCommunity}
+## Detect spatial community 
+set.seed(22)
+pancreasSCE <- detectCommunity(pancreasSCE, 
+                               colPairName = "expansion_interaction_graph")
+
+plotSpatial(pancreasSCE,
+            img_id = "ImageNb",
+            node_color_by = "spatial_community",
+            node_size_fix = 4,
+            edge_width_fix = 1,
+            draw_edges = TRUE,
+            colPairName = "expansion_interaction_graph",
+            directed = FALSE,
+            nodes_first = FALSE)
+
+## Detect spatial community - specify size_threshold
+set.seed(22)
+pancreasSCE <- detectCommunity(pancreasSCE, 
+                               colPairName = "expansion_interaction_graph", 
+                               size_threshold = 20)
+
+plotSpatial(pancreasSCE,
+            img_id = "ImageNb",
+            node_color_by = "spatial_community",
+            node_size_fix = 4,
+            edge_width_fix = 1,
+            draw_edges = TRUE,
+            colPairName = "expansion_interaction_graph",
+            directed = FALSE,
+            nodes_first = FALSE)
+```
+It is also possible to use different community detection algorithms from the `igraph`package. 
+
+```{r detectCommunity-walktrap}
+## Detect spatial community - walktrap community detection
+set.seed(22)
+pancreasSCE <- detectCommunity(pancreasSCE, 
+                               colPairName = "expansion_interaction_graph", 
+                               cluster_fun = "walktrap")
+
+plotSpatial(pancreasSCE,
+            img_id = "ImageNb",
+            node_color_by = "spatial_community",
+            node_size_fix = 4,
+            edge_width_fix = 1,
+            draw_edges = TRUE,
+            colPairName = "expansion_interaction_graph",
+            directed = FALSE,
+            nodes_first = FALSE)
+```
+
+Moreover, the user can specify \code{group_by} to perform spatial community 
+detection separately for all unique entries to \code{colData(object)[,group_by]} 
+e.g. for tumor and non-tumor cells.
+
+```{r detectCommunity-bygroup}
+## Detect spatial community - specify group_by
+pancreasSCE <- detectCommunity(pancreasSCE, 
+                               colPairName = "expansion_interaction_graph", 
+                               group_by = "CellType", 
+                               size_threshold = 10) 
+
+plotSpatial(pancreasSCE,
+            img_id = "ImageNb",
+            node_color_by = "spatial_community",
+            node_size_fix = 4,
+            edge_width_fix = 1,
+            draw_edges = TRUE,
+            colPairName = "expansion_interaction_graph",
+            directed = FALSE,
+            nodes_first = FALSE)
+```
+
 ## Border cells
 
 To exclude cells that are close to the image border, the `imcRtools`

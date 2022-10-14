@@ -1031,3 +1031,25 @@
   
   return(p)
 }
+
+#### SpatialCommunity helpers ####
+
+#' @importFrom igraph cluster_louvain graph_from_data_frame
+#' @importFrom utils getFromNamespace
+#' @importFrom SingleCellExperiment colPair
+
+
+.detectCommunity_function <- function(cur_object,
+                                      colPairName, 
+                                      cluster_fun){
+  
+  gr <- graph_from_data_frame(as.data.frame(colPair(cur_object, colPairName)), 
+                              directed = FALSE, 
+                              vertices = data.frame(index = seq_len(ncol(cur_object))))
+  
+  cluster_function <- getFromNamespace(paste0("cluster_",cluster_fun), ns = "igraph")
+  
+  cl_comm <- cluster_function(gr)
+  
+  return(cl_comm)
+}

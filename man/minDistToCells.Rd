@@ -15,11 +15,12 @@ minDistToCells(
 )
 }
 \arguments{
-\item{object}{a `SingleCellExperiment` or `SpatialExperiment` object}
+\item{object}{a \code{SingleCellExperiment} or \code{SpatialExperiment}
+object}
 
 \item{x_cells}{logical vector of length equal to the number of cells
 contained in \code{object}. \code{TRUE} entries define the cells to which
-distances will be calculated (see Details).}
+distances will be calculated.}
 
 \item{img_id}{single character indicating the \code{colData(object)} entry
 containing the unique image identifiers.}
@@ -36,6 +37,10 @@ returned for the distances of patched/spatially clustered cells.}
 
 \item{BPPARAM}{a \code{\link[BiocParallel]{BiocParallelParam-class}} object
 defining how to parallelize computations.}
+}
+\value{
+returns an object of \code{class(object)} containing a new column 
+entry to \code{colData(object)[[name]]}.
 }
 \description{
 Function to return the distance of the closest cell of interest
@@ -72,5 +77,5 @@ plotSpatial(pancreasSCE,img_id = "ImageNb",node_color_by = "distToCells")
 
 }
 \author{
-Daniel Schulz
+Daniel Schulz (\email{daniel.schulz@uzh.ch})
 }
