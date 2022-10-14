@@ -122,6 +122,10 @@ test_that("detectCommunity function works", {
   expect_error(detectCommunity(cur_sce_5, colPairName = "neighborhood"),
                regexp = "No interactions found.",
                fixed = TRUE)
-
+  
+  colnames(sce) <- NULL
+  expect_error(detectCommunity(sce, colPairName = "neighborhood"),
+               regexp = "'colnames' of 'object' need to be specified and unique (e.g. as cell IDs).",
+               fixed = TRUE)
 }
 )
