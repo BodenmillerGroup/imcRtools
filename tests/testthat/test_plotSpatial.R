@@ -692,12 +692,12 @@ test_that("plotSpatial function works", {
                              arrow = "test"), 
                  "'arrow' must be of class grid::arrow.",
                  fixed = TRUE)
-    #expect_error(plotSpatial(cur_sce, img_id = "ImageNb", draw_edges = TRUE,
-    #                         colPairName = "knn_interaction_graph",
-    #                         arrow = grid::arrow(),
-    #                         end_cap = "test"), 
-    #             "'end_cap' must be of type 'geometry'.",
-    #             fixed = TRUE)
+    expect_error(plotSpatial(cur_sce, img_id = "ImageNb", draw_edges = TRUE,
+                             colPairName = "knn_interaction_graph",
+                             arrow = grid::arrow(),
+                             end_cap = "test"), 
+                 "'end_cap' must be of type 'ggraph_geometry'.",
+                 fixed = TRUE)
 
     expect_error(plotSpatial(cur_sce, img_id = "ImageNb",
                              nodes_first = "test"), 
