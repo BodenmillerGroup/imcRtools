@@ -806,8 +806,8 @@
             stop("'arrow' must be of class grid::arrow.")
         }
         
-        if (!is.null(end_cap) && !is(end_cap, "geometry")) {
-            stop("'end_cap' must be of type 'geometry'.")
+        if (!is.null(end_cap) && !is(end_cap, "ggraph_geometry")) {
+            stop("'end_cap' must be of type 'ggraph_geometry'.")
         }
     }
     

@@ -131,3 +131,7 @@ Changes in version 1.2.2 (2022-06-02):
 Changes in version 1.2.3 (2022-06-04):
 
 + Bug fix: specify the number of nodes in patchDetection function
+
+Changes in version 1.2.4 (2022-10-15):
+
++ Changed geometry class test
