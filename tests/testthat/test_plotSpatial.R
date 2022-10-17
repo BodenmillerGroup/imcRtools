@@ -705,7 +705,7 @@ test_that("plotSpatial function works", {
                              colPairName = "knn_interaction_graph",
                              arrow = grid::arrow(),
                              end_cap = "test"), 
-                 "'end_cap' must be of type 'geometry'.",
+                 "'end_cap' must be of type 'ggraph_geometry'.",
                  fixed = TRUE)
 
     expect_error(plotSpatial(cur_sce, img_id = "ImageNb",
