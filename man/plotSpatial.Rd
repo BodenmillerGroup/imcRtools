@@ -29,7 +29,8 @@ plotSpatial(
   nrows = NULL,
   scales = "free",
   flip_x = FALSE,
-  flip_y = TRUE
+  flip_y = TRUE,
+  aspect_ratio = 1
 )
 }
 \arguments{
@@ -103,6 +104,9 @@ all images.}
 \item{flip_x}{flip the x-axis?}
 
 \item{flip_y}{flip the y-axis?}
+
+\item{aspect_ratio}{relative ratio between the physical units of the x and y 
+axis (defaults to 1).}
 }
 \value{
 returns a \code{ggplot} object.

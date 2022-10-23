@@ -460,7 +460,8 @@
 .postProcessPlot <- function(p, object, img_id, nrows, ncols, node_color_by,
                              node_color_fix,
                              node_shape_fix, node_size_fix, edge_color_fix,
-                             edge_width_fix, scales, flip_x, flip_y){
+                             edge_width_fix, scales, flip_x, flip_y,
+                             aspect_ratio){
 
     if (!is.null(node_color_fix)) {
         names(node_color_fix) <- as.character(node_color_fix)
@@ -509,6 +510,8 @@
     if (flip_y) {
         p <- p + scale_y_reverse()
     }
+    
+    p <- p + theme(aspect.ratio = aspect_ratio)
 
     return(p)
 }

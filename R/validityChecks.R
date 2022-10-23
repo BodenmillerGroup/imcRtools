@@ -682,7 +682,7 @@
                                     assay_type, edge_width_by, draw_edges, 
                                     directed,  arrow,  end_cap, colPairName, 
                                     nodes_first, ncols, nrows, scales, 
-                                    flip_x, flip_y){
+                                    flip_x, flip_y, aspect_ratio){
     
     if (!is(object, "SingleCellExperiment")) {
         stop("'object' not of type 'SingleCellExperiment'.")
@@ -834,6 +834,12 @@
     if (length(flip_x) != 1 | !is.logical(flip_x)) {
         stop("'flip_x' must be a single logical")
     }
+    
+    if (length(aspect_ratio) != 1 | !is.numeric(aspect_ratio) | 
+        any(aspect_ratio < 0)) {
+        stop("'aspect_ratio' must be a single positive number.")
+    }
+    
 }
 
 .valid.countInteractions.input <- function(object, group_by, label, method,
