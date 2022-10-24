@@ -65,7 +65,8 @@ sce$cellular_neighborhood <- factor(cur_cluster$cluster)
 
 plotSpatial(sce, img_id = "ImageNb",
            colPairName = "knn_cn_graph",
-           node_color_by = "cellular_neighborhood")
+           node_color_by = "cellular_neighborhood",
+           scales = "free")
 
 ## 2. Spatial context (SC)
 sce <- buildSpatialGraph(sce, img_id = "ImageNb",
@@ -84,7 +85,8 @@ sce <- detectSpatialContext(sce, entry = "aggregatedNeighborhood",
 
 plotSpatial(sce, img_id = "ImageNb",
            colPairName = "knn_sc_graph",
-           node_color_by = "spatial_context")
+           node_color_by = "spatial_context",
+           scales = "free")
             
 # Filter spatial context
 # By group
@@ -93,7 +95,8 @@ sce <- filterSpatialContext(sce, group_by = "ImageNb",
 
 plotSpatial(sce, img_id = "ImageNb", 
             colPairName = "knn_sc_graph", 
-            node_color_by = "spatial_context_filtered")
+            node_color_by = "spatial_context_filtered",
+            scales = "free")
 
 # By cells
 sce <- filterSpatialContext(sce, group_by = "ImageNb", 
@@ -101,7 +104,8 @@ sce <- filterSpatialContext(sce, group_by = "ImageNb",
 
 plotSpatial(sce, img_id = "ImageNb", 
            colPairName = "knn_sc_graph", 
-           node_color_by = "spatial_context_filtered")
+           node_color_by = "spatial_context_filtered",
+           scales = "free")
            
 }
 \references{

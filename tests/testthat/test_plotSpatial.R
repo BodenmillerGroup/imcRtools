@@ -3,6 +3,19 @@ test_that("plotSpatial function works", {
     library(ggraph)
     data("pancreasSCE")
     
+    cur_sce1 <- pancreasSCE[,pancreasSCE$ImageNb == 1]
+    cur_sce2 <- pancreasSCE[,pancreasSCE$ImageNb == 2]
+    cur_sce3 <- pancreasSCE[,pancreasSCE$ImageNb == 3]
+    
+    cur_sce1$Pos_X <- cur_sce1$Pos_X - min(cur_sce1$Pos_X)
+    cur_sce1$Pos_Y <- cur_sce1$Pos_Y - min(cur_sce1$Pos_Y)
+    cur_sce2$Pos_X <- cur_sce2$Pos_X - min(cur_sce2$Pos_X)
+    cur_sce2$Pos_Y <- cur_sce2$Pos_Y - min(cur_sce2$Pos_Y)
+    cur_sce3$Pos_X <- cur_sce3$Pos_X - min(cur_sce3$Pos_X)
+    cur_sce3$Pos_Y <- cur_sce3$Pos_Y - min(cur_sce3$Pos_Y)
+    
+    pancreasSCE <- cbind(cur_sce1, cur_sce2, cur_sce3)
+    
     cur_sce <- pancreasSCE
 
     # SingleCellExperiment
@@ -505,11 +518,14 @@ test_that("plotSpatial function works", {
     
     # making one image smaller
     cur_sce_2 <- cur_sce[,cur_sce$ImageNb == "1"]
-    cur_sce_2 <- cur_sce_2[,cur_sce_2$Pos_X > 130]
+    cur_sce_2 <- cur_sce_2[,cur_sce_2$Pos_X > 30 & cur_sce_2$Pos_Y > 30]
     
-    cur_sce_3 <- cbind(cur_sce_2, cur_sce[,cur_sce$ImageNb == "2" | cur_sce$ImageNb == "3"])
+    cur_sce_3 <- cur_sce[,cur_sce$ImageNb == "2"]
+    cur_sce_3 <- cur_sce_3[,cur_sce_3$Pos_X > 30 & cur_sce_3$Pos_Y > 30]
     
-    p <- plotSpatial(cur_sce_3[,cur_sce_3$ImageNb == 1], img_id = "ImageName", node_color_by = "CellType") + coord_fixed()
+    cur_sce_4 <- cbind(cur_sce_2, cur_sce_3, cur_sce[,cur_sce$ImageNb == "3"])
+    
+    p <- plotSpatial(cur_sce_4, img_id = "ImageName", node_color_by = "CellType")
     expect_s3_class(p, "ggraph")
     expect_silent(print(p))
     

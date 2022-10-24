@@ -61,7 +61,8 @@
 #' plotSpatial(sce,
 #'             img_id = "ImageNb",
 #'             colPairName = "neighborhood",
-#'             node_color_by = "spatial_community")
+#'             node_color_by = "spatial_community",
+#'             scales = "free")
 #'            
 #' @author Lasse Meyer (\email{lasse.meyer@@uzh.ch})
 #' 

@@ -51,7 +51,8 @@
 #' @param flip_x flip the x-axis?
 #' @param flip_y flip the y-axis?
 #' @param aspect_ratio relative ratio between the physical units of the x and y 
-#' axis (defaults to 1). 
+#' axis (defaults to 1). Ignore setting the aspect ratio with 
+#' \code{aspect_ratio = NULL}.
 #' 
 #' @return returns a \code{ggplot} object.
 #' 
@@ -94,7 +95,8 @@
 #' plotSpatial(sce, img_id = "ImageNb",
 #'             node_color_by = "CellType",
 #'             node_shape_by = "ImageNb",
-#'             node_size_by = "Area")
+#'             node_size_by = "Area",
+#'             scales = "free")
 #'   
 #' # With edges and nodes colored by expression
 #' plotSpatial(sce, img_id = "ImageNb",
@@ -104,7 +106,8 @@
 #'             node_size_by = "Area",
 #'             draw_edges = TRUE,
 #'             colPairName = "knn_interaction_graph",
-#'             edge_color_by = "Pattern")
+#'             edge_color_by = "Pattern",
+#'             scales = "free")
 #'             
 #' # With arrows
 #' plotSpatial(sce, img_id = "ImageNb",
@@ -115,7 +118,8 @@
 #'             colPairName = "knn_interaction_graph",
 #'             edge_color_fix = "green",
 #'             arrow = grid::arrow(length = grid::unit(0.1, "inch")),
-#'             end_cap = ggraph::circle(0.2, "cm"))
+#'             end_cap = ggraph::circle(0.2, "cm"),
+#'             scales = "free")
 #'   
 #' @seealso 
 #' \code{\link{buildSpatialGraph}} for constructing interaction graphs

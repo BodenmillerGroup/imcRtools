@@ -511,7 +511,9 @@
         p <- p + scale_y_reverse()
     }
     
-    p <- p + theme(aspect.ratio = aspect_ratio)
+    if (!is.null(aspect_ratio)) {
+        p <- p + theme(aspect.ratio = aspect_ratio)
+    }
 
     return(p)
 }

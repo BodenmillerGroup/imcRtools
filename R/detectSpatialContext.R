@@ -67,7 +67,8 @@
 #'
 #' plotSpatial(sce, img_id = "ImageNb",
 #'            colPairName = "knn_cn_graph",
-#'            node_color_by = "cellular_neighborhood")
+#'            node_color_by = "cellular_neighborhood",
+#'            scales = "free")
 #'
 #' ## 2. Spatial context (SC)
 #' sce <- buildSpatialGraph(sce, img_id = "ImageNb",
@@ -86,7 +87,8 @@
 #'
 #' plotSpatial(sce, img_id = "ImageNb",
 #'            colPairName = "knn_sc_graph",
-#'            node_color_by = "spatial_context")
+#'            node_color_by = "spatial_context",
+#'            scales = "free")
 #'            
 #' @seealso 
 #' \code{\link[imcRtools]{filterSpatialContext}} for the function to filter 
