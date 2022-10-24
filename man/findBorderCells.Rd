@@ -36,9 +36,9 @@ data("pancreasSCE")
 sce <- findBorderCells(pancreasSCE, img_id = "ImageNb", 
                        border_dist = 10)
 
-plotSpatial(sce, img_id = "ImageNb", node_color_by = "border_cells")
+plotSpatial(sce, 
+            img_id = "ImageNb", 
+            node_color_by = "border_cells",
+            scales = "free")
 
-}
-\author{
-Nils Eling (\email{nils.eling@dqbm.uzh.ch})
 }

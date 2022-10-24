@@ -3,6 +3,19 @@ test_that("detectSpatialContext function works", {
   library(cytomapper)
   data(pancreasSCE)
   
+  cur_sce1 <- pancreasSCE[,pancreasSCE$ImageNb == 1]
+  cur_sce2 <- pancreasSCE[,pancreasSCE$ImageNb == 2]
+  cur_sce3 <- pancreasSCE[,pancreasSCE$ImageNb == 3]
+  
+  cur_sce1$Pos_X <- cur_sce1$Pos_X - min(cur_sce1$Pos_X)
+  cur_sce1$Pos_Y <- cur_sce1$Pos_Y - min(cur_sce1$Pos_Y)
+  cur_sce2$Pos_X <- cur_sce2$Pos_X - min(cur_sce2$Pos_X)
+  cur_sce2$Pos_Y <- cur_sce2$Pos_Y - min(cur_sce2$Pos_Y)
+  cur_sce3$Pos_X <- cur_sce3$Pos_X - min(cur_sce3$Pos_X)
+  cur_sce3$Pos_Y <- cur_sce3$Pos_Y - min(cur_sce3$Pos_Y)
+  
+  pancreasSCE <- cbind(cur_sce1, cur_sce2, cur_sce3)
+  
   ## 1. Cellular neighborhood (CN)
   sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
                            type = "knn", 

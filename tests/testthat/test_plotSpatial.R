@@ -3,6 +3,19 @@ test_that("plotSpatial function works", {
     library(ggraph)
     data("pancreasSCE")
     
+    cur_sce1 <- pancreasSCE[,pancreasSCE$ImageNb == 1]
+    cur_sce2 <- pancreasSCE[,pancreasSCE$ImageNb == 2]
+    cur_sce3 <- pancreasSCE[,pancreasSCE$ImageNb == 3]
+    
+    cur_sce1$Pos_X <- cur_sce1$Pos_X - min(cur_sce1$Pos_X)
+    cur_sce1$Pos_Y <- cur_sce1$Pos_Y - min(cur_sce1$Pos_Y)
+    cur_sce2$Pos_X <- cur_sce2$Pos_X - min(cur_sce2$Pos_X)
+    cur_sce2$Pos_Y <- cur_sce2$Pos_Y - min(cur_sce2$Pos_Y)
+    cur_sce3$Pos_X <- cur_sce3$Pos_X - min(cur_sce3$Pos_X)
+    cur_sce3$Pos_Y <- cur_sce3$Pos_Y - min(cur_sce3$Pos_Y)
+    
+    pancreasSCE <- cbind(cur_sce1, cur_sce2, cur_sce3)
+    
     cur_sce <- pancreasSCE
 
     # SingleCellExperiment
@@ -498,6 +511,24 @@ test_that("plotSpatial function works", {
     expect_s3_class(p, "ggraph")
     expect_silent(print(p))
     
+    p <- plotSpatial(cur_sce, img_id = "ImageName", node_color_by = "CellType",
+                     aspect_ratio = 2)
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    # making one image smaller
+    cur_sce_2 <- cur_sce[,cur_sce$ImageNb == "1"]
+    cur_sce_2 <- cur_sce_2[,cur_sce_2$Pos_X > 30 & cur_sce_2$Pos_Y > 30]
+    
+    cur_sce_3 <- cur_sce[,cur_sce$ImageNb == "2"]
+    cur_sce_3 <- cur_sce_3[,cur_sce_3$Pos_X > 30 & cur_sce_3$Pos_Y > 30]
+    
+    cur_sce_4 <- cbind(cur_sce_2, cur_sce_3, cur_sce[,cur_sce$ImageNb == "3"])
+    
+    p <- plotSpatial(cur_sce_4, img_id = "ImageName", node_color_by = "CellType")
+    expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
     ## Subsetting
     cur_sce2 <- cur_sce[,cur_sce$Pattern]
     
@@ -766,6 +797,21 @@ test_that("plotSpatial function works", {
     expect_error(plotSpatial(cur_sce, img_id = "ImageNb",
                              flip_y = c(1, 2)), 
                  "'flip_y' must be a single logical",
+                 fixed = TRUE)
+    
+    expect_error(plotSpatial(cur_sce, img_id = "ImageNb",
+                             aspect_ratio = c(1, 2)), 
+                 "'aspect_ratio' must be a single positive number.",
+                 fixed = TRUE)
+    
+    expect_error(plotSpatial(cur_sce, img_id = "ImageNb",
+                             aspect_ratio = "test"), 
+                 "'aspect_ratio' must be a single positive number.",
+                 fixed = TRUE)
+    
+    expect_error(plotSpatial(cur_sce, img_id = "ImageNb",
+                             aspect_ratio = -1), 
+                 "'aspect_ratio' must be a single positive number.",
                  fixed = TRUE)
     
 })

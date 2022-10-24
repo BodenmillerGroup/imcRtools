@@ -47,9 +47,12 @@
 #' @param nrows number of rows of the grid to arrange individual images.
 #' @param scales one of \code{"free"}, \code{"fixed"}, \code{"free_x"} or 
 #' \code{"free_y"} indicating if x- and y-axis ranges should be fixed across
-#' all images. 
+#' all images. Defaults to "fixed" to match physical units on the x- and y-axis.
 #' @param flip_x flip the x-axis?
 #' @param flip_y flip the y-axis?
+#' @param aspect_ratio relative ratio between the physical units of the x and y 
+#' axis (defaults to 1). Ignore setting the aspect ratio with 
+#' \code{aspect_ratio = NULL}.
 #' 
 #' @return returns a \code{ggplot} object.
 #' 
@@ -92,7 +95,8 @@
 #' plotSpatial(sce, img_id = "ImageNb",
 #'             node_color_by = "CellType",
 #'             node_shape_by = "ImageNb",
-#'             node_size_by = "Area")
+#'             node_size_by = "Area",
+#'             scales = "free")
 #'   
 #' # With edges and nodes colored by expression
 #' plotSpatial(sce, img_id = "ImageNb",
@@ -102,7 +106,8 @@
 #'             node_size_by = "Area",
 #'             draw_edges = TRUE,
 #'             colPairName = "knn_interaction_graph",
-#'             edge_color_by = "Pattern")
+#'             edge_color_by = "Pattern",
+#'             scales = "free")
 #'             
 #' # With arrows
 #' plotSpatial(sce, img_id = "ImageNb",
@@ -113,7 +118,8 @@
 #'             colPairName = "knn_interaction_graph",
 #'             edge_color_fix = "green",
 #'             arrow = grid::arrow(length = grid::unit(0.1, "inch")),
-#'             end_cap = ggraph::circle(0.2, "cm"))
+#'             end_cap = ggraph::circle(0.2, "cm"),
+#'             scales = "free")
 #'   
 #' @seealso 
 #' \code{\link{buildSpatialGraph}} for constructing interaction graphs
@@ -149,15 +155,16 @@ plotSpatial <- function(object,
                         nodes_first = TRUE,
                         ncols = NULL,
                         nrows = NULL,
-                        scales = "free",
+                        scales = "fixed",
                         flip_x = FALSE,
-                        flip_y = TRUE){
+                        flip_y = TRUE,
+                        aspect_ratio = 1){
     
     .valid.plotSpatial.input(object, img_id, coords, node_color_by, 
                              node_shape_by, node_size_by, edge_color_by,
                              assay_type, edge_width_by, draw_edges, directed, 
                              arrow, end_cap, colPairName, nodes_first,
-                             ncols, nrows, scales, flip_x, flip_y)
+                             ncols, nrows, scales, flip_x, flip_y, aspect_ratio)
     
     nodes <- .makeNodes(object, node_color_by, img_id, node_shape_by,
                         node_size_by, assay_type)
@@ -191,7 +198,7 @@ plotSpatial <- function(object,
     p <- .postProcessPlot(p, object, img_id, nrows, ncols, node_color_by, 
                           node_color_fix,
                           node_shape_fix, node_size_fix, edge_color_fix, 
-                          edge_width_fix, scales, flip_x, flip_y)
+                          edge_width_fix, scales, flip_x, flip_y, aspect_ratio)
         
     return(p)
 }

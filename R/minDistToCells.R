@@ -42,7 +42,10 @@
 #'                              min_patch_size = 20,
 #'                              expand_by = 1)
 #'
-#' plotSpatial(pancreasSCE, img_id = "ImageNb", node_color_by = "patch_id")
+#' plotSpatial(pancreasSCE, 
+#'             img_id = "ImageNb", 
+#'             node_color_by = "patch_id",
+#'             scales = "free")
 #'
 #' # Distance to celltype_B patches
 #' pancreasSCE <- minDistToCells(pancreasSCE,
@@ -50,7 +53,10 @@
 #'                              coords = c("Pos_X","Pos_Y"),
 #'                              img_id = "ImageNb")
 #'
-#' plotSpatial(pancreasSCE,img_id = "ImageNb",node_color_by = "distToCells")
+#' plotSpatial(pancreasSCE,
+#'             img_id = "ImageNb",
+#'             node_color_by = "distToCells",
+#'             scales = "free")
 #'
 #' @author Daniel Schulz (\email{daniel.schulz@@uzh.ch})
 #' @importFrom distances distances distance_columns
