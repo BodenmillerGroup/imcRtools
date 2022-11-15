@@ -100,7 +100,7 @@ test_that("plotSpatial function works", {
     
     p <- plotSpatial(cur_sce, img_id = "ImageNb", node_size_by = "CellType")
     expect_s3_class(p, "ggraph")
-    expect_warning(print(p), regexp = "Using size for a discrete variable is not advised.")
+    #expect_warning(print(p), regexp = "Using size for a discrete variable is not advised.")
     expect_equal(p$data$x, pancreasSCE$Pos_X)
     expect_equal(p$data$y, pancreasSCE$Pos_Y)
     expect_equal(p$data$ImageNb, pancreasSCE$ImageNb)
@@ -116,7 +116,7 @@ test_that("plotSpatial function works", {
     
     p <- plotSpatial(cur_sce, img_id = "ImageNb", node_size_by = "Pattern")
     expect_s3_class(p, "ggraph")
-    expect_warning(print(p), regexp = "Using size for a discrete variable is not advised.")
+    #expect_warning(print(p), regexp = "Using size for a discrete variable is not advised.")
     expect_equal(p$data$x, pancreasSCE$Pos_X)
     expect_equal(p$data$y, pancreasSCE$Pos_Y)
     expect_equal(p$data$ImageNb, pancreasSCE$ImageNb)
@@ -755,13 +755,6 @@ test_that("plotSpatial function works", {
     
     expect_error(print(p), 
                  "Unknown colour name: test",
-                 fixed = TRUE)
-    
-    p <- plotSpatial(cur_sce, img_id = "ImageNb",
-                     node_shape_fix = "test")
-    
-    expect_error(print(p), 
-                 "Can't find shape name:\n* 'test'",
                  fixed = TRUE)
     
     p <- plotSpatial(cur_sce, img_id = "ImageNb",
