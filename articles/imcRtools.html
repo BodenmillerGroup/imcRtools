@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.10</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.0</span>
       </span>
     </div>
 
@@ -73,18 +73,26 @@
       <h1 data-toc-skip>Tools for IMC data analysis</h1>
                         <h4 data-toc-skip class="author">Nils Eling</h4>
             <address class="author_afil">
-      Department for Quantitative Biomedicine, University of ZurichInstitute for Molecular Health Sciences, ETH Zurich<br><a class="author_email" href="mailto:#"></a><a href="mailto:nils.eling@dqbm.uzh.ch" class="email">nils.eling@dqbm.uzh.ch</a>
+      Department for Quantitative Biomedicine, University of
+ZurichInstitute for Molecular Health Sciences, ETH
+Zurich<br><a class="author_email" href="mailto:#"></a><a href="mailto:nils.eling@dqbm.uzh.ch" class="email">nils.eling@dqbm.uzh.ch</a>
       </address>
-                              <h4 data-toc-skip class="author">Lasse Meyer</h4>
+                              <h4 data-toc-skip class="author">Lasse
+Meyer</h4>
             <address class="author_afil">
-      Department for Quantitative Biomedicine, University of ZurichInstitute for Molecular Health Sciences, ETH Zurich<br><a class="author_email" href="mailto:#">lasse.meyer@<span class="citation">(<strong>uzh.ch?</strong>)</span></a>
+      Department for Quantitative Biomedicine, University of
+ZurichInstitute for Molecular Health Sciences, ETH
+Zurich<br><a class="author_email" href="mailto:#">lasse.meyer@<span class="citation">(<strong>uzh.ch?</strong>)</span></a>
       </address>
-                              <h4 data-toc-skip class="author">Daniel Schulz</h4>
+                              <h4 data-toc-skip class="author">Daniel
+Schulz</h4>
             <address class="author_afil">
-      Department for Quantitative Biomedicine, University of ZurichInstitute for Molecular Health Sciences, ETH Zurich<br><a class="author_email" href="mailto:#">daniel.schulz@<span class="citation">(<strong>uzh.ch?</strong>)</span></a>
+      Department for Quantitative Biomedicine, University of
+ZurichInstitute for Molecular Health Sciences, ETH
+Zurich<br><a class="author_email" href="mailto:#">daniel.schulz@<span class="citation">(<strong>uzh.ch?</strong>)</span></a>
       </address>
                   
-            <h4 data-toc-skip class="date">24 October 2022</h4>
+            <h4 data-toc-skip class="date">15 November 2022</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BodenmillerGroup/imcRtools/blob/HEAD/vignettes/imcRtools.Rmd" class="external-link"><code>vignettes/imcRtools.Rmd</code></a></small>
       <div class="hidden name"><code>imcRtools.Rmd</code></div>
@@ -94,73 +102,155 @@
     
         <div class="abstract">
       <p class="abstract">Abstract</p>
-      <p>This R package supports the handling and analysis of imaging mass cytometry and other highly multiplexed imaging data. The main functionality includes reading in single-cell data after image segmentation and measurement, data formatting to perform channel spillover correction and a number of spatial analysis approaches. First, cell-cell interactions are detected via spatial graph construction; these graphs can be visualized with cells representing nodes and interactions representing edges. Furthermore, per cell, its direct neighbours are summarized to allow spatial clustering. Per image/grouping level, interactions between types of cells are counted, averaged and compared against random permutations. In that way, types of cells that interact more (attraction) or less (avoidance) frequently than expected by chance are detected.</p>
+      <p>This R package supports the handling and analysis of imaging
+      mass cytometry and other highly multiplexed imaging data. The main
+      functionality includes reading in single-cell data after image
+      segmentation and measurement, data formatting to perform channel
+      spillover correction and a number of spatial analysis approaches.
+      First, cell-cell interactions are detected via spatial graph
+      construction; these graphs can be visualized with cells
+      representing nodes and interactions representing edges.
+      Furthermore, per cell, its direct neighbours are summarized to
+      allow spatial clustering. Per image/grouping level, interactions
+      between types of cells are counted, averaged and compared against
+      random permutations. In that way, types of cells that interact
+      more (attraction) or less (avoidance) frequently than expected by
+      chance are detected.</p>
     </div>
     
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>This vignette gives an introduction to handling and analyzing imaging mass cytometry (IMC) and other highly-multiplexed imaging data in R. The <code>imcRtools</code> package relies on expression and morphological features extracted from multi-channel images using corresponding segmentation masks. A description of data types and segmentation approaches can be found below (<a href="#dataTypes">data types</a>, <a href="#segmentation">segmentation</a>). However, due to shared data structures, the functionalities of the <code>imcRtools</code> package are applicable to most highly multiplexed imaging modalities.</p>
+<p>This vignette gives an introduction to handling and analyzing imaging
+mass cytometry (IMC) and other highly-multiplexed imaging data in R. The
+<code>imcRtools</code> package relies on expression and morphological
+features extracted from multi-channel images using corresponding
+segmentation masks. A description of data types and segmentation
+approaches can be found below (<a href="#dataTypes">data types</a>, <a href="#segmentation">segmentation</a>). However, due to shared data
+structures, the functionalities of the <code>imcRtools</code> package
+are applicable to most highly multiplexed imaging modalities.</p>
 <div class="section level3">
 <h3 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h3>
-<p>The <code>imcRtools</code> package exports functions and example data to perform the following analyses:</p>
+<p>The <code>imcRtools</code> package exports functions and example data
+to perform the following analyses:</p>
 <ol style="list-style-type: decimal">
 <li><a href="#read-in-data">Read in pre-processed data</a></li>
-<li><a href="#spillover">Perform spillover correction for IMC data</a></li>
+<li><a href="#spillover">Perform spillover correction for IMC
+data</a></li>
 <li>
 <a href="#build-graph">Build</a> and <a href="#viz-cells">visualize</a> spatial graphs</li>
 <li>
-<a href="#aggregate-neighbors">Aggregate across neighbouring cells</a> for spatial clustering</li>
+<a href="#aggregate-neighbors">Aggregate across neighbouring
+cells</a> for spatial clustering</li>
 <li>
-<a href="#patch-detection">Detect spatial patches</a> of similar cell-types</li>
-<li><a href="#test-neighborhood">Test the attraction or avoidance between celltypes</a></li>
+<a href="#patch-detection">Detect spatial patches</a> of similar
+cell-types</li>
+<li><a href="#test-neighborhood">Test the attraction or avoidance
+between celltypes</a></li>
 </ol>
-<p>To highlight the usability of these function, the <code>imcRtools</code> package also exports a number of <a href="#test-data">test data files</a>.</p>
+<p>To highlight the usability of these function, the
+<code>imcRtools</code> package also exports a number of <a href="#test-data">test data files</a>.</p>
 </div>
 <div class="section level3">
 <h3 id="highly-multiplexed-imaging">Highly multiplexed imaging<a class="anchor" aria-label="anchor" href="#highly-multiplexed-imaging"></a>
 </h3>
-<p>Highly multiplexed imaging techniques <span class="citation">(Bodenmiller 2016)</span> such as imaging mass cytometry (IMC) <span class="citation">(Giesen et al. 2014)</span>, multiplexed ion beam imaging (MIBI) <span class="citation">(Angelo et al. 2014)</span> and cyclic immunofluorescence techniques <span class="citation">Gut, Herrmann, and Pelkmans (2018)</span> acquire read-outs of the expression of tens of protein in a spatially resolved manner. After technology-dependent data pre-processing, the raw data files are comparable: multi-channel images for the dimensions <code>x</code>, <code>y</code>, and <code>c</code>, where <code>x</code> and <code>y</code> define the number of pixels (<code>x * y</code>) per image and <code>c</code> the number of proteins (also refered to as “markers”) measured per image. More info on the <a href="#dataTypes">data types</a> and <a href="#segmentation">further pre-processing</a> can be found below.</p>
-<p>Increased multiplexity compared to epitope-based techniques is achieved using single-cell resolved spatial transcriptomics techniques including MERFISH <span class="citation">(Chen et al. 2015)</span> and seqFISH <span class="citation">(Lubeck et al. 2014)</span>. However, data produced by these techniques required different pre-processing steps. Nevertheless, analysis performed on the single-cell level is equally applicable.</p>
+<p>Highly multiplexed imaging techniques <span class="citation">(Bodenmiller 2016)</span> such as imaging mass
+cytometry (IMC) <span class="citation">(Giesen et al. 2014)</span>,
+multiplexed ion beam imaging (MIBI) <span class="citation">(Angelo et
+al. 2014)</span> and cyclic immunofluorescence techniques <span class="citation">Gut, Herrmann, and Pelkmans (2018)</span> acquire
+read-outs of the expression of tens of protein in a spatially resolved
+manner. After technology-dependent data pre-processing, the raw data
+files are comparable: multi-channel images for the dimensions
+<code>x</code>, <code>y</code>, and <code>c</code>, where <code>x</code>
+and <code>y</code> define the number of pixels (<code>x * y</code>) per
+image and <code>c</code> the number of proteins (also refered to as
+“markers”) measured per image. More info on the <a href="#dataTypes">data types</a> and <a href="#segmentation">further
+pre-processing</a> can be found below.</p>
+<p>Increased multiplexity compared to epitope-based techniques is
+achieved using single-cell resolved spatial transcriptomics techniques
+including MERFISH <span class="citation">(Chen et al. 2015)</span> and
+seqFISH <span class="citation">(Lubeck et al. 2014)</span>. However,
+data produced by these techniques required different pre-processing
+steps. Nevertheless, analysis performed on the single-cell level is
+equally applicable.</p>
 <div class="section level4">
 <h4 id="imaging-mass-cytometry">Imaging mass cytometry<a class="anchor" aria-label="anchor" href="#imaging-mass-cytometry"></a>
 </h4>
-<p>IMC <span class="citation">(Giesen et al. 2014)</span> is a highly multiplexed imaging approach to measure spatial protein abundance. In IMC, tissue sections on slides are stained with a mix of around 40 metal-conjugated antibodies prior to laser ablation with <span class="math inline">\(1\mu{}m\)</span> resolution. The ablated material is transferred to a mass cytometer for time-of-flight detection of the metal ions <span class="citation">(Giesen et al. 2014)</span>. At an ablation frequency of 200Hz, a 1mm x 1mm region can be acquired within 1.5 hours.</p>
+<p>IMC <span class="citation">(Giesen et al. 2014)</span> is a highly
+multiplexed imaging approach to measure spatial protein abundance. In
+IMC, tissue sections on slides are stained with a mix of around 40
+metal-conjugated antibodies prior to laser ablation with <span class="math inline">\(1\mu{}m\)</span> resolution. The ablated material
+is transferred to a mass cytometer for time-of-flight detection of the
+metal ions <span class="citation">(Giesen et al. 2014)</span>. At an
+ablation frequency of 200Hz, a 1mm x 1mm region can be acquired within
+1.5 hours.</p>
 </div>
 <div class="section level4">
 <h4 id="dataTypes">Data types<a class="anchor" aria-label="anchor" href="#dataTypes"></a>
 </h4>
-<p>In the case of IMC, the raw data output are .mcd files containing all acquired regions per slide. During image pre-prcoessing these files are converted into individual multi-channel .tiff and <a href="https://docs.openmicroscopy.org/ome-model/5.6.3/ome-tiff/" class="external-link">OME-TIFF</a> files. These file formats are supported by most open-source and commercial image analysis software, such as <a href="https://imagej.net/software/fiji/" class="external-link">Fiji</a>, <a href="https://qupath.github.io/" class="external-link">QuPath</a> or <a href="https://napari.org/" class="external-link">napari</a>.</p>
-<p>In R, these .tiff files can be read into individual <a href="https://bioconductor.org/packages/release/bioc/vignettes/EBImage/inst/doc/EBImage-introduction.html#3_Image_data_representation" class="external-link">Image</a> objects or combined into a <a href="https://www.bioconductor.org/packages/release/bioc/vignettes/cytomapper/inst/doc/cytomapper.html#5_The_CytoImageList_object" class="external-link">CytoImageList</a> object supported by the <a href="https://www.bioconductor.org/packages/release/bioc/html/cytomapper.html" class="external-link">cytomapper</a> package.</p>
+<p>In the case of IMC, the raw data output are .mcd files containing all
+acquired regions per slide. During image pre-prcoessing these files are
+converted into individual multi-channel .tiff and <a href="https://docs.openmicroscopy.org/ome-model/5.6.3/ome-tiff/" class="external-link">OME-TIFF</a>
+files. These file formats are supported by most open-source and
+commercial image analysis software, such as <a href="https://imagej.net/software/fiji/" class="external-link">Fiji</a>, <a href="https://qupath.github.io/" class="external-link">QuPath</a> or <a href="https://napari.org/" class="external-link">napari</a>.</p>
+<p>In R, these .tiff files can be read into individual <a href="https://bioconductor.org/packages/release/bioc/vignettes/EBImage/inst/doc/EBImage-introduction.html#3_Image_data_representation" class="external-link">Image</a>
+objects or combined into a <a href="https://www.bioconductor.org/packages/release/bioc/vignettes/cytomapper/inst/doc/cytomapper.html#5_The_CytoImageList_object" class="external-link">CytoImageList</a>
+object supported by the <a href="https://www.bioconductor.org/packages/release/bioc/html/cytomapper.html" class="external-link">cytomapper</a>
+package.</p>
 </div>
 <div class="section level4">
 <h4 id="segmentation">Segmentation and feature extraction<a class="anchor" aria-label="anchor" href="#segmentation"></a>
 </h4>
-<p>The pixel resolution of most highly multiplexed imaging technologies including IMC support the detection of cellular structures. Therefore, a common processing step using multi-channel images is object segmentation. In this vignette, objects are defined as cells; however, also larger scale structures could be segmented.</p>
-<p>There are multiple different image segmentation approaches available. However, <code>imcRtools</code> only supports direct reader functions for two segmentation strategies developed for highly multiplexed imaging technologies:</p>
+<p>The pixel resolution of most highly multiplexed imaging technologies
+including IMC support the detection of cellular structures. Therefore, a
+common processing step using multi-channel images is object
+segmentation. In this vignette, objects are defined as cells; however,
+also larger scale structures could be segmented.</p>
+<p>There are multiple different image segmentation approaches available.
+However, <code>imcRtools</code> only supports direct reader functions
+for two segmentation strategies developed for highly multiplexed imaging
+technologies:</p>
 <ol style="list-style-type: decimal">
-<li><p>The <a href="https://github.com/BodenmillerGroup/ImcSegmentationPipeline" class="external-link">ImcSegmentationPipeline</a> has been developed to give the user flexibility in how to perform channel selection and image segmentation. The underlying principle is to train a pixel classifier (using <a href="https://www.ilastik.org/" class="external-link">ilastik</a>) on a number of selected channels to perform probabilistic classification of each pixel into: background, cytoplasm and nucleus. Based on these classification probabilities a <a href="https://cellprofiler.org/" class="external-link">CellProfiler</a> pipeline performs cell segmentation and feature extraction.</p></li>
-<li><p>A containerized version of this pipeline is implemented in <a href="https://github.com/BodenmillerGroup/steinbock" class="external-link">steinbock</a>. <code>steinbock</code> further supports segmentation via the use of <code>Mesmer</code> from the <code>DeepCell</code> library <span class="citation">(Greenwald et al. 2021)</span>.</p></li>
+<li><p>The <a href="https://github.com/BodenmillerGroup/ImcSegmentationPipeline" class="external-link">ImcSegmentationPipeline</a>
+has been developed to give the user flexibility in how to perform
+channel selection and image segmentation. The underlying principle is to
+train a pixel classifier (using <a href="https://www.ilastik.org/" class="external-link">ilastik</a>) on a number of selected
+channels to perform probabilistic classification of each pixel into:
+background, cytoplasm and nucleus. Based on these classification
+probabilities a <a href="https://cellprofiler.org/" class="external-link">CellProfiler</a>
+pipeline performs cell segmentation and feature extraction.</p></li>
+<li><p>A containerized version of this pipeline is implemented in <a href="https://github.com/BodenmillerGroup/steinbock" class="external-link">steinbock</a>.
+<code>steinbock</code> further supports segmentation via the use of
+<code>Mesmer</code> from the <code>DeepCell</code> library <span class="citation">(Greenwald et al. 2021)</span>.</p></li>
 </ol>
-<p>While the output of both approaches is structured differently, the exported features are comparable:</p>
+<p>While the output of both approaches is structured differently, the
+exported features are comparable:</p>
 <ol style="list-style-type: decimal">
 <li>per cell: channel intensity, morphology and location</li>
 <li>cell-cell interactions exported as graph</li>
 </ol>
-<p>By combining these with availabel channel information, the data can be read into a <em><a href="https://bioconductor.org/packages/3.15/SpatialExperiment" class="external-link">SpatialExperiment</a></em> or <em><a href="https://bioconductor.org/packages/3.15/SingleCellExperiment" class="external-link">SingleCellExperiment</a></em> object (see <a href="#read-in-data">below</a>).</p>
+<p>By combining these with availabel channel information, the data can
+be read into a <em><a href="https://bioconductor.org/packages/3.16/SpatialExperiment" class="external-link">SpatialExperiment</a></em>
+or <em><a href="https://bioconductor.org/packages/3.16/SingleCellExperiment" class="external-link">SingleCellExperiment</a></em>
+object (see <a href="#read-in-data">below</a>).</p>
 </div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="test-data">Example data<a class="anchor" aria-label="anchor" href="#test-data"></a>
 </h2>
-<p>The <code>imcRtools</code> package contains a number of example data generated by the Hyperion imaging system for different purposes. The following section gives an overview of these files.</p>
+<p>The <code>imcRtools</code> package contains a number of example data
+generated by the Hyperion imaging system for different purposes. The
+following section gives an overview of these files.</p>
 <div class="section level3">
 <h3 id="for-spillover-correction">For spillover correction<a class="anchor" aria-label="anchor" href="#for-spillover-correction"></a>
 </h3>
-<p>To highlight the use of the <code>imcRtools</code> package for spillover correction, we provide four .txt files containing pixel intensities of four spotted metals.</p>
-<p>Please refer to the <a href="#spillover">spillover correction</a> section for full details.</p>
+<p>To highlight the use of the <code>imcRtools</code> package for
+spillover correction, we provide four .txt files containing pixel
+intensities of four spotted metals.</p>
+<p>Please refer to the <a href="#spillover">spillover correction</a>
+section for full details.</p>
 <p>These files are accessible via:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/spillover"</span>, package <span class="op">=</span> <span class="st">"imcRtools"</span><span class="op">)</span></span>
@@ -171,8 +261,11 @@
 <div class="section level3">
 <h3 id="raw-data-in-form-of--txt-files">Raw data in form of .txt files<a class="anchor" aria-label="anchor" href="#raw-data-in-form-of--txt-files"></a>
 </h3>
-<p>IMC generates .mcd files storing the raw data or all acquired regions of interest (ROI). In addition, the raw pixel values are also stored in individual .txt files per ROI.</p>
-<p>To highlight reading in raw data in form of .txt files, the <code>imcRtools</code> contains 3 sample acquisitions:</p>
+<p>IMC generates .mcd files storing the raw data or all acquired regions
+of interest (ROI). In addition, the raw pixel values are also stored in
+individual .txt files per ROI.</p>
+<p>To highlight reading in raw data in form of .txt files, the
+<code>imcRtools</code> contains 3 sample acquisitions:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">txt_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/mockData/raw"</span>, </span>
 <span>                                    package <span class="op">=</span> <span class="st">"imcRtools"</span><span class="op">)</span><span class="op">)</span></span>
@@ -183,8 +276,14 @@
 <div class="section level3">
 <h3 id="imcsegmentationpipeline-output-data">ImcSegmentationPipeline output data<a class="anchor" aria-label="anchor" href="#imcsegmentationpipeline-output-data"></a>
 </h3>
-<p>IMC data preprocessing and segmentation can be performed using the <a href="https://github.com/BodenmillerGroup/ImcSegmentationPipeline" class="external-link">ImcSegmentationPipeline</a>. It generates a number of <code>.csv</code> files containing object/cell-specific and image-specific metadata.</p>
-<p>The <code>imcRtools</code> package exports the <code>read_cpout</code> function as convenient reader function for outputs generated by the <code>ImcSegmentationPipeline</code>. For demonstration purposes, <code>imcRtools</code> contains the output of running the pipeline on a small example dataset:</p>
+<p>IMC data preprocessing and segmentation can be performed using the <a href="https://github.com/BodenmillerGroup/ImcSegmentationPipeline" class="external-link">ImcSegmentationPipeline</a>.
+It generates a number of <code>.csv</code> files containing
+object/cell-specific and image-specific metadata.</p>
+<p>The <code>imcRtools</code> package exports the
+<code>read_cpout</code> function as convenient reader function for
+outputs generated by the <code>ImcSegmentationPipeline</code>. For
+demonstration purposes, <code>imcRtools</code> contains the output of
+running the pipeline on a small example dataset:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/mockData/cpout"</span>, package <span class="op">=</span> <span class="st">"imcRtools"</span><span class="op">)</span></span>
 <span></span>
@@ -197,8 +296,12 @@
 <div class="section level3">
 <h3 id="steinbock-output-data">steinbock output data<a class="anchor" aria-label="anchor" href="#steinbock-output-data"></a>
 </h3>
-<p>The <a href="https://github.com/BodenmillerGroup/steinbock" class="external-link">steinbock</a> pipeline can be used to process, segment and extract features from IMC data. For more information, please refer to its <a href="https://bodenmillergroup.github.io/steinbock/" class="external-link">documentation</a>.</p>
-<p>To highlight the functionality of <code>imcRtools</code> to read in single-cell data generated by <code>steinbock</code>, we provide a small toy dataset available at:</p>
+<p>The <a href="https://github.com/BodenmillerGroup/steinbock" class="external-link">steinbock</a>
+pipeline can be used to process, segment and extract features from IMC
+data. For more information, please refer to its <a href="https://bodenmillergroup.github.io/steinbock/" class="external-link">documentation</a>.</p>
+<p>To highlight the functionality of <code>imcRtools</code> to read in
+single-cell data generated by <code>steinbock</code>, we provide a small
+toy dataset available at:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/mockData/steinbock"</span>, package <span class="op">=</span> <span class="st">"imcRtools"</span><span class="op">)</span></span>
 <span></span>
@@ -252,26 +355,50 @@
 <span><span class="co">## [47] "regionprops/20210305_NE_mockData5_2.csv"</span></span>
 <span><span class="co">## [48] "regionprops/20210305_NE_mockData5_3.csv"</span></span>
 <span><span class="co">## [49] "steinbock.sh"</span></span></code></pre>
-<p>The example data related to the <code>ImcSegmentationPipeline</code> and <code>steinbock</code> can also be accessed <a href="https://github.com/BodenmillerGroup/TestData/tree/main/datasets/210308_ImcTestData" class="external-link">online</a>.</p>
+<p>The example data related to the <code>ImcSegmentationPipeline</code>
+and <code>steinbock</code> can also be accessed <a href="https://github.com/BodenmillerGroup/TestData/tree/main/datasets/210308_ImcTestData" class="external-link">online</a>.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="read-in-data">Read in IMC data<a class="anchor" aria-label="anchor" href="#read-in-data"></a>
 </h2>
-<p>The <code>imcRtools</code> package supports reading in data generated by the <a href="https://github.com/BodenmillerGroup/ImcSegmentationPipeline" class="external-link">ImcSegmentationPipeline</a> or <a href="https://github.com/BodenmillerGroup/steinbock" class="external-link">steinbock</a> pipeline.</p>
-<p>To read in the outpout data into a <em><a href="https://bioconductor.org/packages/3.15/SpatialExperiment" class="external-link">SpatialExperiment</a></em> or <em><a href="https://bioconductor.org/packages/3.15/SingleCellExperiment" class="external-link">SingleCellExperiment</a></em>, the <code>imcRtools</code> package exports the <code>read_cpout</code> function.</p>
-<p>By default, the single-cell data is read into a <em><a href="https://bioconductor.org/packages/3.15/SpatialExperiment" class="external-link">SpatialExperiment</a></em> object. Here, the extracted channel- and cell-specific intensities are stored in the <code>counts(spe)</code> slot. All morphological features are stored in <code>colData(spe)</code> and the spatial locations of the cells are stored in <code>spatialCoords(spe)</code>. The interaction graph is stored in <code>colPair(spe, "neighbourhood")</code>.</p>
-<p>Alternatively, the data can be read into a <em><a href="https://bioconductor.org/packages/3.15/SingleCellExperiment" class="external-link">SingleCellExperiment</a></em> object. The only difference is the lack of <code>spatialCoords(sce)</code>. Here, the spatial coordinates are stored in <code>colData(spe)$Pos_X</code> and <code>colData(spe)$Pos_Y</code>.</p>
+<p>The <code>imcRtools</code> package supports reading in data generated
+by the <a href="https://github.com/BodenmillerGroup/ImcSegmentationPipeline" class="external-link">ImcSegmentationPipeline</a>
+or <a href="https://github.com/BodenmillerGroup/steinbock" class="external-link">steinbock</a>
+pipeline.</p>
+<p>To read in the outpout data into a <em><a href="https://bioconductor.org/packages/3.16/SpatialExperiment" class="external-link">SpatialExperiment</a></em>
+or <em><a href="https://bioconductor.org/packages/3.16/SingleCellExperiment" class="external-link">SingleCellExperiment</a></em>,
+the <code>imcRtools</code> package exports the <code>read_cpout</code>
+function.</p>
+<p>By default, the single-cell data is read into a <em><a href="https://bioconductor.org/packages/3.16/SpatialExperiment" class="external-link">SpatialExperiment</a></em>
+object. Here, the extracted channel- and cell-specific intensities are
+stored in the <code>counts(spe)</code> slot. All morphological features
+are stored in <code>colData(spe)</code> and the spatial locations of the
+cells are stored in <code>spatialCoords(spe)</code>. The interaction
+graph is stored in <code>colPair(spe, "neighbourhood")</code>.</p>
+<p>Alternatively, the data can be read into a <em><a href="https://bioconductor.org/packages/3.16/SingleCellExperiment" class="external-link">SingleCellExperiment</a></em>
+object. The only difference is the lack of
+<code>spatialCoords(sce)</code>. Here, the spatial coordinates are
+stored in <code>colData(spe)$Pos_X</code> and
+<code>colData(spe)$Pos_Y</code>.</p>
 <div class="section level3">
 <h3 id="read-in-cellprofiler-output">Read in CellProfiler output<a class="anchor" aria-label="anchor" href="#read-in-cellprofiler-output"></a>
 </h3>
-<p>The <a href="https://github.com/BodenmillerGroup/ImcSegmentationPipeline" class="external-link">ImcSegmentationPipeline</a> produces a number of output files. By default, all single-cell features are measured and exported. To browse and select the features of interest, the <code>imcRtools</code> package provides the <code>show_cpout_features</code> function:</p>
+<p>The <a href="https://github.com/BodenmillerGroup/ImcSegmentationPipeline" class="external-link">ImcSegmentationPipeline</a>
+produces a number of output files. By default, all single-cell features
+are measured and exported. To browse and select the features of
+interest, the <code>imcRtools</code> package provides the
+<code>show_cpout_features</code> function:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/mockData/cpout"</span>, package <span class="op">=</span> <span class="st">"imcRtools"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/show_cpout_features.html">show_cpout_features</a></span><span class="op">(</span><span class="va">path</span><span class="op">)</span></span></code></pre></div>
-<div id="htmlwidget-1960f16a7efcbaecf74f" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-1960f16a7efcbaecf74f">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100","101","102","103","104","105","106","107","108","109","110","111","112","113","114","115","116","117","118","119","120","121","122","123","124","125","126","127","128","129","130","131","132","133","134","135","136","137","138","139","140","141","142","143","144","145","146","147","148","149","150","151","152","153","154","155","156","157","158","159","160","161","162","163","164","165","166","167","168","169","170","171","172","173","174","175","176","177","178","179","180","181","182","183","184","185","186","187","188","189","190","191","192","193","194","195","196","197","198","199","200","201","202","203","204"],["Location_Center_X","Location_Center_Y","Location_Center_Z","Number_Object_Number","Neighbors_NumberOfNeighbors_8","Neighbors_PercentTouching_8","Neighbors_FirstClosestObjectNumber_8","Neighbors_FirstClosestDistance_8","Neighbors_SecondClosestObjectNumber_8","Neighbors_SecondClosestDistance_8","Neighbors_AngleBetweenNeighbors_8","Intensity_IntegratedIntensity_FullStack_c1","Intensity_MeanIntensity_FullStack_c1","Intensity_StdIntensity_FullStack_c1","Intensity_MinIntensity_FullStack_c1","Intensity_MaxIntensity_FullStack_c1","Intensity_IntegratedIntensityEdge_FullStack_c1","Intensity_MeanIntensityEdge_FullStack_c1","Intensity_StdIntensityEdge_FullStack_c1","Intensity_MinIntensityEdge_FullStack_c1","Intensity_MaxIntensityEdge_FullStack_c1","Intensity_MassDisplacement_FullStack_c1","Intensity_LowerQuartileIntensity_FullStack_c1","Intensity_MedianIntensity_FullStack_c1","Intensity_MADIntensity_FullStack_c1","Intensity_UpperQuartileIntensity_FullStack_c1","Location_CenterMassIntensity_X_FullStack_c1","Location_CenterMassIntensity_Y_FullStack_c1","Location_CenterMassIntensity_Z_FullStack_c1","Location_MaxIntensity_X_FullStack_c1","Location_MaxIntensity_Y_FullStack_c1","Location_MaxIntensity_Z_FullStack_c1","Intensity_IntegratedIntensity_FullStack_c2","Intensity_MeanIntensity_FullStack_c2","Intensity_StdIntensity_FullStack_c2","Intensity_MinIntensity_FullStack_c2","Intensity_MaxIntensity_FullStack_c2","Intensity_IntegratedIntensityEdge_FullStack_c2","Intensity_MeanIntensityEdge_FullStack_c2","Intensity_StdIntensityEdge_FullStack_c2","Intensity_MinIntensityEdge_FullStack_c2","Intensity_MaxIntensityEdge_FullStack_c2","Intensity_MassDisplacement_FullStack_c2","Intensity_LowerQuartileIntensity_FullStack_c2","Intensity_MedianIntensity_FullStack_c2","Intensity_MADIntensity_FullStack_c2","Intensity_UpperQuartileIntensity_FullStack_c2","Location_CenterMassIntensity_X_FullStack_c2","Location_CenterMassIntensity_Y_FullStack_c2","Location_CenterMassIntensity_Z_FullStack_c2","Location_MaxIntensity_X_FullStack_c2","Location_MaxIntensity_Y_FullStack_c2","Location_MaxIntensity_Z_FullStack_c2","Intensity_IntegratedIntensity_FullStack_c3","Intensity_MeanIntensity_FullStack_c3","Intensity_StdIntensity_FullStack_c3","Intensity_MinIntensity_FullStack_c3","Intensity_MaxIntensity_FullStack_c3","Intensity_IntegratedIntensityEdge_FullStack_c3","Intensity_MeanIntensityEdge_FullStack_c3","Intensity_StdIntensityEdge_FullStack_c3","Intensity_MinIntensityEdge_FullStack_c3","Intensity_MaxIntensityEdge_FullStack_c3","Intensity_MassDisplacement_FullStack_c3","Intensity_LowerQuartileIntensity_FullStack_c3","Intensity_MedianIntensity_FullStack_c3","Intensity_MADIntensity_FullStack_c3","Intensity_UpperQuartileIntensity_FullStack_c3","Location_CenterMassIntensity_X_FullStack_c3","Location_CenterMassIntensity_Y_FullStack_c3","Location_CenterMassIntensity_Z_FullStack_c3","Location_MaxIntensity_X_FullStack_c3","Location_MaxIntensity_Y_FullStack_c3","Location_MaxIntensity_Z_FullStack_c3","Intensity_IntegratedIntensity_FullStack_c4","Intensity_MeanIntensity_FullStack_c4","Intensity_StdIntensity_FullStack_c4","Intensity_MinIntensity_FullStack_c4","Intensity_MaxIntensity_FullStack_c4","Intensity_IntegratedIntensityEdge_FullStack_c4","Intensity_MeanIntensityEdge_FullStack_c4","Intensity_StdIntensityEdge_FullStack_c4","Intensity_MinIntensityEdge_FullStack_c4","Intensity_MaxIntensityEdge_FullStack_c4","Intensity_MassDisplacement_FullStack_c4","Intensity_LowerQuartileIntensity_FullStack_c4","Intensity_MedianIntensity_FullStack_c4","Intensity_MADIntensity_FullStack_c4","Intensity_UpperQuartileIntensity_FullStack_c4","Location_CenterMassIntensity_X_FullStack_c4","Location_CenterMassIntensity_Y_FullStack_c4","Location_CenterMassIntensity_Z_FullStack_c4","Location_MaxIntensity_X_FullStack_c4","Location_MaxIntensity_Y_FullStack_c4","Location_MaxIntensity_Z_FullStack_c4","Intensity_IntegratedIntensity_FullStack_c5","Intensity_MeanIntensity_FullStack_c5","Intensity_StdIntensity_FullStack_c5","Intensity_MinIntensity_FullStack_c5","Intensity_MaxIntensity_FullStack_c5","Intensity_IntegratedIntensityEdge_FullStack_c5","Intensity_MeanIntensityEdge_FullStack_c5","Intensity_StdIntensityEdge_FullStack_c5","Intensity_MinIntensityEdge_FullStack_c5","Intensity_MaxIntensityEdge_FullStack_c5","Intensity_MassDisplacement_FullStack_c5","Intensity_LowerQuartileIntensity_FullStack_c5","Intensity_MedianIntensity_FullStack_c5","Intensity_MADIntensity_FullStack_c5","Intensity_UpperQuartileIntensity_FullStack_c5","Location_CenterMassIntensity_X_FullStack_c5","Location_CenterMassIntensity_Y_FullStack_c5","Location_CenterMassIntensity_Z_FullStack_c5","Location_MaxIntensity_X_FullStack_c5","Location_MaxIntensity_Y_FullStack_c5","Location_MaxIntensity_Z_FullStack_c5","Intensity_IntegratedIntensity_ProbabStack_c1","Intensity_MeanIntensity_ProbabStack_c1","Intensity_StdIntensity_ProbabStack_c1","Intensity_MinIntensity_ProbabStack_c1","Intensity_MaxIntensity_ProbabStack_c1","Intensity_IntegratedIntensityEdge_ProbabStack_c1","Intensity_MeanIntensityEdge_ProbabStack_c1","Intensity_StdIntensityEdge_ProbabStack_c1","Intensity_MinIntensityEdge_ProbabStack_c1","Intensity_MaxIntensityEdge_ProbabStack_c1","Intensity_MassDisplacement_ProbabStack_c1","Intensity_LowerQuartileIntensity_ProbabStack_c1","Intensity_MedianIntensity_ProbabStack_c1","Intensity_MADIntensity_ProbabStack_c1","Intensity_UpperQuartileIntensity_ProbabStack_c1","Location_CenterMassIntensity_X_ProbabStack_c1","Location_CenterMassIntensity_Y_ProbabStack_c1","Location_CenterMassIntensity_Z_ProbabStack_c1","Location_MaxIntensity_X_ProbabStack_c1","Location_MaxIntensity_Y_ProbabStack_c1","Location_MaxIntensity_Z_ProbabStack_c1","Intensity_IntegratedIntensity_ProbabStack_c2","Intensity_MeanIntensity_ProbabStack_c2","Intensity_StdIntensity_ProbabStack_c2","Intensity_MinIntensity_ProbabStack_c2","Intensity_MaxIntensity_ProbabStack_c2","Intensity_IntegratedIntensityEdge_ProbabStack_c2","Intensity_MeanIntensityEdge_ProbabStack_c2","Intensity_StdIntensityEdge_ProbabStack_c2","Intensity_MinIntensityEdge_ProbabStack_c2","Intensity_MaxIntensityEdge_ProbabStack_c2","Intensity_MassDisplacement_ProbabStack_c2","Intensity_LowerQuartileIntensity_ProbabStack_c2","Intensity_MedianIntensity_ProbabStack_c2","Intensity_MADIntensity_ProbabStack_c2","Intensity_UpperQuartileIntensity_ProbabStack_c2","Location_CenterMassIntensity_X_ProbabStack_c2","Location_CenterMassIntensity_Y_ProbabStack_c2","Location_CenterMassIntensity_Z_ProbabStack_c2","Location_MaxIntensity_X_ProbabStack_c2","Location_MaxIntensity_Y_ProbabStack_c2","Location_MaxIntensity_Z_ProbabStack_c2","Intensity_IntegratedIntensity_ProbabStack_c3","Intensity_MeanIntensity_ProbabStack_c3","Intensity_StdIntensity_ProbabStack_c3","Intensity_MinIntensity_ProbabStack_c3","Intensity_MaxIntensity_ProbabStack_c3","Intensity_IntegratedIntensityEdge_ProbabStack_c3","Intensity_MeanIntensityEdge_ProbabStack_c3","Intensity_StdIntensityEdge_ProbabStack_c3","Intensity_MinIntensityEdge_ProbabStack_c3","Intensity_MaxIntensityEdge_ProbabStack_c3","Intensity_MassDisplacement_ProbabStack_c3","Intensity_LowerQuartileIntensity_ProbabStack_c3","Intensity_MedianIntensity_ProbabStack_c3","Intensity_MADIntensity_ProbabStack_c3","Intensity_UpperQuartileIntensity_ProbabStack_c3","Location_CenterMassIntensity_X_ProbabStack_c3","Location_CenterMassIntensity_Y_ProbabStack_c3","Location_CenterMassIntensity_Z_ProbabStack_c3","Location_MaxIntensity_X_ProbabStack_c3","Location_MaxIntensity_Y_ProbabStack_c3","Location_MaxIntensity_Z_ProbabStack_c3","AreaShape_Extent","AreaShape_EulerNumber","AreaShape_EquivalentDiameter","AreaShape_MajorAxisLength","AreaShape_MinorAxisLength","AreaShape_Center_X","AreaShape_Center_Y","AreaShape_BoundingBoxMinimum_X","AreaShape_BoundingBoxMinimum_Y","AreaShape_BoundingBoxMaximum_X","AreaShape_BoundingBoxMaximum_Y","AreaShape_Area","AreaShape_Perimeter","AreaShape_MaximumRadius","AreaShape_MeanRadius","AreaShape_MedianRadius","AreaShape_MinFeretDiameter","AreaShape_MaxFeretDiameter","AreaShape_Orientation","AreaShape_Eccentricity","AreaShape_FormFactor","AreaShape_Solidity","AreaShape_ConvexArea","AreaShape_Compactness","AreaShape_BoundingBoxArea"],["Location","Location","Location","ID","Neighbors","Neighbors","Neighbors","Neighbors","Neighbors","Neighbors","Neighbors","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Location","Location","Location","Location","Location","Location","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Location","Location","Location","Location","Location","Location","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Location","Location","Location","Location","Location","Location","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Location","Location","Location","Location","Location","Location","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Location","Location","Location","Location","Location","Location","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Location","Location","Location","Location","Location","Location","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Location","Location","Location","Location","Location","Location","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Location","Location","Location","Location","Location","Location","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape"],[null,null,null,null,null,null,null,null,null,null,null,"FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],["Center_X","Center_Y","Center_Z","Number_Object_Number","NumberOfNeighbors","PercentTouching","FirstClosestObjectNumber","FirstClosestDistance","SecondClosestObjectNumber","SecondClosestDistance","AngleBetweenNeighbors","IntegratedIntensity","MeanIntensity","StdIntensity","MinIntensity","MaxIntensity","IntegratedIntensityEdge","MeanIntensityEdge","StdIntensityEdge","MinIntensityEdge","MaxIntensityEdge","MassDisplacement","LowerQuartileIntensity","MedianIntensity","MADIntensity","UpperQuartileIntensity","CenterMassIntensity_X","CenterMassIntensity_Y","CenterMassIntensity_Z","MaxIntensity_X","MaxIntensity_Y","MaxIntensity_Z","IntegratedIntensity","MeanIntensity","StdIntensity","MinIntensity","MaxIntensity","IntegratedIntensityEdge","MeanIntensityEdge","StdIntensityEdge","MinIntensityEdge","MaxIntensityEdge","MassDisplacement","LowerQuartileIntensity","MedianIntensity","MADIntensity","UpperQuartileIntensity","CenterMassIntensity_X","CenterMassIntensity_Y","CenterMassIntensity_Z","MaxIntensity_X","MaxIntensity_Y","MaxIntensity_Z","IntegratedIntensity","MeanIntensity","StdIntensity","MinIntensity","MaxIntensity","IntegratedIntensityEdge","MeanIntensityEdge","StdIntensityEdge","MinIntensityEdge","MaxIntensityEdge","MassDisplacement","LowerQuartileIntensity","MedianIntensity","MADIntensity","UpperQuartileIntensity","CenterMassIntensity_X","CenterMassIntensity_Y","CenterMassIntensity_Z","MaxIntensity_X","MaxIntensity_Y","MaxIntensity_Z","IntegratedIntensity","MeanIntensity","StdIntensity","MinIntensity","MaxIntensity","IntegratedIntensityEdge","MeanIntensityEdge","StdIntensityEdge","MinIntensityEdge","MaxIntensityEdge","MassDisplacement","LowerQuartileIntensity","MedianIntensity","MADIntensity","UpperQuartileIntensity","CenterMassIntensity_X","CenterMassIntensity_Y","CenterMassIntensity_Z","MaxIntensity_X","MaxIntensity_Y","MaxIntensity_Z","IntegratedIntensity","MeanIntensity","StdIntensity","MinIntensity","MaxIntensity","IntegratedIntensityEdge","MeanIntensityEdge","StdIntensityEdge","MinIntensityEdge","MaxIntensityEdge","MassDisplacement","LowerQuartileIntensity","MedianIntensity","MADIntensity","UpperQuartileIntensity","CenterMassIntensity_X","CenterMassIntensity_Y","CenterMassIntensity_Z","MaxIntensity_X","MaxIntensity_Y","MaxIntensity_Z","IntegratedIntensity","MeanIntensity","StdIntensity","MinIntensity","MaxIntensity","IntegratedIntensityEdge","MeanIntensityEdge","StdIntensityEdge","MinIntensityEdge","MaxIntensityEdge","MassDisplacement","LowerQuartileIntensity","MedianIntensity","MADIntensity","UpperQuartileIntensity","CenterMassIntensity_X","CenterMassIntensity_Y","CenterMassIntensity_Z","MaxIntensity_X","MaxIntensity_Y","MaxIntensity_Z","IntegratedIntensity","MeanIntensity","StdIntensity","MinIntensity","MaxIntensity","IntegratedIntensityEdge","MeanIntensityEdge","StdIntensityEdge","MinIntensityEdge","MaxIntensityEdge","MassDisplacement","LowerQuartileIntensity","MedianIntensity","MADIntensity","UpperQuartileIntensity","CenterMassIntensity_X","CenterMassIntensity_Y","CenterMassIntensity_Z","MaxIntensity_X","MaxIntensity_Y","MaxIntensity_Z","IntegratedIntensity","MeanIntensity","StdIntensity","MinIntensity","MaxIntensity","IntegratedIntensityEdge","MeanIntensityEdge","StdIntensityEdge","MinIntensityEdge","MaxIntensityEdge","MassDisplacement","LowerQuartileIntensity","MedianIntensity","MADIntensity","UpperQuartileIntensity","CenterMassIntensity_X","CenterMassIntensity_Y","CenterMassIntensity_Z","MaxIntensity_X","MaxIntensity_Y","MaxIntensity_Z","Extent","EulerNumber","EquivalentDiameter","MajorAxisLength","MinorAxisLength","Center_X","Center_Y","BoundingBoxMinimum_X","BoundingBoxMinimum_Y","BoundingBoxMaximum_X","BoundingBoxMaximum_Y","Area","Perimeter","MaximumRadius","MeanRadius","MedianRadius","MinFeretDiameter","MaxFeretDiameter","Orientation","Eccentricity","FormFactor","Solidity","ConvexArea","Compactness","BoundingBoxArea"],[null,null,null,null,null,null,null,null,null,null,null,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,8,8,8,8,8,8,8,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,"Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","Background","Background","Background","Background","Background","Background","Background","Background","Background","Background","Background","Background","Background","Background","Background","Background","Background","Background","Background","Background","Background",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],["float","float","float","integer","integer","float","integer","float","integer","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>column_name<\/th>\n      <th>category<\/th>\n      <th>image_name<\/th>\n      <th>object_name<\/th>\n      <th>feature_name<\/th>\n      <th>channel<\/th>\n      <th>parameters<\/th>\n      <th>channel_id<\/th>\n      <th>data_type<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[6,7]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script><p>By default, <code>read_cpout</code> will read in the mean intensity per channel and cell from “hot pixel” filtered image stacks specified via <code>intensities = "Intensity_MeanIntensity_FullStackFiltered"</code>. Please refer to <code><a href="../reference/read_cpout.html">?read_cpout</a></code> for the full documentation.</p>
+<div id="htmlwidget-12188259e8ef0d34f822" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-12188259e8ef0d34f822">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100","101","102","103","104","105","106","107","108","109","110","111","112","113","114","115","116","117","118","119","120","121","122","123","124","125","126","127","128","129","130","131","132","133","134","135","136","137","138","139","140","141","142","143","144","145","146","147","148","149","150","151","152","153","154","155","156","157","158","159","160","161","162","163","164","165","166","167","168","169","170","171","172","173","174","175","176","177","178","179","180","181","182","183","184","185","186","187","188","189","190","191","192","193","194","195","196","197","198","199","200","201","202","203","204"],["Location_Center_X","Location_Center_Y","Location_Center_Z","Number_Object_Number","Neighbors_NumberOfNeighbors_8","Neighbors_PercentTouching_8","Neighbors_FirstClosestObjectNumber_8","Neighbors_FirstClosestDistance_8","Neighbors_SecondClosestObjectNumber_8","Neighbors_SecondClosestDistance_8","Neighbors_AngleBetweenNeighbors_8","Intensity_IntegratedIntensity_FullStack_c1","Intensity_MeanIntensity_FullStack_c1","Intensity_StdIntensity_FullStack_c1","Intensity_MinIntensity_FullStack_c1","Intensity_MaxIntensity_FullStack_c1","Intensity_IntegratedIntensityEdge_FullStack_c1","Intensity_MeanIntensityEdge_FullStack_c1","Intensity_StdIntensityEdge_FullStack_c1","Intensity_MinIntensityEdge_FullStack_c1","Intensity_MaxIntensityEdge_FullStack_c1","Intensity_MassDisplacement_FullStack_c1","Intensity_LowerQuartileIntensity_FullStack_c1","Intensity_MedianIntensity_FullStack_c1","Intensity_MADIntensity_FullStack_c1","Intensity_UpperQuartileIntensity_FullStack_c1","Location_CenterMassIntensity_X_FullStack_c1","Location_CenterMassIntensity_Y_FullStack_c1","Location_CenterMassIntensity_Z_FullStack_c1","Location_MaxIntensity_X_FullStack_c1","Location_MaxIntensity_Y_FullStack_c1","Location_MaxIntensity_Z_FullStack_c1","Intensity_IntegratedIntensity_FullStack_c2","Intensity_MeanIntensity_FullStack_c2","Intensity_StdIntensity_FullStack_c2","Intensity_MinIntensity_FullStack_c2","Intensity_MaxIntensity_FullStack_c2","Intensity_IntegratedIntensityEdge_FullStack_c2","Intensity_MeanIntensityEdge_FullStack_c2","Intensity_StdIntensityEdge_FullStack_c2","Intensity_MinIntensityEdge_FullStack_c2","Intensity_MaxIntensityEdge_FullStack_c2","Intensity_MassDisplacement_FullStack_c2","Intensity_LowerQuartileIntensity_FullStack_c2","Intensity_MedianIntensity_FullStack_c2","Intensity_MADIntensity_FullStack_c2","Intensity_UpperQuartileIntensity_FullStack_c2","Location_CenterMassIntensity_X_FullStack_c2","Location_CenterMassIntensity_Y_FullStack_c2","Location_CenterMassIntensity_Z_FullStack_c2","Location_MaxIntensity_X_FullStack_c2","Location_MaxIntensity_Y_FullStack_c2","Location_MaxIntensity_Z_FullStack_c2","Intensity_IntegratedIntensity_FullStack_c3","Intensity_MeanIntensity_FullStack_c3","Intensity_StdIntensity_FullStack_c3","Intensity_MinIntensity_FullStack_c3","Intensity_MaxIntensity_FullStack_c3","Intensity_IntegratedIntensityEdge_FullStack_c3","Intensity_MeanIntensityEdge_FullStack_c3","Intensity_StdIntensityEdge_FullStack_c3","Intensity_MinIntensityEdge_FullStack_c3","Intensity_MaxIntensityEdge_FullStack_c3","Intensity_MassDisplacement_FullStack_c3","Intensity_LowerQuartileIntensity_FullStack_c3","Intensity_MedianIntensity_FullStack_c3","Intensity_MADIntensity_FullStack_c3","Intensity_UpperQuartileIntensity_FullStack_c3","Location_CenterMassIntensity_X_FullStack_c3","Location_CenterMassIntensity_Y_FullStack_c3","Location_CenterMassIntensity_Z_FullStack_c3","Location_MaxIntensity_X_FullStack_c3","Location_MaxIntensity_Y_FullStack_c3","Location_MaxIntensity_Z_FullStack_c3","Intensity_IntegratedIntensity_FullStack_c4","Intensity_MeanIntensity_FullStack_c4","Intensity_StdIntensity_FullStack_c4","Intensity_MinIntensity_FullStack_c4","Intensity_MaxIntensity_FullStack_c4","Intensity_IntegratedIntensityEdge_FullStack_c4","Intensity_MeanIntensityEdge_FullStack_c4","Intensity_StdIntensityEdge_FullStack_c4","Intensity_MinIntensityEdge_FullStack_c4","Intensity_MaxIntensityEdge_FullStack_c4","Intensity_MassDisplacement_FullStack_c4","Intensity_LowerQuartileIntensity_FullStack_c4","Intensity_MedianIntensity_FullStack_c4","Intensity_MADIntensity_FullStack_c4","Intensity_UpperQuartileIntensity_FullStack_c4","Location_CenterMassIntensity_X_FullStack_c4","Location_CenterMassIntensity_Y_FullStack_c4","Location_CenterMassIntensity_Z_FullStack_c4","Location_MaxIntensity_X_FullStack_c4","Location_MaxIntensity_Y_FullStack_c4","Location_MaxIntensity_Z_FullStack_c4","Intensity_IntegratedIntensity_FullStack_c5","Intensity_MeanIntensity_FullStack_c5","Intensity_StdIntensity_FullStack_c5","Intensity_MinIntensity_FullStack_c5","Intensity_MaxIntensity_FullStack_c5","Intensity_IntegratedIntensityEdge_FullStack_c5","Intensity_MeanIntensityEdge_FullStack_c5","Intensity_StdIntensityEdge_FullStack_c5","Intensity_MinIntensityEdge_FullStack_c5","Intensity_MaxIntensityEdge_FullStack_c5","Intensity_MassDisplacement_FullStack_c5","Intensity_LowerQuartileIntensity_FullStack_c5","Intensity_MedianIntensity_FullStack_c5","Intensity_MADIntensity_FullStack_c5","Intensity_UpperQuartileIntensity_FullStack_c5","Location_CenterMassIntensity_X_FullStack_c5","Location_CenterMassIntensity_Y_FullStack_c5","Location_CenterMassIntensity_Z_FullStack_c5","Location_MaxIntensity_X_FullStack_c5","Location_MaxIntensity_Y_FullStack_c5","Location_MaxIntensity_Z_FullStack_c5","Intensity_IntegratedIntensity_ProbabStack_c1","Intensity_MeanIntensity_ProbabStack_c1","Intensity_StdIntensity_ProbabStack_c1","Intensity_MinIntensity_ProbabStack_c1","Intensity_MaxIntensity_ProbabStack_c1","Intensity_IntegratedIntensityEdge_ProbabStack_c1","Intensity_MeanIntensityEdge_ProbabStack_c1","Intensity_StdIntensityEdge_ProbabStack_c1","Intensity_MinIntensityEdge_ProbabStack_c1","Intensity_MaxIntensityEdge_ProbabStack_c1","Intensity_MassDisplacement_ProbabStack_c1","Intensity_LowerQuartileIntensity_ProbabStack_c1","Intensity_MedianIntensity_ProbabStack_c1","Intensity_MADIntensity_ProbabStack_c1","Intensity_UpperQuartileIntensity_ProbabStack_c1","Location_CenterMassIntensity_X_ProbabStack_c1","Location_CenterMassIntensity_Y_ProbabStack_c1","Location_CenterMassIntensity_Z_ProbabStack_c1","Location_MaxIntensity_X_ProbabStack_c1","Location_MaxIntensity_Y_ProbabStack_c1","Location_MaxIntensity_Z_ProbabStack_c1","Intensity_IntegratedIntensity_ProbabStack_c2","Intensity_MeanIntensity_ProbabStack_c2","Intensity_StdIntensity_ProbabStack_c2","Intensity_MinIntensity_ProbabStack_c2","Intensity_MaxIntensity_ProbabStack_c2","Intensity_IntegratedIntensityEdge_ProbabStack_c2","Intensity_MeanIntensityEdge_ProbabStack_c2","Intensity_StdIntensityEdge_ProbabStack_c2","Intensity_MinIntensityEdge_ProbabStack_c2","Intensity_MaxIntensityEdge_ProbabStack_c2","Intensity_MassDisplacement_ProbabStack_c2","Intensity_LowerQuartileIntensity_ProbabStack_c2","Intensity_MedianIntensity_ProbabStack_c2","Intensity_MADIntensity_ProbabStack_c2","Intensity_UpperQuartileIntensity_ProbabStack_c2","Location_CenterMassIntensity_X_ProbabStack_c2","Location_CenterMassIntensity_Y_ProbabStack_c2","Location_CenterMassIntensity_Z_ProbabStack_c2","Location_MaxIntensity_X_ProbabStack_c2","Location_MaxIntensity_Y_ProbabStack_c2","Location_MaxIntensity_Z_ProbabStack_c2","Intensity_IntegratedIntensity_ProbabStack_c3","Intensity_MeanIntensity_ProbabStack_c3","Intensity_StdIntensity_ProbabStack_c3","Intensity_MinIntensity_ProbabStack_c3","Intensity_MaxIntensity_ProbabStack_c3","Intensity_IntegratedIntensityEdge_ProbabStack_c3","Intensity_MeanIntensityEdge_ProbabStack_c3","Intensity_StdIntensityEdge_ProbabStack_c3","Intensity_MinIntensityEdge_ProbabStack_c3","Intensity_MaxIntensityEdge_ProbabStack_c3","Intensity_MassDisplacement_ProbabStack_c3","Intensity_LowerQuartileIntensity_ProbabStack_c3","Intensity_MedianIntensity_ProbabStack_c3","Intensity_MADIntensity_ProbabStack_c3","Intensity_UpperQuartileIntensity_ProbabStack_c3","Location_CenterMassIntensity_X_ProbabStack_c3","Location_CenterMassIntensity_Y_ProbabStack_c3","Location_CenterMassIntensity_Z_ProbabStack_c3","Location_MaxIntensity_X_ProbabStack_c3","Location_MaxIntensity_Y_ProbabStack_c3","Location_MaxIntensity_Z_ProbabStack_c3","AreaShape_Extent","AreaShape_EulerNumber","AreaShape_EquivalentDiameter","AreaShape_MajorAxisLength","AreaShape_MinorAxisLength","AreaShape_Center_X","AreaShape_Center_Y","AreaShape_BoundingBoxMinimum_X","AreaShape_BoundingBoxMinimum_Y","AreaShape_BoundingBoxMaximum_X","AreaShape_BoundingBoxMaximum_Y","AreaShape_Area","AreaShape_Perimeter","AreaShape_MaximumRadius","AreaShape_MeanRadius","AreaShape_MedianRadius","AreaShape_MinFeretDiameter","AreaShape_MaxFeretDiameter","AreaShape_Orientation","AreaShape_Eccentricity","AreaShape_FormFactor","AreaShape_Solidity","AreaShape_ConvexArea","AreaShape_Compactness","AreaShape_BoundingBoxArea"],["Location","Location","Location","ID","Neighbors","Neighbors","Neighbors","Neighbors","Neighbors","Neighbors","Neighbors","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Location","Location","Location","Location","Location","Location","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Location","Location","Location","Location","Location","Location","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Location","Location","Location","Location","Location","Location","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Location","Location","Location","Location","Location","Location","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Location","Location","Location","Location","Location","Location","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Location","Location","Location","Location","Location","Location","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Location","Location","Location","Location","Location","Location","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Intensity","Location","Location","Location","Location","Location","Location","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape","AreaShape"],[null,null,null,null,null,null,null,null,null,null,null,"FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","FullStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack","ProbabStack",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],["Center_X","Center_Y","Center_Z","Number_Object_Number","NumberOfNeighbors","PercentTouching","FirstClosestObjectNumber","FirstClosestDistance","SecondClosestObjectNumber","SecondClosestDistance","AngleBetweenNeighbors","IntegratedIntensity","MeanIntensity","StdIntensity","MinIntensity","MaxIntensity","IntegratedIntensityEdge","MeanIntensityEdge","StdIntensityEdge","MinIntensityEdge","MaxIntensityEdge","MassDisplacement","LowerQuartileIntensity","MedianIntensity","MADIntensity","UpperQuartileIntensity","CenterMassIntensity_X","CenterMassIntensity_Y","CenterMassIntensity_Z","MaxIntensity_X","MaxIntensity_Y","MaxIntensity_Z","IntegratedIntensity","MeanIntensity","StdIntensity","MinIntensity","MaxIntensity","IntegratedIntensityEdge","MeanIntensityEdge","StdIntensityEdge","MinIntensityEdge","MaxIntensityEdge","MassDisplacement","LowerQuartileIntensity","MedianIntensity","MADIntensity","UpperQuartileIntensity","CenterMassIntensity_X","CenterMassIntensity_Y","CenterMassIntensity_Z","MaxIntensity_X","MaxIntensity_Y","MaxIntensity_Z","IntegratedIntensity","MeanIntensity","StdIntensity","MinIntensity","MaxIntensity","IntegratedIntensityEdge","MeanIntensityEdge","StdIntensityEdge","MinIntensityEdge","MaxIntensityEdge","MassDisplacement","LowerQuartileIntensity","MedianIntensity","MADIntensity","UpperQuartileIntensity","CenterMassIntensity_X","CenterMassIntensity_Y","CenterMassIntensity_Z","MaxIntensity_X","MaxIntensity_Y","MaxIntensity_Z","IntegratedIntensity","MeanIntensity","StdIntensity","MinIntensity","MaxIntensity","IntegratedIntensityEdge","MeanIntensityEdge","StdIntensityEdge","MinIntensityEdge","MaxIntensityEdge","MassDisplacement","LowerQuartileIntensity","MedianIntensity","MADIntensity","UpperQuartileIntensity","CenterMassIntensity_X","CenterMassIntensity_Y","CenterMassIntensity_Z","MaxIntensity_X","MaxIntensity_Y","MaxIntensity_Z","IntegratedIntensity","MeanIntensity","StdIntensity","MinIntensity","MaxIntensity","IntegratedIntensityEdge","MeanIntensityEdge","StdIntensityEdge","MinIntensityEdge","MaxIntensityEdge","MassDisplacement","LowerQuartileIntensity","MedianIntensity","MADIntensity","UpperQuartileIntensity","CenterMassIntensity_X","CenterMassIntensity_Y","CenterMassIntensity_Z","MaxIntensity_X","MaxIntensity_Y","MaxIntensity_Z","IntegratedIntensity","MeanIntensity","StdIntensity","MinIntensity","MaxIntensity","IntegratedIntensityEdge","MeanIntensityEdge","StdIntensityEdge","MinIntensityEdge","MaxIntensityEdge","MassDisplacement","LowerQuartileIntensity","MedianIntensity","MADIntensity","UpperQuartileIntensity","CenterMassIntensity_X","CenterMassIntensity_Y","CenterMassIntensity_Z","MaxIntensity_X","MaxIntensity_Y","MaxIntensity_Z","IntegratedIntensity","MeanIntensity","StdIntensity","MinIntensity","MaxIntensity","IntegratedIntensityEdge","MeanIntensityEdge","StdIntensityEdge","MinIntensityEdge","MaxIntensityEdge","MassDisplacement","LowerQuartileIntensity","MedianIntensity","MADIntensity","UpperQuartileIntensity","CenterMassIntensity_X","CenterMassIntensity_Y","CenterMassIntensity_Z","MaxIntensity_X","MaxIntensity_Y","MaxIntensity_Z","IntegratedIntensity","MeanIntensity","StdIntensity","MinIntensity","MaxIntensity","IntegratedIntensityEdge","MeanIntensityEdge","StdIntensityEdge","MinIntensityEdge","MaxIntensityEdge","MassDisplacement","LowerQuartileIntensity","MedianIntensity","MADIntensity","UpperQuartileIntensity","CenterMassIntensity_X","CenterMassIntensity_Y","CenterMassIntensity_Z","MaxIntensity_X","MaxIntensity_Y","MaxIntensity_Z","Extent","EulerNumber","EquivalentDiameter","MajorAxisLength","MinorAxisLength","Center_X","Center_Y","BoundingBoxMinimum_X","BoundingBoxMinimum_Y","BoundingBoxMaximum_X","BoundingBoxMaximum_Y","Area","Perimeter","MaximumRadius","MeanRadius","MedianRadius","MinFeretDiameter","MaxFeretDiameter","Orientation","Eccentricity","FormFactor","Solidity","ConvexArea","Compactness","BoundingBoxArea"],[null,null,null,null,null,null,null,null,null,null,null,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,8,8,8,8,8,8,8,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,"Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Sm147","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Yb172","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Pr141","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Eu153","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","Ag107","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellCenter","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","CellBorder","Background","Background","Background","Background","Background","Background","Background","Background","Background","Background","Background","Background","Background","Background","Background","Background","Background","Background","Background","Background","Background",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],["float","float","float","integer","integer","float","integer","float","integer","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float","float"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>column_name<\/th>\n      <th>category<\/th>\n      <th>image_name<\/th>\n      <th>object_name<\/th>\n      <th>feature_name<\/th>\n      <th>channel<\/th>\n      <th>parameters<\/th>\n      <th>channel_id<\/th>\n      <th>data_type<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[6,7]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script><p>By default, <code>read_cpout</code> will read in the mean intensity
+per channel and cell from “hot pixel” filtered image stacks specified
+via
+<code>intensities = "Intensity_MeanIntensity_FullStackFiltered"</code>.
+Please refer to <code><a href="../reference/read_cpout.html">?read_cpout</a></code> for the full documentation.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cur_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/mockData/cpout"</span>, package <span class="op">=</span> <span class="st">"imcRtools"</span><span class="op">)</span></span>
 <span></span>
@@ -311,7 +438,10 @@
 <div class="section level3">
 <h3 id="read-in-steinbock-output">Read in steinbock output<a class="anchor" aria-label="anchor" href="#read-in-steinbock-output"></a>
 </h3>
-<p>Single-cell data and all associated metadata (e.g. spatial location, morphology and interaction graphs) as produced by the <a href="https://github.com/BodenmillerGroup/steinbock" class="external-link">steinbock</a> pipeline can be read in using the <code>read_steinbock</code> function:</p>
+<p>Single-cell data and all associated metadata (e.g. spatial location,
+morphology and interaction graphs) as produced by the <a href="https://github.com/BodenmillerGroup/steinbock" class="external-link">steinbock</a>
+pipeline can be read in using the <code>read_steinbock</code>
+function:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cur_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/mockData/steinbock"</span>, package <span class="op">=</span> <span class="st">"imcRtools"</span><span class="op">)</span></span>
 <span></span>
@@ -344,13 +474,20 @@
 <span><span class="co">## reducedDimNames(0):</span></span>
 <span><span class="co">## mainExpName: NULL</span></span>
 <span><span class="co">## altExpNames(0):</span></span></code></pre>
-<p>For more information, please refer to <code><a href="../reference/read_steinbock.html">?read_steinbock</a></code>.</p>
+<p>For more information, please refer to
+<code><a href="../reference/read_steinbock.html">?read_steinbock</a></code>.</p>
 </div>
 <div class="section level3">
 <h3 id="read-raw--txt-files-into-image-objects">Read raw .txt files into Image objects<a class="anchor" aria-label="anchor" href="#read-raw--txt-files-into-image-objects"></a>
 </h3>
-<p>For reading in and visualization of multi-channel images and segmentation masks, please refer to the <em><a href="https://bioconductor.org/packages/3.15/cytomapper" class="external-link">cytomapper</a></em> package. The <code>imcRtools</code> package however supports reading in raw .txt files generated by the Hyperion imaging system into a <code>CytoImageList</code> object; a data container exported by <code>cytomapper</code>.</p>
-<p>The user needs to provide a path from which all .txt files will be read in:</p>
+<p>For reading in and visualization of multi-channel images and
+segmentation masks, please refer to the <em><a href="https://bioconductor.org/packages/3.16/cytomapper" class="external-link">cytomapper</a></em>
+package. The <code>imcRtools</code> package however supports reading in
+raw .txt files generated by the Hyperion imaging system into a
+<code>CytoImageList</code> object; a data container exported by
+<code>cytomapper</code>.</p>
+<p>The user needs to provide a path from which all .txt files will be
+read in:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/mockData/raw"</span>, package <span class="op">=</span> <span class="st">"imcRtools"</span><span class="op">)</span></span>
 <span></span>
@@ -360,18 +497,32 @@
 <span><span class="co">## names(3): 20210305_NE_mockData2_ROI_001_1 20210305_NE_mockData2_ROI_002_2 20210305_NE_mockData2_ROI_003_3 </span></span>
 <span><span class="co">## Each image contains 5 channel(s)</span></span>
 <span><span class="co">## channelNames(5): Ag107Di Pr141Di Sm147Di Eu153Di Yb172Di</span></span></code></pre>
-<p>By specifying the <code>pattern</code> argument, individual or a subset of files can be read in. For more information, please refer to <code><a href="../reference/readImagefromTXT.html">?readImagefromTXT</a></code>.</p>
+<p>By specifying the <code>pattern</code> argument, individual or a
+subset of files can be read in. For more information, please refer to
+<code><a href="../reference/readImagefromTXT.html">?readImagefromTXT</a></code>.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="spillover">Spillover correction<a class="anchor" aria-label="anchor" href="#spillover"></a>
 </h2>
-<p>When acquiring IMC images, pixel intensities can be influenced by spillover from neighboring channels. To correct for this, Chevrier <em>et al.</em> have developed a staining protocol to acquire individually spotted metal isotopes <span class="citation">(Chevrier et al. 2017)</span>. Based on these measurements, spillover into neighboring channels can be quantified to correct pixel intensities.</p>
-<p>The <code>imcRtools</code> package provides helper functions that facilitate the correction of spillover for IMC data. For a full tutorial, please refer to the <a href="https://bodenmillergroup.github.io/IMCDataAnalysis/spillover-correction.html" class="external-link">IMC data analysis book</a>.</p>
+<p>When acquiring IMC images, pixel intensities can be influenced by
+spillover from neighboring channels. To correct for this, Chevrier
+<em>et al.</em> have developed a staining protocol to acquire
+individually spotted metal isotopes <span class="citation">(Chevrier et
+al. 2017)</span>. Based on these measurements, spillover into
+neighboring channels can be quantified to correct pixel intensities.</p>
+<p>The <code>imcRtools</code> package provides helper functions that
+facilitate the correction of spillover for IMC data. For a full
+tutorial, please refer to the <a href="https://bodenmillergroup.github.io/IMCDataAnalysis/spillover-correction.html" class="external-link">IMC
+data analysis book</a>.</p>
 <div class="section level3">
 <h3 id="read-in-the-single-spot-acquisitions">Read in the single-spot acquisitions<a class="anchor" aria-label="anchor" href="#read-in-the-single-spot-acquisitions"></a>
 </h3>
-<p>In the first step, the pixel intensities of individually spotted metals need to be read into a <code>SingleCellExperiment</code> container for downstream use with the <em><a href="https://bioconductor.org/packages/3.15/CATALYST" class="external-link">CATALYST</a></em> package. For this, the <code>readSCEfromTXT</code> function can be used:</p>
+<p>In the first step, the pixel intensities of individually spotted
+metals need to be read into a <code>SingleCellExperiment</code>
+container for downstream use with the <em><a href="https://bioconductor.org/packages/3.16/CATALYST" class="external-link">CATALYST</a></em>
+package. For this, the <code>readSCEfromTXT</code> function can be
+used:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/spillover"</span>, package <span class="op">=</span> <span class="st">"imcRtools"</span><span class="op">)</span></span>
 <span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readSCEfromTXT.html">readSCEfromTXT</a></span><span class="op">(</span><span class="va">path</span><span class="op">)</span> </span></code></pre></div>
@@ -393,16 +544,26 @@
 <span><span class="co">## reducedDimNames(0):</span></span>
 <span><span class="co">## mainExpName: NULL</span></span>
 <span><span class="co">## altExpNames(0):</span></span></code></pre>
-<p>Here, the example metal spot files are read in. The spot information are stored in the <code>colData(sce)</code> slot and channel information are stored in <code>rowData(sce)</code>. Each column represents a single pixel.</p>
+<p>Here, the example metal spot files are read in. The spot information
+are stored in the <code>colData(sce)</code> slot and channel information
+are stored in <code>rowData(sce)</code>. Each column represents a single
+pixel.</p>
 </div>
 <div class="section level3">
 <h3 id="quality-control-on-single-spot-acquisitions">Quality control on single-spot acquisitions<a class="anchor" aria-label="anchor" href="#quality-control-on-single-spot-acquisitions"></a>
 </h3>
-<p>In the next step, it is crucial to identify potentially mislabeled spots or spots with low pixel intensities. The <code>imcRtools</code> package exports the <code>plotSpotHeatmap</code> function, which visualizes the aggregated (default <code>median</code>) pixel intensities per spot and per metal:</p>
+<p>In the next step, it is crucial to identify potentially mislabeled
+spots or spots with low pixel intensities. The <code>imcRtools</code>
+package exports the <code>plotSpotHeatmap</code> function, which
+visualizes the aggregated (default <code>median</code>) pixel
+intensities per spot and per metal:</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSpotHeatmap.html">plotSpotHeatmap</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></span></code></pre></div>
 <p><img src="imcRtools_files/figure-html/plotSpotHeatmap-1.png" width="480"></p>
-<p>Here, high median pixel intensities can be observed in each spot and their corresponding channels (visualized on the <code>log10</code> scale by default). To quickly identify spot/channel combinations with low signal, the <code>threshold</code> parameter can be set:</p>
+<p>Here, high median pixel intensities can be observed in each spot and
+their corresponding channels (visualized on the <code>log10</code> scale
+by default). To quickly identify spot/channel combinations with low
+signal, the <code>threshold</code> parameter can be set:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSpotHeatmap.html">plotSpotHeatmap</a></span><span class="op">(</span><span class="va">sce</span>, log <span class="op">=</span> <span class="cn">FALSE</span>, threshold <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span></code></pre></div>
 <p><img src="imcRtools_files/figure-html/plotSpotHeatmap-2-1.png" width="480"></p>
@@ -410,7 +571,10 @@
 <div class="section level3">
 <h3 id="consecutive-pixel-binning">Consecutive pixel binning<a class="anchor" aria-label="anchor" href="#consecutive-pixel-binning"></a>
 </h3>
-<p>If pixel intensities are low, spillover estimation might not be robust. Therefore, the <code>binAcrossPixels</code> function can be used to sum consecutive pixels and enhance the acquired signal. This step is optional for spillover estimation.</p>
+<p>If pixel intensities are low, spillover estimation might not be
+robust. Therefore, the <code>binAcrossPixels</code> function can be used
+to sum consecutive pixels and enhance the acquired signal. This step is
+optional for spillover estimation.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sce2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/binAcrossPixels.html">binAcrossPixels</a></span><span class="op">(</span><span class="va">sce</span>, bin_size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span></span>
@@ -420,8 +584,17 @@
 <div class="section level3">
 <h3 id="pixel-filtering">Pixel filtering<a class="anchor" aria-label="anchor" href="#pixel-filtering"></a>
 </h3>
-<p>Prior to spillover estimation, the <em><a href="https://bioconductor.org/packages/3.15/CATALYST" class="external-link">CATALYST</a></em> package provides the <code>assignPrelim</code>, <code>estCutoffs</code> and <code>applyCutoffs</code> functions to estimate the spotted mass for each pixel based on their channel intensities. For more information on the spillover estimation and correction, please refer to the <a href="https://bioconductor.org/packages/release/bioc/vignettes/CATALYST/inst/doc/preprocessing.html#compensation" class="external-link">CATALYST vignette</a>.</p>
-<p>This estimation can be used to identify pixels that cannot be easily assigned to their spotted mass, potentially indicating pixels with weak signal. To remove these pixels, the <code>filterPixels</code> function can be used. This function further removes pixels assigned to masses, which only contain very few pixels.</p>
+<p>Prior to spillover estimation, the <em><a href="https://bioconductor.org/packages/3.16/CATALYST" class="external-link">CATALYST</a></em>
+package provides the <code>assignPrelim</code>, <code>estCutoffs</code>
+and <code>applyCutoffs</code> functions to estimate the spotted mass for
+each pixel based on their channel intensities. For more information on
+the spillover estimation and correction, please refer to the <a href="https://bioconductor.org/packages/release/bioc/vignettes/CATALYST/inst/doc/preprocessing.html#compensation" class="external-link">CATALYST
+vignette</a>.</p>
+<p>This estimation can be used to identify pixels that cannot be easily
+assigned to their spotted mass, potentially indicating pixels with weak
+signal. To remove these pixels, the <code>filterPixels</code> function
+can be used. This function further removes pixels assigned to masses,
+which only contain very few pixels.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/HelenaLC/CATALYST" class="external-link">CATALYST</a></span><span class="op">)</span></span>
 <span></span>
@@ -446,7 +619,9 @@
 <div class="section level3">
 <h3 id="estimating-the-spillover-matrix">Estimating the spillover matrix<a class="anchor" aria-label="anchor" href="#estimating-the-spillover-matrix"></a>
 </h3>
-<p>Finally, the pre-processed <code>SiingleCellExperiment</code> object can be used to generate the spillover matrix using the <code><a href="https://rdrr.io/pkg/CATALYST/man/computeSpillmat.html" class="external-link">CATALYST::computeSpillmat</a></code> function:</p>
+<p>Finally, the pre-processed <code>SiingleCellExperiment</code> object
+can be used to generate the spillover matrix using the
+<code><a href="https://rdrr.io/pkg/CATALYST/man/computeSpillmat.html" class="external-link">CATALYST::computeSpillmat</a></code> function:</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CATALYST/man/computeSpillmat.html" class="external-link">computeSpillmat</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></span>
 <span><span class="fu">metadata</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">spillover_matrix</span></span></code></pre></div>
@@ -455,17 +630,26 @@
 <span><span class="co">## Dy162Di 0.015715159 1.000000000 0.048116187 0.008250039</span></span>
 <span><span class="co">## Dy163Di 0.003809504 0.012159704 1.000000000 0.020214651</span></span>
 <span><span class="co">## Dy164Di 0.005058069 0.008457546 0.028912343 1.000000000</span></span></code></pre>
-<p>This spillover matrix can be directly applied to compensate the summarized pixel intensities per cell and per channel as described <a href="https://bioconductor.org/packages/release/bioc/vignettes/CATALYST/inst/doc/preprocessing.html#compcytof-compensation-of-mass-cytometry-data" class="external-link">here</a>.</p>
+<p>This spillover matrix can be directly applied to compensate the
+summarized pixel intensities per cell and per channel as described <a href="https://bioconductor.org/packages/release/bioc/vignettes/CATALYST/inst/doc/preprocessing.html#compcytof-compensation-of-mass-cytometry-data" class="external-link">here</a>.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="spatial-analysis">Spatial analysis<a class="anchor" aria-label="anchor" href="#spatial-analysis"></a>
 </h2>
-<p>The following section will highlight functions for spatial analyses of the data.</p>
+<p>The following section will highlight functions for spatial analyses
+of the data.</p>
 <div class="section level3">
 <h3 id="build-graph">Constructing graphs<a class="anchor" aria-label="anchor" href="#build-graph"></a>
 </h3>
-<p>When following the <code>ImcSegmentationPipeline</code> or <code>steinbock</code> and reading in the data using the corresponding functions, the generated graphs are automatically stored in the <code>colPair(spe, "neighborhood")</code> slot. Alternatively, the <code>buildSpatialGraph</code> function in the <code>imcRtools</code> package constructs interaction graphs using either (i) cell-centroid expansion, (ii) k-nearest neighbor search or (iii) delaunay triangulation.</p>
+<p>When following the <code>ImcSegmentationPipeline</code> or
+<code>steinbock</code> and reading in the data using the corresponding
+functions, the generated graphs are automatically stored in the
+<code>colPair(spe, "neighborhood")</code> slot. Alternatively, the
+<code>buildSpatialGraph</code> function in the <code>imcRtools</code>
+package constructs interaction graphs using either (i) cell-centroid
+expansion, (ii) k-nearest neighbor search or (iii) delaunay
+triangulation.</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BodenmillerGroup/cytomapper" class="external-link">cytomapper</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pancreasSCE"</span><span class="op">)</span></span>
@@ -482,12 +666,24 @@
 <span><span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/colPairs.html" class="external-link">colPairNames</a></span><span class="op">(</span><span class="va">pancreasSCE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "expansion_interaction_graph" "knn_interaction_graph"      </span></span>
 <span><span class="co">## [3] "delaunay_interaction_graph"</span></span></code></pre>
-<p>When setting <code>type = "knn"</code>, by default a directional graph will be build. Setting <code>directed = FALSE</code> will create bi-directional edges for each pair of cells that are connected by at least one edge in the directed setting.</p>
+<p>When setting <code>type = "knn"</code>, by default a directional
+graph will be build. Setting <code>directed = FALSE</code> will create
+bi-directional edges for each pair of cells that are connected by at
+least one edge in the directed setting.</p>
 </div>
 <div class="section level3">
 <h3 id="viz-cells">Graph/cell visualization<a class="anchor" aria-label="anchor" href="#viz-cells"></a>
 </h3>
-<p>The cells’ locations and constructed graphs can be visualized using the <code>plotSpatial</code> function. Here, cells are referred to as “nodes” and cell-cell interactions are referred to as “edges”. All visual attributes of the nodes and edges can be set. Either by specifying a variable in <code>colData(spe)</code>, a marker name or a single entry using the <code>*_fix</code> parameters. By default the <code>plotSpatial</code> function will visualize equal physical units on the x- and y-axis with an aspect ratio of 1. The example data are located in different regions of an image and we therefore set <code>scales = "free"</code> for simpler visualization.</p>
+<p>The cells’ locations and constructed graphs can be visualized using
+the <code>plotSpatial</code> function. Here, cells are referred to as
+“nodes” and cell-cell interactions are referred to as “edges”. All
+visual attributes of the nodes and edges can be set. Either by
+specifying a variable in <code>colData(spe)</code>, a marker name or a
+single entry using the <code>*_fix</code> parameters. By default the
+<code>plotSpatial</code> function will visualize equal physical units on
+the x- and y-axis with an aspect ratio of 1. The example data are
+located in different regions of an image and we therefore set
+<code>scales = "free"</code> for simpler visualization.</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggraph.data-imaginist.com" class="external-link">ggraph</a></span><span class="op">)</span></span>
@@ -527,20 +723,32 @@
 <span>            colPairName <span class="op">=</span> <span class="st">"knn_interaction_graph"</span>,</span>
 <span>            directed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> </span></code></pre></div>
 <p><img src="imcRtools_files/figure-html/plotSpatial-3.png" width="700"></p>
-<p>The returned object can be further modified using the <code>ggplot2</code> logic. This includes changing the node color, shape and size using <code>scale_color_*</code>, <code>scale_shape_*</code> and <code>scale_size_*</code>. Edge attributes can be altered using the <code>scale_edge_*</code> function exported by <code>ggraph</code>,</p>
+<p>The returned object can be further modified using the
+<code>ggplot2</code> logic. This includes changing the node color, shape
+and size using <code>scale_color_*</code>, <code>scale_shape_*</code>
+and <code>scale_size_*</code>. Edge attributes can be altered using the
+<code>scale_edge_*</code> function exported by <code>ggraph</code>,</p>
 </div>
 <div class="section level3">
 <h3 id="aggregate-neighbors">Neighborhood aggregation<a class="anchor" aria-label="anchor" href="#aggregate-neighbors"></a>
 </h3>
-<p>The <code>aggregateNeighbors</code> function can be used to aggregate features of all neighboring cells for each individual cell. This function operates in two settings.</p>
+<p>The <code>aggregateNeighbors</code> function can be used to aggregate
+features of all neighboring cells for each individual cell. This
+function operates in two settings.</p>
 <ol style="list-style-type: decimal">
 <li>
-<code>metadata</code>: when aggregating by cell-specific metadata, the function computes the relative frequencies of all entries to <code>colData(sce)[[count_by]]</code> within the direct neighborhood of each cell.<br>
+<code>metadata</code>: when aggregating by cell-specific metadata,
+the function computes the relative frequencies of all entries to
+<code>colData(sce)[[count_by]]</code> within the direct neighborhood of
+each cell.<br>
 </li>
 <li>
-<code>expression</code>: the expression counts of neighboring cells are aggregated using the specified <code>statistic</code> (defaults to <code>mean</code>).</li>
+<code>expression</code>: the expression counts of neighboring cells
+are aggregated using the specified <code>statistic</code> (defaults to
+<code>mean</code>).</li>
 </ol>
-<p>Each cell’s neighborhood is defined as endpoints of edges stored in <code>colPair(sce, colPairName)</code>.</p>
+<p>Each cell’s neighborhood is defined as endpoints of edges stored in
+<code>colPair(sce, colPairName)</code>.</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pancreasSCE</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/aggregateNeighbors.html">aggregateNeighbors</a></span><span class="op">(</span><span class="va">pancreasSCE</span>,</span>
 <span>                                  colPairName <span class="op">=</span> <span class="st">"knn_interaction_graph"</span>,</span>
@@ -571,7 +779,9 @@
 <span><span class="co">## 4   2.55842  0.773342  0.124545  0.188629   2.51084</span></span>
 <span><span class="co">## 5   2.44287  1.126240  0.252129  0.200261   2.61336</span></span>
 <span><span class="co">## 6   2.65059  0.903869  0.181792  0.196691   2.16434</span></span></code></pre>
-<p>The returned entries can now be used for clustering to group cells based on their environment (either by aggregated categorical features or expression).</p>
+<p>The returned entries can now be used for clustering to group cells
+based on their environment (either by aggregated categorical features or
+expression).</p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">22</span><span class="op">)</span></span>
 <span><span class="va">cur_cluster</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/kmeans.html" class="external-link">kmeans</a></span><span class="op">(</span><span class="va">pancreasSCE</span><span class="op">$</span><span class="va">aggregatedNeighbors</span>, centers <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
@@ -610,21 +820,44 @@
 <div class="section level3">
 <h3 id="spatial-context">Spatial context analysis<a class="anchor" aria-label="anchor" href="#spatial-context"></a>
 </h3>
-<p>The single cell assignments derived from clustering cells based on their environment can be interpreted as <strong>cellular neighborhoods (CNs)</strong>, which can represent sites of unique local processes <span class="citation">(Schürch et al. 2020)</span>.</p>
-<p>Downstream of CNs, imcRtools exports three functions to detect and analyze the <strong>spatial context (SC)</strong> of each cell.</p>
+<p>The single cell assignments derived from clustering cells based on
+their environment can be interpreted as <strong>cellular neighborhoods
+(CNs)</strong>, which can represent sites of unique local processes
+<span class="citation">(Schürch et al. 2020)</span>.</p>
+<p>Downstream of CNs, imcRtools exports three functions to detect and
+analyze the <strong>spatial context (SC)</strong> of each cell.</p>
 <ol style="list-style-type: decimal">
 <li>
-<code>detectSpatialContext</code>: for the function to detect SCs</li>
+<code>detectSpatialContext</code>: for the function to detect
+SCs</li>
 <li>
-<code>filterSpatialContext</code>: for the function to filter SCs</li>
+<code>filterSpatialContext</code>: for the function to filter
+SCs</li>
 <li>
-<code>plotSpatialContext</code>: for the function to plot SC graphs</li>
+<code>plotSpatialContext</code>: for the function to plot SC
+graphs</li>
 </ol>
-<p>The term SC was coined by Bhate and colleagues <span class="citation">(Bhate et al. 2022)</span> and describes tissue regions in which distinct CNs may be interacting, which can lead to specialized local biological events.</p>
-<p>The <code>detectSpatialContext</code> function relies on CN fractions for each cell in a spatial interaction graph (originally a k-nearest neighbor (KNN) graph).</p>
-<p>We can retrieve the CN fractions using the above-described <code>buildSpatialGraph</code> and <code>aggregateNeighbors</code> functions. The window size (k for KNN) for <code>buildSpatialGraph</code> should reflect a length scale on which biological signals can be exchanged and depends, among others, on cell density and tissue area. In view of their divergent functionality, we recommend to use a larger window size for SC (interaction between local processes) than for CN (local processes) detection.</p>
-<p>Subsequently, the CN fractions are sorted from high-to-low and the SC of each cell is assigned the minimal combination of SCs that additively surpass a user-defined threshold. The default threshold of 0.9 aims to represent the dominant CNs, hence the most prevalent signals, in a given window.</p>
-<p>For more details, please refer to <span class="citation">(Bhate et al. 2022)</span>.</p>
+<p>The term SC was coined by Bhate and colleagues <span class="citation">(Bhate et al. 2022)</span> and describes tissue regions
+in which distinct CNs may be interacting, which can lead to specialized
+local biological events.</p>
+<p>The <code>detectSpatialContext</code> function relies on CN fractions
+for each cell in a spatial interaction graph (originally a k-nearest
+neighbor (KNN) graph).</p>
+<p>We can retrieve the CN fractions using the above-described
+<code>buildSpatialGraph</code> and <code>aggregateNeighbors</code>
+functions. The window size (k for KNN) for
+<code>buildSpatialGraph</code> should reflect a length scale on which
+biological signals can be exchanged and depends, among others, on cell
+density and tissue area. In view of their divergent functionality, we
+recommend to use a larger window size for SC (interaction between local
+processes) than for CN (local processes) detection.</p>
+<p>Subsequently, the CN fractions are sorted from high-to-low and the SC
+of each cell is assigned the minimal combination of SCs that additively
+surpass a user-defined threshold. The default threshold of 0.9 aims to
+represent the dominant CNs, hence the most prevalent signals, in a given
+window.</p>
+<p>For more details, please refer to <span class="citation">(Bhate et
+al. 2022)</span>.</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Generate k-nearest neighbor graph</span></span>
 <span><span class="va">pancreasSCE</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/buildSpatialGraph.html">buildSpatialGraph</a></span><span class="op">(</span><span class="va">pancreasSCE</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
@@ -664,8 +897,14 @@
 <span>            scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="va">col_SC</span><span class="op">)</span></span></code></pre></div>
 <p><img src="imcRtools_files/figure-html/detectSpatialContext-1.png" width="700"></p>
-<p>After SC assignment for each individual cell, the <code>filterSpatialContext</code> function allows to filter detected SCs based on user-defined thresholds for number of group entries (usually image or patient ID) and/or total number of cells per SC.</p>
-<p>In addition to a new column entry to the <code>colData(object)</code>, the function also returns a <code>data.frame</code> entry to <code>metadata(object)</code> containing filtered group and cell counts per SC.</p>
+<p>After SC assignment for each individual cell, the
+<code>filterSpatialContext</code> function allows to filter detected SCs
+based on user-defined thresholds for number of group entries (usually
+image or patient ID) and/or total number of cells per SC.</p>
+<p>In addition to a new column entry to the
+<code>colData(object)</code>, the function also returns a
+<code>data.frame</code> entry to <code>metadata(object)</code>
+containing filtered group and cell counts per SC.</p>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Filter spatial contexts</span></span>
 <span><span class="co"># By number of group entries</span></span>
@@ -724,7 +963,9 @@
 <span>            scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="va">col_SC</span><span class="op">)</span></span></code></pre></div>
 <p><img src="imcRtools_files/figure-html/filterSpatialContext-2.png" width="700"></p>
-<p>Lastly, the <code>plotSpatialContext</code> function plots directed <em>SC graphs</em>, akin to <em>CN combination maps</em> in <span class="citation">(Bhate et al. 2022)</span>, based on symbolic edge-lists and vertex metadata, which operates on cohort-level.</p>
+<p>Lastly, the <code>plotSpatialContext</code> function plots directed
+<em>SC graphs</em>, akin to <em>CN combination maps</em> in <span class="citation">(Bhate et al. 2022)</span>, based on symbolic
+edge-lists and vertex metadata, which operates on cohort-level.</p>
 <div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot spatial context graph </span></span>
 <span><span class="co"># Default</span></span>
@@ -751,8 +992,14 @@
 <span>                   node_label_color_by <span class="op">=</span> <span class="st">"n_cells"</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://sjmgarnier.github.io/viridis/reference/scale_viridis.html" class="external-link">scale_color_viridis</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="imcRtools_files/figure-html/plotSpatialContext-3.png" width="700"></p>
-<p>The returned object can be further modified using the <code>ggplot2</code> logic. This includes changing the node color and size using <code>scale_color_*</code> and <code>scale_size_*</code>. Edge attributes can be altered using the <code>scale_edge_*</code> function exported by <code>ggraph</code>.</p>
-<p>Furthermore, setting <code>return_data = TRUE</code> returns the symbolic edge-list and vertex metadata used for graph construction in a <code>list</code> of two <code>data.frames</code>.</p>
+<p>The returned object can be further modified using the
+<code>ggplot2</code> logic. This includes changing the node color and
+size using <code>scale_color_*</code> and <code>scale_size_*</code>.
+Edge attributes can be altered using the <code>scale_edge_*</code>
+function exported by <code>ggraph</code>.</p>
+<p>Furthermore, setting <code>return_data = TRUE</code> returns the
+symbolic edge-list and vertex metadata used for graph construction in a
+<code>list</code> of two <code>data.frames</code>.</p>
 <div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Return data</span></span>
 <span><span class="fu"><a href="../reference/plotSpatialContext.html">plotSpatialContext</a></span><span class="op">(</span><span class="va">pancreasSCE</span>,</span>
@@ -784,12 +1031,19 @@
 <div class="section level3">
 <h3 id="community-detection">Community detection<a class="anchor" aria-label="anchor" href="#community-detection"></a>
 </h3>
-<p>In addition to cellular neighborhood and spatial context analysis, <code>imcRtools</code> exports the <code>detectCommunity</code> function to detect the spatial community of each cell as proposed by <span class="citation">(Jackson et al. 2020)</span>. Here, each cell is clustered based on its interactions as defined by a spatial object graph.</p>
-<p>In more detail, the spatial community detection procedure is as follows:</p>
+<p>In addition to cellular neighborhood and spatial context analysis,
+<code>imcRtools</code> exports the <code>detectCommunity</code> function
+to detect the spatial community of each cell as proposed by <span class="citation">(Jackson et al. 2020)</span>. Here, each cell is
+clustered based on its interactions as defined by a spatial object
+graph.</p>
+<p>In more detail, the spatial community detection procedure is as
+follows:</p>
 <ol style="list-style-type: decimal">
 <li><p>Create an igraph object from the edge list stored in .</p></li>
-<li><p>Perform community detection using the specified  algorithm (defaults to “louvain”).</p></li>
-<li><p>Store the community IDs in a vector and replace all communities with a size smaller than  by NA.</p></li>
+<li><p>Perform community detection using the specified algorithm
+(defaults to “louvain”).</p></li>
+<li><p>Store the community IDs in a vector and replace all communities
+with a size smaller than by NA.</p></li>
 </ol>
 <div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Detect spatial community </span></span>
@@ -825,7 +1079,9 @@
 <span>            directed <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>            nodes_first <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>            scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="imcRtools_files/figure-html/detectCommunity-2.png" width="700"> It is also possible to use different community detection algorithms from the <code>igraph</code>package.</p>
+<p><img src="imcRtools_files/figure-html/detectCommunity-2.png" width="700">
+It is also possible to use different community detection algorithms from
+the <code>igraph</code>package.</p>
 <div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Detect spatial community - walktrap community detection</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">22</span><span class="op">)</span></span>
@@ -844,7 +1100,9 @@
 <span>            nodes_first <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>            scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="imcRtools_files/figure-html/detectCommunity-walktrap-1.png" width="700"></p>
-<p>Moreover, the user can specify  to perform spatial community detection separately for all unique entries to  e.g. for tumor and non-tumor cells.</p>
+<p>Moreover, the user can specify to perform spatial community detection
+separately for all unique entries to e.g. for tumor and non-tumor
+cells.</p>
 <div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Detect spatial community - specify group_by</span></span>
 <span><span class="va">pancreasSCE</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/detectCommunity.html">detectCommunity</a></span><span class="op">(</span><span class="va">pancreasSCE</span>, </span>
@@ -867,7 +1125,9 @@
 <div class="section level3">
 <h3 id="border-cells">Border cells<a class="anchor" aria-label="anchor" href="#border-cells"></a>
 </h3>
-<p>To exclude cells that are close to the image border, the <code>imcRtools</code> package exports the <code>findBorderCells</code> function.</p>
+<p>To exclude cells that are close to the image border, the
+<code>imcRtools</code> package exports the <code>findBorderCells</code>
+function.</p>
 <div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pancreasSCE</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/findBorderCells.html">findBorderCells</a></span><span class="op">(</span><span class="va">pancreasSCE</span>,</span>
 <span>                               img_id <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
@@ -887,13 +1147,25 @@
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_color_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set2"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/scale_edge_colour.html" class="external-link">scale_edge_color_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set1"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="imcRtools_files/figure-html/findBorderCells-1.png" width="700"></p>
-<p>Excluding border cells can be useful when incorrectly connected cells are observed at image borders.</p>
+<p>Excluding border cells can be useful when incorrectly connected cells
+are observed at image borders.</p>
 </div>
 <div class="section level3">
 <h3 id="patch-detection">Patch detection<a class="anchor" aria-label="anchor" href="#patch-detection"></a>
 </h3>
-<p>An alternative and supervised way of detecting regions with similar types of cells is available via the <code>patchDetection</code> function. Here, the user defines which cells should be used for patch detection via the <code>patch_cells</code> parameter. A patch is defined as a set of cells as defined by <code>patch_cells</code> which are weakly connected in the graph in <code>colPair(object, colPairname)</code>.</p>
-<p>Below, the <code>patchDetection</code> function is demonstrated using the previously computed <code>expansion</code> graph and defining cells of <code>celltype_B</code> as the cells of interest. Here, the function additionally draws a concave hull around the detected patch, expands the hull by 20<span class="math inline">\(\mu{}m\)</span> and defines all cells within this expanded hulls as patch cells.</p>
+<p>An alternative and supervised way of detecting regions with similar
+types of cells is available via the <code>patchDetection</code>
+function. Here, the user defines which cells should be used for patch
+detection via the <code>patch_cells</code> parameter. A patch is defined
+as a set of cells as defined by <code>patch_cells</code> which are
+weakly connected in the graph in
+<code>colPair(object, colPairname)</code>.</p>
+<p>Below, the <code>patchDetection</code> function is demonstrated using
+the previously computed <code>expansion</code> graph and defining cells
+of <code>celltype_B</code> as the cells of interest. Here, the function
+additionally draws a concave hull around the detected patch, expands the
+hull by 20<span class="math inline">\(\mu{}m\)</span> and defines all
+cells within this expanded hulls as patch cells.</p>
 <div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pancreasSCE</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/patchDetection.html">patchDetection</a></span><span class="op">(</span><span class="va">pancreasSCE</span>, </span>
 <span>                              patch_cells <span class="op">=</span> <span class="va">pancreasSCE</span><span class="op">$</span><span class="va">CellType</span> <span class="op">==</span> <span class="st">"celltype_B"</span>,</span>
@@ -907,7 +1179,8 @@
 <span>            scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="imcRtools_files/figure-html/patchDetection-1.png" width="700"></p>
 <p>Patches that only consist of 1 or 2 cells cannot be expanded.</p>
-<p>For each patch larger than 2 cells, the spatial area can be computed using the <code>patchSize</code> function:</p>
+<p>For each patch larger than 2 cells, the spatial area can be computed
+using the <code>patchSize</code> function:</p>
 <div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/patchSize.html">patchSize</a></span><span class="op">(</span><span class="va">pancreasSCE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## DataFrame with 8 rows and 3 columns</span></span>
@@ -925,8 +1198,19 @@
 <div class="section level3">
 <h3 id="minimal-distances-to-cells-of-interest">Minimal distances to cells of interest<a class="anchor" aria-label="anchor" href="#minimal-distances-to-cells-of-interest"></a>
 </h3>
-<p>Calculate the minimal distance for each cell to a given cell type or class of cells of interest, the function <code>minDistToCells</code> is available. Cells of interest are defined via the <code>x_cells</code> parameter as <code>logical</code> and distances to for all cells to those cells will be reported in a new column in the <code>colData</code> of the <code>SingleCellExperiment</code>.</p>
-<p>If the cells of interest form patches (many cells of the same type next to each other) or similarly if a patch detection has previously been performed the positive distances reflect the distances from cells outside of patches to the closest patch border and the negative distances reflect the distances from cells inside the patches to the patch border. If <code>return_neg</code> is set to <code>FALSE</code> negative distances are set to 0.</p>
+<p>Calculate the minimal distance for each cell to a given cell type or
+class of cells of interest, the function <code>minDistToCells</code> is
+available. Cells of interest are defined via the <code>x_cells</code>
+parameter as <code>logical</code> and distances to for all cells to
+those cells will be reported in a new column in the <code>colData</code>
+of the <code>SingleCellExperiment</code>.</p>
+<p>If the cells of interest form patches (many cells of the same type
+next to each other) or similarly if a patch detection has previously
+been performed the positive distances reflect the distances from cells
+outside of patches to the closest patch border and the negative
+distances reflect the distances from cells inside the patches to the
+patch border. If <code>return_neg</code> is set to <code>FALSE</code>
+negative distances are set to 0.</p>
 <div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pancreasSCE</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/minDistToCells.html">minDistToCells</a></span><span class="op">(</span><span class="va">pancreasSCE</span>,</span>
 <span>                              x_cells <span class="op">=</span> <span class="va">pancreasSCE</span><span class="op">$</span><span class="va">CellType</span> <span class="op">==</span> <span class="st">"celltype_B"</span>,</span>
@@ -943,18 +1227,50 @@
 <div class="section level3">
 <h3 id="test-neighborhood">Neighborhood permutation testing<a class="anchor" aria-label="anchor" href="#test-neighborhood"></a>
 </h3>
-<p>The following section describes how to observe and test the average number of interactions between cell labels (e.g. cell-types) within grouping levels (e.g. images). For full descriptions of the testing approaches, please refer to <a href="https://www.nature.com/articles/nmeth.4391" class="external-link">Shapiro et al., Nature Methods</a> <span class="citation">(Schapiro et al. 2017)</span> and <a href="https://www.sciencedirect.com/science/article/pii/S2405471217305434" class="external-link">Schulz et al., Cell Systems</a> <span class="citation">(Schulz et al. 2018)</span></p>
-<p>The <code>imcRtools</code> package exports the <code>countInteractions</code> and <code>testInteractions</code> functions, which summarize all cell-cell interactions per grouping level (e.g. image). As a result, a table is returned where each row represents one of all possible cell-type/cell-type interactions among all grouping levels. Missing entries or <code>NA</code>s indicate missing cell-type labels for this grouping level. The next section gives details on how interactions are summarized.</p>
+<p>The following section describes how to observe and test the average
+number of interactions between cell labels (e.g. cell-types) within
+grouping levels (e.g. images). For full descriptions of the testing
+approaches, please refer to <a href="https://www.nature.com/articles/nmeth.4391" class="external-link">Shapiro et al., Nature
+Methods</a> <span class="citation">(Schapiro et al. 2017)</span> and <a href="https://www.sciencedirect.com/science/article/pii/S2405471217305434" class="external-link">Schulz
+et al., Cell Systems</a> <span class="citation">(Schulz et al.
+2018)</span></p>
+<p>The <code>imcRtools</code> package exports the
+<code>countInteractions</code> and <code>testInteractions</code>
+functions, which summarize all cell-cell interactions per grouping level
+(e.g. image). As a result, a table is returned where each row represents
+one of all possible cell-type/cell-type interactions among all grouping
+levels. Missing entries or <code>NA</code>s indicate missing cell-type
+labels for this grouping level. The next section gives details on how
+interactions are summarized.</p>
 <div class="section level4">
 <h4 id="summarizing-interactions">Summarizing interactions<a class="anchor" aria-label="anchor" href="#summarizing-interactions"></a>
 </h4>
-<p>The <code>countInteractions</code> function counts the number of edges (interactions) between each set of unique cell labels per grouping level. Simplified, it counts for each cell of type A the number of neighbors of type B. This count is averaged within each unique grouping level (e.g. image) in three different ways:</p>
+<p>The <code>countInteractions</code> function counts the number of
+edges (interactions) between each set of unique cell labels per grouping
+level. Simplified, it counts for each cell of type A the number of
+neighbors of type B. This count is averaged within each unique grouping
+level (e.g. image) in three different ways:</p>
 <ol style="list-style-type: decimal">
-<li><p><code>method = "classic"</code>: The count is divided by the total number of cells of type A. The final count can be interpreted as “How many neighbors of type B does a cell of type A have on average?”</p></li>
-<li><p><code>method = "histocat"</code>: The count is divided by the number of cells of type A that have at least one neighbor of type B. The final count can be interpreted as “How many many neighbors of type B has a cell of type A on average, given it has at least one neighbor of type B?”</p></li>
-<li><p><code>method = "patch"</code>: For each cell, the count is binarized to 0 (less than <code>patch_size</code> neighbors of type B) or 1 (more or equal to <code>patch_size</code> neighbors of type B). The binarized counts are averaged across all cells of type A. The final count can be interpreted as “What fraction of cells of type A have at least a given number of neighbors of type B?”</p></li>
+<li><p><code>method = "classic"</code>: The count is divided by the
+total number of cells of type A. The final count can be interpreted as
+“How many neighbors of type B does a cell of type A have on
+average?”</p></li>
+<li><p><code>method = "histocat"</code>: The count is divided by the
+number of cells of type A that have at least one neighbor of type B. The
+final count can be interpreted as “How many many neighbors of type B has
+a cell of type A on average, given it has at least one neighbor of type
+B?”</p></li>
+<li><p><code>method = "patch"</code>: For each cell, the count is
+binarized to 0 (less than <code>patch_size</code> neighbors of type B)
+or 1 (more or equal to <code>patch_size</code> neighbors of type B). The
+binarized counts are averaged across all cells of type A. The final
+count can be interpreted as “What fraction of cells of type A have at
+least a given number of neighbors of type B?”</p></li>
 </ol>
-<p>The <code>countInteractions</code> returns a <code>DataFrame</code> containing the summarized counts (<code>ct</code>) for all combinations of <code>from_label</code>, <code>to_label</code> and <code>group_by</code>.</p>
+<p>The <code>countInteractions</code> returns a <code>DataFrame</code>
+containing the summarized counts (<code>ct</code>) for all combinations
+of <code>from_label</code>, <code>to_label</code> and
+<code>group_by</code>.</p>
 <div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/countInteractions.html">countInteractions</a></span><span class="op">(</span><span class="va">pancreasSCE</span>,</span>
 <span>                         group_by <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
@@ -980,10 +1296,23 @@
 <div class="section level4">
 <h4 id="testing-for-significance">Testing for significance<a class="anchor" aria-label="anchor" href="#testing-for-significance"></a>
 </h4>
-<p>In the next instance, one can test if the obtained count is larger or smaller compared to what is expected from a random distribution of cell labels. For this, the <code>testInteractions</code> function permutes the cell labels <code>iter</code> times and counts interactions as described above. This approach generates a distribution of the interaction count under a random distribution of cell labels. The observed interaction count is compared against this Null distribution to derive empirical p-values:</p>
-<p><code>p_gt</code>: fraction of perturbations equal or greater than the observed count</p>
-<p><code>p_lt</code>: fraction of perturbations equal or less than the observed count</p>
-<p>Based on these empirical p-values, the <code>interaction</code> score (attraction or avoidance), overall <code>p</code> value and significance by comparison to <code>p_treshold</code> (<code>sig</code> and <code>sigval</code>) are derived. All results are returned in form of a <code>DataFrame</code>.</p>
+<p>In the next instance, one can test if the obtained count is larger or
+smaller compared to what is expected from a random distribution of cell
+labels. For this, the <code>testInteractions</code> function permutes
+the cell labels <code>iter</code> times and counts interactions as
+described above. This approach generates a distribution of the
+interaction count under a random distribution of cell labels. The
+observed interaction count is compared against this Null distribution to
+derive empirical p-values:</p>
+<p><code>p_gt</code>: fraction of perturbations equal or greater than
+the observed count</p>
+<p><code>p_lt</code>: fraction of perturbations equal or less than the
+observed count</p>
+<p>Based on these empirical p-values, the <code>interaction</code> score
+(attraction or avoidance), overall <code>p</code> value and significance
+by comparison to <code>p_treshold</code> (<code>sig</code> and
+<code>sigval</code>) are derived. All results are returned in form of a
+<code>DataFrame</code>.</p>
 <div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/testInteractions.html">testInteractions</a></span><span class="op">(</span><span class="va">pancreasSCE</span>,</span>
 <span>                        group_by <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
@@ -995,10 +1324,10 @@
 <span><span class="co">##      group_by from_label   to_label        ct        p_gt        p_lt</span></span>
 <span><span class="co">##     &lt;integer&gt;   &lt;factor&gt;   &lt;factor&gt; &lt;numeric&gt;   &lt;numeric&gt;   &lt;numeric&gt;</span></span>
 <span><span class="co">## 1           1 celltype_A celltype_A  2.823529 0.000999001 1.000000000</span></span>
-<span><span class="co">## 2           1 celltype_A celltype_B  0.823529 0.002997003 1.000000000</span></span>
+<span><span class="co">## 2           1 celltype_A celltype_B  0.823529 0.000999001 1.000000000</span></span>
 <span><span class="co">## 3           1 celltype_A celltype_C  1.352941 1.000000000 0.000999001</span></span>
 <span><span class="co">## 4           1 celltype_B celltype_A  2.000000 0.000999001 1.000000000</span></span>
-<span><span class="co">## 5           1 celltype_B celltype_B  0.625000 0.132867133 0.912087912</span></span>
+<span><span class="co">## 5           1 celltype_B celltype_B  0.625000 0.129870130 0.926073926</span></span>
 <span><span class="co">## ...       ...        ...        ...       ...         ...         ...</span></span>
 <span><span class="co">## 23          3 celltype_B celltype_B   4.00000 0.000999001 1.000000000</span></span>
 <span><span class="co">## 24          3 celltype_B celltype_C   1.00000 1.000000000 0.000999001</span></span>
@@ -1008,10 +1337,10 @@
 <span><span class="co">##     interaction           p       sig    sigval</span></span>
 <span><span class="co">##       &lt;logical&gt;   &lt;numeric&gt; &lt;logical&gt; &lt;numeric&gt;</span></span>
 <span><span class="co">## 1          TRUE 0.000999001      TRUE         1</span></span>
-<span><span class="co">## 2          TRUE 0.002997003      TRUE         1</span></span>
+<span><span class="co">## 2          TRUE 0.000999001      TRUE         1</span></span>
 <span><span class="co">## 3         FALSE 0.000999001      TRUE        -1</span></span>
 <span><span class="co">## 4          TRUE 0.000999001      TRUE         1</span></span>
-<span><span class="co">## 5          TRUE 0.132867133     FALSE         0</span></span>
+<span><span class="co">## 5          TRUE 0.129870130     FALSE         0</span></span>
 <span><span class="co">## ...         ...         ...       ...       ...</span></span>
 <span><span class="co">## 23         TRUE 0.000999001      TRUE         1</span></span>
 <span><span class="co">## 24        FALSE 0.000999001      TRUE        -1</span></span>
@@ -1024,12 +1353,24 @@
 <div class="section level2">
 <h2 id="contributions">Contributions<a class="anchor" aria-label="anchor" href="#contributions"></a>
 </h2>
-<p>Large chunks of the code of the <code>imcRtools</code> package is based on the work of <a href="https://github.com/votti" class="external-link">Vito Zanotelli</a>. Vito has co-developed the spillover correction approach and translated the interaction testing approach developed by <a href="https://github.com/DenisSch" class="external-link">Denis Shapiro</a> and <a href="https://github.com/JanaFischer" class="external-link">Jana Fischer</a> into R (formerly known as the <a href="https://github.com/BodenmillerGroup/neighbouRhood" class="external-link">neighbouRhood</a> R package). Jana has furthermore added the “patch” method for interaction counting and testing. <a href="https://github.com/toobiwankenobi" class="external-link">Tobias Hoch</a> has written the first version of reading in the <code>ImcSegmentationPipeline</code> output and the <code>patchDetection</code> function. <a href="https://github.com/SchulzDan" class="external-link">Daniel Schulz</a> has build the <code>aggregateNeighbors</code> and <code>minDistToCells</code> functions and contributed to developing the spatial clustering approach. <a href="https://github.com/lassedochreden" class="external-link">Lasse Meyer</a> has implemented the functions for spatial context analysis.</p>
+<p>Large chunks of the code of the <code>imcRtools</code> package is
+based on the work of <a href="https://github.com/votti" class="external-link">Vito
+Zanotelli</a>. Vito has co-developed the spillover correction approach
+and translated the interaction testing approach developed by <a href="https://github.com/DenisSch" class="external-link">Denis Shapiro</a> and <a href="https://github.com/JanaFischer" class="external-link">Jana Fischer</a> into R (formerly
+known as the <a href="https://github.com/BodenmillerGroup/neighbouRhood" class="external-link">neighbouRhood</a>
+R package). Jana has furthermore added the “patch” method for
+interaction counting and testing. <a href="https://github.com/toobiwankenobi" class="external-link">Tobias Hoch</a> has written the
+first version of reading in the <code>ImcSegmentationPipeline</code>
+output and the <code>patchDetection</code> function. <a href="https://github.com/SchulzDan" class="external-link">Daniel Schulz</a> has build the
+<code>aggregateNeighbors</code> and <code>minDistToCells</code>
+functions and contributed to developing the spatial clustering approach.
+<a href="https://github.com/lassedochreden" class="external-link">Lasse Meyer</a> has
+implemented the functions for spatial context analysis.</p>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<pre><code><span><span class="co">## R version 4.2.1 (2022-06-23)</span></span>
+<pre><code><span><span class="co">## R version 4.2.2 (2022-10-31)</span></span>
 <span><span class="co">## Platform: x86_64-apple-darwin17.0 (64-bit)</span></span>
 <span><span class="co">## Running under: macOS Big Sur ... 10.16</span></span>
 <span><span class="co">## </span></span>
@@ -1045,167 +1386,202 @@
 <span><span class="co">## [8] base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">##  [1] ggraph_2.1.0                ggplot2_3.3.6              </span></span>
-<span><span class="co">##  [3] cytomapper_1.8.0            EBImage_4.38.0             </span></span>
-<span><span class="co">##  [5] CATALYST_1.20.1             imcRtools_1.3.10           </span></span>
-<span><span class="co">##  [7] SpatialExperiment_1.6.1     SingleCellExperiment_1.18.1</span></span>
-<span><span class="co">##  [9] SummarizedExperiment_1.26.1 Biobase_2.56.0             </span></span>
-<span><span class="co">## [11] GenomicRanges_1.48.0        GenomeInfoDb_1.32.4        </span></span>
-<span><span class="co">## [13] IRanges_2.30.1              S4Vectors_0.34.0           </span></span>
-<span><span class="co">## [15] BiocGenerics_0.42.0         MatrixGenerics_1.8.1       </span></span>
-<span><span class="co">## [17] matrixStats_0.62.0          BiocStyle_2.24.0           </span></span>
+<span><span class="co">##  [1] ggraph_2.1.0                ggplot2_3.4.0              </span></span>
+<span><span class="co">##  [3] cytomapper_1.10.0           EBImage_4.40.0             </span></span>
+<span><span class="co">##  [5] CATALYST_1.22.0             imcRtools_1.5.0            </span></span>
+<span><span class="co">##  [7] SpatialExperiment_1.8.0     SingleCellExperiment_1.20.0</span></span>
+<span><span class="co">##  [9] SummarizedExperiment_1.28.0 Biobase_2.58.0             </span></span>
+<span><span class="co">## [11] GenomicRanges_1.50.1        GenomeInfoDb_1.34.3        </span></span>
+<span><span class="co">## [13] IRanges_2.32.0              S4Vectors_0.36.0           </span></span>
+<span><span class="co">## [15] BiocGenerics_0.44.0         MatrixGenerics_1.10.0      </span></span>
+<span><span class="co">## [17] matrixStats_0.62.0          BiocStyle_2.26.0           </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
-<span><span class="co">##   [1] scattermore_0.8             flowWorkspace_4.8.0        </span></span>
-<span><span class="co">##   [3] R.methodsS3_1.8.2           ragg_1.2.4                 </span></span>
-<span><span class="co">##   [5] tidyr_1.2.1                 bit64_4.0.5                </span></span>
-<span><span class="co">##   [7] knitr_1.40                  irlba_2.3.5.1              </span></span>
-<span><span class="co">##   [9] multcomp_1.4-20             DelayedArray_0.22.0        </span></span>
-<span><span class="co">##  [11] R.utils_2.12.0              data.table_1.14.4          </span></span>
-<span><span class="co">##  [13] RCurl_1.98-1.9              doParallel_1.0.17          </span></span>
-<span><span class="co">##  [15] generics_0.1.3              flowCore_2.8.0             </span></span>
-<span><span class="co">##  [17] ScaledMatrix_1.4.1          TH.data_1.1-1              </span></span>
-<span><span class="co">##  [19] cowplot_1.1.1               terra_1.6-17               </span></span>
-<span><span class="co">##  [21] proxy_0.4-27                ggpointdensity_0.1.0       </span></span>
-<span><span class="co">##  [23] bit_4.0.4                   tzdb_0.3.0                 </span></span>
-<span><span class="co">##  [25] xml2_1.3.3                  httpuv_1.6.6               </span></span>
-<span><span class="co">##  [27] assertthat_0.2.1            viridis_0.6.2              </span></span>
-<span><span class="co">##  [29] xfun_0.34                   hms_1.1.2                  </span></span>
-<span><span class="co">##  [31] jquerylib_0.1.4             evaluate_0.17              </span></span>
-<span><span class="co">##  [33] promises_1.2.0.1            fansi_1.0.3                </span></span>
-<span><span class="co">##  [35] Rgraphviz_2.40.0            igraph_1.3.5               </span></span>
-<span><span class="co">##  [37] DBI_1.1.3                   htmlwidgets_1.5.4          </span></span>
-<span><span class="co">##  [39] purrr_0.3.5                 ellipsis_0.3.2             </span></span>
-<span><span class="co">##  [41] crosstalk_1.2.0             backports_1.4.1            </span></span>
-<span><span class="co">##  [43] dplyr_1.0.10                ggcyto_1.24.1              </span></span>
-<span><span class="co">##  [45] ggnewscale_0.4.8            ggpubr_0.4.0               </span></span>
-<span><span class="co">##  [47] V8_4.2.1                    cytolib_2.8.0              </span></span>
-<span><span class="co">##  [49] bookdown_0.29               svgPanZoom_0.3.4           </span></span>
-<span><span class="co">##  [51] RcppParallel_5.1.5          deldir_1.0-6               </span></span>
-<span><span class="co">##  [53] sparseMatrixStats_1.8.0     vctrs_0.5.0                </span></span>
-<span><span class="co">##  [55] abind_1.4-5                 cachem_1.0.6               </span></span>
-<span><span class="co">##  [57] withr_2.5.0                 ggforce_0.4.1              </span></span>
-<span><span class="co">##  [59] aws.signature_0.6.0         vroom_1.6.0                </span></span>
-<span><span class="co">##  [61] svglite_2.1.0               cluster_2.1.3              </span></span>
-<span><span class="co">##  [63] crayon_1.5.2                drc_3.0-1                  </span></span>
-<span><span class="co">##  [65] labeling_0.4.2              edgeR_3.38.4               </span></span>
-<span><span class="co">##  [67] pkgconfig_2.0.3             units_0.8-0                </span></span>
-<span><span class="co">##  [69] tweenr_2.0.2                vipor_0.4.5                </span></span>
-<span><span class="co">##  [71] rlang_1.0.6                 lifecycle_1.0.3            </span></span>
-<span><span class="co">##  [73] sandwich_3.0-2              rsvd_1.0.5                 </span></span>
-<span><span class="co">##  [75] rprojroot_2.0.3             polyclip_1.10-4            </span></span>
-<span><span class="co">##  [77] graph_1.74.0                tiff_0.1-11                </span></span>
-<span><span class="co">##  [79] Matrix_1.5-1                raster_3.6-3               </span></span>
-<span><span class="co">##  [81] carData_3.0-5               zoo_1.8-11                 </span></span>
-<span><span class="co">##  [83] Rhdf5lib_1.18.2             base64enc_0.1-3            </span></span>
-<span><span class="co">##  [85] beeswarm_0.4.0              RTriangle_1.6-0.10         </span></span>
-<span><span class="co">##  [87] ggridges_0.5.4              GlobalOptions_0.1.2        </span></span>
-<span><span class="co">##  [89] pheatmap_1.0.12             png_0.1-7                  </span></span>
-<span><span class="co">##  [91] viridisLite_0.4.1           rjson_0.2.21               </span></span>
-<span><span class="co">##  [93] bitops_1.0-7                shinydashboard_0.7.2       </span></span>
-<span><span class="co">##  [95] R.oo_1.25.0                 ConsensusClusterPlus_1.60.0</span></span>
-<span><span class="co">##  [97] KernSmooth_2.23-20          rhdf5filters_1.8.0         </span></span>
-<span><span class="co">##  [99] DelayedMatrixStats_1.18.2   shape_1.4.6                </span></span>
-<span><span class="co">## [101] classInt_0.4-8              stringr_1.4.1              </span></span>
-<span><span class="co">## [103] rstatix_0.7.0               readr_2.1.3                </span></span>
-<span><span class="co">## [105] jpeg_0.1-9                  ggsignif_0.6.4             </span></span>
-<span><span class="co">## [107] aws.s3_0.3.21               beachmat_2.12.0            </span></span>
-<span><span class="co">## [109] scales_1.2.1                memoise_2.0.1              </span></span>
-<span><span class="co">## [111] magrittr_2.0.3              plyr_1.8.7                 </span></span>
-<span><span class="co">## [113] hexbin_1.28.2               zlibbioc_1.42.0            </span></span>
-<span><span class="co">## [115] compiler_4.2.1              dqrng_0.3.0                </span></span>
-<span><span class="co">## [117] concaveman_1.1.0            RColorBrewer_1.1-3         </span></span>
-<span><span class="co">## [119] plotrix_3.8-2               clue_0.3-62                </span></span>
-<span><span class="co">## [121] cli_3.4.1                   XVector_0.36.0             </span></span>
-<span><span class="co">## [123] ncdfFlow_2.42.1             FlowSOM_2.4.0              </span></span>
-<span><span class="co">## [125] MASS_7.3-57                 tidyselect_1.2.0           </span></span>
-<span><span class="co">## [127] stringi_1.7.8               RProtoBufLib_2.8.0         </span></span>
-<span><span class="co">## [129] textshaping_0.3.6           highr_0.9                  </span></span>
-<span><span class="co">## [131] yaml_2.3.6                  BiocSingular_1.12.0        </span></span>
-<span><span class="co">## [133] locfit_1.5-9.6              latticeExtra_0.6-30        </span></span>
-<span><span class="co">## [135] ggrepel_0.9.1               grid_4.2.1                 </span></span>
-<span><span class="co">## [137] sass_0.4.2                  tools_4.2.1                </span></span>
-<span><span class="co">## [139] parallel_4.2.1              CytoML_2.8.1               </span></span>
-<span><span class="co">## [141] circlize_0.4.15             foreach_1.5.2              </span></span>
-<span><span class="co">## [143] gridExtra_2.3               farver_2.1.1               </span></span>
-<span><span class="co">## [145] Rtsne_0.16                  DropletUtils_1.16.0        </span></span>
-<span><span class="co">## [147] digest_0.6.30               BiocManager_1.30.18        </span></span>
-<span><span class="co">## [149] shiny_1.7.2                 Rcpp_1.0.9                 </span></span>
-<span><span class="co">## [151] car_3.1-1                   broom_1.0.1                </span></span>
-<span><span class="co">## [153] scuttle_1.6.3               later_1.3.0                </span></span>
-<span><span class="co">## [155] httr_1.4.4                  sf_1.0-8                   </span></span>
-<span><span class="co">## [157] ComplexHeatmap_2.12.1       distances_0.1.8            </span></span>
-<span><span class="co">## [159] colorspace_2.0-3            XML_3.99-0.11              </span></span>
-<span><span class="co">## [161] fs_1.5.2                    splines_4.2.1              </span></span>
-<span><span class="co">## [163] RBGL_1.72.0                 scater_1.24.0              </span></span>
-<span><span class="co">## [165] pkgdown_2.0.6               graphlayouts_0.8.3         </span></span>
-<span><span class="co">## [167] sp_1.5-0                    systemfonts_1.0.4          </span></span>
-<span><span class="co">## [169] xtable_1.8-4                jsonlite_1.8.3             </span></span>
-<span><span class="co">## [171] tidygraph_1.2.2             R6_2.5.1                   </span></span>
-<span><span class="co">## [173] pillar_1.8.1                htmltools_0.5.3            </span></span>
-<span><span class="co">## [175] mime_0.12                   nnls_1.4                   </span></span>
-<span><span class="co">## [177] glue_1.6.2                  fastmap_1.1.0              </span></span>
-<span><span class="co">## [179] DT_0.26                     BiocParallel_1.30.4        </span></span>
-<span><span class="co">## [181] BiocNeighbors_1.14.0        fftwtools_0.9-11           </span></span>
-<span><span class="co">## [183] class_7.3-20                codetools_0.2-18           </span></span>
-<span><span class="co">## [185] mvtnorm_1.1-3               utf8_1.2.2                 </span></span>
-<span><span class="co">## [187] lattice_0.20-45             bslib_0.4.0                </span></span>
-<span><span class="co">## [189] tibble_3.1.8                curl_4.3.3                 </span></span>
-<span><span class="co">## [191] ggbeeswarm_0.6.0            colorRamps_2.3.1           </span></span>
-<span><span class="co">## [193] gtools_3.9.3                magick_2.7.3               </span></span>
-<span><span class="co">## [195] interp_1.1-3                survival_3.3-1             </span></span>
-<span><span class="co">## [197] limma_3.52.4                rmarkdown_2.17             </span></span>
-<span><span class="co">## [199] desc_1.4.2                  munsell_0.5.0              </span></span>
-<span><span class="co">## [201] e1071_1.7-12                GetoptLong_1.0.5           </span></span>
-<span><span class="co">## [203] rhdf5_2.40.0                GenomeInfoDbData_1.2.8     </span></span>
-<span><span class="co">## [205] iterators_1.0.14            HDF5Array_1.24.2           </span></span>
-<span><span class="co">## [207] reshape2_1.4.4              gtable_0.3.1</span></span></code></pre>
+<span><span class="co">##   [1] R.methodsS3_1.8.2           ragg_1.2.4                 </span></span>
+<span><span class="co">##   [3] tidyr_1.2.1                 bit64_4.0.5                </span></span>
+<span><span class="co">##   [5] knitr_1.40                  irlba_2.3.5.1              </span></span>
+<span><span class="co">##   [7] multcomp_1.4-20             DelayedArray_0.24.0        </span></span>
+<span><span class="co">##   [9] R.utils_2.12.2              data.table_1.14.4          </span></span>
+<span><span class="co">##  [11] RCurl_1.98-1.9              doParallel_1.0.17          </span></span>
+<span><span class="co">##  [13] generics_0.1.3              flowCore_2.10.0            </span></span>
+<span><span class="co">##  [15] ScaledMatrix_1.6.0          terra_1.6-17               </span></span>
+<span><span class="co">##  [17] cowplot_1.1.1               TH.data_1.1-1              </span></span>
+<span><span class="co">##  [19] proxy_0.4-27                bit_4.0.4                  </span></span>
+<span><span class="co">##  [21] tzdb_0.3.0                  httpuv_1.6.6               </span></span>
+<span><span class="co">##  [23] assertthat_0.2.1            viridis_0.6.2              </span></span>
+<span><span class="co">##  [25] xfun_0.34                   hms_1.1.2                  </span></span>
+<span><span class="co">##  [27] jquerylib_0.1.4             evaluate_0.18              </span></span>
+<span><span class="co">##  [29] promises_1.2.0.1            fansi_1.0.3                </span></span>
+<span><span class="co">##  [31] igraph_1.3.5                DBI_1.1.3                  </span></span>
+<span><span class="co">##  [33] htmlwidgets_1.5.4           purrr_0.3.5                </span></span>
+<span><span class="co">##  [35] ellipsis_0.3.2              crosstalk_1.2.0            </span></span>
+<span><span class="co">##  [37] dplyr_1.0.10                ggnewscale_0.4.8           </span></span>
+<span><span class="co">##  [39] ggpubr_0.4.0                backports_1.4.1            </span></span>
+<span><span class="co">##  [41] V8_4.2.2                    cytolib_2.10.0             </span></span>
+<span><span class="co">##  [43] bookdown_0.30               svgPanZoom_0.3.4           </span></span>
+<span><span class="co">##  [45] sparseMatrixStats_1.10.0    vctrs_0.5.0                </span></span>
+<span><span class="co">##  [47] abind_1.4-5                 cachem_1.0.6               </span></span>
+<span><span class="co">##  [49] withr_2.5.0                 ggforce_0.4.1              </span></span>
+<span><span class="co">##  [51] vroom_1.6.0                 svglite_2.1.0              </span></span>
+<span><span class="co">##  [53] cluster_2.1.4               crayon_1.5.2               </span></span>
+<span><span class="co">##  [55] drc_3.0-1                   labeling_0.4.2             </span></span>
+<span><span class="co">##  [57] edgeR_3.40.0                pkgconfig_2.0.3            </span></span>
+<span><span class="co">##  [59] units_0.8-0                 tweenr_2.0.2               </span></span>
+<span><span class="co">##  [61] vipor_0.4.5                 rlang_1.0.6                </span></span>
+<span><span class="co">##  [63] lifecycle_1.0.3             sandwich_3.0-2             </span></span>
+<span><span class="co">##  [65] rsvd_1.0.5                  rprojroot_2.0.3            </span></span>
+<span><span class="co">##  [67] polyclip_1.10-4             tiff_0.1-11                </span></span>
+<span><span class="co">##  [69] Matrix_1.5-1                raster_3.6-3               </span></span>
+<span><span class="co">##  [71] carData_3.0-5               Rhdf5lib_1.20.0            </span></span>
+<span><span class="co">##  [73] zoo_1.8-11                  beeswarm_0.4.0             </span></span>
+<span><span class="co">##  [75] RTriangle_1.6-0.10          ggridges_0.5.4             </span></span>
+<span><span class="co">##  [77] GlobalOptions_0.1.2         pheatmap_1.0.12            </span></span>
+<span><span class="co">##  [79] png_0.1-7                   viridisLite_0.4.1          </span></span>
+<span><span class="co">##  [81] rjson_0.2.21                bitops_1.0-7               </span></span>
+<span><span class="co">##  [83] shinydashboard_0.7.2        R.oo_1.25.0                </span></span>
+<span><span class="co">##  [85] ConsensusClusterPlus_1.62.0 KernSmooth_2.23-20         </span></span>
+<span><span class="co">##  [87] rhdf5filters_1.10.0         DelayedMatrixStats_1.20.0  </span></span>
+<span><span class="co">##  [89] shape_1.4.6                 classInt_0.4-8             </span></span>
+<span><span class="co">##  [91] stringr_1.4.1               readr_2.1.3                </span></span>
+<span><span class="co">##  [93] jpeg_0.1-9                  rstatix_0.7.1              </span></span>
+<span><span class="co">##  [95] ggsignif_0.6.4              beachmat_2.14.0            </span></span>
+<span><span class="co">##  [97] scales_1.2.1                memoise_2.0.1              </span></span>
+<span><span class="co">##  [99] magrittr_2.0.3              plyr_1.8.8                 </span></span>
+<span><span class="co">## [101] zlibbioc_1.44.0             compiler_4.2.2             </span></span>
+<span><span class="co">## [103] dqrng_0.3.0                 concaveman_1.1.0           </span></span>
+<span><span class="co">## [105] RColorBrewer_1.1-3          plotrix_3.8-2              </span></span>
+<span><span class="co">## [107] clue_0.3-62                 cli_3.4.1                  </span></span>
+<span><span class="co">## [109] XVector_0.38.0              FlowSOM_2.6.0              </span></span>
+<span><span class="co">## [111] MASS_7.3-58.1               tidyselect_1.2.0           </span></span>
+<span><span class="co">## [113] stringi_1.7.8               RProtoBufLib_2.10.0        </span></span>
+<span><span class="co">## [115] textshaping_0.3.6           highr_0.9                  </span></span>
+<span><span class="co">## [117] yaml_2.3.6                  BiocSingular_1.14.0        </span></span>
+<span><span class="co">## [119] locfit_1.5-9.6              ggrepel_0.9.2              </span></span>
+<span><span class="co">## [121] grid_4.2.2                  sass_0.4.2                 </span></span>
+<span><span class="co">## [123] tools_4.2.2                 parallel_4.2.2             </span></span>
+<span><span class="co">## [125] circlize_0.4.15             foreach_1.5.2              </span></span>
+<span><span class="co">## [127] gridExtra_2.3               farver_2.1.1               </span></span>
+<span><span class="co">## [129] Rtsne_0.16                  DropletUtils_1.18.0        </span></span>
+<span><span class="co">## [131] digest_0.6.30               BiocManager_1.30.19        </span></span>
+<span><span class="co">## [133] shiny_1.7.3                 Rcpp_1.0.9                 </span></span>
+<span><span class="co">## [135] car_3.1-1                   broom_1.0.1                </span></span>
+<span><span class="co">## [137] scuttle_1.8.0               later_1.3.0                </span></span>
+<span><span class="co">## [139] sf_1.0-9                    ComplexHeatmap_2.14.0      </span></span>
+<span><span class="co">## [141] distances_0.1.8             colorspace_2.0-3           </span></span>
+<span><span class="co">## [143] XML_3.99-0.12               fs_1.5.2                   </span></span>
+<span><span class="co">## [145] splines_4.2.2               pkgdown_2.0.6              </span></span>
+<span><span class="co">## [147] scater_1.26.1               graphlayouts_0.8.3         </span></span>
+<span><span class="co">## [149] sp_1.5-1                    systemfonts_1.0.4          </span></span>
+<span><span class="co">## [151] xtable_1.8-4                jsonlite_1.8.3             </span></span>
+<span><span class="co">## [153] tidygraph_1.2.2             R6_2.5.1                   </span></span>
+<span><span class="co">## [155] pillar_1.8.1                htmltools_0.5.3            </span></span>
+<span><span class="co">## [157] mime_0.12                   nnls_1.4                   </span></span>
+<span><span class="co">## [159] glue_1.6.2                  fastmap_1.1.0              </span></span>
+<span><span class="co">## [161] DT_0.26                     BiocParallel_1.32.1        </span></span>
+<span><span class="co">## [163] BiocNeighbors_1.16.0        fftwtools_0.9-11           </span></span>
+<span><span class="co">## [165] class_7.3-20                codetools_0.2-18           </span></span>
+<span><span class="co">## [167] mvtnorm_1.1-3               utf8_1.2.2                 </span></span>
+<span><span class="co">## [169] lattice_0.20-45             bslib_0.4.1                </span></span>
+<span><span class="co">## [171] tibble_3.1.8                curl_4.3.3                 </span></span>
+<span><span class="co">## [173] ggbeeswarm_0.6.0            colorRamps_2.3.1           </span></span>
+<span><span class="co">## [175] gtools_3.9.3                magick_2.7.3               </span></span>
+<span><span class="co">## [177] survival_3.4-0              limma_3.54.0               </span></span>
+<span><span class="co">## [179] rmarkdown_2.18              desc_1.4.2                 </span></span>
+<span><span class="co">## [181] munsell_0.5.0               e1071_1.7-12               </span></span>
+<span><span class="co">## [183] GetoptLong_1.0.5            rhdf5_2.42.0               </span></span>
+<span><span class="co">## [185] GenomeInfoDbData_1.2.9      iterators_1.0.14           </span></span>
+<span><span class="co">## [187] HDF5Array_1.26.0            reshape2_1.4.4             </span></span>
+<span><span class="co">## [189] gtable_0.3.1</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-Angelo2014" class="csl-entry">
-Angelo, Michael, Sean C. Bendall, Rachel Finck, Matthew B. Hale, Chuck Hitzman, Alexander D. Borowsky, Richard M. Levenson, et al. 2014. <span>“Multiplexed Ion Beam Imaging of Human Breast Tumors.”</span> <em>Nature Medicine</em> 20 (4): 436–42.
+Angelo, Michael, Sean C. Bendall, Rachel Finck, Matthew B. Hale, Chuck
+Hitzman, Alexander D. Borowsky, Richard M. Levenson, et al. 2014.
+<span>“Multiplexed Ion Beam Imaging of Human Breast Tumors.”</span>
+<em>Nature Medicine</em> 20 (4): 436–42.
 </div>
 <div id="ref-Bhate2022" class="csl-entry">
-Bhate, Salil S., Graham L. Barlow, Christian M. Schürch, and Garry P. Nolan. 2022. <span>“Tissue Schematics Map the Specialization of Immune Tissue Motifs and Their Appropriation by Tumors.”</span> <em>Cell Systems</em> 13 (2): 109–30.
+Bhate, Salil S., Graham L. Barlow, Christian M. Schürch, and Garry P.
+Nolan. 2022. <span>“Tissue Schematics Map the Specialization of Immune
+Tissue Motifs and Their Appropriation by Tumors.”</span> <em>Cell
+Systems</em> 13 (2): 109–30.
 </div>
 <div id="ref-Bodenmiller2016" class="csl-entry">
-Bodenmiller, Bernd. 2016. <span>“Multiplexed Epitope-Based Tissue Imaging for Discovery and Healthcare Applications.”</span> <em>Cell Systems</em> 2: 225–38.
+Bodenmiller, Bernd. 2016. <span>“Multiplexed Epitope-Based Tissue
+Imaging for Discovery and Healthcare Applications.”</span> <em>Cell
+Systems</em> 2: 225–38.
 </div>
 <div id="ref-Chen2015" class="csl-entry">
-Chen, Kok Hao, Alistair N. Boettiger, Jeffrey R. Moffitt, Siyuan Wang, and Xiaowei Zhuang. 2015. <span>“Spatially Resolved, Highly Multiplexed RNA Profiling in Single Cells.”</span> <em>Science</em> 348: aaa6090.
+Chen, Kok Hao, Alistair N. Boettiger, Jeffrey R. Moffitt, Siyuan Wang,
+and Xiaowei Zhuang. 2015. <span>“Spatially Resolved, Highly Multiplexed
+RNA Profiling in Single Cells.”</span> <em>Science</em> 348: aaa6090.
 </div>
 <div id="ref-Chevrier2017" class="csl-entry">
-Chevrier, Stéphane, Helena L. Crowell, Vito R. T. Zanotelli, Stefanie Engler, Mark D. Robinson, and Bernd Bodenmiller. 2017. <span>“Compensation of Signal Spillover in Suspension and Imaging Mass Cytometry.”</span> <em>Cell Systems</em> 6: 612–20.
+Chevrier, Stéphane, Helena L. Crowell, Vito R. T. Zanotelli, Stefanie
+Engler, Mark D. Robinson, and Bernd Bodenmiller. 2017.
+<span>“Compensation of Signal Spillover in Suspension and Imaging Mass
+Cytometry.”</span> <em>Cell Systems</em> 6: 612–20.
 </div>
 <div id="ref-Giesen2014" class="csl-entry">
-Giesen, Charlotte, Hao A. O. Wang, Denis Schapiro, Nevena Zivanovic, Andrea Jacobs, Bodo Hattendorf, Peter J. Schüffler, et al. 2014. <span>“Highly Multiplexed Imaging of Tumor Tissues with Subcellular Resolution by Mass Cytometry.”</span> <em>Nature <span>M</span>ethods</em> 11 (4): 417–22.
+Giesen, Charlotte, Hao A. O. Wang, Denis Schapiro, Nevena Zivanovic,
+Andrea Jacobs, Bodo Hattendorf, Peter J. Schüffler, et al. 2014.
+<span>“Highly Multiplexed Imaging of Tumor Tissues with Subcellular
+Resolution by Mass Cytometry.”</span> <em>Nature
+<span>M</span>ethods</em> 11 (4): 417–22.
 </div>
 <div id="ref-Greenwald2021" class="csl-entry">
-Greenwald, Noah F, Geneva Miller, Erick Moen, Alex Kong, Adam Kagel, Christine Camacho, Brianna J Mcintosh, et al. 2021. <span>“Whole-Cell Segmentation of Tissue Images with Human-Level Performance Using Large-Scale Data Annotation and Deep Learning.”</span> <em>bioRxiv</em>, 1–29.
+Greenwald, Noah F, Geneva Miller, Erick Moen, Alex Kong, Adam Kagel,
+Christine Camacho, Brianna J Mcintosh, et al. 2021. <span>“Whole-Cell
+Segmentation of Tissue Images with Human-Level Performance Using
+Large-Scale Data Annotation and Deep Learning.”</span> <em>bioRxiv</em>,
+1–29.
 </div>
 <div id="ref-Gut2018" class="csl-entry">
-Gut, Gabriele, Markus D Herrmann, and Lucas Pelkmans. 2018. <span>“Multiplexed Protein Maps Link Subcellular Organization to Cellular States.”</span> <em>Science</em> 361: 1–13.
+Gut, Gabriele, Markus D Herrmann, and Lucas Pelkmans. 2018.
+<span>“Multiplexed Protein Maps Link Subcellular Organization to
+Cellular States.”</span> <em>Science</em> 361: 1–13.
 </div>
 <div id="ref-Jackson2020" class="csl-entry">
-Jackson, Hartland W., Jana R. Fischer, Vito R. T. Zanotelli, H. Raza Ali, Robert Mechera, Savas D. Soysal, Holger Moch, et al. 2020. <span>“The Single-Cell Pathology Landscape of Breast Cancer.”</span> <em>Nature</em> 578 (7796): 615–20.
+Jackson, Hartland W., Jana R. Fischer, Vito R. T. Zanotelli, H. Raza
+Ali, Robert Mechera, Savas D. Soysal, Holger Moch, et al. 2020.
+<span>“The Single-Cell Pathology Landscape of Breast Cancer.”</span>
+<em>Nature</em> 578 (7796): 615–20.
 </div>
 <div id="ref-Lin2018" class="csl-entry">
-Lin, Jia-Ren, Benjamin Izar, Shu Wang, Clarence Yapp, Shaolin Mei, Parin M. Shah, Sandro Santagata, and Peter K. Sorger. 2018. <span>“Highly Multiplexed Immunofluorescence Imaging of Human Tissues and Tumors Using t-CyCIF and Conventional Optical Microscopes.”</span> <em>eLife</em> 7: 1–46.
+Lin, Jia-Ren, Benjamin Izar, Shu Wang, Clarence Yapp, Shaolin Mei, Parin
+M. Shah, Sandro Santagata, and Peter K. Sorger. 2018. <span>“Highly
+Multiplexed Immunofluorescence Imaging of Human Tissues and Tumors Using
+t-CyCIF and Conventional Optical Microscopes.”</span> <em>eLife</em> 7:
+1–46.
 </div>
 <div id="ref-Lubeck2014" class="csl-entry">
-Lubeck, Eric, Ahmet F Coskun, Timur Zhiyentayev, Mubhij Ahmad, and Long Cai. 2014. <span>“Single-Cell in Situ RNA Profiling by Sequential Hybridization.”</span> <em>Nature Methods</em> 11: 360–61.
+Lubeck, Eric, Ahmet F Coskun, Timur Zhiyentayev, Mubhij Ahmad, and Long
+Cai. 2014. <span>“Single-Cell in Situ RNA Profiling by Sequential
+Hybridization.”</span> <em>Nature Methods</em> 11: 360–61.
 </div>
 <div id="ref-Shapiro2017" class="csl-entry">
-Schapiro, Denis, Hartland W Jackson, Swetha Raghuraman, Jana R Fischer, Vito RT Zanotelli, Daniel Schulz, Charlotte Giesen, Raúl Catena, Zsuzsanna Varga, and Bernd Bodenmiller. 2017. <span>“histoCAT: Analysis of Cell Phenotypes and Interactions in Multiplex Image Cytometry Data.”</span> <em>Nature Methods</em> 14: 873--876.
+Schapiro, Denis, Hartland W Jackson, Swetha Raghuraman, Jana R Fischer,
+Vito RT Zanotelli, Daniel Schulz, Charlotte Giesen, Raúl Catena,
+Zsuzsanna Varga, and Bernd Bodenmiller. 2017. <span>“histoCAT: Analysis
+of Cell Phenotypes and Interactions in Multiplex Image Cytometry
+Data.”</span> <em>Nature Methods</em> 14: 873--876.
 </div>
 <div id="ref-Schulz2018" class="csl-entry">
-Schulz, Daniel, Vito RT Zanotelli, Rana R Fischer, Denis Schapiro, Stefanie Engler, Xiao-Kang Lun, Hartland W Jackson, and Bernd Bodenmiller. 2018. <span>“Simultaneous Multiplexed Imaging of mRNA and Proteins with Subcellular Resolution in Breast Cancer Tissue Samples by Mass Cytometry.”</span> <em>Cell Systems</em> 6: 25–36.e5.
+Schulz, Daniel, Vito RT Zanotelli, Rana R Fischer, Denis Schapiro,
+Stefanie Engler, Xiao-Kang Lun, Hartland W Jackson, and Bernd
+Bodenmiller. 2018. <span>“Simultaneous Multiplexed Imaging of mRNA and
+Proteins with Subcellular Resolution in Breast Cancer Tissue Samples by
+Mass Cytometry.”</span> <em>Cell Systems</em> 6: 25–36.e5.
 </div>
 <div id="ref-Schurch2020" class="csl-entry">
-Schürch, Christian M., Salil S. Bhate, Graham L. Barlow, Darci J. Phillips, Luca Noti, Inti Zlobec, Pauline Chu, et al. 2020. <span>“Coordinated Cellular Neighborhoods Orchestrate Antitumoral Immunity at the Colorectal Cancer Invasive Front.”</span> <em>Cell</em> 182 (5): 1341–59.
+Schürch, Christian M., Salil S. Bhate, Graham L. Barlow, Darci J.
+Phillips, Luca Noti, Inti Zlobec, Pauline Chu, et al. 2020.
+<span>“Coordinated Cellular Neighborhoods Orchestrate Antitumoral
+Immunity at the Colorectal Cancer Invasive Front.”</span> <em>Cell</em>
+182 (5): 1341–59.
 </div>
 </div>
 </div>
