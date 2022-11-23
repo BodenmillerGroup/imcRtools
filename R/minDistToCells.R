@@ -86,7 +86,7 @@ minDistToCells <- function(object,
       cur_obj <- object[,as.character(colData(object)[[img_id]]) == x]
       
       cur_obj[[name]] <- NA
-      if (sum(cur_obj$x_cells) == 0) {
+      if (sum(cur_obj$x_cells) == 0 | sum(cur_obj$x_cells) == ncol(cur_obj)) {
         return(cur_obj)
       }
       

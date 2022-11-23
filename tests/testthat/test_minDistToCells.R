@@ -102,6 +102,26 @@ test_that("minDistToCells works",{
   
   expect_equal(cur_sce_2$distToCells,cur_spe_2$distToCells)
   
+  # Works when all cells of an image belog to one batch
+  expect_silent(cur_sce <- minDistToCells(object = pancreasSCE,
+                                          x_cells = pancreasSCE$ImageName == "J02_imc.tiff",
+                                          coords = c("Pos_X","Pos_Y"),
+                                          img_id = "ImageName"))
+  
+  expect_s4_class(cur_sce , class = "SingleCellExperiment")
+  expect_true("distToCells" %in% names(colData(cur_sce)))
+  expect_true(all(is.na(cur_sce$distToCells)))
+  
+  cur_sce$CellType[cur_sce$ImageName == "J02_imc.tiff"] <- "celltype_A"
+  expect_silent(cur_sce <- minDistToCells(object = cur_sce,
+                                          x_cells = cur_sce$CellType == "celltype_A",
+                                          coords = c("Pos_X","Pos_Y"),
+                                          img_id = "ImageName"))
+  expect_s4_class(cur_sce , class = "SingleCellExperiment")
+  expect_true("distToCells" %in% names(colData(cur_sce)))
+  expect_true(all(is.na(cur_sce$distToCells[cur_sce$ImageName == "J02_imc.tiff"])))
+  expect_true(all(!is.na(cur_sce$distToCells[cur_sce$ImageName != "J02_imc.tiff"])))
+  
   # Error
   expect_error(cur_sce_4 <- minDistToCells(object = pancreasSCE[,pancreasSCE$ImageName == "J02_imc.tiff"],
                                             x_cells = pancreasSCE$CellType == "celltype_A",
