@@ -893,7 +893,7 @@
     setorder(dat_stat, "group_by", "from_label", "to_label")
     setorder(dat_baseline, "group_by", "from_label", "to_label")
 
-    dat_stat[is.na(dat_baseline$ct),
+    dat_stat[is.na(dat_stat$ct),
              c("p_gt", "p_lt", "ct", "interaction",
                "p", "sig", "sigval") := NA]
 
