@@ -159,7 +159,8 @@ read_cpout <- function(path,
     if (!is.null(image_file)) {
         object <- .cpout_add_image_metadata(object, path, image_file, 
                                         extract_imgid_from, 
-                                        extract_imagemetadata_from)
+                                        extract_imagemetadata_from,
+                                        extract_cellid_from)
     }
     
     if (!is.null(graph_file)){

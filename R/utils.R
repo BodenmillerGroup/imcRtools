@@ -120,6 +120,7 @@
 }
 
 #' @importFrom methods as
+#' @importFrom dplyr left_join
 .steinbock_add_image_metadata <- function(object, image_file,
                                           extract_imagemetadata_from) {
 
@@ -128,10 +129,17 @@
                                                 extract_imagemetadata_from)),
                           show_col_types = FALSE)
     cur_img_meta$sample_id <- sub("\\.[^.]*$", "", cur_img_meta$image)
+    
+    cur_df <- as(left_join(x = as.data.frame(colData(object)), 
+                           y = cur_img_meta[,-1],
+                           by = "sample_id"), "DataFrame")
+    
+    if (!all.equal(paste(cur_df[["sample_id"]], cur_df[["ObjectNumber"]]),
+                   paste(object[["sample_id"]], object[["ObjectNumber"]]))) {
+        stop("Order of cells do not match")    
+    }
 
-    colData(object) <- as(merge(x = colData(object), y = cur_img_meta[,-1],
-                                by = "sample_id",
-                                sort = FALSE), "DataFrame")
+    colData(object) <- cur_df
 
     return(object)
 }
@@ -266,17 +274,28 @@
 }
 
 #' @importFrom methods as
+#' @importFrom dplyr join_by
 .cpout_add_image_metadata <- function(object, path, image_file,
                                       extract_imgid_from,
-                                      extract_imagemetadata_from) {
+                                      extract_imagemetadata_from,
+                                      extract_cellid_from) {
 
     cur_img_meta <- vroom(file.path(path, image_file),
                           col_select = all_of(c(extract_imgid_from,
                                                 extract_imagemetadata_from)),
                           show_col_types = FALSE)
-    colData(object) <- as(merge(x = colData(object), y = cur_img_meta,
-                                by.x = "sample_id", by.y = extract_imgid_from,
-                                sort = FALSE), "DataFrame")
+    cur_img_meta$sample_id <- as.character(cur_img_meta[[extract_imgid_from]])
+    
+    cur_df <- as(left_join(x = as.data.frame(colData(object)), 
+                           y = cur_img_meta,
+                           by = "sample_id"), "DataFrame")
+    
+    if (!all.equal(paste(cur_df[["sample_id"]], cur_df[[extract_cellid_from]]),
+                   paste(object[["sample_id"]], object[[extract_cellid_from]]))) {
+        stop("Order of cells do not match")    
+    }
+    
+    colData(object) <- cur_df
 
     return(object)
 }

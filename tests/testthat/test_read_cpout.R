@@ -1,4 +1,5 @@
 test_that("read_cpout function works.", {
+
     path <- system.file("extdata/mockData/cpout", package = "imcRtools")
 
     # SpatialExperiment
@@ -13,7 +14,7 @@ test_that("read_cpout function works.", {
                  c("Tube.Number", "Metal.Tag", "Target", "ilastik", "full"))
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "AreaShape_Area", "Neighbors_NumberOfNeighbors_8", 
                                             "AreaShape_Eccentricity", "AreaShape_MajorAxisLength", "AreaShape_MinorAxisLength", 
-                                            "AreaShape_MeanRadius", "Metadata_acname", "Metadata_acid", "Metadata_description"))
+                                            "AreaShape_MeanRadius", "ImageNumber", "Metadata_acname", "Metadata_acid", "Metadata_description"))
     expect_equal(spatialCoordsNames(cur_spe), c("Pos_X", "Pos_Y"))
     
     object_file <- vroom::vroom(file.path(path, "cell.csv"))
@@ -21,7 +22,7 @@ test_that("read_cpout function works.", {
     rownames(cur_counts) <- rownames(cur_spe)
     
     image_file <- vroom::vroom(file.path(path, "Image.csv"))
-    object_file <- merge(object_file, image_file, by = "ImageNumber", order = FALSE)
+    object_file <- dplyr::left_join(object_file, image_file, by = "ImageNumber")
     
     expect_equal(counts(cur_spe), cur_counts * (2^16 - 1))
     expect_equal(counts(cur_spe)[1:10], c(0, 0.930232557922948, 0.0232558139480737, 0.0465116278961474, 
@@ -76,7 +77,7 @@ test_that("read_cpout function works.", {
                  c("Tube.Number", "Metal.Tag", "Target", "ilastik", "full"))
     expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectNumber", "Pos_X", "Pos_Y", "AreaShape_Area", 
                                             "Neighbors_NumberOfNeighbors_8", "AreaShape_Eccentricity", "AreaShape_MajorAxisLength", 
-                                            "AreaShape_MinorAxisLength", "AreaShape_MeanRadius", "Metadata_acname", 
+                                            "AreaShape_MinorAxisLength", "AreaShape_MeanRadius", "ImageNumber", "Metadata_acname", 
                                             "Metadata_acid", "Metadata_description"))
     
     object_file <- vroom::vroom(file.path(path, "cell.csv"))
@@ -84,7 +85,7 @@ test_that("read_cpout function works.", {
     rownames(cur_counts) <- rownames(cur_sce)
     
     image_file <- vroom::vroom(file.path(path, "Image.csv"))
-    object_file <- merge(object_file, image_file, by = "ImageNumber", order = FALSE)
+    object_file <- dplyr::left_join(object_file, image_file, by = "ImageNumber")
     
     expect_equal(counts(cur_sce), cur_counts * (2^16 - 1))
     expect_equal(counts(cur_sce)[1:10], c(0, 0.930232557922948, 0.0232558139480737, 0.0465116278961474, 
@@ -249,7 +250,7 @@ test_that("read_cpout function works.", {
                  c("Tube.Number", "Metal.Tag", "Target", "ilastik", "full"))
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "AreaShape_Area", "Neighbors_NumberOfNeighbors_8", 
                                             "AreaShape_Eccentricity", "AreaShape_MajorAxisLength", "AreaShape_MinorAxisLength", 
-                                            "AreaShape_MeanRadius", "Metadata_acname", "Metadata_acid", "Metadata_description"))
+                                            "AreaShape_MeanRadius", "ImageNumber", "Metadata_acname", "Metadata_acid", "Metadata_description"))
     expect_equal(spatialCoordsNames(cur_spe), c("Pos_X", "Pos_Y"))
     
     object_file <- vroom::vroom(file.path(path, "cell.csv"))
@@ -285,7 +286,7 @@ test_that("read_cpout function works.", {
                  c("Tube.Number", "Metal.Tag", "Target", "ilastik", "full"))
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "AreaShape_Area", "Neighbors_NumberOfNeighbors_8", 
                                             "AreaShape_Eccentricity", "AreaShape_MajorAxisLength", "AreaShape_MinorAxisLength", 
-                                            "AreaShape_MeanRadius", "Metadata_acname", "Metadata_acid", "Metadata_description"))
+                                            "AreaShape_MeanRadius", "ImageNumber", "Metadata_acname", "Metadata_acid", "Metadata_description"))
     expect_equal(spatialCoordsNames(cur_spe), c("Pos_X", "Pos_Y"))
     
     object_file <- vroom::vroom(file.path(path, "cell.csv"))
@@ -293,7 +294,7 @@ test_that("read_cpout function works.", {
     rownames(cur_counts) <- rownames(cur_spe)
     
     image_file <- vroom::vroom(file.path(path, "Image.csv"))
-    object_file <- merge(object_file, image_file, by = "ImageNumber", order = FALSE)
+    object_file <- dplyr::left_join(object_file, image_file, by = "ImageNumber")
     
     expect_equal(counts(cur_spe), cur_counts * (2^16 - 1))
     expect_equal(counts(cur_spe)[1:10], c(0, 0.930232557922948, 0.0232558139480737, 0.0465116278961474, 
@@ -326,7 +327,7 @@ test_that("read_cpout function works.", {
     expect_equal(length(names(rowData(cur_spe))), 0) 
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "AreaShape_Area", "Neighbors_NumberOfNeighbors_8", 
                                             "AreaShape_Eccentricity", "AreaShape_MajorAxisLength", "AreaShape_MinorAxisLength", 
-                                            "AreaShape_MeanRadius", "Metadata_acname", "Metadata_acid", "Metadata_description"))
+                                            "AreaShape_MeanRadius", "ImageNumber", "Metadata_acname", "Metadata_acid", "Metadata_description"))
     expect_equal(spatialCoordsNames(cur_spe), c("Pos_X", "Pos_Y"))
     
     object_file <- vroom::vroom(file.path(path, "cell.csv"))
@@ -334,7 +335,7 @@ test_that("read_cpout function works.", {
     rownames(cur_counts) <- rownames(cur_spe)
     
     image_file <- vroom::vroom(file.path(path, "Image.csv"))
-    object_file <- merge(object_file, image_file, by = "ImageNumber", order = FALSE)
+    object_file <- dplyr::left_join(object_file, image_file, by = "ImageNumber")
     
     expect_equal(counts(cur_spe), cur_counts * (2^16 - 1))
     expect_equal(counts(cur_spe)[1:10], c(0, 0.930232557922948, 0.0232558139480737, 0.0465116278961474, 
@@ -359,7 +360,7 @@ test_that("read_cpout function works.", {
                  c("Tube.Number", "Metal.Tag", "Target", "ilastik", "full"))
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "AreaShape_Area", "Neighbors_NumberOfNeighbors_8", 
                                             "AreaShape_Eccentricity", "AreaShape_MajorAxisLength", "AreaShape_MinorAxisLength", 
-                                            "AreaShape_MeanRadius", "Metadata_acname", "Metadata_acid", "Metadata_description"))
+                                            "AreaShape_MeanRadius", "ImageNumber", "Metadata_acname", "Metadata_acid", "Metadata_description"))
     expect_equal(spatialCoordsNames(cur_spe), c("Pos_X", "Pos_Y"))
     
     object_file <- vroom::vroom(file.path(path, "cell.csv"))
@@ -394,7 +395,8 @@ test_that("read_cpout function works.", {
     cur_spe <- read_cpout(path, extract_cellmetadata_from = "Location_MaxIntensity_Y_FullStack_c1", 
                           graph_file = "Object_relationships.csv")
     
-    expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "Location_MaxIntensity_Y_FullStack_c1", 
+    expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "Location_MaxIntensity_Y_FullStack_c1",
+                                            "ImageNumber",
                                             "Metadata_acname", 
                                             "Metadata_acid", "Metadata_description"))
     expect_equal(spatialCoordsNames(cur_spe), c("Pos_X", "Pos_Y"))
@@ -408,7 +410,7 @@ test_that("read_cpout function works.", {
     
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "AreaShape_Area", "Neighbors_NumberOfNeighbors_8", 
                                             "AreaShape_Eccentricity", "AreaShape_MajorAxisLength", "AreaShape_MinorAxisLength", 
-                                            "AreaShape_MeanRadius", "Metadata_end_timestamp"))
+                                            "AreaShape_MeanRadius","ImageNumber", "Metadata_end_timestamp"))
     
     expect_equal(spatialCoordsNames(cur_spe), c("Pos_X", "Pos_Y"))
     
@@ -431,13 +433,13 @@ test_that("read_cpout function works.", {
     
     expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectNumber", "AreaShape_Area", "Neighbors_NumberOfNeighbors_8", 
                                             "AreaShape_Eccentricity", "AreaShape_MajorAxisLength", "AreaShape_MinorAxisLength", 
-                                            "AreaShape_MeanRadius", "Metadata_acname", "Metadata_acid", "Metadata_description"
+                                            "AreaShape_MeanRadius", "ImageNumber", "Metadata_acname", "Metadata_acid", "Metadata_description"
     ))
     
     cur_spe <- read_cpout(path, extract_cellmetadata_from = NULL, 
                           graph_file = "Object_relationships.csv")
     
-    expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber",
+    expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "ImageNumber",
                                             "Metadata_acname", "Metadata_acid", "Metadata_description"))
     
     cur_spe <- read_cpout(path, extract_imagemetadata_from = NULL, 
@@ -445,7 +447,7 @@ test_that("read_cpout function works.", {
     
     expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "AreaShape_Area", "Neighbors_NumberOfNeighbors_8", 
                                             "AreaShape_Eccentricity", "AreaShape_MajorAxisLength", "AreaShape_MinorAxisLength", 
-                                            "AreaShape_MeanRadius"))
+                                            "AreaShape_MeanRadius", "ImageNumber"))
     
     # Fail
     expect_error(read_cpout("test", 
@@ -762,3 +764,4 @@ test_that("read_cpout function works.", {
                  regexp = "'extract_graphcellids_from' not in 'graph_file'.", 
                  fixed = TRUE)
 })
+
