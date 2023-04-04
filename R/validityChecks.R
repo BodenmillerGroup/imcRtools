@@ -884,7 +884,7 @@
     }
 }
 
-.valid.testInteractions.input <- function(iter, p_threshold){
+.valid.testInteractions.input <- function(iter, p_threshold, return_samples){
     if (length(iter) != 1 | !is.numeric(iter)) {
         stop("'iter' must be a single positive numeric.")
     }
@@ -899,6 +899,10 @@
     
     if (p_threshold < 0 | p_threshold > 1) {
         stop("'p_threshold' must be a single numeric between 0 and 1.")
+    }
+    
+    if (length(return_samples) != 1 | !is.logical(return_samples)) {
+        stop("'return_samples' must be a single logical.")
     }
 }
 

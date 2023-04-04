@@ -168,6 +168,10 @@ Changes in version 1.5.2 (2022-11-23)
 
 + Bug fix minDistToCells: return NA when all cells of an image belong to a patch
 
-Changes in version 1.5.3 (2022-11-23)
+Changes in version 1.5.3 (2023-03-23)
 
 + Replaced merge function by left_join as safety measure
+
+Changes in version 1.5.4 (2022-04-04)
+
++ Added option to get permutation counts returned from testInteractions

@@ -1,5 +1,6 @@
 test_that("testInteractions function works", {
     library(cytomapper)
+    library(BiocParallel)
     data(pancreasSCE)
     
     pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn",
@@ -408,6 +409,67 @@ test_that("testInteractions function works", {
     expect_equal(cur_test$p < 0.01, cur_test$sig)
     expect_equal(cur_test$sig * sign(cur_test$interaction - 0.5), cur_test$sigval)
     
+    # Return samples
+    pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "expansion",
+                                     threshold = 20)
+    expect_silent(cur_out <- testInteractions(pancreasSCE, 
+                                              group_by = "ImageNb", 
+                                              label = "CellType",
+                                              method = "classic",
+                                              iter = 100,
+                                              colPairName = "expansion_interaction_graph",
+                                              return_samples = TRUE,
+                                              BPPARAM = SerialParam(RNGseed = 123)))
+    
+    expect_silent(cur_out_2 <- testInteractions(pancreasSCE, 
+                                              group_by = "ImageNb", 
+                                              label = "CellType",
+                                              method = "classic",
+                                              iter = 100,
+                                              colPairName = "expansion_interaction_graph",
+                                              BPPARAM = SerialParam(RNGseed = 123)))
+    
+    expect_equal(cur_out$group_by, cur_out_2$group_by)
+    expect_equal(cur_out$from_label, cur_out_2$from_label)
+    expect_equal(cur_out$to_label, cur_out_2$to_label)
+    expect_equal(cur_out$ct, cur_out_2$ct)
+    expect_equal(cur_out$p_lt, cur_out_2$p_lt)
+    expect_equal(cur_out$p_gt, cur_out_2$p_gt)
+    expect_equal(cur_out$interaction, cur_out_2$interaction)
+    expect_equal(cur_out$p, cur_out_2$p)
+    expect_equal(cur_out$sig, cur_out_2$sig)
+    expect_equal(cur_out$sigval, cur_out_2$sigval)
+    
+    expect_equal(dim(cur_out), c(27, 110))
+    expect_equal(cur_out$iter_1, c(1.29411764705882, 0.352941176470588, 7.29411764705882, 0.75, 
+                                   0.25, 7.125, 1.40909090909091, 0.647727272727273, 7.34090909090909, 
+                                   3.64444444444444, 3.22222222222222, 2.95555555555556, 3.91891891891892, 
+                                   3.08108108108108, 3.37837837837838, 3.325, 3.125, 3.3, 0, 0, 
+                                   0, 0, 5.6969696969697, 5.51515151515152, 0, 5.9672131147541, 
+                                   4.81967213114754))
+    expect_equal(cur_out$iter_13, c(1.05882352941176, 0.470588235294118, 7.64705882352941, 1, 0.5, 
+                                    6.5, 1.47727272727273, 0.590909090909091, 7.29545454545454, 4.31111111111111, 
+                                    2.88888888888889, 2.75555555555556, 3.51351351351351, 3.67567567567568, 
+                                    3.16216216216216, 3.1, 2.925, 3.6, 0, 0, 0, 0, 6.36363636363636, 
+                                    5.03030303030303, 0, 5.44262295081967, 5.14754098360656))
+    expect_equal(cur_out$iter_26, c(1.29411764705882, 0.882352941176471, 7.58823529411765, 1.875, 
+                                    0.25, 7.125, 1.46590909090909, 0.647727272727273, 7.02272727272727, 
+                                    3.91111111111111, 3.42222222222222, 3.11111111111111, 4.16216216216216, 
+                                    2.54054054054054, 3.13513513513514, 3.5, 2.9, 3.15, 0, 0, 0, 
+                                    0, 6.06060606060606, 5.09090909090909, 0, 5.50819672131148, 5.34426229508197
+    ))
+    expect_equal(cur_out$iter_67, c(1.64705882352941, 0.529411764705882, 6.29411764705882, 1.125, 
+                                    0.25, 6.75, 1.21590909090909, 0.613636363636364, 7.65909090909091, 
+                                    4.53333333333333, 2.86666666666667, 3.44444444444444, 3.48648648648649, 
+                                    2.32432432432432, 3.13513513513514, 3.875, 2.9, 3.15, 0, 0, 0, 
+                                    0, 5.96969696969697, 5.33333333333333, 0, 5.77049180327869, 4.91803278688525
+    ))
+    expect_equal(cur_out$iter_99, c(1.41176470588235, 0, 7.35294117647059, 0, 1.75, 8, 1.42045454545455, 
+                                    0.727272727272727, 7.13636363636364, 3.91111111111111, 3.13333333333333, 
+                                    3.53333333333333, 3.81081081081081, 2.86486486486486, 3.08108108108108, 
+                                    3.975, 2.85, 2.65, 0, 0, 0, 0, 6.15151515151515, 5.31818181818182, 
+                                    0, 5.75409836065574, 4.75409836065574))
+    
     # Fail
     expect_error(testInteractions("test"),
                  regexp = "'object' not of type 'SingleCellExperiment'.",
@@ -475,6 +537,16 @@ test_that("testInteractions function works", {
                                       p_threshold = 3),
                  regexp = "'p_threshold' must be a single numeric between 0 and 1.",
                  fixed = TRUE)    
+    expect_error(testInteractions(pancreasSCE, group_by = "ImageNb", label = "CellType", 
+                                  colPairName = "knn_interaction_graph",
+                                  return_samples = 1),
+                 regexp = "'return_samples' must be a single logical.",
+                 fixed = TRUE)
+    expect_error(testInteractions(pancreasSCE, group_by = "ImageNb", label = "CellType", 
+                                  colPairName = "knn_interaction_graph",
+                                  return_samples = c("test", "test2")),
+                 regexp = "'return_samples' must be a single logical.",
+                 fixed = TRUE)
     
 
 })

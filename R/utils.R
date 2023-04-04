@@ -885,7 +885,7 @@
     return(cur_out)
 }
 
-.calc_p_vals<- function(dat_baseline, dat_perm, n_perm, p_thres){
+.calc_p_vals<- function(dat_baseline, dat_perm, n_perm, p_thres, return_samples){
     dat_perm <- merge(dat_perm,
                       dat_baseline[, c("from_label", "to_label",
                                        "group_by", "ct")],
@@ -911,6 +911,22 @@
 
     setorder(dat_stat, "group_by", "from_label", "to_label")
     setorder(dat_baseline, "group_by", "from_label", "to_label")
+    
+    stopifnot(all.equal(paste(dat_stat$group_by, dat_stat$from_label, dat_stat$to_label),
+                        paste(dat_baseline$group_by, dat_baseline$from_label, dat_baseline$to_label)))
+    
+    if (return_samples) {
+        dat_perm <- dcast(dat_perm[,c("from_label", "to_label", "group_by", "iter", "ct_perm")], 
+                          from_label + to_label + group_by ~ iter, value.var = "ct_perm")
+        setorder(dat_perm, "group_by", "from_label", "to_label")
+    
+        stopifnot(all.equal(paste(dat_perm$group_by, dat_perm$from_label, dat_perm$to_label),
+                            paste(dat_baseline$group_by, dat_baseline$from_label, dat_baseline$to_label))) 
+        cols <- as.character(seq_len(n_perm))
+        dat_perm <- dat_perm[,cols,with=FALSE]
+        colnames(dat_perm) <- paste0("iter_", colnames(dat_perm))
+        dat_stat <- cbind(dat_stat, dat_perm)
+    }
 
     dat_stat[is.na(dat_baseline$ct),
              c("p_gt", "p_lt", "ct", "interaction",

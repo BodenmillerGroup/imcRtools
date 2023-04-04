@@ -13,6 +13,7 @@ testInteractions(
   patch_size = NULL,
   iter = 1000,
   p_threshold = 0.01,
+  return_samples = FALSE,
   BPPARAM = SerialParam()
 )
 }
@@ -43,6 +44,9 @@ the minimum number of neighbors of the same type to be considered a patch
 \item{p_threshold}{single numeric indicating the empirical p-value 
 threshold at which interactions are considered to be significantly 
 enriched or depleted per group.}
+
+\item{return_samples}{single logical indicating if the permuted interaction
+counts of all iterations should be returned.}
 
 \item{BPPARAM}{parameters for parallelized processing.}
 }

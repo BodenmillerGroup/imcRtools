@@ -24,6 +24,8 @@
 #' @param p_threshold single numeric indicating the empirical p-value 
 #' threshold at which interactions are considered to be significantly 
 #' enriched or depleted per group.
+#' @param return_samples single logical indicating if the permuted interaction
+#' counts of all iterations should be returned.
 #' @param BPPARAM parameters for parallelized processing. 
 #'
 #' @section Counting and summarizing cell-cell interactions:
@@ -154,13 +156,14 @@ testInteractions <- function(object,
                                 patch_size = NULL,
                                 iter = 1000,
                                 p_threshold = 0.01,
+                                return_samples = FALSE,
                                 BPPARAM = SerialParam()){
 
     # Input check
     method <- match.arg(method)
     .valid.countInteractions.input(object, group_by, label, method,
                                         patch_size, colPairName)
-    .valid.testInteractions.input(iter, p_threshold)
+    .valid.testInteractions.input(iter, p_threshold, return_samples)
     
     # Re-level group_by label
     if(is.factor(colData(object)[[group_by]])) {
@@ -186,7 +189,8 @@ testInteractions <- function(object,
                                 colPairName, method, BPPARAM)
     
     cur_out <- .calc_p_vals(cur_count, cur_out, n_perm = iter, 
-                            p_thres = p_threshold)
+                            p_thres = p_threshold, 
+                            return_samples = return_samples)
     
     setorder(cur_out, "group_by", "from_label", "to_label")
     
