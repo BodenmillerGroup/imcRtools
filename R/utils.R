@@ -401,73 +401,61 @@
                           node_color_fix, node_size_fix, node_shape_fix,
                           edge_color_by, edge_width_by, edge_color_fix,
                           edge_width_fix, nodes_first){
-
-    node_color_by <- if(is.null(node_color_by)) NULL else as.name(node_color_by)
-    node_size_by <- if(is.null(node_size_by)) NULL else as.name(node_size_by)
-    node_shape_by <- if(is.null(node_shape_by)) NULL else as.name(node_shape_by)
-    edge_color_by <- if(is.null(edge_color_by)) NULL else as.name(edge_color_by)
-    edge_width_by <- if(is.null(edge_width_by)) NULL else as.name(edge_width_by)
-
-    if (!is.null(node_color_fix)){ node_color_by <- as.character(node_color_fix)
-    } else { node_color_by <- node_color_by }
-    if (!is.null(node_size_fix)){ node_size_by <- as.character(node_size_fix)
-    } else { node_size_by <- node_size_by }
-    if (!is.null(node_shape_fix)){ node_shape_by <- as.character(node_shape_fix)
-    } else { node_shape_by <- node_shape_by }
-    if (!is.null(edge_color_fix)){ edge_color_by <- as.character(edge_color_fix)
-    } else { edge_color_by <-  edge_color_by }
-    if (!is.null(edge_width_fix)){edge_width_by <- as.character(edge_width_fix)
-    } else { edge_width_by <- edge_width_by}
+    
+    node_mapping <- aes(colour = .data[[node_color_by]],
+                        size = .data[[node_size_by]],
+                        shape = .data[[node_shape_by]])
+    if (is.null(node_color_by)) {node_mapping$colour <- NULL}
+    if (is.null(node_size_by)) {node_mapping$size <- NULL}
+    if (is.null(node_shape_by)) {node_mapping$shape <- NULL}
+    if (!is.null(node_color_fix)) {node_mapping$colour <- node_color_fix}
+    if (!is.null(node_size_fix)) {node_mapping$size <- node_size_fix}
+    if (!is.null(node_shape_fix)) {node_mapping$shape <- node_shape_fix}
 
     if (draw_edges) {
+        
+        edge_mapping <- aes(edge_colour = .data[[edge_color_by]],
+                           edge_width = .data[[edge_width_by]])
+        if (is.null(edge_color_by)) {edge_mapping$edge_colour <- NULL}
+        if (is.null(edge_width_by)) {edge_mapping$edge_width <- NULL}
+        if (!is.null(edge_color_fix)) {edge_mapping$edge_colour <- edge_color_fix}
+        if (!is.null(edge_width_fix)) {edge_mapping$edge_width <- edge_width_fix}
+        
         if (!is.null(arrow)) {
 
             if (is.null(end_cap)) {
                 end_cap <- circle(0.1, 'cm')
             }
-
+            
             if (directed) {
-                cur_geom_edge <- geom_edge_fan(aes_(edge_colour = edge_color_by,
-                                                    edge_width = edge_width_by),
+                cur_geom_edge <- geom_edge_fan(edge_mapping,
                                                end_cap = end_cap,
                                                arrow = arrow)
             } else {
-                cur_geom_edge <- geom_edge_link(aes_(
-                    edge_colour = edge_color_by,
-                    edge_width = edge_width_by),
-                    end_cap = end_cap,
-                    arrow = arrow)
+                cur_geom_edge <- geom_edge_link(edge_mapping, 
+                                                end_cap = end_cap,
+                                                arrow = arrow)
             }
         } else {
             if (directed) {
-                cur_geom_edge <- geom_edge_fan0(aes_(
-                    edge_colour = edge_color_by,
-                    edge_width = edge_width_by))
+                cur_geom_edge <- geom_edge_fan0(edge_mapping)
             } else {
-                cur_geom_edge <- geom_edge_link0(aes_(
-                    edge_colour = edge_color_by,
-                    edge_width = edge_width_by))
+                cur_geom_edge <- geom_edge_link0(edge_mapping)
             }
         }
 
         if (nodes_first) {
             p <- ggraph(layout) +
-                geom_node_point(aes_(colour = node_color_by,
-                                     size = node_size_by,
-                                     shape = node_shape_by)) +
+                geom_node_point(node_mapping) +
                 cur_geom_edge
         } else {
             p <- ggraph(layout) +
                 cur_geom_edge +
-                geom_node_point(aes_(colour = node_color_by,
-                                     size = node_size_by,
-                                     shape = node_shape_by))
+                geom_node_point(node_mapping)
         }
     } else {
         p <- ggraph(layout) +
-            geom_node_point(aes_(colour = node_color_by,
-                                 size = node_size_by,
-                                 shape = node_shape_by))
+            geom_node_point(aes(node_mapping))
     }
 
     return(p)
@@ -967,7 +955,7 @@
   return(edges)
 }
 
-#' @importFrom ggplot2 aes_ guide_legend guide_colorbar guides scale_size_manual
+#' @importFrom ggplot2 guide_legend guide_colorbar guides scale_size_manual
 #' @importFrom ggraph geom_edge_link geom_node_label geom_node_point ggraph
 #' @importFrom igraph layout.sugiyama vertex_attr
 
@@ -1012,7 +1000,7 @@
   }
   
   if (!is.null(node_color_by)) {
-      cur_geom_node <- geom_node_point(aes_(color = color, size = size))
+      cur_geom_node <- geom_node_point(aes(color = color, size = size))
   } else {
       cur_geom_node <- geom_node_point(aes_(size = size), color = color)
   }

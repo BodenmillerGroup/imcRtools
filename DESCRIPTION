@@ -56,7 +56,8 @@ Imports:
     concaveman,
     tidyselect,
     distances,
-    MatrixGenerics
+    MatrixGenerics,
+    rlang
 Suggests:
     CATALYST,
     grid,
