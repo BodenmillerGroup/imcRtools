@@ -848,7 +848,8 @@
                             colPairName, method, BPPARAM) {
 
     cur_lab_table <- data.table(label = as.factor(colData(object)[[label]]),
-                                group_by = colData(object)[[group_by]])
+                                group_by = colData(object)[[group_by]],
+                                index = seq_len(ncol(object)))
 
     . <- label <- NULL
 
@@ -856,7 +857,10 @@
                         function(x){
 
                             label_perm <- cur_lab_table[ ,
-                                                         .(label=sample(label)), by=group_by]
+                                                         .(label=sample(label), 
+                                                           index = index), by=group_by]
+                            
+                            setorder(label_perm, "index")
                             
                             cur_perm <- .prepare_table(object, group_by,
                                                        label_perm$label, colPairName)

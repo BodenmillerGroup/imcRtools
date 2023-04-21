@@ -328,6 +328,7 @@ test_that("testInteractions gives same results as neighbouRhood", {
     
     dat_p <- calc_p_vals(cur_classic, dat_perm, n_perm = n_perm, p_tresh = 0.01) 
     setorder(dat_p, group, FirstLabel, SecondLabel)
+    dat_p$group <- as.character(dat_p$group)
     
     imcRtools_classic_perm <- testInteractions(pancreasSCE, 
                                                    group_by = "ImageNb", 
@@ -340,8 +341,8 @@ test_that("testInteractions gives same results as neighbouRhood", {
     setorder(imcRtools_classic_perm, "group_by", "from_label", "to_label")
     
     expect_equal(dat_p$group, imcRtools_classic_perm$group_by)
-    expect_equal(dat_p$FirstLabel, imcRtools_classic_perm$from_label)
-    expect_equal(dat_p$SecondLabel, imcRtools_classic_perm$to_label)
+    expect_equal(as.character(dat_p$FirstLabel), imcRtools_classic_perm$from_label)
+    expect_equal(as.character(dat_p$SecondLabel), imcRtools_classic_perm$to_label)
     expect_equal(dat_p$p_gt[!is.na(imcRtools_classic$ct)], imcRtools_classic_perm$p_gt[!is.na(imcRtools_classic$ct)])
     expect_equal(dat_p$p_lt[!is.na(imcRtools_classic$ct)], imcRtools_classic_perm$p_lt[!is.na(imcRtools_classic$ct)])
     expect_equal(dat_p$direction[!is.na(imcRtools_classic$ct)], imcRtools_classic_perm$interaction[!is.na(imcRtools_classic$ct)])
@@ -383,6 +384,7 @@ test_that("testInteractions gives same results as neighbouRhood", {
     
     dat_p <- calc_p_vals(cur_histo, dat_perm, n_perm = n_perm, p_tresh = 0.01) 
     setorder(dat_p, group, FirstLabel, SecondLabel)
+    dat_p$group <- as.character(dat_p$group)
     
     imcRtools_histo_perm <- testInteractions(pancreasSCE, 
                                             group_by = "ImageNb", 
@@ -396,8 +398,8 @@ test_that("testInteractions gives same results as neighbouRhood", {
     setorder(imcRtools_histo_perm, "group_by", "from_label", "to_label")
     
     expect_equal(dat_p$group, imcRtools_histo_perm$group_by)
-    expect_equal(dat_p$FirstLabel, imcRtools_histo_perm$from_label)
-    expect_equal(dat_p$SecondLabel, imcRtools_histo_perm$to_label)
+    expect_equal(as.character(dat_p$FirstLabel), imcRtools_histo_perm$from_label)
+    expect_equal(as.character(dat_p$SecondLabel), imcRtools_histo_perm$to_label)
     expect_equal(dat_p$p_gt, imcRtools_histo_perm$p_gt)
     expect_equal(dat_p$p_lt, imcRtools_histo_perm$p_lt)
     expect_equal(dat_p$direction, imcRtools_histo_perm$interaction)
@@ -440,6 +442,7 @@ test_that("testInteractions gives same results as neighbouRhood", {
     
     dat_p <- calc_p_vals(cur_patch, dat_perm, n_perm = n_perm, p_tresh = 0.01) 
     setorder(dat_p, group, FirstLabel, SecondLabel)
+    dat_p$group <- as.character(dat_p$group)
     
     imcRtools_patch_perm <- testInteractions(pancreasSCE, 
                                                  group_by = "ImageNb", 
@@ -454,8 +457,8 @@ test_that("testInteractions gives same results as neighbouRhood", {
     setorder(imcRtools_patch_perm, "group_by", "from_label", "to_label")
     
     expect_equal(dat_p$group, imcRtools_patch_perm$group_by)
-    expect_equal(dat_p$FirstLabel, imcRtools_patch_perm$from_label)
-    expect_equal(dat_p$SecondLabel, imcRtools_patch_perm$to_label)
+    expect_equal(as.character(dat_p$FirstLabel), imcRtools_patch_perm$from_label)
+    expect_equal(as.character(dat_p$SecondLabel), imcRtools_patch_perm$to_label)
     expect_equal(dat_p$p_gt[!is.na(imcRtools_patch_perm$ct)], imcRtools_patch_perm$p_gt[!is.na(imcRtools_patch_perm$ct)])
     expect_equal(dat_p$p_lt[!is.na(imcRtools_patch_perm$ct)], imcRtools_patch_perm$p_lt[!is.na(imcRtools_patch_perm$ct)])
     expect_equal(dat_p$direction[!is.na(imcRtools_patch_perm$ct)], imcRtools_patch_perm$interaction[!is.na(imcRtools_patch_perm$ct)])
@@ -518,6 +521,7 @@ test_that("testInteractions gives same results as neighbouRhood", {
     
     dat_p <- calc_p_vals(cur_classic, dat_perm, n_perm = n_perm, p_tresh = 0.01) 
     setorder(dat_p, group, FirstLabel, SecondLabel)
+    dat_p$group <- as.character(dat_p$group)
     
     imcRtools_classic_perm <- testInteractions(cur_sce, 
                                                group_by = "ImageNb", 
@@ -530,8 +534,8 @@ test_that("testInteractions gives same results as neighbouRhood", {
     setorder(imcRtools_classic_perm, "group_by", "from_label", "to_label")
     
     expect_equal(dat_p$group, imcRtools_classic_perm$group_by)
-    expect_equal(dat_p$FirstLabel, imcRtools_classic_perm$from_label)
-    expect_equal(dat_p$SecondLabel, imcRtools_classic_perm$to_label)
+    expect_equal(as.character(dat_p$FirstLabel), imcRtools_classic_perm$from_label)
+    expect_equal(as.character(dat_p$SecondLabel), imcRtools_classic_perm$to_label)
     #expect_equal(dat_p$p_gt[!is.na(imcRtools_classic_perm$ct)], imcRtools_classic_perm$p_gt[!is.na(imcRtools_classic_perm$ct)])
     #expect_equal(dat_p$p_lt[!is.na(imcRtools_classic_perm$ct)], imcRtools_classic_perm$p_lt[!is.na(imcRtools_classic_perm$ct)])
     expect_equal(dat_p$direction[!is.na(imcRtools_classic_perm$ct)], imcRtools_classic_perm$interaction[!is.na(imcRtools_classic_perm$ct)])
@@ -573,6 +577,7 @@ test_that("testInteractions gives same results as neighbouRhood", {
     
     dat_p <- calc_p_vals(cur_histo, dat_perm, n_perm = n_perm, p_tresh = 0.01) 
     setorder(dat_p, group, FirstLabel, SecondLabel)
+    dat_p$group <- as.character(dat_p$group)
     
     imcRtools_histo_perm <- testInteractions(cur_sce, 
                                                group_by = "ImageNb", 
@@ -586,8 +591,8 @@ test_that("testInteractions gives same results as neighbouRhood", {
     setorder(imcRtools_histo_perm, "group_by", "from_label", "to_label")
     
     expect_equal(dat_p$group, imcRtools_histo_perm$group_by)
-    expect_equal(dat_p$FirstLabel, imcRtools_histo_perm$from_label)
-    expect_equal(dat_p$SecondLabel, imcRtools_histo_perm$to_label)
+    expect_equal(as.character(dat_p$FirstLabel), imcRtools_histo_perm$from_label)
+    expect_equal(as.character(dat_p$SecondLabel), imcRtools_histo_perm$to_label)
     expect_equal(dat_p$p_gt[!is.na(imcRtools_histo_perm$ct)], imcRtools_histo_perm$p_gt[!is.na(imcRtools_histo_perm$ct)])
     expect_equal(dat_p$p_lt[!is.na(imcRtools_histo_perm$ct)], imcRtools_histo_perm$p_lt[!is.na(imcRtools_histo_perm$ct)])
     expect_equal(dat_p$direction[!is.na(imcRtools_histo_perm$ct)], imcRtools_histo_perm$interaction[!is.na(imcRtools_histo_perm$ct)])
@@ -630,6 +635,7 @@ test_that("testInteractions gives same results as neighbouRhood", {
     
     dat_p <- calc_p_vals(cur_classic_patch, dat_perm, n_perm = n_perm, p_tresh = 0.01) 
     setorder(dat_p, group, FirstLabel, SecondLabel)
+    dat_p$group <- as.character(dat_p$group)
     
     imcRtools_classic_patch_perm <- testInteractions(cur_sce, 
                                                group_by = "ImageNb", 
@@ -644,13 +650,210 @@ test_that("testInteractions gives same results as neighbouRhood", {
     setorder(imcRtools_classic_patch_perm, "group_by", "from_label", "to_label")
     
     expect_equal(dat_p$group, imcRtools_classic_patch_perm$group_by)
-    expect_equal(dat_p$FirstLabel, imcRtools_classic_patch_perm$from_label)
-    expect_equal(dat_p$SecondLabel, imcRtools_classic_patch_perm$to_label)
+    expect_equal(as.character(dat_p$FirstLabel), imcRtools_classic_patch_perm$from_label)
+    expect_equal(as.character(dat_p$SecondLabel), imcRtools_classic_patch_perm$to_label)
     #expect_equal(dat_p$p_gt[!is.na(imcRtools_classic_patch_perm$ct)], imcRtools_classic_patch_perm$p_gt[!is.na(imcRtools_classic_patch_perm$ct)])
     #expect_equal(dat_p$p_lt[!is.na(imcRtools_classic_patch_perm$ct)], imcRtools_classic_patch_perm$p_lt[!is.na(imcRtools_classic_patch_perm$ct)])
     expect_equal(dat_p$direction[!is.na(imcRtools_classic_patch_perm$ct)], imcRtools_classic_patch_perm$interaction[!is.na(imcRtools_classic_patch_perm$ct)])
     #expect_equal(dat_p$p[!is.na(imcRtools_classic_patch_perm$ct)], imcRtools_classic_patch_perm$p[!is.na(imcRtools_classic_patch_perm$ct)])
     expect_equal(dat_p$sig[!is.na(imcRtools_classic_patch_perm$ct)], imcRtools_classic_patch_perm$sig[!is.na(imcRtools_classic_patch_perm$ct)])
     expect_equal(dat_p$sigval[!is.na(imcRtools_classic_patch_perm$ct)], imcRtools_classic_patch_perm$sigval[!is.na(imcRtools_classic_patch_perm$ct)])
+    
+})
+
+test_that("testInteractions gives same results as neighbouRhood when using different grouping", {
+    library(data.table)
+    library(cytomapper)
+    data(pancreasSCE)
+    
+    pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn",
+                                     k = 3)
+    
+    dat_cells <- as.data.table(colData(pancreasSCE))
+    dat_relation <- as.data.table(colPair(pancreasSCE))
+    dat_cells[, label := CellType]
+    dat_cells[, group := Pattern]
+    dat_cells[, ImageNumber := ImageNb]
+    dat_cells[, ObjectNumber := CellNb]
+    dat_relation[, Relationship := "Neighbors"]
+    dat_relation[, "First Image Number" := colData(pancreasSCE)[["ImageNb"]][from]]
+    dat_relation[, "First Object Number" := colData(pancreasSCE)[["CellNb"]][from]]
+    dat_relation[, "Second Image Number" := colData(pancreasSCE)[["ImageNb"]][to]]
+    dat_relation[, "Second Object Number" := colData(pancreasSCE)[["CellNb"]][to]]
+    dat_relation[, "First Object Name" := "cell"]
+    dat_relation[, "Second Object Name" := "cell"]
+    
+    d <- prepare_tables(dat_cells, dat_relation, col_group = "Pattern")
+    
+    labels_applied <- apply_labels(d[[1]], d[[2]])
+    
+    cur_classic <- aggregate_classic(labels_applied)
+    setorder(cur_classic, group, FirstLabel, SecondLabel)
+    
+    imcRtools_classic <- countInteractions(pancreasSCE, 
+                                           group_by = "Pattern", 
+                                           label = "CellType",
+                                           colPairName = "knn_interaction_graph")
+    
+    imcRtools_classic <- as.data.table(imcRtools_classic)[cur_classic,, on = c("group_by==group", "from_label==FirstLabel", "to_label==SecondLabel")]
+    setorder(imcRtools_classic, "group_by", "from_label", "to_label")
+    
+    expect_equal(cur_classic$group, imcRtools_classic$group_by)
+    expect_equal(cur_classic$FirstLabel, imcRtools_classic$from_label)
+    expect_equal(cur_classic$SecondLabel, imcRtools_classic$to_label)
+    expect_equal(cur_classic$ct[!is.na(imcRtools_classic$ct)], imcRtools_classic$ct[!is.na(imcRtools_classic$ct)])
+    
+    # Comment: if the to cell is located outside of the group it's still being counted
+    
+    # Perturbation
+    n_perm <- 100
+    
+    dat_perm <- bplapply(1:n_perm, function(x){
+        dat_labels = shuffle_labels(d[[1]])
+        apply_labels(dat_labels, d[[2]]) %>%
+            aggregate_classic()
+    }, BPPARAM = SerialParam(RNGseed = 123))
+    dat_perm <- rbindlist(dat_perm, idcol = 'run')
+    
+    dat_p <- calc_p_vals(cur_classic, dat_perm, n_perm = n_perm, p_tresh = 0.01) 
+    setorder(dat_p, group, FirstLabel, SecondLabel)
+    dat_p$group <- as.character(dat_p$group)
+    
+    imcRtools_classic_perm <- testInteractions(pancreasSCE, 
+                                               group_by = "Pattern", 
+                                               label = "CellType",
+                                               colPairName = "knn_interaction_graph",
+                                               iter = 100,
+                                               BPPARAM = SerialParam(RNGseed = 123))
+    
+    imcRtools_classic_perm <- as.data.table(imcRtools_classic_perm)[dat_p,, on = c("group_by==group", "from_label==FirstLabel", "to_label==SecondLabel")]
+    setorder(imcRtools_classic_perm, "group_by", "from_label", "to_label")
+    
+    expect_equal(dat_p$group, imcRtools_classic_perm$group_by)
+    expect_equal(as.character(dat_p$FirstLabel), imcRtools_classic_perm$from_label)
+    expect_equal(as.character(dat_p$SecondLabel), imcRtools_classic_perm$to_label)
+    expect_equal(dat_p$p_gt[!is.na(imcRtools_classic$ct)], imcRtools_classic_perm$p_gt[!is.na(imcRtools_classic$ct)])
+    expect_equal(dat_p$p_lt[!is.na(imcRtools_classic$ct)], imcRtools_classic_perm$p_lt[!is.na(imcRtools_classic$ct)])
+    expect_equal(dat_p$direction[!is.na(imcRtools_classic$ct)], imcRtools_classic_perm$interaction[!is.na(imcRtools_classic$ct)])
+    expect_equal(dat_p$p[!is.na(imcRtools_classic$ct)], imcRtools_classic_perm$p[!is.na(imcRtools_classic$ct)])
+    expect_equal(dat_p$sig[!is.na(imcRtools_classic$ct)], imcRtools_classic_perm$sig[!is.na(imcRtools_classic$ct)])
+    expect_equal(dat_p$sigval[!is.na(imcRtools_classic$ct)], imcRtools_classic_perm$sigval[!is.na(imcRtools_classic$ct)])
+    
+    ###################################### histocat #############################
+    d <- prepare_tables(dat_cells, dat_relation, col_group = "Pattern")
+    
+    labels_applied <- apply_labels(d[[1]], d[[2]])
+    
+    cur_histo <- aggregate_histo(labels_applied)
+    setorder(cur_histo, group, FirstLabel, SecondLabel)
+    
+    imcRtools_histo <- countInteractions(pancreasSCE, 
+                                         group_by = "Pattern", 
+                                         label = "CellType",
+                                         colPairName = "knn_interaction_graph",
+                                         method = "histocat")
+    
+    imcRtools_histo <- as.data.table(imcRtools_histo)[cur_histo,, on = c("group_by==group", "from_label==FirstLabel", "to_label==SecondLabel")]
+    setorder(imcRtools_histo, "group_by", "from_label", "to_label")
+    
+    expect_equal(cur_histo$group, imcRtools_histo$group_by)
+    expect_equal(cur_histo$FirstLabel, imcRtools_histo$from_label)
+    expect_equal(cur_histo$SecondLabel, imcRtools_histo$to_label)
+    expect_equal(cur_histo$ct[!is.na(imcRtools_histo$ct)], imcRtools_histo$ct[!is.na(imcRtools_histo$ct)])
+    
+    # Perturbation
+    n_perm <- 100
+    
+    dat_perm <- bplapply(1:n_perm, function(x){
+        dat_labels = shuffle_labels(d[[1]])
+        apply_labels(dat_labels, d[[2]]) %>%
+            aggregate_histo()
+    }, BPPARAM = SerialParam(RNGseed = 123))
+    dat_perm <- rbindlist(dat_perm, idcol = 'run')
+    
+    dat_p <- calc_p_vals(cur_histo, dat_perm, n_perm = n_perm, p_tresh = 0.01) 
+    setorder(dat_p, group, FirstLabel, SecondLabel)
+    dat_p$group <- as.character(dat_p$group)
+    
+    imcRtools_histo_perm <- testInteractions(pancreasSCE, 
+                                             group_by = "Pattern", 
+                                             label = "CellType",
+                                             colPairName = "knn_interaction_graph",
+                                             iter = 100,
+                                             method = "histocat", 
+                                             BPPARAM = SerialParam(RNGseed = 123))
+    
+    imcRtools_histo_perm <- as.data.table(imcRtools_histo_perm)[dat_p,, on = c("group_by==group", "from_label==FirstLabel", "to_label==SecondLabel")]
+    setorder(imcRtools_histo_perm, "group_by", "from_label", "to_label")
+    
+    expect_equal(dat_p$group, imcRtools_histo_perm$group_by)
+    expect_equal(as.character(dat_p$FirstLabel), imcRtools_histo_perm$from_label)
+    expect_equal(as.character(dat_p$SecondLabel), imcRtools_histo_perm$to_label)
+    expect_equal(dat_p$p_gt[!is.na(imcRtools_histo_perm$ct)], imcRtools_histo_perm$p_gt[!is.na(imcRtools_histo_perm$ct)])
+    expect_equal(dat_p$p_lt[!is.na(imcRtools_histo_perm$ct)], imcRtools_histo_perm$p_lt[!is.na(imcRtools_histo_perm$ct)])
+    expect_equal(dat_p$direction[!is.na(imcRtools_histo_perm$ct)], imcRtools_histo_perm$interaction[!is.na(imcRtools_histo_perm$ct)])
+    expect_equal(dat_p$p[!is.na(imcRtools_histo_perm$ct)], imcRtools_histo_perm$p[!is.na(imcRtools_histo_perm$ct)])
+    expect_equal(dat_p$sig[!is.na(imcRtools_histo_perm$ct)], imcRtools_histo_perm$sig[!is.na(imcRtools_histo_perm$ct)])
+    expect_equal(dat_p$sigval[!is.na(imcRtools_histo_perm$ct)], imcRtools_histo_perm$sigval[!is.na(imcRtools_histo_perm$ct)])
+    
+    ###################################### patch #############################
+    d <- prepare_tables(dat_cells, dat_relation, col_group = "Pattern")
+    
+    labels_applied <- apply_labels(d[[1]], d[[2]])
+    
+    cur_patch <- aggregate_classic_patch(labels_applied, patch_size = 3)
+    setorder(cur_patch, group, FirstLabel, SecondLabel)
+    
+    imcRtools_patch <- countInteractions(pancreasSCE, 
+                                         group_by = "Pattern", 
+                                         label = "CellType",
+                                         colPairName = "knn_interaction_graph",
+                                         method = "patch",
+                                         patch_size = 3)
+    
+    imcRtools_patch <- as.data.table(imcRtools_patch)[cur_patch,, on = c("group_by==group", "from_label==FirstLabel", "to_label==SecondLabel")]
+    setorder(imcRtools_patch, "group_by", "from_label", "to_label")
+    
+    expect_equal(cur_patch$group, imcRtools_patch$group_by)
+    expect_equal(cur_patch$FirstLabel, imcRtools_patch$from_label)
+    expect_equal(cur_patch$SecondLabel, imcRtools_patch$to_label)
+    expect_equal(cur_patch$ct[!is.na(imcRtools_patch$ct)], imcRtools_patch$ct[!is.na(imcRtools_patch$ct)])
+    
+    # Perturbation
+    n_perm <- 100
+    
+    dat_perm <- bplapply(1:n_perm, function(x){
+        dat_labels = shuffle_labels(d[[1]])
+        apply_labels(dat_labels, d[[2]]) %>%
+            aggregate_classic_patch(patch_size = 3)
+    }, BPPARAM = SerialParam(RNGseed = 123))
+    dat_perm <- rbindlist(dat_perm, idcol = 'run')
+    
+    dat_p <- calc_p_vals(cur_patch, dat_perm, n_perm = n_perm, p_tresh = 0.01) 
+    setorder(dat_p, group, FirstLabel, SecondLabel)
+    dat_p$group <- as.character(dat_p$group)
+    
+    imcRtools_patch_perm <- testInteractions(pancreasSCE, 
+                                             group_by = "Pattern", 
+                                             label = "CellType",
+                                             colPairName = "knn_interaction_graph",
+                                             iter = 100,
+                                             method = "patch",
+                                             patch_size = 3,
+                                             BPPARAM = SerialParam(RNGseed = 123))
+    
+    imcRtools_patch_perm <- as.data.table(imcRtools_patch_perm)[dat_p,, on = c("group_by==group", "from_label==FirstLabel", "to_label==SecondLabel")]
+    setorder(imcRtools_patch_perm, "group_by", "from_label", "to_label")
+    
+    expect_equal(dat_p$group, imcRtools_patch_perm$group_by)
+    expect_equal(as.character(dat_p$FirstLabel), imcRtools_patch_perm$from_label)
+    expect_equal(as.character(dat_p$SecondLabel), imcRtools_patch_perm$to_label)
+    expect_equal(dat_p$p_gt[!is.na(imcRtools_patch_perm$ct)], imcRtools_patch_perm$p_gt[!is.na(imcRtools_patch_perm$ct)])
+    expect_equal(dat_p$p_lt[!is.na(imcRtools_patch_perm$ct)], imcRtools_patch_perm$p_lt[!is.na(imcRtools_patch_perm$ct)])
+    expect_equal(dat_p$direction[!is.na(imcRtools_patch_perm$ct)], imcRtools_patch_perm$interaction[!is.na(imcRtools_patch_perm$ct)])
+    expect_equal(dat_p$p[!is.na(imcRtools_patch_perm$ct)], imcRtools_patch_perm$p[!is.na(imcRtools_patch_perm$ct)])
+    expect_equal(dat_p$sig[!is.na(imcRtools_patch_perm$ct)], imcRtools_patch_perm$sig[!is.na(imcRtools_patch_perm$ct)])
+    expect_equal(dat_p$sigval[!is.na(imcRtools_patch_perm$ct)], imcRtools_patch_perm$sigval[!is.na(imcRtools_patch_perm$ct)])
+    
     
 })

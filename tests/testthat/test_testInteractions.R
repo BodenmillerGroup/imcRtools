@@ -56,9 +56,9 @@ test_that("testInteractions function works", {
                                                   method = "classic",
                                                   colPairName = "knn_interaction_graph"))
     
-    expect_equal(cur_out$group_by, cur_sn$group_by)
-    expect_equal(cur_out$from_label, cur_sn$from_label)
-    expect_equal(cur_out$to_label, cur_sn$to_label)
+    expect_equal(cur_out$group_by, as.character(cur_sn$group_by))
+    expect_equal(cur_out$from_label, as.character(cur_sn$from_label))
+    expect_equal(cur_out$to_label, as.character(cur_sn$to_label))
     expect_equal(cur_out$ct, cur_sn$ct)
     
     cur_test <- cur_out[!is.na(cur_out$ct),]
@@ -75,9 +75,9 @@ test_that("testInteractions function works", {
                                                   iter = 100, p_threshold = 0.5,
                                                 BPPARAM = SerialParam(RNGseed = 123)))    
     
-    expect_equal(cur_out_2$group_by, cur_sn$group_by)
-    expect_equal(cur_out_2$from_label, cur_sn$from_label)
-    expect_equal(cur_out_2$to_label, cur_sn$to_label)
+    expect_equal(cur_out_2$group_by, as.character(cur_sn$group_by))
+    expect_equal(cur_out_2$from_label, as.character(cur_sn$from_label))
+    expect_equal(cur_out_2$to_label, as.character(cur_sn$to_label))
     expect_equal(cur_out_2$ct, cur_sn$ct)
 
     cur_test <- cur_out_2[!is.na(cur_out_2$ct),]
@@ -133,9 +133,9 @@ test_that("testInteractions function works", {
                                                   label = "CellType",
                                                   method = "histocat",
                                                   colPairName = "knn_interaction_graph"))
-    expect_equal(cur_out$group_by, cur_sn$group_by)
-    expect_equal(cur_out$from_label, cur_sn$from_label)
-    expect_equal(cur_out$to_label, cur_sn$to_label)
+    expect_equal(cur_out$group_by, as.character(cur_sn$group_by))
+    expect_equal(cur_out$from_label, as.character(cur_sn$from_label))
+    expect_equal(cur_out$to_label, as.character(cur_sn$to_label))
     expect_equal(cur_out$ct, cur_sn$ct)
     
     cur_test <- cur_out[!is.na(cur_out$ct),]
@@ -152,9 +152,9 @@ test_that("testInteractions function works", {
                                                     iter = 100, p_threshold = 0.5,
                                                 BPPARAM = SerialParam(RNGseed = 123)))    
     
-    expect_equal(cur_out_2$group_by, cur_sn$group_by)
-    expect_equal(cur_out_2$from_label, cur_sn$from_label)
-    expect_equal(cur_out_2$to_label, cur_sn$to_label)
+    expect_equal(cur_out_2$group_by, as.character(cur_sn$group_by))
+    expect_equal(cur_out_2$from_label, as.character(cur_sn$from_label))
+    expect_equal(cur_out_2$to_label, as.character(cur_sn$to_label))
     expect_equal(cur_out_2$ct, cur_sn$ct)
     
     cur_test <- cur_out_2[!is.na(cur_out_2$ct),]
@@ -212,9 +212,9 @@ test_that("testInteractions function works", {
                                                   method = "patch",
                                                   patch_size = 3,
                                                   colPairName = "knn_interaction_graph"))
-    expect_equal(cur_out$group_by, cur_sn$group_by)
-    expect_equal(cur_out$from_label, cur_sn$from_label)
-    expect_equal(cur_out$to_label, cur_sn$to_label)
+    expect_equal(cur_out$group_by, as.character(cur_sn$group_by))
+    expect_equal(cur_out$from_label, as.character(cur_sn$from_label))
+    expect_equal(cur_out$to_label, as.character(cur_sn$to_label))
     expect_equal(cur_out$ct, cur_sn$ct)
     
     cur_test <- cur_out[!is.na(cur_out$ct),]
@@ -232,9 +232,9 @@ test_that("testInteractions function works", {
                                                     iter = 100, p_threshold = 0.5,
                                                 BPPARAM = SerialParam(RNGseed = 123)))    
     
-    expect_equal(cur_out_2$group_by, cur_sn$group_by)
-    expect_equal(cur_out_2$from_label, cur_sn$from_label)
-    expect_equal(cur_out_2$to_label, cur_sn$to_label)
+    expect_equal(cur_out_2$group_by, as.character(cur_sn$group_by))
+    expect_equal(cur_out_2$from_label, as.character(cur_sn$from_label))
+    expect_equal(cur_out_2$to_label, as.character(cur_sn$to_label))
     expect_equal(cur_out_2$ct, cur_sn$ct)
     
     cur_test <- cur_out_2[!is.na(cur_out_2$ct),]
@@ -292,9 +292,9 @@ test_that("testInteractions function works", {
                                               group_by = "ImageNb", 
                                               label = "CellType",
                                               colPairName = "expansion_interaction_graph"))
-    expect_equal(cur_out$group_by, cur_sn$group_by)
-    expect_equal(cur_out$from_label, cur_sn$from_label)
-    expect_equal(cur_out$to_label, cur_sn$to_label)
+    expect_equal(cur_out$group_by, as.character(cur_sn$group_by))
+    expect_equal(cur_out$from_label, as.character(cur_sn$from_label))
+    expect_equal(cur_out$to_label, as.character(cur_sn$to_label))
     expect_equal(cur_out$ct, cur_sn$ct)
     
     cur_test <- cur_out[!is.na(cur_out$ct),]
@@ -345,9 +345,9 @@ test_that("testInteractions function works", {
                                               label = "CellType",
                                               method = "histocat",
                                               colPairName = "expansion_interaction_graph"))
-    expect_equal(cur_out$group_by, cur_sn$group_by)
-    expect_equal(cur_out$from_label, cur_sn$from_label)
-    expect_equal(cur_out$to_label, cur_sn$to_label)
+    expect_equal(cur_out$group_by, as.character(cur_sn$group_by))
+    expect_equal(cur_out$from_label, as.character(cur_sn$from_label))
+    expect_equal(cur_out$to_label, as.character(cur_sn$to_label))
     expect_equal(cur_out$ct, cur_sn$ct)
     
     cur_test <- cur_out[!is.na(cur_out$ct),]
@@ -398,9 +398,9 @@ test_that("testInteractions function works", {
                                               method = "patch",
                                               patch_size = 1,
                                               colPairName = "expansion_interaction_graph"))
-    expect_equal(cur_out$group_by, cur_sn$group_by)
-    expect_equal(cur_out$from_label, cur_sn$from_label)
-    expect_equal(cur_out$to_label, cur_sn$to_label)
+    expect_equal(cur_out$group_by, as.character(cur_sn$group_by))
+    expect_equal(cur_out$from_label, as.character(cur_sn$from_label))
+    expect_equal(cur_out$to_label, as.character(cur_sn$to_label))
     expect_equal(cur_out$ct, cur_sn$ct)
     
     cur_test <- cur_out[!is.na(cur_out$ct),]
@@ -429,9 +429,9 @@ test_that("testInteractions function works", {
                                               colPairName = "expansion_interaction_graph",
                                               BPPARAM = SerialParam(RNGseed = 123)))
     
-    expect_equal(cur_out$group_by, cur_out_2$group_by)
-    expect_equal(cur_out$from_label, cur_out_2$from_label)
-    expect_equal(cur_out$to_label, cur_out_2$to_label)
+    expect_equal(cur_out$group_by, as.character(cur_out_2$group_by))
+    expect_equal(cur_out$from_label, as.character(cur_out_2$from_label))
+    expect_equal(cur_out$to_label, as.character(cur_out_2$to_label))
     expect_equal(cur_out$ct, cur_out_2$ct)
     expect_equal(cur_out$p_lt, cur_out_2$p_lt)
     expect_equal(cur_out$p_gt, cur_out_2$p_gt)
@@ -550,3 +550,91 @@ test_that("testInteractions function works", {
     
 
 })
+
+test_that("testInteractions function works if cells are not grouped by image", {
+    library(cytomapper)
+    library(BiocParallel)
+    data(pancreasSCE)
+    
+    pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "expansion",
+                                     threshold = 10)
+    
+    plotSpatial(pancreasSCE, img_id = "ImageNb", draw_edges = TRUE, 
+                colPairName = "expansion_interaction_graph", 
+                node_color_by = "CellType", scales = "free")
+    
+    out <- testInteractions(pancreasSCE, group_by = "ImageNb", 
+                            label = "CellType", method = "classic", 
+                            iter = 200, colPairName = "expansion_interaction_graph", 
+                            BPPARAM = SerialParam(RNGseed = 111))
+    
+    set.seed(123)
+    cur_sce <- pancreasSCE[,sample(ncol(pancreasSCE))]
+    
+    plotSpatial(cur_sce, img_id = "ImageNb", draw_edges = TRUE, 
+                colPairName = "expansion_interaction_graph", 
+                node_color_by = "CellType", scales = "free")
+    
+    out2 <- testInteractions(cur_sce, group_by = "ImageNb", 
+                            label = "CellType", method = "classic", 
+                            iter = 200, 
+                            colPairName = "expansion_interaction_graph",
+                            BPPARAM = SerialParam(RNGseed = 111))
+    
+    ## Sampling is different between grouped and non-grouped cells
+    ## Therefore the p values are close but not identical
+    expect_equal(out$group_by, out2$group_by)
+    expect_equal(out$from_label, out2$from_label)
+    expect_equal(out$to_label, out2$to_label)
+    expect_equal(out$ct, out2$ct)
+    expect_equal(out$p_gt, out2$p_gt, tolerance = 0.1)
+    expect_equal(out$p_lt, out2$p_lt, tolerance = 0.1)
+    expect_equal(out$interaction, out2$interaction)
+    expect_equal(out$p, out2$p, tolerance = 0.1)
+    expect_equal(out$sig, out2$sig)
+    expect_equal(out$sigval, out2$sigval)
+    
+    out <- testInteractions(pancreasSCE, group_by = "ImageNb", 
+                            label = "CellType", method = "histocat", 
+                            iter = 400, colPairName = "expansion_interaction_graph", 
+                            BPPARAM = SerialParam(RNGseed = 111))
+    
+    out2 <- testInteractions(cur_sce, group_by = "ImageNb", 
+                             label = "CellType", method = "histocat", 
+                             iter = 400, 
+                             colPairName = "expansion_interaction_graph",
+                             BPPARAM = SerialParam(RNGseed = 111))
+    
+    expect_equal(out$group_by, out2$group_by)
+    expect_equal(out$from_label, out2$from_label)
+    expect_equal(out$to_label, out2$to_label)
+    expect_equal(out$ct, out2$ct)
+    expect_equal(out$p_gt, out2$p_gt, tolerance = 0.1)
+    expect_equal(out$p_lt, out2$p_lt, tolerance = 0.1)
+    expect_equal(out$interaction, out2$interaction)
+    expect_equal(out$p, out2$p, tolerance = 0.1)
+    #expect_equal(out$sig, out2$sig)
+    #expect_equal(out$sigval, out2$sigval)
+    
+    out <- testInteractions(pancreasSCE, group_by = "ImageNb", 
+                            label = "CellType", method = "patch", patch_size = 2,
+                            iter = 300, colPairName = "expansion_interaction_graph", 
+                            BPPARAM = SerialParam(RNGseed = 111))
+    
+    out2 <- testInteractions(cur_sce, group_by = "ImageNb", 
+                             label = "CellType", method = "patch", patch_size = 2,
+                             iter = 300, 
+                             colPairName = "expansion_interaction_graph",
+                             BPPARAM = SerialParam(RNGseed = 111))
+    
+    expect_equal(out$group_by, out2$group_by)
+    expect_equal(out$from_label, out2$from_label)
+    expect_equal(out$to_label, out2$to_label)
+    expect_equal(out$ct, out2$ct)
+    expect_equal(out$p_gt, out2$p_gt, tolerance = 0.1)
+    expect_equal(out$p_lt, out2$p_lt, tolerance = 0.1)
+    expect_equal(out$interaction, out2$interaction)
+    expect_equal(out$p, out2$p, tolerance = 0.1)
+    #expect_equal(out$sig, out2$sig)
+    #expect_equal(out$sigval, out2$sigval)
+    })
