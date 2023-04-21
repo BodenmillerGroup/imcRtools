@@ -851,7 +851,7 @@
                                 group_by = colData(object)[[group_by]],
                                 index = seq_len(ncol(object)))
 
-    . <- label <- NULL
+    . <- index <- label <- NULL
 
     cur_out <- bplapply(seq_len(iter),
                         function(x){

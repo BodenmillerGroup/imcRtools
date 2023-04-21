@@ -289,3 +289,66 @@ test_that("patchDetection function works", {
                  fixed = TRUE)
                      
 })
+
+test_that("patchDetection function works if cells are not ordered by image", {
+    library(cytomapper)
+    data(pancreasSCE)
+    
+    cur_sce1 <- pancreasSCE[,pancreasSCE$ImageNb == 1]
+    cur_sce2 <- pancreasSCE[,pancreasSCE$ImageNb == 2]
+    cur_sce3 <- pancreasSCE[,pancreasSCE$ImageNb == 3]
+    
+    cur_sce1$Pos_X <- cur_sce1$Pos_X - min(cur_sce1$Pos_X)
+    cur_sce1$Pos_Y <- cur_sce1$Pos_Y - min(cur_sce1$Pos_Y)
+    cur_sce2$Pos_X <- cur_sce2$Pos_X - min(cur_sce2$Pos_X)
+    cur_sce2$Pos_Y <- cur_sce2$Pos_Y - min(cur_sce2$Pos_Y)
+    cur_sce3$Pos_X <- cur_sce3$Pos_X - min(cur_sce3$Pos_X)
+    cur_sce3$Pos_Y <- cur_sce3$Pos_Y - min(cur_sce3$Pos_Y)
+    
+    pancreasSCE <- cbind(cur_sce1, cur_sce2, cur_sce3)
+    
+    pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                     type = "expansion", threshold = 20)
+    pancreasSCE$index <- 1:ncol(pancreasSCE)
+    
+    expect_silent(cur_sce <- patchDetection(pancreasSCE, 
+                                            patch_cells = pancreasSCE$CellType == "celltype_B",
+                                            colPairName = "expansion_interaction_graph"))
+    
+    plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "CellType")  
+    plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "patch_id")
+    
+    set.seed(1234)
+    shuffled_sce <- pancreasSCE[,sample(ncol(pancreasSCE))]
+    
+    cur_sce2 <- patchDetection(shuffled_sce, 
+                               patch_cells = shuffled_sce$CellType == "celltype_B",
+                               colPairName = "expansion_interaction_graph")
+    
+    plotSpatial(cur_sce2, img_id = "ImageNb", node_color_by = "CellType")  
+    plotSpatial(cur_sce2, img_id = "ImageNb", node_color_by = "patch_id")
+    
+    expect_equal(is.na(cur_sce2$patch_id[order(cur_sce2$index)]), is.na(cur_sce$patch_id[order(cur_sce$index)]))
+    
+    expect_silent(cur_sce <- patchDetection(pancreasSCE, img_id = "ImageNb",
+                                            patch_cells = pancreasSCE$CellType == "celltype_B",
+                                            expand_by = 10,
+                                            colPairName = "expansion_interaction_graph"))
+    
+    plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "CellType")  
+    plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "patch_id")
+    
+    set.seed(1234)
+    shuffled_sce <- pancreasSCE[,sample(ncol(pancreasSCE))]
+    
+    cur_sce2 <- patchDetection(shuffled_sce, img_id = "ImageNb",
+                               expand_by = 10,
+                               patch_cells = shuffled_sce$CellType == "celltype_B",
+                               colPairName = "expansion_interaction_graph")
+    
+    plotSpatial(cur_sce2, img_id = "ImageNb", node_color_by = "CellType")  
+    plotSpatial(cur_sce2, img_id = "ImageNb", node_color_by = "patch_id")
+    
+    expect_equal(is.na(cur_sce2$patch_id[order(cur_sce2$index)]), is.na(cur_sce$patch_id[order(cur_sce$index)]))
+    
+    })
