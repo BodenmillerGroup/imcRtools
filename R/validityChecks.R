@@ -853,6 +853,10 @@
         stop("'group_by' must be a single string.")
     }
     
+    if (any(is.na(object[[group_by]]))) {
+        stop("Please remove NAs from the grouping vector.")
+    }
+    
     if (!group_by %in% names(colData(object))) {
         stop("'group_by' not in colData(object).")
     }
@@ -871,6 +875,10 @@
     
     if (!label %in% names(colData(object))) {
         stop("'label' not in colData(object).")
+    }
+    
+    if (any(is.na(object[[label]]))) {
+        stop("Please remove NAs from the label vector.")
     }
     
     if (method == "patch") {
