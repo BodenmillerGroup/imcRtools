@@ -67,7 +67,8 @@ function (\code{type = "knn"})).}
 \value{
 returns a \code{SpatialExperiment} or \code{SingleCellExperiment}
 containing the graph in form of a \code{SelfHits} object in
-\code{colPair(object, name)}.
+\code{colPair(object, name)}. The object is grouped by entries in the 
+\code{img_id} slot.
 }
 \description{
 Function to define cell-cell interactions via distance-based
@@ -111,6 +112,15 @@ algorithms, see
 \code{\link[BiocNeighbors]{BiocNeighborParam}}. Within the
 \code{BiocNeighborParam} object, \code{distance} can be set to
 \code{"Euclidean"} (default), \code{"Manhattan"} or \code{"Cosine"}.
+}
+
+\section{Ordering of the output object}{
+
+The \code{buildSpatialGraph} function operates on individual images.
+Therefore the returned object is grouped by entries in \code{img_id}. 
+This means all cells of a given image are grouped together in the object.
+The ordering of cells within each individual image is the same as the ordering
+of these cells in the input object.
 }
 
 \examples{

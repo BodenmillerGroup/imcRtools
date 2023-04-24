@@ -77,7 +77,7 @@
 #' \code{BiocNeighborParam} object, \code{distance} can be set to
 #' \code{"Euclidean"} (default), \code{"Manhattan"} or \code{"Cosine"}.
 #' 
-#' @section Ordering of the output object
+#' @section Ordering of the output object:
 #' The \code{buildSpatialGraph} function operates on individual images.
 #' Therefore the returned object is grouped by entries in \code{img_id}. 
 #' This means all cells of a given image are grouped together in the object.

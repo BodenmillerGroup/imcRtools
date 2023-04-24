@@ -23,7 +23,7 @@
 #' @param BPPARAM a \code{\link[BiocParallel]{BiocParallelParam-class}} object
 #' defining how to parallelize computations.
 #' 
-#' @section Ordering of the output object
+#' @section Ordering of the output object:
 #' The \code{minDistToCells} function operates on individual images.
 #' Therefore the returned object is grouped by entries in \code{img_id}. 
 #' This means all cells of a given image are grouped together in the object.

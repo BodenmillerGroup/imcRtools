@@ -47,7 +47,7 @@
 #' \code{colData(object)[[name]]}, which stores the patch ID per cell. \code{NA}
 #' indicate cells that are not part of a patch. 
 #' 
-#' @section Ordering of the output object
+#' @section Ordering of the output object:
 #' If \code{expand_by > 0}, the \code{patchDetection} function operates on individual images.
 #' Therefore the returned object is grouped by entries in \code{img_id}. 
 #' This means all cells of a given image are grouped together in the object.
