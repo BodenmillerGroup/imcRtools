@@ -178,5 +178,6 @@ Changes in version 1.5.4 (2023-04-04)
 
 Changes in version 1.5.5 (2023-04-20)
 
-+ Bug fix: in corner cases, levels of the permuted factors do not match the baseline.
++ Bug fix: in corner cases, levels of the permuted factors in the testInteractions function do not match the baseline.
 + Bug fix: testInteractions now works for cells that are not ordered by grouping level
++ Added explicitly message for some functions that the output is ordered by image

@@ -47,8 +47,19 @@
 #' \code{colData(object)[[name]]}, which stores the patch ID per cell. \code{NA}
 #' indicate cells that are not part of a patch. 
 #' 
+#' @section Ordering of the output object
+#' If \code{expand_by > 0}, the \code{patchDetection} function operates on individual images.
+#' Therefore the returned object is grouped by entries in \code{img_id}. 
+#' This means all cells of a given image are grouped together in the object.
+#' The ordering of cells within each individual image is the same as the ordering
+#' of these cells in the input object.
+#' 
+#' If \code{expand_by = 0}, the ordering of cells in the output object is the same as
+#' in the input object.
+#' 
 #' @return An object of \code{class(object)} containing a patch ID for each 
-#' cell in \code{colData(object)[[name]]}. 
+#' cell in \code{colData(object)[[name]]}. If \code{expand_by > 0},  cells in the 
+#' output object are grouped by entries in \code{img_id}.
 #' 
 #' @examples
 #' library(cytomapper)
@@ -142,6 +153,8 @@ patchDetection <- function(object,
                                 convex = convex,
                                 img_id = img_id,
                                 BPPARAM = BPPARAM)
+        
+        message("The returned object is ordered by the '", img_id, "' entry.")
     }
     
     return(object)
