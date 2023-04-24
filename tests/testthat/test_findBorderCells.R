@@ -147,3 +147,34 @@ test_that("findBorderCells function works", {
                  regexp = "'border_dist' must be a single numeric.",
                  fixed = TRUE)
 })
+
+test_that("findBorderCells function works if cells are not ordered by image", {
+    # SingleCellExperiment
+    library(cytomapper)
+    data(pancreasSCE)
+    
+    cur_sce1 <- pancreasSCE[,pancreasSCE$ImageNb == 1]
+    cur_sce2 <- pancreasSCE[,pancreasSCE$ImageNb == 2]
+    cur_sce3 <- pancreasSCE[,pancreasSCE$ImageNb == 3]
+    
+    cur_sce1$Pos_X <- cur_sce1$Pos_X - min(cur_sce1$Pos_X)
+    cur_sce1$Pos_Y <- cur_sce1$Pos_Y - min(cur_sce1$Pos_Y)
+    cur_sce2$Pos_X <- cur_sce2$Pos_X - min(cur_sce2$Pos_X)
+    cur_sce2$Pos_Y <- cur_sce2$Pos_Y - min(cur_sce2$Pos_Y)
+    cur_sce3$Pos_X <- cur_sce3$Pos_X - min(cur_sce3$Pos_X)
+    cur_sce3$Pos_Y <- cur_sce3$Pos_Y - min(cur_sce3$Pos_Y)
+    
+    pancreasSCE <- cbind(cur_sce1, cur_sce2, cur_sce3)
+    
+    expect_silent(pancreasSCE  <- findBorderCells(pancreasSCE, img_id = "ImageNb", border_dist = 10))
+    plotSpatial(pancreasSCE, img_id = "ImageNb", node_color_by = "border_cells")
+    
+    set.seed(123)
+    sce2 <- pancreasSCE[,sample(ncol(pancreasSCE))]
+    
+    expect_silent(sce2  <- findBorderCells(sce2, img_id = "ImageNb", border_dist = 10))
+    plotSpatial(sce2, img_id = "ImageNb", node_color_by = "border_cells")
+    
+    all.equal(pancreasSCE$border_cells, sce2[,colnames(pancreasSCE)]$border_cells)
+
+    })
