@@ -848,15 +848,20 @@
                             colPairName, method, BPPARAM) {
 
     cur_lab_table <- data.table(label = as.factor(colData(object)[[label]]),
-                                group_by = colData(object)[[group_by]])
+                                group_by = colData(object)[[group_by]],
+                                index = seq_len(ncol(object)))
 
-    . <- label <- NULL
+    . <- index <- label <- NULL
 
     cur_out <- bplapply(seq_len(iter),
                         function(x){
 
                             label_perm <- cur_lab_table[ ,
-                                                         .(label=sample(label)), by=group_by]
+                                                         .(label=sample(label), 
+                                                           index = index), by=group_by]
+                            
+                            setorder(label_perm, "index")
+                            
                             cur_perm <- .prepare_table(object, group_by,
                                                        label_perm$label, colPairName)
 
@@ -908,7 +913,17 @@
     dat_stat[, p := p_gt * interaction + p_lt * (!interaction)]
     dat_stat[, sig := p < p_thres]
     dat_stat[, sigval := as.integer(sig) * sign(interaction - 0.5)]
+    
+    # In corner cases, the levels of the factors can be different and the 
+    # ordering is incorrect
+    dat_baseline$group_by <- as.character(dat_baseline$group_by)
+    dat_baseline$from_label <- as.character(dat_baseline$from_label)
+    dat_baseline$to_label <- as.character(dat_baseline$to_label)
 
+    dat_stat$group_by <- as.character(dat_stat$group_by)
+    dat_stat$from_label <- as.character(dat_stat$from_label)
+    dat_stat$to_label <- as.character(dat_stat$to_label)
+    
     setorder(dat_stat, "group_by", "from_label", "to_label")
     setorder(dat_baseline, "group_by", "from_label", "to_label")
     
@@ -916,8 +931,13 @@
                         paste(dat_baseline$group_by, dat_baseline$from_label, dat_baseline$to_label)))
     
     if (return_samples) {
-        dat_perm <- dcast(dat_perm[,c("from_label", "to_label", "group_by", "iter", "ct_perm")], 
+        dat_perm <- dcast.data.table(dat_perm[,c("from_label", "to_label", "group_by", "iter", "ct_perm")], 
                           from_label + to_label + group_by ~ iter, value.var = "ct_perm")
+        
+        dat_perm$group_by <- as.character(dat_perm$group_by)
+        dat_perm$from_label <- as.character(dat_perm$from_label)
+        dat_perm$to_label <- as.character(dat_perm$to_label)
+        
         setorder(dat_perm, "group_by", "from_label", "to_label")
     
         stopifnot(all.equal(paste(dat_perm$group_by, dat_perm$from_label, dat_perm$to_label),

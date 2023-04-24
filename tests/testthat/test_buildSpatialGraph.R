@@ -16,8 +16,9 @@ test_that("buildSpatialGraph function works", {
     pancreasSCE <- cbind(cur_sce1, cur_sce2, cur_sce3)
     
     # Delauney
-    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-                                 type = "delaunay"))
+    expect_message(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                 type = "delaunay"),
+                  regexp = "The returned object is ordered by the 'ImageNb' entry.")
     expect_equal(colPairNames(cur_sce), "delaunay_interaction_graph")
     expect_true(!is.null(colPair(cur_sce)))
     expect_equal(length(colPair(cur_sce)), 2082)
@@ -51,8 +52,9 @@ test_that("buildSpatialGraph function works", {
     expect_equal(sum(isRedundantHit(colPair(cur_sce))), length(colPair(cur_sce))/2)
     
     # Max dist
-    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-                                               type = "delaunay", max_dist = 20))
+    expect_message(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                               type = "delaunay", max_dist = 20),
+                  regexp = "The returned object is ordered by the 'ImageNb' entry.")
     expect_equal(colPairNames(cur_sce), "delaunay_interaction_graph")
     expect_true(!is.null(colPair(cur_sce)))
     expect_equal(length(colPair(cur_sce)), 1956)
@@ -70,8 +72,9 @@ test_that("buildSpatialGraph function works", {
     expect_equal(sum(isRedundantHit(colPair(cur_sce))), length(colPair(cur_sce))/2)
     
     # KNN
-    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-                                 type = "knn", k = 5))
+    expect_message(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                 type = "knn", k = 5),
+                  regexp = "The returned object is ordered by the 'ImageNb' entry.")
     expect_equal(colPairNames(cur_sce), "knn_interaction_graph")
     expect_true(!is.null(colPair(cur_sce)))
     expect_equal(length(colPair(cur_sce)), 1810)
@@ -116,8 +119,9 @@ test_that("buildSpatialGraph function works", {
     
     expect_equal(cur_ind_real, cur_ind_test, check.attributes = FALSE)
     
-    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-                                 type = "knn", k = 5, directed = FALSE))
+    expect_message(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                 type = "knn", k = 5, directed = FALSE),
+                  regexp = "The returned object is ordered by the 'ImageNb' entry.")
     expect_equal(colPairNames(cur_sce), "knn_interaction_graph")
     expect_true(!is.null(colPair(cur_sce)))
     expect_equal(length(colPair(cur_sce)), 2068)
@@ -178,8 +182,9 @@ test_that("buildSpatialGraph function works", {
     expect_equal(cur_ind_real, cur_ind_test, check.attributes = FALSE)
     
     # Other ks
-    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-                                 type = "knn", k = 10))
+    expect_message(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                 type = "knn", k = 10),
+                  regexp = "The returned object is ordered by the 'ImageNb' entry.")
     expect_equal(colPairNames(cur_sce), "knn_interaction_graph")
     expect_true(!is.null(colPair(cur_sce)))
     expect_equal(length(colPair(cur_sce)), 3620)
@@ -222,8 +227,9 @@ test_that("buildSpatialGraph function works", {
     
     expect_equal(cur_ind_real, cur_ind_test, check.attributes = FALSE)
     
-    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-                                 type = "knn", k = 10, directed = FALSE))
+    expect_message(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                 type = "knn", k = 10, directed = FALSE),
+                  regexp = "The returned object is ordered by the 'ImageNb' entry.")
     expect_equal(colPairNames(cur_sce), "knn_interaction_graph")
     expect_true(!is.null(colPair(cur_sce)))
     expect_equal(length(colPair(cur_sce)), 4124)
@@ -282,17 +288,21 @@ test_that("buildSpatialGraph function works", {
     expect_equal(cur_ind_real, cur_ind_test, check.attributes = FALSE)
     
     # Other algorithm
-    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-                                 type = "knn", k = 10))
-    expect_silent(cur_sce <- buildSpatialGraph(cur_sce, img_id = "ImageNb", 
+    expect_message(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                 type = "knn", k = 10),
+                  regexp = "The returned object is ordered by the 'ImageNb' entry.")
+    expect_message(cur_sce <- buildSpatialGraph(cur_sce, img_id = "ImageNb", 
                                  type = "knn", k = 10, name = "vptree",
-                                 BNPARAM = BiocNeighbors::VptreeParam()))
-    expect_silent(cur_sce <- buildSpatialGraph(cur_sce, img_id = "ImageNb", 
+                                 BNPARAM = BiocNeighbors::VptreeParam()),
+                  regexp = "The returned object is ordered by the 'ImageNb' entry.")
+    expect_message(cur_sce <- buildSpatialGraph(cur_sce, img_id = "ImageNb", 
                                  type = "knn", k = 10, name = "annoy",
-                                 BNPARAM = BiocNeighbors::AnnoyParam()))
-    expect_silent(cur_sce <- buildSpatialGraph(cur_sce, img_id = "ImageNb", 
+                                 BNPARAM = BiocNeighbors::AnnoyParam()),
+                  regexp = "The returned object is ordered by the 'ImageNb' entry.")
+    expect_message(cur_sce <- buildSpatialGraph(cur_sce, img_id = "ImageNb", 
                                  type = "knn", k = 10, name = "hnsw",
-                                 BNPARAM = BiocNeighbors::HnswParam()))
+                                 BNPARAM = BiocNeighbors::HnswParam()),
+                  regexp = "The returned object is ordered by the 'ImageNb' entry.")
     
     expect_equal(colPairNames(cur_sce), 
                  c("knn_interaction_graph", "vptree", "annoy", "hnsw"))
@@ -300,8 +310,9 @@ test_that("buildSpatialGraph function works", {
                  colPair(cur_sce, "vptree"))
     
     # Max dist
-    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-                                               type = "knn", k = 5, max_dist = 10))
+    expect_message(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                               type = "knn", k = 5, max_dist = 10),
+                  regexp = "The returned object is ordered by the 'ImageNb' entry.")
     expect_equal(colPairNames(cur_sce), "knn_interaction_graph")
     expect_true(!is.null(colPair(cur_sce)))
     expect_equal(length(colPair(cur_sce)), 711)
@@ -358,8 +369,9 @@ test_that("buildSpatialGraph function works", {
     expect_equal(cur_ind_real, cur_ind_test, check.attributes = FALSE)
     
     # Expansion
-    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-                                 type = "expansion", threshold = 15))
+    expect_message(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                 type = "expansion", threshold = 15),
+                  regexp = "The returned object is ordered by the 'ImageNb' entry.")
     expect_equal(colPairNames(cur_sce), "expansion_interaction_graph")
     expect_true(!is.null(colPair(cur_sce)))
     expect_equal(length(colPair(cur_sce)), 2042)
@@ -380,8 +392,9 @@ test_that("buildSpatialGraph function works", {
     
     expect_equal(sum(isRedundantHit(colPair(cur_sce))), length(colPair(cur_sce))/2)
     
-    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-                                 type = "expansion", threshold = 15, directed = FALSE))
+    expect_message(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                 type = "expansion", threshold = 15, directed = FALSE),
+                  regexp = "The returned object is ordered by the 'ImageNb' entry.")
     expect_equal(colPairNames(cur_sce), "expansion_interaction_graph")
     expect_true(!is.null(colPair(cur_sce)))
     expect_equal(length(colPair(cur_sce)), 2042)
@@ -438,8 +451,9 @@ test_that("buildSpatialGraph function works", {
     
     expect_equal(cur_ind_real, cur_ind_test, check.attributes = FALSE)
     
-    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
-                                               type = "expansion", threshold = 1))
+    expect_message(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                               type = "expansion", threshold = 1),
+                  regexp = "The returned object is ordered by the 'ImageNb' entry.")
     expect_equal(colPairNames(cur_sce), "expansion_interaction_graph")
     expect_true(!is.null(colPair(cur_sce)))
     expect_equal(length(colPair(cur_sce)), 0)
@@ -466,15 +480,18 @@ test_that("buildSpatialGraph function works", {
     
     spatialCoords(pancreasSPE) <- as.matrix(colData(pancreasSCE)[,c("Pos_X", "Pos_Y")])
     
-    expect_silent(cur_spe <- buildSpatialGraph(pancreasSPE, img_id = "ImageNb", 
-                                               type = "expansion", threshold = 15))
+    expect_message(cur_spe <- buildSpatialGraph(pancreasSPE, img_id = "ImageNb", 
+                                               type = "expansion", threshold = 15),
+                  regexp = "The returned object is ordered by the 'ImageNb' entry.")
     
     expect_equal(colPairNames(cur_spe), "expansion_interaction_graph")
-    expect_silent(cur_spe <- buildSpatialGraph(pancreasSPE, img_id = "ImageNb", 
-                                               type = "delaunay"))
+    expect_message(cur_spe <- buildSpatialGraph(pancreasSPE, img_id = "ImageNb", 
+                                               type = "delaunay"), 
+                  regex = "The returned object is ordered by the 'ImageNb' entry.")
     expect_equal(colPairNames(cur_spe), "delaunay_interaction_graph")
-    expect_silent(cur_spe <- buildSpatialGraph(pancreasSPE, img_id = "ImageNb", 
-                                               type = "knn", k = 5))
+    expect_message(cur_spe <- buildSpatialGraph(pancreasSPE, img_id = "ImageNb", 
+                                               type = "knn", k = 5),
+                  regexp = "The returned object is ordered by the 'ImageNb' entry.")
     expect_equal(colPairNames(cur_spe), "knn_interaction_graph")
     
     # Check that metadata is not duplicated
@@ -563,17 +580,20 @@ test_that("buildSpatialGraph function works", {
     data("pancreasSCE")
     
     # Parallelisation
-    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+    expect_message(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
                                                type = "expansion", threshold = 15,
-                                               BPPARAM = BiocParallel::bpparam()))
+                                               BPPARAM = BiocParallel::bpparam()),
+                  regexp = "The returned object is ordered by the 'ImageNb' entry.")
     expect_equal(colPairNames(cur_sce), "expansion_interaction_graph")
-    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+    expect_message(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
                                                type = "delaunay",
-                                               BPPARAM = BiocParallel::bpparam()))
+                                               BPPARAM = BiocParallel::bpparam()),
+                  regexp = "The returned object is ordered by the 'ImageNb' entry.")
     expect_equal(colPairNames(cur_sce), "delaunay_interaction_graph")
-    expect_silent(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+    expect_message(cur_sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
                                                type = "knn", k = 5,
-                                               BPPARAM = BiocParallel::bpparam()))
+                                               BPPARAM = BiocParallel::bpparam()),
+                  regexp = "The returned object is ordered by the 'ImageNb' entry.")
     expect_equal(colPairNames(cur_sce), "knn_interaction_graph")
     
 })

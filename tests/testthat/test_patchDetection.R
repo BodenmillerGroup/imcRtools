@@ -51,36 +51,40 @@ test_that("patchDetection function works", {
     
     plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "patch_id")
     
-    expect_silent(cur_sce <- patchDetection(pancreasSCE, 
+    expect_message(cur_sce <- patchDetection(pancreasSCE, 
                                             patch_cells = pancreasSCE$CellType == "celltype_B",
                                             colPairName = "expansion_interaction_graph",
                                             expand_by = 10, img_id = "ImageNb",
-                                            name = "patch_id_2"))
+                                            name = "patch_id_2"), 
+                  regex = "The returned object is ordered by the 'ImageNb' entry.")
     expect_equal(unique(cur_sce$patch_id_2), c(NA, "1", "2", "3", "4", "5", "6", "7", "8"))
     plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "patch_id_2")
     
-    expect_silent(cur_sce <- patchDetection(pancreasSCE, 
+    expect_message(cur_sce <- patchDetection(pancreasSCE, 
                                             patch_cells = pancreasSCE$CellType == "celltype_B",
                                             colPairName = "expansion_interaction_graph",
                                             expand_by = 50, img_id = "ImageNb",
-                                            name = "patch_id"))
+                                            name = "patch_id"), 
+                  regex = "The returned object is ordered by the 'ImageNb' entry.")
     expect_equal(unique(cur_sce$patch_id), c(NA,  "1", "3", "6", "7", "8"))
     plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "patch_id")
     
-    expect_silent(cur_sce <- patchDetection(pancreasSCE, 
+    expect_message(cur_sce <- patchDetection(pancreasSCE, 
                                             patch_cells = pancreasSCE$CellType == "celltype_B",
                                             colPairName = "expansion_interaction_graph",
                                             expand_by = 1000, img_id = "ImageNb",
-                                            name = "patch_id"))
+                                            name = "patch_id"), 
+                  regex = "The returned object is ordered by the 'ImageNb' entry.")
     expect_equal(unique(cur_sce$patch_id), c("3", "6", "7", "8"))
     plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "patch_id")
     
-    expect_silent(cur_sce <- patchDetection(pancreasSCE, 
+    expect_message(cur_sce <- patchDetection(pancreasSCE, 
                                             patch_cells = pancreasSCE$CellType == "celltype_B",
                                             colPairName = "expansion_interaction_graph",
                                             expand_by = 20, img_id = "ImageNb",
                                             name = "patch_id",
-                                            min_patch_size = 5))
+                                            min_patch_size = 5), 
+                   regex = "The returned object is ordered by the 'ImageNb' entry.")
     expect_equal(unique(cur_sce$patch_id), c(NA, "6", "7", "8"))
     plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "patch_id")
     
@@ -90,40 +94,44 @@ test_that("patchDetection function works", {
     cur_sce_2$Pos_X <- NULL
     cur_sce_2$Pos_y <- NULL
     
-    expect_silent(cur_sce <- patchDetection(cur_sce_2, 
+    expect_message(cur_sce <- patchDetection(cur_sce_2, 
                                             patch_cells = pancreasSCE$CellType == "celltype_B",
                                             colPairName = "expansion_interaction_graph",
                                             expand_by = 30,
                                             img_id = "ImageNb",
-                                            coords = c("X", "Y")))
+                                            coords = c("X", "Y")), 
+                  regex = "The returned object is ordered by the 'ImageNb' entry.")
     
     expect_equal(unique(cur_sce$patch_id), c(NA, "1", "3", "4", "6", "7", "8"))
     
     # Concave and convex
-    expect_silent(cur_sce <- patchDetection(pancreasSCE, 
+    expect_message(cur_sce <- patchDetection(pancreasSCE, 
                                             patch_cells = pancreasSCE$CellType == "celltype_B",
                                             colPairName = "expansion_interaction_graph",
                                             expand_by = 1, img_id = "ImageNb",
                                             name = "patch_id",
-                                            convex = TRUE))
+                                            convex = TRUE), 
+                  regex = "The returned object is ordered by the 'ImageNb' entry.")
     expect_equal(unique(cur_sce$patch_id), c(NA, "1", "2", "3", "4", "5", "6", "7", "8"))
     plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "patch_id")
     
-    expect_silent(cur_sce <- patchDetection(pancreasSCE, 
+    expect_message(cur_sce <- patchDetection(pancreasSCE, 
                                             patch_cells = pancreasSCE$CellType == "celltype_B",
                                             colPairName = "expansion_interaction_graph",
                                             expand_by = 20, img_id = "ImageNb",
                                             name = "patch_id",
-                                            convex = TRUE))
+                                            convex = TRUE), 
+                  regex = "The returned object is ordered by the 'ImageNb' entry.")
     expect_equal(unique(cur_sce$patch_id), c(NA, "1", "2", "3", "4", "5", "6", "7", "8"))
     plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "patch_id")
     
-    expect_silent(cur_sce <- patchDetection(pancreasSCE, 
+    expect_message(cur_sce <- patchDetection(pancreasSCE, 
                                             patch_cells = pancreasSCE$CellType == "celltype_B",
                                             colPairName = "expansion_interaction_graph",
                                             expand_by = 1000, img_id = "ImageNb",
                                             name = "patch_id",
-                                            convex = TRUE))
+                                            convex = TRUE), 
+                  regex = "The returned object is ordered by the 'ImageNb' entry.")
     expect_equal(unique(cur_sce$patch_id), c("3", "6", "7", "8"))
     plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "patch_id")
     
@@ -172,22 +180,24 @@ test_that("patchDetection function works", {
     cur_spe <- buildSpatialGraph(cur_spe, img_id = "ImageNb", 
                                      type = "expansion", threshold = 20)
     
-    expect_silent(cur_spe_2 <- patchDetection(cur_spe, 
+    expect_message(cur_spe_2 <- patchDetection(cur_spe, 
                                             patch_cells = cur_spe$CellType == "celltype_B",
                                             colPairName = "expansion_interaction_graph",
                                             expand_by = 10, img_id = "ImageNb",
-                                            name = "patch_id_2"))
+                                            name = "patch_id_2"), 
+                  regex = "The returned object is ordered by the 'ImageNb' entry.")
     expect_equal(unique(cur_spe_2$patch_id_2), c(NA, "1", "2", "3", "4", "5", "6", "7", "8"))
     plotSpatial(cur_spe_2, img_id = "ImageNb", node_color_by = "patch_id_2")
     
     cur_spe_3 <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
                                  type = "expansion", threshold = 20)
     
-    expect_silent(cur_spe_3 <- patchDetection(cur_spe_3, 
+    expect_message(cur_spe_3 <- patchDetection(cur_spe_3, 
                                               patch_cells = cur_spe_3$CellType == "celltype_B",
                                               colPairName = "expansion_interaction_graph",
                                               expand_by = 10, img_id = "ImageNb",
-                                              name = "patch_id_2"))
+                                              name = "patch_id_2"), 
+                  regex = "The returned object is ordered by the 'ImageNb' entry.")
     expect_equal(cur_spe_3$patch_id_2, cur_spe_2$patch_id_2)
     plotSpatial(cur_spe_3, img_id = "ImageNb", node_color_by = "patch_id_2")
     
@@ -289,3 +299,67 @@ test_that("patchDetection function works", {
                  fixed = TRUE)
                      
 })
+
+test_that("patchDetection function works if cells are not ordered by image", {
+    library(cytomapper)
+    data(pancreasSCE)
+    
+    cur_sce1 <- pancreasSCE[,pancreasSCE$ImageNb == 1]
+    cur_sce2 <- pancreasSCE[,pancreasSCE$ImageNb == 2]
+    cur_sce3 <- pancreasSCE[,pancreasSCE$ImageNb == 3]
+    
+    cur_sce1$Pos_X <- cur_sce1$Pos_X - min(cur_sce1$Pos_X)
+    cur_sce1$Pos_Y <- cur_sce1$Pos_Y - min(cur_sce1$Pos_Y)
+    cur_sce2$Pos_X <- cur_sce2$Pos_X - min(cur_sce2$Pos_X)
+    cur_sce2$Pos_Y <- cur_sce2$Pos_Y - min(cur_sce2$Pos_Y)
+    cur_sce3$Pos_X <- cur_sce3$Pos_X - min(cur_sce3$Pos_X)
+    cur_sce3$Pos_Y <- cur_sce3$Pos_Y - min(cur_sce3$Pos_Y)
+    
+    pancreasSCE <- cbind(cur_sce1, cur_sce2, cur_sce3)
+    
+    pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+                                     type = "expansion", threshold = 20)
+    pancreasSCE$index <- 1:ncol(pancreasSCE)
+    
+    expect_silent(cur_sce <- patchDetection(pancreasSCE, 
+                                            patch_cells = pancreasSCE$CellType == "celltype_B",
+                                            colPairName = "expansion_interaction_graph"))
+    
+    plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "CellType")  
+    plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "patch_id")
+    
+    set.seed(1234)
+    shuffled_sce <- pancreasSCE[,sample(ncol(pancreasSCE))]
+    
+    cur_sce2 <- patchDetection(shuffled_sce, 
+                               patch_cells = shuffled_sce$CellType == "celltype_B",
+                               colPairName = "expansion_interaction_graph")
+    
+    plotSpatial(cur_sce2, img_id = "ImageNb", node_color_by = "CellType")  
+    plotSpatial(cur_sce2, img_id = "ImageNb", node_color_by = "patch_id")
+    
+    expect_equal(is.na(cur_sce2$patch_id[order(cur_sce2$index)]), is.na(cur_sce$patch_id[order(cur_sce$index)]))
+    
+    expect_message(cur_sce <- patchDetection(pancreasSCE, img_id = "ImageNb",
+                                            patch_cells = pancreasSCE$CellType == "celltype_B",
+                                            expand_by = 10,
+                                            colPairName = "expansion_interaction_graph"), 
+                  regex = "The returned object is ordered by the 'ImageNb' entry.")
+    
+    plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "CellType")  
+    plotSpatial(cur_sce, img_id = "ImageNb", node_color_by = "patch_id")
+    
+    set.seed(1234)
+    shuffled_sce <- pancreasSCE[,sample(ncol(pancreasSCE))]
+    
+    cur_sce2 <- patchDetection(shuffled_sce, img_id = "ImageNb",
+                               expand_by = 10,
+                               patch_cells = shuffled_sce$CellType == "celltype_B",
+                               colPairName = "expansion_interaction_graph")
+    
+    plotSpatial(cur_sce2, img_id = "ImageNb", node_color_by = "CellType")  
+    plotSpatial(cur_sce2, img_id = "ImageNb", node_color_by = "patch_id")
+    
+    expect_equal(is.na(cur_sce2$patch_id[order(cur_sce2$index)]), is.na(cur_sce$patch_id[order(cur_sce$index)]))
+    
+    })

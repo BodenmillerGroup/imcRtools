@@ -169,6 +169,9 @@ testInteractions <- function(object,
     if(is.factor(colData(object)[[group_by]])) {
         colData(object)[[group_by]] <- as.factor(as.character(colData(object)[[group_by]]))
     }
+    
+    # Strictly work with characters 
+    colData(object)[[label]] <- as.character(colData(object)[[label]])
 
     cur_label <- as.factor(colData(object)[[label]])
     cur_table <- .prepare_table(object, group_by, cur_label, colPairName)

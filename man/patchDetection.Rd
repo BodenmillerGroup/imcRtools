@@ -52,7 +52,8 @@ defining how to parallelize computations.}
 }
 \value{
 An object of \code{class(object)} containing a patch ID for each 
-cell in \code{colData(object)[[name]]}.
+cell in \code{colData(object)[[name]]}. If \code{expand_by > 0},  cells in the 
+output object are grouped by entries in \code{img_id}.
 }
 \description{
 Function to detect spatial clusters of defined types of cells.
@@ -79,6 +80,18 @@ expansion only works if a patch contains at least 3 cells.
 The returned object contains an additional entry 
 \code{colData(object)[[name]]}, which stores the patch ID per cell. \code{NA}
 indicate cells that are not part of a patch.
+}
+
+\section{Ordering of the output object}{
+
+If \code{expand_by > 0}, the \code{patchDetection} function operates on individual images.
+Therefore the returned object is grouped by entries in \code{img_id}. 
+This means all cells of a given image are grouped together in the object.
+The ordering of cells within each individual image is the same as the ordering
+of these cells in the input object.
+
+If \code{expand_by = 0}, the ordering of cells in the output object is the same as
+in the input object.
 }
 
 \examples{

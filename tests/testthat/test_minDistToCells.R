@@ -2,10 +2,10 @@ test_that("minDistToCells works",{
   data("pancreasSCE")
   
   # works when cell types present and with negative distances returned
-  expect_silent(cur_sce <- minDistToCells(object = pancreasSCE,
+  expect_message(cur_sce <- minDistToCells(object = pancreasSCE,
                  x_cells = pancreasSCE$CellType == "celltype_B",
                  coords = c("Pos_X","Pos_Y"),
-                 img_id = "ImageName"))
+                 img_id = "ImageName"), regexp = "The returned object is ordered by the 'ImageName' entry.")
   
   expect_s4_class(cur_sce , class = "SingleCellExperiment")
   expect_true("distToCells" %in% names(colData(cur_sce)))
@@ -13,11 +13,11 @@ test_that("minDistToCells works",{
   expect_true(min(cur_sce$distToCells) < 0)
   
   # works on cell types when present and no negative distances returned
-  expect_silent(cur_sce_2 <- minDistToCells(object = pancreasSCE,
+  expect_message(cur_sce_2 <- minDistToCells(object = pancreasSCE,
                                           x_cells = pancreasSCE$CellType == "celltype_B",
                                           coords = c("Pos_X","Pos_Y"),
                                           img_id = "ImageName",
-                                          return_neg = FALSE))
+                                          return_neg = FALSE), regexp = "The returned object is ordered by the 'ImageName' entry.")
   
   expect_true(is(cur_sce_2, "SingleCellExperiment"))
   expect_s4_class(cur_sce_2 , class = "SingleCellExperiment")
@@ -30,10 +30,10 @@ test_that("minDistToCells works",{
   expect_equal(length(cur_sce[,cur_sce$distToCells < 0]),length(cur_sce_2[,cur_sce_2$distToCells == 0]))
 
   # works on cell types when not present in some image and with negative distances returned
-  expect_silent(cur_sce_3 <- minDistToCells(object = pancreasSCE,
+  expect_message(cur_sce_3 <- minDistToCells(object = pancreasSCE,
                                           x_cells = pancreasSCE$CellType == "celltype_A",
                                           coords = c("Pos_X","Pos_Y"),
-                                          img_id = "ImageName"))
+                                          img_id = "ImageName"), regexp = "The returned object is ordered by the 'ImageName' entry.")
   
   expect_true(is(cur_sce_3, "SingleCellExperiment"))
   expect_s4_class(cur_sce_3 , class = "SingleCellExperiment")
@@ -47,11 +47,11 @@ test_that("minDistToCells works",{
   expect_equal(length(cur_sce_3[,cur_sce_3$ImageName == "J02_imc.tiff"]$CellNb),sum(is.na(cur_sce_3$distToCells)))
   
   # works on cell types when not present in some images and no negative distances returned
-  expect_silent(cur_sce_4 <- minDistToCells(object = pancreasSCE,
+  expect_message(cur_sce_4 <- minDistToCells(object = pancreasSCE,
                                             x_cells = pancreasSCE$CellType == "celltype_A",
                                             coords = c("Pos_X","Pos_Y"),
                                             img_id = "ImageName",
-                                            return_neg = FALSE))
+                                            return_neg = FALSE), regexp = "The returned object is ordered by the 'ImageName' entry.")
   
   expect_true(is(cur_sce_4, "SingleCellExperiment"))
   expect_s4_class(cur_sce_4 , class = "SingleCellExperiment")
@@ -81,11 +81,11 @@ test_that("minDistToCells works",{
   expect_true(min(cur_spe_1$distToCells) < 0)
   
   # works on cell types when present and no negative distances returned
-  expect_silent(cur_spe_2 <- minDistToCells(object = pancreasSCE,
+  expect_message(cur_spe_2 <- minDistToCells(object = pancreasSCE,
                                             x_cells = pancreasSCE$CellType == "celltype_B",
                                             coords = c("Pos_X","Pos_Y"),
                                             img_id = "ImageName",
-                                            return_neg = FALSE))
+                                            return_neg = FALSE), regexp = "The returned object is ordered by the 'ImageName' entry.")
   
   expect_true(is(cur_spe_2, "SingleCellExperiment"))
   expect_s4_class(cur_spe_2 , class = "SingleCellExperiment")
@@ -103,20 +103,20 @@ test_that("minDistToCells works",{
   expect_equal(cur_sce_2$distToCells,cur_spe_2$distToCells)
   
   # Works when all cells of an image belog to one batch
-  expect_silent(cur_sce <- minDistToCells(object = pancreasSCE,
+  expect_message(cur_sce <- minDistToCells(object = pancreasSCE,
                                           x_cells = pancreasSCE$ImageName == "J02_imc.tiff",
                                           coords = c("Pos_X","Pos_Y"),
-                                          img_id = "ImageName"))
+                                          img_id = "ImageName"), regexp = "The returned object is ordered by the 'ImageName' entry.")
   
   expect_s4_class(cur_sce , class = "SingleCellExperiment")
   expect_true("distToCells" %in% names(colData(cur_sce)))
   expect_true(all(is.na(cur_sce$distToCells)))
   
   cur_sce$CellType[cur_sce$ImageName == "J02_imc.tiff"] <- "celltype_A"
-  expect_silent(cur_sce <- minDistToCells(object = cur_sce,
+  expect_message(cur_sce <- minDistToCells(object = cur_sce,
                                           x_cells = cur_sce$CellType == "celltype_A",
                                           coords = c("Pos_X","Pos_Y"),
-                                          img_id = "ImageName"))
+                                          img_id = "ImageName"), regexp = "The returned object is ordered by the 'ImageName' entry.")
   expect_s4_class(cur_sce , class = "SingleCellExperiment")
   expect_true("distToCells" %in% names(colData(cur_sce)))
   expect_true(all(is.na(cur_sce$distToCells[cur_sce$ImageName == "J02_imc.tiff"])))

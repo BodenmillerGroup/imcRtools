@@ -172,6 +172,12 @@ Changes in version 1.5.3 (2023-03-23)
 
 + Replaced merge function by left_join as safety measure
 
-Changes in version 1.5.4 (2022-04-04)
+Changes in version 1.5.4 (2023-04-04)
 
 + Added option to get permutation counts returned from testInteractions
+
+Changes in version 1.5.5 (2023-04-20)
+
++ Bug fix: in corner cases, levels of the permuted factors in the testInteractions function do not match the baseline.
++ Bug fix: testInteractions now works for cells that are not ordered by grouping level
++ Added explicitly message for some functions that the output is ordered by image

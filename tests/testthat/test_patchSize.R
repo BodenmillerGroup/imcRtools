@@ -59,11 +59,12 @@ test_that("patchSize function works", {
                                                                                                                    "sfg")))
     
     # Expansion setting
-    expect_silent(cur_sce <- patchDetection(pancreasSCE, 
+    expect_message(cur_sce <- patchDetection(pancreasSCE, 
                                             patch_cells = pancreasSCE$CellType == "celltype_B",
                                             colPairName = "expansion_interaction_graph",
                                             expand_by = 10,
-                                            img_id = "ImageNb"))
+                                            img_id = "ImageNb"),
+                  regex = "The returned object is ordered by the 'ImageNb' entry.")
     
     expect_silent(cur_out_4 <- patchSize(cur_sce))
     expect_false(identical(cur_out_1$size, cur_out_3$size))

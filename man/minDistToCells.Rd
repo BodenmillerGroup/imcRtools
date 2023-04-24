@@ -40,7 +40,8 @@ defining how to parallelize computations.}
 }
 \value{
 returns an object of \code{class(object)} containing a new column 
-entry to \code{colData(object)[[name]]}.
+entry to \code{colData(object)[[name]]}. Cells in the object are grouped
+by entries in \code{img_id}.
 }
 \description{
 Function to return the distance of the closest cell of interest
@@ -49,6 +50,15 @@ distances are returned by default which indicate the distance of the cells
 of interest to the closest cell that is not of the type of cells of
 interest.
 }
+\section{Ordering of the output object}{
+
+The \code{minDistToCells} function operates on individual images.
+Therefore the returned object is grouped by entries in \code{img_id}. 
+This means all cells of a given image are grouped together in the object.
+The ordering of cells within each individual image is the same as the ordering
+of these cells in the input object.
+}
+
 \examples{
 library(cytomapper)
 data(pancreasSCE)

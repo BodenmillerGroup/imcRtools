@@ -23,8 +23,16 @@
 #' @param BPPARAM a \code{\link[BiocParallel]{BiocParallelParam-class}} object
 #' defining how to parallelize computations.
 #' 
+#' @section Ordering of the output object:
+#' The \code{minDistToCells} function operates on individual images.
+#' Therefore the returned object is grouped by entries in \code{img_id}. 
+#' This means all cells of a given image are grouped together in the object.
+#' The ordering of cells within each individual image is the same as the ordering
+#' of these cells in the input object.
+#' 
 #' @return returns an object of \code{class(object)} containing a new column 
-#' entry to \code{colData(object)[[name]]}.
+#' entry to \code{colData(object)[[name]]}. Cells in the object are grouped
+#' by entries in \code{img_id}.
 #' 
 #' @examples
 #' library(cytomapper)
@@ -120,6 +128,8 @@ minDistToCells <- function(object,
   
   metadata(cur_out) <- cur_meta
   int_metadata(cur_out) <- cur_intmeta
+  
+  message("The returned object is ordered by the '", img_id, "' entry.")
   
   return(cur_out)
 }
