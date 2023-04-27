@@ -11,6 +11,8 @@ This R/Bioconductor package contains helper functions to analyse IMC (or other m
 
 Its official package page can be found here: [https://bioconductor.org/packages/imcRtools](https://bioconductor.org/packages/imcRtools)
 
+**Bug notice: we discovered and fixed a bug in the `testInteractions` function in version below 1.5.5 which affected `SingleCellExperiment` or `SpatialExperiment` objects in which cells were not grouped by image. Please install the newest version of `imcRtools` directly from Github as explained below.**  
+
 ## Check status
 
 | Bioc branch | Checks |
