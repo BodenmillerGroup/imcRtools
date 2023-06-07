@@ -18,7 +18,7 @@ expansion, delaunay triangulation or k nearest neighbor detection."><!-- mathjax
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.7.1</span>
       </span>
     </div>
 
@@ -149,7 +149,8 @@ function (<code>type = "knn"</code>)).</p></dd>
 
 
 <p>containing the graph in form of a <code>SelfHits</code> object in
-<code>colPair(object, name)</code>.</p>
+<code>colPair(object, name)</code>. The object is grouped by entries in the 
+<code>img_id</code> slot.</p>
     </div>
     <div id="building-an-interaction-graph">
     <h2>Building an interaction graph</h2>
@@ -188,6 +189,16 @@ algorithms, see
 <code>BiocNeighborParam</code> object, <code>distance</code> can be set to
 <code>"Euclidean"</code> (default), <code>"Manhattan"</code> or <code>"Cosine"</code>.</p>
     </div>
+    <div id="ordering-of-the-output-object">
+    <h2>Ordering of the output object</h2>
+    
+
+<p>The <code>buildSpatialGraph</code> function operates on individual images.
+Therefore the returned object is grouped by entries in <code>img_id</code>. 
+This means all cells of a given image are grouped together in the object.
+The ordering of cells within each individual image is the same as the ordering
+of these cells in the input object.</p>
+    </div>
     <div id="see-also">
     <h2>See also</h2>
     <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/BiocNeighbors/man/findNeighbors-methods.html" class="external-link">findNeighbors</a></code> for the function finding
@@ -211,6 +222,7 @@ via delaunay triangulation</p>
 <span class="r-in"><span><span class="co"># Constructing a graph via expansion</span></span></span>
 <span class="r-in"><span><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu">buildSpatialGraph</span><span class="op">(</span><span class="va">spe</span>, img_id <span class="op">=</span> <span class="st">"sample_id"</span>,</span></span>
 <span class="r-in"><span>                         type <span class="op">=</span> <span class="st">"expansion"</span>, threshold <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The returned object is ordered by the 'sample_id' entry.</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/colPairs.html" class="external-link">colPair</a></span><span class="op">(</span><span class="va">spe</span>, <span class="st">"expansion_interaction_graph"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SelfHits object with 278 hits and 0 metadata columns:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              from        to</span>
@@ -232,6 +244,7 @@ via delaunay triangulation</p>
 <span class="r-in"><span><span class="co"># Constructing a graph via delaunay triangulation</span></span></span>
 <span class="r-in"><span><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu">buildSpatialGraph</span><span class="op">(</span><span class="va">spe</span>, img_id <span class="op">=</span> <span class="st">"sample_id"</span>,</span></span>
 <span class="r-in"><span>                         type <span class="op">=</span> <span class="st">"delaunay"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The returned object is ordered by the 'sample_id' entry.</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/colPairs.html" class="external-link">colPair</a></span><span class="op">(</span><span class="va">spe</span>, <span class="st">"delaunay_interaction_graph"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SelfHits object with 1002 hits and 0 metadata columns:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>               from        to</span>
@@ -253,6 +266,7 @@ via delaunay triangulation</p>
 <span class="r-in"><span><span class="co"># Constructing a graph via k nearest neighbor search</span></span></span>
 <span class="r-in"><span><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu">buildSpatialGraph</span><span class="op">(</span><span class="va">spe</span>, img_id <span class="op">=</span> <span class="st">"sample_id"</span>,</span></span>
 <span class="r-in"><span>                         type <span class="op">=</span> <span class="st">"knn"</span>, k <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The returned object is ordered by the 'sample_id' entry.</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/colPairs.html" class="external-link">colPair</a></span><span class="op">(</span><span class="va">spe</span>, <span class="st">"knn_interaction_graph"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SelfHits object with 1090 hits and 0 metadata columns:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>               from        to</span>

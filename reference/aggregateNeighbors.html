@@ -18,7 +18,7 @@ neighbors of each cell."><!-- mathjax --><script src="https://cdnjs.cloudflare.c
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.7.1</span>
       </span>
     </div>
 
@@ -163,6 +163,7 @@ values in form of a <code>DataFrame</code> object in
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="buildSpatialGraph.html">buildSpatialGraph</a></span><span class="op">(</span><span class="va">pancreasSCE</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span>, </span></span>
 <span class="r-in"><span>                         type <span class="op">=</span> <span class="st">"knn"</span>, k <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The returned object is ordered by the 'ImageNb' entry.</span>
 <span class="r-in"><span>                         </span></span>
 <span class="r-in"><span><span class="co"># Aggregating neighboring cell-types</span></span></span>
 <span class="r-in"><span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu">aggregateNeighbors</span><span class="op">(</span><span class="va">sce</span>, colPairName <span class="op">=</span> <span class="st">"knn_interaction_graph"</span>,</span></span>

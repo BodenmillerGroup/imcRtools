@@ -21,7 +21,7 @@ interest."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/m
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.7.1</span>
       </span>
     </div>
 
@@ -116,7 +116,18 @@ defining how to parallelize computations.</p></dd>
     
 
 <p>returns an object of <code>class(object)</code> containing a new column 
-entry to <code>colData(object)[[name]]</code>.</p>
+entry to <code>colData(object)[[name]]</code>. Cells in the object are grouped
+by entries in <code>img_id</code>.</p>
+    </div>
+    <div id="ordering-of-the-output-object">
+    <h2>Ordering of the output object</h2>
+    
+
+<p>The <code>minDistToCells</code> function operates on individual images.
+Therefore the returned object is grouped by entries in <code>img_id</code>. 
+This means all cells of a given image are grouped together in the object.
+The ordering of cells within each individual image is the same as the ordering
+of these cells in the input object.</p>
     </div>
     <div id="author">
     <h2>Author</h2>
@@ -131,6 +142,7 @@ entry to <code>colData(object)[[name]]</code>.</p>
 <span class="r-in"><span><span class="co"># Build interaction graph</span></span></span>
 <span class="r-in"><span><span class="va">pancreasSCE</span> <span class="op">&lt;-</span> <span class="fu"><a href="buildSpatialGraph.html">buildSpatialGraph</a></span><span class="op">(</span><span class="va">pancreasSCE</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span>,</span></span>
 <span class="r-in"><span>type <span class="op">=</span> <span class="st">"expansion"</span>,threshold <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The returned object is ordered by the 'ImageNb' entry.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Detect patches of "celltype_B" cells</span></span></span>
 <span class="r-in"><span><span class="va">pancreasSCE</span> <span class="op">&lt;-</span> <span class="fu"><a href="patchDetection.html">patchDetection</a></span><span class="op">(</span><span class="va">pancreasSCE</span>,</span></span>
@@ -139,6 +151,7 @@ entry to <code>colData(object)[[name]]</code>.</p>
 <span class="r-in"><span>                             colPairName <span class="op">=</span> <span class="st">"expansion_interaction_graph"</span>,</span></span>
 <span class="r-in"><span>                             min_patch_size <span class="op">=</span> <span class="fl">20</span>,</span></span>
 <span class="r-in"><span>                             expand_by <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The returned object is ordered by the 'ImageNb' entry.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plotSpatial.html">plotSpatial</a></span><span class="op">(</span><span class="va">pancreasSCE</span>, </span></span>
 <span class="r-in"><span>            img_id <span class="op">=</span> <span class="st">"ImageNb"</span>, </span></span>
@@ -151,6 +164,11 @@ entry to <code>colData(object)[[name]]</code>.</p>
 <span class="r-in"><span>                             x_cells <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">pancreasSCE</span><span class="op">$</span><span class="va">patch_id</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                             coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pos_X"</span>,<span class="st">"Pos_Y"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                             img_id <span class="op">=</span> <span class="st">"ImageNb"</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>useNames = NA is deprecated. Instead, specify either useNames = TRUE or useNames = TRUE.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>useNames = NA is deprecated. Instead, specify either useNames = TRUE or useNames = TRUE.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>useNames = NA is deprecated. Instead, specify either useNames = TRUE or useNames = TRUE.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>useNames = NA is deprecated. Instead, specify either useNames = TRUE or useNames = TRUE.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The returned object is ordered by the 'ImageNb' entry.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plotSpatial.html">plotSpatial</a></span><span class="op">(</span><span class="va">pancreasSCE</span>,</span></span>
 <span class="r-in"><span>            img_id <span class="op">=</span> <span class="st">"ImageNb"</span>,</span></span>
