@@ -185,3 +185,7 @@ Changes in version 1.5.5 (2023-04-20)
 Changes in version 1.6.1 (2023-05-24)
 
 + Moved some of the tests to long tests
+
+Changes in version 1.6.2 (2023-06-07)
+
++ More info on reproducibility using detectCommunity
