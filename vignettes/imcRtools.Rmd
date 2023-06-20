@@ -1031,8 +1031,7 @@ out <- countInteractions(pancreasSCE,
                          group_by = "ImageNb",
                          label = "CellType",
                          method = "classic",
-                         colPairName = "knn_interaction_graph",
-                        BPPARAM = BiocParallel::SerialParam(RNGseed = 123))
+                         colPairName = "knn_interaction_graph")
 out
 ```
 
@@ -1061,7 +1060,8 @@ out <- testInteractions(pancreasSCE,
                         group_by = "ImageNb",
                         label = "CellType",
                         method = "classic",
-                        colPairName = "knn_interaction_graph")
+                        colPairName = "knn_interaction_graph",
+                        BPPARAM = BiocParallel::SerialParam(RNGseed = 123))
 out
 ```
 
