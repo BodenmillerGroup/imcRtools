@@ -1052,12 +1052,16 @@ or avoidance), overall `p` value and significance by comparison to
 `p_treshold` (`sig` and `sigval`) are derived. All results are returned
 in form of a `DataFrame`.
 
+We set the seed within the `SerialParam` (or `MulticoreParam`) function for
+reproducibility.
+
 ```{r testInteractions}
 out <- testInteractions(pancreasSCE,
                         group_by = "ImageNb",
                         label = "CellType",
                         method = "classic",
-                        colPairName = "knn_interaction_graph")
+                        colPairName = "knn_interaction_graph",
+                        BPPARAM = BiocParallel::SerialParam(RNGseed = 123))
 out
 ```
 
