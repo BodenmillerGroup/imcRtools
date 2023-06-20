@@ -69,8 +69,8 @@ e.g. for tumor and non-tumor cells.
 }
 
 \examples{
-set.seed(22)
 library(cytomapper)
+library(BiocParallel)
 data(pancreasSCE)
 
 sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",
@@ -79,13 +79,25 @@ sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",
                         threshold = 20)
 
 ## Detect spatial community 
+set.seed(22)
 sce <- detectCommunity(sce, 
                       colPairName = "neighborhood", 
                       size_threshold = 10)
 
 plotSpatial(sce,
             img_id = "ImageNb",
-            colPairName = "neighborhood",
+            node_color_by = "spatial_community",
+            scales = "free")
+            
+## Detect spatial community - specify group_by
+sce <- detectCommunity(sce, 
+                       colPairName = "neighborhood", 
+                       group_by = "CellType", 
+                       size_threshold = 10,
+                       BPPARAM = SerialParam(RNGseed = 22)) 
+
+plotSpatial(sce,
+            img_id = "ImageNb",
             node_color_by = "spatial_community",
             scales = "free")
            
