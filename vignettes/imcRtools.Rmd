@@ -1023,12 +1023,16 @@ The `countInteractions` returns a `DataFrame` containing the summarized
 counts (`ct`) for all combinations of `from_label`, `to_label` and
 `group_by`.
 
+We set the seed within the `SerialParam` (or `MulticoreParam`) function for
+reproducibility.
+
 ```{r countInteractions}
 out <- countInteractions(pancreasSCE,
                          group_by = "ImageNb",
                          label = "CellType",
                          method = "classic",
-                         colPairName = "knn_interaction_graph")
+                         colPairName = "knn_interaction_graph",
+                        BPPARAM = BiocParallel::SerialParam(RNGseed = 123))
 out
 ```
 

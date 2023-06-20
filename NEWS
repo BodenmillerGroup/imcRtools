@@ -189,3 +189,7 @@ Changes in version 1.6.1 (2023-05-24)
 Changes in version 1.6.2 (2023-06-07)
 
 + More info on reproducibility using detectCommunity
+
+Changes in version 1.6.3 (2023-06-20)
+
++ More info on reproducibility using testInteractions
