@@ -1061,7 +1061,7 @@ out <- testInteractions(pancreasSCE,
                         label = "CellType",
                         method = "classic",
                         colPairName = "knn_interaction_graph",
-                        BPPARAM = SerialParam(RNGseed = 123))
+                        BPPARAM = BiocParallel::SerialParam(RNGseed = 123))
 out
 ```
 
