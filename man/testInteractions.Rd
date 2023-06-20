@@ -129,18 +129,20 @@ or avoidance), overall \code{p} value and significance by comparison to
 
 \examples{
 library(cytomapper)
+library(BiocParallel)
 data(pancreasSCE)
 
 pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
                                  type = "knn", k = 3)
                                
-# Classic style calculation
+# Classic style calculation - setting the seed inside SerialParam for reproducibility
 (out <- testInteractions(pancreasSCE, 
                          group_by = "ImageNb",
                          label = "CellType", 
                          method = "classic",
                          colPairName = "knn_interaction_graph",
-                         iter = 1000))
+                         iter = 1000,
+                         BPPARAM = SerialParam(RNGseed = 123)))
                                 
 # Histocat style calculation
 (out <- testInteractions(pancreasSCE, 
@@ -148,7 +150,8 @@ pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",
                          label = "CellType", 
                          method = "histocat",
                          colPairName = "knn_interaction_graph",
-                         iter = 1000))
+                         iter = 1000,
+                         BPPARAM = SerialParam(RNGseed = 123)))
                                 
 # Patch style calculation
 (out <- testInteractions(pancreasSCE, 
@@ -157,7 +160,8 @@ pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",
                          method = "patch",
                          patch_size = 3,
                          colPairName = "knn_interaction_graph",
-                         ))
+                         iter = 1000,
+                         BPPARAM = SerialParam(RNGseed = 123)))
 
 }
 \references{
