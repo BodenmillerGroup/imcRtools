@@ -835,9 +835,16 @@
         stop("'flip_x' must be a single logical")
     }
     
-    if (length(aspect_ratio) != 1 | !is.numeric(aspect_ratio) | 
-        any(aspect_ratio < 0)) {
-        stop("'aspect_ratio' must be a single positive number.")
+    if (!is.null(aspect_ratio) & length(aspect_ratio) != 1) {
+        stop("'aspect_ratio' must be a single positive number, NULL or 'auto'.")
+    }
+    
+    if (!is.null(aspect_ratio)) {
+        if (aspect_ratio != "auto" &
+            (!is.numeric(aspect_ratio) | 
+            any(aspect_ratio < 0))) {
+                stop("'aspect_ratio' must be a single positive number, NULL or 'auto'.")
+        }
     }
     
 }

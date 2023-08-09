@@ -518,15 +518,65 @@ test_that("plotSpatial function works", {
     
     # making one image smaller
     cur_sce_2 <- cur_sce[,cur_sce$ImageNb == "1"]
-    cur_sce_2 <- cur_sce_2[,cur_sce_2$Pos_X > 30 & cur_sce_2$Pos_Y > 30]
+    cur_sce_2 <- cur_sce_2[,cur_sce_2$Pos_X > 30 & cur_sce_2$Pos_Y > 50]
     
     cur_sce_3 <- cur_sce[,cur_sce$ImageNb == "2"]
-    cur_sce_3 <- cur_sce_3[,cur_sce_3$Pos_X > 30 & cur_sce_3$Pos_Y > 30]
+    cur_sce_3 <- cur_sce_3[,cur_sce_3$Pos_X > 30 & cur_sce_3$Pos_Y > 70]
     
     cur_sce_4 <- cbind(cur_sce_2, cur_sce_3, cur_sce[,cur_sce$ImageNb == "3"])
     
     p <- plotSpatial(cur_sce_4, img_id = "ImageName", node_color_by = "CellType")
     expect_s3_class(p, "ggraph")
+    expect_silent(print(p))
+    
+    # Testing the aspect_ratio
+    cur_sce_5 <- cur_sce_4[,cur_sce_4$ImageNb == 1 | cur_sce_4$ImageNb == 2]
+    p <- plotSpatial(cur_sce_5, img_id = "ImageName", node_color_by = "CellType")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce_5, img_id = "ImageName", node_color_by = "CellType", aspect_ratio = 2)
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce_5, img_id = "ImageName", node_color_by = "CellType", aspect_ratio = NULL)
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce_5, img_id = "ImageName", node_color_by = "CellType", scales = "free")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce_5, img_id = "ImageName", node_color_by = "CellType", scales = "free", aspect_ratio = 2)
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce_3, img_id = "ImageName", node_color_by = "CellType")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce_3, img_id = "ImageName", node_color_by = "CellType", aspect_ratio = 2)
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce_3, img_id = "ImageName", node_color_by = "CellType", scales = "free")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce_3, img_id = "ImageName", node_color_by = "CellType", scales = "free", aspect_ratio = 2)
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce_3, img_id = "ImageName", node_color_by = "CellType", draw_edges = TRUE, colPairName = "knn_interaction_graph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce_3, img_id = "ImageName", node_color_by = "CellType", draw_edges = TRUE, colPairName = "knn_interaction_graph", aspect_ratio = 2)
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce_5, img_id = "ImageName", node_color_by = "CellType", draw_edges = TRUE, colPairName = "knn_interaction_graph")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce_5, img_id = "ImageName", node_color_by = "CellType", draw_edges = TRUE, colPairName = "knn_interaction_graph", aspect_ratio = 2)
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce_5, img_id = "ImageName", node_color_by = "CellType", draw_edges = TRUE, colPairName = "knn_interaction_graph", aspect_ratio = 2, scales = "free")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce_5, img_id = "ImageName", node_color_by = "CellType", draw_edges = TRUE, colPairName = "knn_interaction_graph", scales = "free")
+    expect_silent(print(p))
+    
+    p <- plotSpatial(cur_sce_5, img_id = "ImageName", node_color_by = "CellType", draw_edges = TRUE, colPairName = "knn_interaction_graph", scales = "free", aspect_ratio = NULL)
     expect_silent(print(p))
     
     ## Subsetting
@@ -794,17 +844,17 @@ test_that("plotSpatial function works", {
     
     expect_error(plotSpatial(cur_sce, img_id = "ImageNb",
                              aspect_ratio = c(1, 2)), 
-                 "'aspect_ratio' must be a single positive number.",
+                 "'aspect_ratio' must be a single positive number, NULL or 'auto'.",
                  fixed = TRUE)
     
     expect_error(plotSpatial(cur_sce, img_id = "ImageNb",
                              aspect_ratio = "test"), 
-                 "'aspect_ratio' must be a single positive number.",
+                 "'aspect_ratio' must be a single positive number, NULL or 'auto'.",
                  fixed = TRUE)
     
     expect_error(plotSpatial(cur_sce, img_id = "ImageNb",
                              aspect_ratio = -1), 
-                 "'aspect_ratio' must be a single positive number.",
+                 "'aspect_ratio' must be a single positive number, NULL or 'auto'.",
                  fixed = TRUE)
     
 })

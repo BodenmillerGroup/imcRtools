@@ -50,9 +50,12 @@
 #' all images. Defaults to "fixed" to match physical units on the x- and y-axis.
 #' @param flip_x flip the x-axis?
 #' @param flip_y flip the y-axis?
-#' @param aspect_ratio relative ratio between the physical units of the x and y 
-#' axis (defaults to 1). Ignore setting the aspect ratio with 
-#' \code{aspect_ratio = NULL}.
+#' @param aspect_ratio single numeric, "auto" or NULL to define the relative
+#' ratio between the physical units of the x and y axis. If \code{"auto"}
+#' (default), the physical units match between the x and y axis if
+#' \code{scales = "fixed"}. If \code{scales = "free"}, the default aspect
+#' ratio is set to 1. Ignore setting the aspect ratio with \code{aspect_ratio
+#' = NULL}.
 #' 
 #' @return returns a \code{ggplot} object.
 #' 
@@ -158,7 +161,7 @@ plotSpatial <- function(object,
                         scales = "fixed",
                         flip_x = FALSE,
                         flip_y = TRUE,
-                        aspect_ratio = 1){
+                        aspect_ratio = "auto"){
     
     .valid.plotSpatial.input(object, img_id, coords, node_color_by, 
                              node_shape_by, node_size_by, edge_color_by,
