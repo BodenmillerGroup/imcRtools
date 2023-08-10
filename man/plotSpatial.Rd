@@ -30,7 +30,7 @@ plotSpatial(
   scales = "fixed",
   flip_x = FALSE,
   flip_y = TRUE,
-  aspect_ratio = 1
+  aspect_ratio = "auto"
 )
 }
 \arguments{
@@ -53,10 +53,10 @@ entry by which the shape of the nodes are defined.}
 \item{node_size_by}{single character indicating the \code{colData(object)}
 entry by which the size of the nodes are defined.}
 
-\item{node_color_fix}{single character or numeric specifying the color of all 
+\item{node_color_fix}{single character or numeric specifying the color of all
 nodes.}
 
-\item{node_shape_fix}{single numeric or character specifying the shape of all 
+\item{node_shape_fix}{single numeric or character specifying the shape of all
 nodes.}
 
 \item{node_size_fix}{single numeric specifying the size of all nodes}
@@ -76,7 +76,7 @@ See details for more information.}
 \item{edge_width_by}{single character determining the size of the edges.
 See details for more information.}
 
-\item{edge_color_fix}{single character or numeric specifying the color of all 
+\item{edge_color_fix}{single character or numeric specifying the color of all
 edges.}
 
 \item{edge_width_fix}{single numeric specifying the size of all edges.}
@@ -88,7 +88,7 @@ arrows between cells.}
 the edges are. This only takes effect when drawing arrows. Default:
 \code{end_cap = circle(0.1, 'cm')}}
 
-\item{colPairName}{single character specifying the 
+\item{colPairName}{single character specifying the
 \code{colPair(object)} slot to retrieve the cell-cell pairings.}
 
 \item{nodes_first}{should the nodes be plotted first and then the edges?}
@@ -97,7 +97,7 @@ the edges are. This only takes effect when drawing arrows. Default:
 
 \item{nrows}{number of rows of the grid to arrange individual images.}
 
-\item{scales}{one of \code{"free"}, \code{"fixed"}, \code{"free_x"} or 
+\item{scales}{one of \code{"free"}, \code{"fixed"}, \code{"free_x"} or
 \code{"free_y"} indicating if x- and y-axis ranges should be fixed across
 all images. Defaults to "fixed" to match physical units on the x- and y-axis.}
 
@@ -105,44 +105,47 @@ all images. Defaults to "fixed" to match physical units on the x- and y-axis.}
 
 \item{flip_y}{flip the y-axis?}
 
-\item{aspect_ratio}{relative ratio between the physical units of the x and y 
-axis (defaults to 1). Ignore setting the aspect ratio with 
-\code{aspect_ratio = NULL}.}
+\item{aspect_ratio}{single numeric, "auto" or NULL to define the relative
+ratio between the physical units of the x and y axis. If \code{"auto"}
+(default), the physical units match between the x and y axis if
+\code{scales = "fixed"}. If \code{scales = "free"}, the default aspect
+ratio is set to 1. Ignore setting the aspect ratio with \code{aspect_ratio
+= NULL}.}
 }
 \value{
 returns a \code{ggplot} object.
 }
 \description{
-A general function to plot spatial locations of cells while 
+A general function to plot spatial locations of cells while
 specifying color, shape, size. Cell-cell interactions can be visualized
 in form of edges between points.
 }
 \section{Visualizing cell locations and cell-cell interactions}{
- 
+
 By default, the cells' locations are visualized in form of points (here also
 referred to as "nodes") on a 2-dimensional plane. The cells' coordinates are
 extracted either from \code{colData(object)} slot (for a
 \code{SingleCellExperiment} input object) or from the
 \code{spatialCoords(object)} slot (for a \code{SpatialExperiment} input
-object). Node aesthetics are controlled by setting \code{node_color_by}, 
+object). Node aesthetics are controlled by setting \code{node_color_by},
 \code{node_shape_by} and \code{node_size_by} for associating the aesthetics
-with variables. If node aesthetics should be the same for all nodes,  
-\code{node_color_fix}, \code{node_shape_fix} and \code{node_size_fix} can 
+with variables. If node aesthetics should be the same for all nodes,
+\code{node_color_fix}, \code{node_shape_fix} and \code{node_size_fix} can
 be set.
 
 When \code{draw_edges = TRUE}, cell-cell interactions are visualized in form
-of edges between nodes. For this, \code{object} needs to contain 
+of edges between nodes. For this, \code{object} needs to contain
 column pairings in \code{colPair(object, colPairName)}. Edge color and size
-can be set by specifying either an entry in 
-\code{mcols(colPair(object, colPairName))} (edge attributes) or in 
-\code{colData(object)}. In the latter case, edges are colored by attributes 
-associated to the "from" node. Variable aesthetics can be set using 
-\code{edge_color_by} and \code{edge_width_by}. If all edges should have 
+can be set by specifying either an entry in
+\code{mcols(colPair(object, colPairName))} (edge attributes) or in
+\code{colData(object)}. In the latter case, edges are colored by attributes
+associated to the "from" node. Variable aesthetics can be set using
+\code{edge_color_by} and \code{edge_width_by}. If all edges should have
 the same width or color, \code{edge_color_fix} and \code{edge_width_fix}
 can be set.
 
-Arrows for displaying directed graphs can be drawn by supplying a 
-\code{\link[grid]{arrow}} object. Arrow attributes can be set within this 
+Arrows for displaying directed graphs can be drawn by supplying a
+\code{\link[grid]{arrow}} object. Arrow attributes can be set within this
 class. To cap the edge before it reaches the next node, the \code{end_cap}
 parameter can be used.
 }
@@ -151,7 +154,7 @@ parameter can be used.
 library(cytomapper)
 data(pancreasSCE)
 
-sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", 
+sce <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",
                          type = "knn", k = 3, directed = FALSE)
 
 # Only nodes
@@ -160,7 +163,7 @@ plotSpatial(sce, img_id = "ImageNb",
             node_shape_by = "ImageNb",
             node_size_by = "Area",
             scales = "free")
-  
+
 # With edges and nodes colored by expression
 plotSpatial(sce, img_id = "ImageNb",
             node_color_by = "PIN",
@@ -171,7 +174,7 @@ plotSpatial(sce, img_id = "ImageNb",
             colPairName = "knn_interaction_graph",
             edge_color_by = "Pattern",
             scales = "free")
-            
+
 # With arrows
 plotSpatial(sce, img_id = "ImageNb",
             node_color_by = "CellType",
@@ -183,7 +186,7 @@ plotSpatial(sce, img_id = "ImageNb",
             arrow = grid::arrow(length = grid::unit(0.1, "inch")),
             end_cap = ggraph::circle(0.2, "cm"),
             scales = "free")
-  
+
 }
 \seealso{
 \code{\link{buildSpatialGraph}} for constructing interaction graphs

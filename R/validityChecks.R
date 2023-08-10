@@ -9,18 +9,18 @@
     if (read_metal_from_filename) {
         cur_mass <- str_extract(cur_names, "[0-9]{2,3}$")
         cur_names <- cur_names[order(as.numeric(cur_mass))]
-        
+
         if (!all(grepl("^[A-Z]{1}[a-z]{0,1}[0-9]{2,3}$", cur_names))) {
             stop("Not all names match the pattern (mt)(mass).")
         }
-        
+
         # Check if spotted channel is also open
         cur_channels <- str_extract(colnames(txt_list[[1]]),
                                     "[A-Z]{1}[a-z]{0,1}[0-9]{2,3}Di")
         cur_channels <- cur_channels[!is.na(cur_channels)]
         cur_channels <- sub("Di", "", cur_channels)
-        
-        # Verbose option will print possible missmatched between acquired and 
+
+        # Verbose option will print possible missmatched between acquired and
         # open channels
         spot_not_ac <- cur_names[!(cur_names %in% cur_channels)]
         ac_not_spot <- cur_channels[!(cur_channels %in% cur_names)]
@@ -35,7 +35,7 @@
             cat("Channels acquired but not spotted: ",
                 paste(ac_not_spot, collapse = ", "))
         }
-        
+
         if (!all(cur_names %in% cur_channels)) {
             stop("Not all spotted channels were acquired.")
         }
@@ -75,7 +75,7 @@
         stop("'log' needs to be logical.")
     }
 
-    if (!is.null(threshold) & (length(threshold) != 1 || 
+    if (!is.null(threshold) & (length(threshold) != 1 ||
                                 !all(is.numeric(threshold)))) {
         stop("'threshold' needs to be a single numeric.")
     }
@@ -188,7 +188,7 @@
 
     if (!is.null(regionprops_folder)) {
 
-        if (length(regionprops_folder) != 1 | 
+        if (length(regionprops_folder) != 1 |
             !is.character(regionprops_folder)) {
             stop("'regionprops_folder' must be a single string.")
         }
@@ -224,43 +224,43 @@
     if (!is.null(regionprops_folder)) {
         all_files <- list.files(file.path(path, regionprops_folder),
                                 pattern =  pattern, full.names = TRUE)
-        
+
         if (length(all_files) > 0) {
             cur_file <- vroom(all_files[1],
                                 progress = FALSE,
                                 col_types = cols())
-            
+
             if (!all(is.character(coords))) {
                 stop("'extract_coords_from' must be characters.")
             }
-            
+
             if (!all(coords %in% colnames(cur_file))) {
                 stop("'coords' not in regionprops files.")
-            }   
+            }
         }
     }
-    
+
     # Check image file
     if (!is.null(image_file)) {
         if (length(image_file) != 1 | !is.character(image_file)) {
             stop("'image_file' must be a single string.")
         }
-        
+
         if (!file.exists(file.path(path, image_file))) {
             stop("'image_file' doesn't exist.")
         }
-        
+
         if (!all(is.character(extract_imagemetadata_from))) {
             stop("'extract_imagemetadata_from' should only contain characters.")
         }
-        
-        cur_images_file <- vroom(file.path(path, image_file), progress = FALSE, 
+
+        cur_images_file <- vroom(file.path(path, image_file), progress = FALSE,
                                     col_types = cols())
-            
+
         if (!all(extract_imagemetadata_from %in% colnames(cur_images_file))) {
             stop("'extract_imagemetadata_from' not in images file.")
         }
-    } 
+    }
 
     # Check panel
     if (!is.null(panel)) {
@@ -294,12 +294,12 @@
 #' @importFrom stringr str_count
 .valid.read_cpout.input <- function(path, object_file, image_file,
                             panel_file, graph_file, object_feature_file,
-                            intensities, extract_imgid_from, 
+                            intensities, extract_imgid_from,
                             extract_cellid_from,
                             extract_coords_from,
-                            extract_cellmetadata_from, 
+                            extract_cellmetadata_from,
                             extract_imagemetadata_from,
-                            extract_graphimageid_from, 
+                            extract_graphimageid_from,
                             extract_graphcellids_from,
                             extract_metal_from, scale_intensities,
                             extract_scalingfactor_from){
@@ -382,7 +382,7 @@
                 stop("'extract_metal_from' must be specified.")
             }
 
-            if (length(extract_metal_from) != 1 | 
+            if (length(extract_metal_from) != 1 |
                 !is.character(extract_metal_from)) {
                 stop("'extract_metal_from' must be a single string.")
             }
@@ -394,7 +394,7 @@
     }
 
     # Check object files
-    cur_file <- vroom(file.path(path, object_file), n_max = 1, 
+    cur_file <- vroom(file.path(path, object_file), n_max = 1,
                       col_types = cols())
 
     if (is.null(intensities)) {
@@ -417,7 +417,7 @@
     cur_channels <- as.numeric(table(cur_channels))
 
     if (any(cur_channels > 1)) {
-        stop("Some of the features set via 'intensities'", 
+        stop("Some of the features set via 'intensities'",
              " cannot be uniquely accessed.")
     }
 
@@ -477,7 +477,7 @@
     }
 
     if (!is.null(image_file)) {
-        cur_file <- vroom(file.path(path, image_file), n_max = 1, 
+        cur_file <- vroom(file.path(path, image_file), n_max = 1,
                           col_types = cols())
 
         if (!is.null(extract_imagemetadata_from)) {
@@ -486,12 +486,12 @@
             }
         }
 
-        if (length(extract_scalingfactor_from) != 1 | 
+        if (length(extract_scalingfactor_from) != 1 |
             !is.character(extract_scalingfactor_from)) {
             stop("'extract_scalingfactor_from' must be a single string.")
         }
 
-        if (scale_intensities & 
+        if (scale_intensities &
             !extract_scalingfactor_from %in% colnames(cur_file)) {
             stop("'extract_scalingfactor_from' not in 'image_file'.")
         }
@@ -500,14 +500,14 @@
 
     # Check graph file
     if (!is.null(graph_file)) {
-        cur_file <- vroom(file.path(path, graph_file), n_max = 1, 
+        cur_file <- vroom(file.path(path, graph_file), n_max = 1,
                             col_types = cols())
 
         if (is.null(extract_graphimageid_from)) {
             stop("'extract_graphimageid_from' must be specified.")
         }
 
-        if (length(extract_graphimageid_from) != 1 | 
+        if (length(extract_graphimageid_from) != 1 |
             !is.character(extract_graphimageid_from)) {
             stop("'extract_graphimageid_from' must be a single string.")
         }
@@ -529,8 +529,8 @@
 }
 
 #' @importFrom SpatialExperiment spatialCoordsNames
-.valid.buildSpatialGraph.input <- function(object, type, img_id, k, 
-                                    threshold, coords, name, 
+.valid.buildSpatialGraph.input <- function(object, type, img_id, k,
+                                    threshold, coords, name,
                                     directed, max_dist){
 
     if (!is(object, "SingleCellExperiment")) {
@@ -551,11 +551,11 @@
             stop("When constructing a graph via expansion,",
                  " please specify 'threshold'.")
         }
-        
+
         if (length(threshold) != 1 || !is.numeric(threshold)) {
             stop("'threshold' must be a single numeric")
         }
-        
+
     }
 
     if (type == "knn") {
@@ -564,16 +564,16 @@
             stop("When constructing a graph via nearest neighbour detection, ",
                  "please specify 'k'.")
         }
-        
+
         if (length(k) != 1 || !is.numeric(k)) {
             stop("'k' must be a single numeric")
         }
-        
-        if (!is.null(max_dist) & (length(max_dist) != 1 || 
+
+        if (!is.null(max_dist) & (length(max_dist) != 1 ||
                                     !is.numeric(max_dist))) {
             stop("'max_dist' must be a single numeric")
         }
-        
+
     }
 
     if (length(coords) != 2 | !all(is.character(coords))) {
@@ -604,22 +604,22 @@
 
 }
 
-.valid.aggregateNeighbors.input <- function(object, colPairName, aggregate_by, 
-                                        count_by, proportions, assay_type, 
+.valid.aggregateNeighbors.input <- function(object, colPairName, aggregate_by,
+                                        count_by, proportions, assay_type,
                                         subset_row, name){
 
     if (!is(object, "SingleCellExperiment")) {
         stop("'object' not of type 'SingleCellExperiment'.")
     }
-    
+
     if (length(colPairName) != 1 | !is.character(colPairName)) {
         stop("'colPairName' must be a single string.")
     }
-    
+
     if (! colPairName %in% colPairNames(object)) {
         stop("'colPairName' not in 'colPairNames(object)'.")
     }
-    
+
     if (length(colPair(object, colPairName)) == 0) {
         stop("No interactions found.")
     }
@@ -629,7 +629,7 @@
         if (is.null(count_by)) {
             stop("Provide a 'colData(object)' entry to aggregate by.")
         }
-        
+
         if (length(count_by) != 1 | !is.character(count_by)) {
             stop("'count_by' must be a single string.")
         }
@@ -637,7 +637,7 @@
         if (! count_by %in% colnames(colData(object))) {
             stop("'count_by' is not a valid enty of 'colData(object)'.")
         }
-      
+
         if (length(proportions) != 1 | !is.logical(proportions)) {
             stop("'proportions' must be a single logical")
         }
@@ -648,7 +648,7 @@
         if (is.null(assay_type)) {
             stop("'assay_type' not provided")
         }
-        
+
         if (length(assay_type) != 1 | !is.character(assay_type)) {
             stop("'assay_type' must be a single string.")
         }
@@ -656,21 +656,21 @@
         if (! assay_type %in% assayNames(object)) {
             stop("'assay_type' not an assay in the 'object'.")
         }
-        
+
         if (!is.null(subset_row)) {
-            if (all(is.character(subset_row)) & 
+            if (all(is.character(subset_row)) &
                 !all(subset_row %in% rownames(object))) {
                 stop("'subset_row' not in rownames(object).")
             }
-            
-            if (all(is.logical(subset_row)) & 
+
+            if (all(is.logical(subset_row)) &
                 length(subset_row) != nrow(object)) {
-                stop("'subset_row' logical entries", 
+                stop("'subset_row' logical entries",
                      " must be as long as 'nrow(object)'.")
             }
         }
     }
-    
+
     if (!is.null(name) & (length(name) != 1 | !is.character(name))) {
         stop("'name' must be a single string.")
     }
@@ -679,11 +679,11 @@
 #' @importFrom S4Vectors mcols
 .valid.plotSpatial.input <- function(object, img_id, coords, node_color_by,
                                     node_shape_by, node_size_by, edge_color_by,
-                                    assay_type, edge_width_by, draw_edges, 
-                                    directed,  arrow,  end_cap, colPairName, 
-                                    nodes_first, ncols, nrows, scales, 
+                                    assay_type, edge_width_by, draw_edges,
+                                    directed,  arrow,  end_cap, colPairName,
+                                    nodes_first, ncols, nrows, scales,
                                     flip_x, flip_y, aspect_ratio){
-    
+
     if (!is(object, "SingleCellExperiment")) {
         stop("'object' not of type 'SingleCellExperiment'.")
     }
@@ -699,7 +699,7 @@
     if (length(coords) != 2 | !all(is.character(coords))) {
         stop("'coords' must be a character vector of length 2.")
     }
-    
+
     if (is(object, "SpatialExperiment")) {
         if (!all(coords %in% spatialCoordsNames(object))) {
             stop("'coords' not in spatialCoords(object).")
@@ -714,23 +714,23 @@
         !is.character(node_color_by))) {
         stop("'node_color_by' must be a single string.")
     }
-    
+
     cur_accepted <- c(names(colData(object)), rownames(object))
 
     if (!is.null(node_color_by) && !node_color_by %in% cur_accepted) {
         stop("'node_color_by' not in colData(object) or rownames(object).")
     }
-    
+
     if (!is.null(node_color_by) && node_color_by %in% rownames(object)) {
         if (is.null(assay_type)) {
-            stop("When coloring nodes by marker expression,", 
+            stop("When coloring nodes by marker expression,",
                     " please specify 'assay_type'.")
         }
-        
+
         if (length(assay_type) != 1 | !is.character(assay_type)) {
             stop("'assay_type' must be a single string.")
         }
-        
+
         if (!assay_type %in% assayNames(object)) {
             stop("'assay_type' not an assay in object.")
         }
@@ -785,16 +785,16 @@
             stop("'edge_color_by' not in 'colData(object)'",
                  " or in 'mcols(colPair(object, colPairName))'.")
         }
-        
-        if (!is.null(edge_width_by) && 
+
+        if (!is.null(edge_width_by) &&
             (length(edge_width_by) != 1 | !is.character(edge_width_by))) {
             stop("'edge_width_by' must be a single string.")
         }
-        
-        if (!is.null(edge_width_by) && 
+
+        if (!is.null(edge_width_by) &&
             (!edge_width_by %in% names(colData(object)) &&
             !edge_width_by %in% names(mcols(colPair(object, colPairName))))) {
-            stop("'edge_width_by' not in 'colData(object)'", 
+            stop("'edge_width_by' not in 'colData(object)'",
                  " or in 'mcols(colPair(object, colPairName))'.")
         }
 
@@ -805,12 +805,12 @@
         if (!is.null(arrow) && !is(arrow, "arrow")) {
             stop("'arrow' must be of class grid::arrow.")
         }
-        
+
         if (!is.null(end_cap) && !is(end_cap, "ggraph_geometry")) {
             stop("'end_cap' must be of type 'ggraph_geometry'.")
         }
     }
-    
+
     if (length(nodes_first) != 1 | !is.logical(nodes_first)) {
         stop("'nodes_first' must be a single logical")
     }
@@ -822,70 +822,77 @@
     if (!is.null(nrows) && (length(nrows) != 1 | !is.numeric(nrows))) {
         stop("'nrows' must be a single numeric")
     }
-    
+
     if (!scales %in% c("fixed", "free_x", "free_y", "free")) {
         stop("'scales' should be one of 'fixed', 'free_x', 'free_y', 'free'.")
     }
-    
+
     if (length(flip_y) != 1 | !is.logical(flip_y)) {
         stop("'flip_y' must be a single logical")
     }
-    
+
     if (length(flip_x) != 1 | !is.logical(flip_x)) {
         stop("'flip_x' must be a single logical")
     }
-    
-    if (length(aspect_ratio) != 1 | !is.numeric(aspect_ratio) | 
-        any(aspect_ratio < 0)) {
-        stop("'aspect_ratio' must be a single positive number.")
+
+    if (!is.null(aspect_ratio) & length(aspect_ratio) != 1) {
+        stop("'aspect_ratio' must be a single positive number, NULL or 'auto'.")
     }
-    
+
+    if (!is.null(aspect_ratio)) {
+        if (aspect_ratio != "auto" &
+            (!is.numeric(aspect_ratio) |
+            any(aspect_ratio < 0))) {
+                stop("'aspect_ratio' must be a single positive number, NULL or 'auto'.")
+        }
+    }
+
 }
 
 .valid.countInteractions.input <- function(object, group_by, label, method,
                                                 patch_size, colPairName){
-    
+
     if (!is(object, "SingleCellExperiment")) {
         stop("'object' not of type 'SingleCellExperiment'.")
     }
-    
+
     if (length(group_by) != 1 | !is.character(group_by)) {
         stop("'group_by' must be a single string.")
     }
-    
+
     if (any(is.na(object[[group_by]]))) {
         stop("Please remove NAs from the grouping vector.")
     }
-    
+
     if (!group_by %in% names(colData(object))) {
         stop("'group_by' not in colData(object).")
     }
-    
+
     if (length(colPairName) != 1 | !is.character(colPairName)) {
         stop("'colPairName' must be a single string.")
     }
-    
+
     if (!colPairName %in% colPairNames(object)) {
         stop("'colPairName' not in colPairNames(object).")
     }
-    
+
     if (length(label) != 1 | !is.character(label)) {
         stop("'label' must be a single string.")
     }
-    
+
     if (!label %in% names(colData(object))) {
         stop("'label' not in colData(object).")
     }
-    
+
     if (any(is.na(object[[label]]))) {
         stop("Please remove NAs from the label vector.")
     }
-    
+
     if (method == "patch") {
         if (is.null(patch_size)) {
             stop("When method = 'patch', please specify 'patch_size'.")
         }
-        
+
         if (length(patch_size) != 1 | !is.numeric(patch_size)) {
             stop("'patch_size' must be a single numeric.")
         }
@@ -896,19 +903,19 @@
     if (length(iter) != 1 | !is.numeric(iter)) {
         stop("'iter' must be a single positive numeric.")
     }
-    
+
     if (iter < 1) {
         stop("'iter' must be a single positive numeric.")
     }
-    
+
     if (length(p_threshold) != 1 | !is.numeric(p_threshold)) {
         stop("'p_threshold' must be a single numeric between 0 and 1.")
     }
-    
+
     if (p_threshold < 0 | p_threshold > 1) {
         stop("'p_threshold' must be a single numeric between 0 and 1.")
     }
-    
+
     if (length(return_samples) != 1 | !is.logical(return_samples)) {
         stop("'return_samples' must be a single logical.")
     }
@@ -918,19 +925,19 @@
     if (!is(object, "SingleCellExperiment")) {
         stop("'object' not of type 'SingleCellExperiment'.")
     }
-    
+
     if (length(img_id) != 1 | !is.character(img_id)) {
         stop("'img_id' must be a single string.")
     }
-    
+
     if (!img_id %in% names(colData(object))) {
         stop("'img_id' not in colData(object).")
     }
-    
+
     if (length(coords) != 2 | !all(is.character(coords))) {
         stop("'coords' must be a character vector of length 2.")
     }
-    
+
     if (is(object, "SpatialExperiment")) {
         if (!all(coords %in% spatialCoordsNames(object))) {
             stop("'coords' not in spatialCoords(object).")
@@ -940,47 +947,47 @@
             stop("'coords' not in colData(object).")
         }
     }
-    
+
     if (length(border_dist) != 1 | !is.numeric(border_dist)) {
         stop("'border_dist' must be a single numeric.")
     }
 }
 
-.valid.patchDetection.input <- function(object, patch_cells, colPairName, 
+.valid.patchDetection.input <- function(object, patch_cells, colPairName,
                                         min_patch_size, name, expand_by, coords,
                                         convex, img_id){
     if (!is(object, "SingleCellExperiment")) {
         stop("'object' not of type 'SingleCellExperiment'.")
     }
-    
+
     if (!all(is.logical(patch_cells))) {
         stop("'patch_cells' must all be logical.")
     }
-    
+
     if (length(patch_cells) != ncol(object)) {
         stop("Length of 'patch_cells' must match the number of cells in 'object'.")
     }
-    
+
     if (length(colPairName) != 1 | !is.character(colPairName)) {
         stop("'colPairName' must be a single string.")
     }
-    
+
     if (! colPairName %in% colPairNames(object)) {
         stop("'colPairName' not in 'colPairNames(object)'.")
     }
-    
+
     if (length(colPair(object, colPairName)) == 0) {
         stop("No interactions found.")
     }
-    
+
     if (length(min_patch_size) != 1 | !is.numeric(min_patch_size)) {
         stop("'min_patch_size' must be a single numeric.")
     }
-    
+
     if (length(coords) != 2 | !all(is.character(coords))) {
         stop("'coords' must be a character vector of length 2.")
     }
-    
+
     if (is(object, "SpatialExperiment")) {
         if (!all(coords %in% spatialCoordsNames(object))) {
             stop("'coords' not in spatialCoords(object).")
@@ -990,28 +997,28 @@
             stop("'coords' not in colData(object).")
         }
     }
-    
+
     if (length(name) != 1 | !is.character(name)) {
         stop("'name' must be a single string.")
     }
-    
+
     if (length(expand_by) != 1 | !is.numeric(expand_by)) {
         stop("'expand_by' must be a single numeric.")
     }
-    
+
     if (length(convex) != 1 | !is.logical(convex)) {
         stop("'convex' must be a single logical.")
     }
-    
+
     if (expand_by > 0) {
         if (is.null(img_id)) {
             stop("'img_id' must be specified when patch expansion is performed.")
         }
-        
+
         if (length(img_id) != 1 | !is.character(img_id)) {
             stop("'img_id' must be a single string.")
         }
-        
+
         if (!img_id %in% names(colData(object))) {
             stop("'img_id' not in colData(object).")
         }
@@ -1022,23 +1029,23 @@
   if(!is(object, "SingleCellExperiment")) {
     stop("'object' not of type 'SingleCellExperiment'.")
   }
-  
+
   if (!all(is.logical(x_cells))) {
     stop("'x_cells' must all be logical.")
   }
-  
+
   if (length(x_cells) != ncol(object)) {
     stop("Length of 'x_cells' must match the number of cells in 'object'.")
   }
-  
+
   if (length(name) != 1 | !is.character(name)) {
     stop("'name' must be a single string.")
   }
-  
+
   if (length(coords) != 2 | !all(is.character(coords))) {
     stop("'coords' must be a character vector of length 2.")
   }
-  
+
   if (is(object, "SpatialExperiment")) {
     if (!all(coords %in% spatialCoordsNames(object))) {
       stop("'coords' not in spatialCoords(object).")
@@ -1048,15 +1055,15 @@
       stop("'coords' not in colData(object).")
     }
   }
-  
+
   if (length(img_id) != 1 | !is.character(img_id)) {
     stop("'img_id' must be a single string.")
   }
-  
+
   if (!img_id %in% names(colData(object))) {
     stop("'img_id' not in colData(object).")
   }
-  
+
   if(!is.logical(return_neg)){
     stop("'return_neg' is not of type logical.")
   }
@@ -1066,19 +1073,19 @@
     if (!is(object, "SingleCellExperiment")) {
         stop("'object' not of type 'SingleCellExperiment'.")
     }
-    
+
     if (length(patch_name) != 1 | !is.character(patch_name)) {
         stop("'patch_name' must be a single string.")
     }
-    
+
     if (!patch_name %in% names(colData(object))) {
         stop("'patch_name' nor in 'colData(object)'.")
     }
-    
+
     if (length(coords) != 2 | !all(is.character(coords))) {
         stop("'coords' must be a character vector of length 2.")
     }
-    
+
     if (is(object, "SpatialExperiment")) {
         if (!all(coords %in% spatialCoordsNames(object))) {
             stop("'coords' not in spatialCoords(object).")
@@ -1088,7 +1095,7 @@
             stop("'coords' not in colData(object).")
         }
     }
-    
+
     if (length(convex) != 1 | !is.logical(convex)) {
         stop("'convex' must be a single logical.")
     }
@@ -1101,59 +1108,59 @@
   if (!is(object, "SingleCellExperiment")) {
     stop("'object' needs to be a SingleCellExperiment object.")
   }
-  
+
   if (!entry %in% names(colData(object))) {
     stop("'entry' not in 'colData(object)'.")
   }
-  
+
   if (!is(colData(object)[,entry],"DFrame")) {
     stop("'colData(object)[,entry]' needs to be a DFrame object.")
   }
-    
+
   if (!(is.numeric(threshold) & (0 <= threshold && threshold <= 1))){
     stop("'threshold' needs to be a single numeric between 0-1.")
   }
-  
+
     if (length(name) != 1 | !is.character(name)) {
     stop("'name' has to be a single character'.")
   }
 }
 
-.valid.filterSpatialContext.input <- function(object, 
-                                              entry, 
+.valid.filterSpatialContext.input <- function(object,
+                                              entry,
                                               group_by,
                                               group_threshold,
-                                              cells_threshold, 
+                                              cells_threshold,
                                               name){
-  
+
   if (!is(object, "SingleCellExperiment")) {
     stop("'object' needs to be a SingleCellExperiment object.")
   }
-  
+
   if (!entry %in% names(colData(object))) {
     stop("'entry' not in 'colData(object)'.")
   }
-  
-  if (!group_by %in% names(colData(object))) { 
+
+  if (!group_by %in% names(colData(object))) {
     stop("'group_by' not in 'colData(object)'.")
   }
-  
+
   if (!is.null(group_threshold) &&
       (!is.numeric(group_threshold) | length(group_threshold) != 1)){
     stop("'group_threshold' needs to be a single numeric.")
   }
-  
+
   if (!is.null(cells_threshold) &&
      (!is.numeric(cells_threshold) | length(cells_threshold) != 1)){
     stop("'cells_threshold' needs to be a single numeric.")
   }
-  
+
   if (is.null(group_threshold) &&
      (is.null(cells_threshold))) {
-    stop("One of 'group_threshold' and 'cells_threshold' ", 
+    stop("One of 'group_threshold' and 'cells_threshold' ",
          "has to be defined.")
   }
-  
+
   if (length(name) != 1 | !is.character(name)) {
     stop("'name' has to be a single character'.")
   }
@@ -1162,151 +1169,151 @@
 .valid.plotSpatialContext.input <- function(object,
                                             entry,
                                             group_by,
-                                            node_color_by, 
+                                            node_color_by,
                                             node_size_by,
                                             node_color_fix,
                                             node_size_fix,
                                             node_label_repel,
                                             node_label_color_by,
-                                            node_label_color_fix, 
+                                            node_label_color_fix,
                                             draw_edges,
                                             edge_color_fix,
                                             return_data){
   if (!is(object, "SingleCellExperiment")) {
     stop("'object' needs to be a SingleCellExperiment object.")
   }
-  
+
   if (!entry %in% names(colData(object))) {
     stop("'entry' not in 'colData(object)'.")
   }
-  
-  if (!group_by %in% names(colData(object))) { 
+
+  if (!group_by %in% names(colData(object))) {
     stop("'group_by' not in 'colData(object)'.")
   }
-  
+
   if (!is.null(node_color_by) &&
       (!node_color_by %in% c("name", "n_cells", "n_group"))){
     stop("'node_color_by' has to be one off 'name', 'n_cells' or 'n_group'.")
   }
-  
+
   if (!is.null(node_size_by) &&
       (!node_size_by %in% c("n_cells", "n_group"))){
     stop("'node_size_by' has to be 'n_cells' or 'n_group'.")
   }
-  
-  if (!is.null(node_label_color_by) && 
+
+  if (!is.null(node_label_color_by) &&
       (!node_label_color_by %in% c("name","n_cells","n_group"))){
     stop("'node_label_color_by' has to be one off 'name', 'n_cells' or 'n_group'.")
   }
-  
+
   if (!is.logical(node_label_repel)) {
     stop("'node_label_repel' has to be logical'.")
   }
-  
+
   if(node_label_repel == FALSE){
     if(!is.null(node_label_color_by) | (!is.null(node_label_color_fix))){
-    stop("'node_label_color_by' and 'node_label_color_fix' can not be defined ", 
+    stop("'node_label_color_by' and 'node_label_color_fix' can not be defined ",
          "when node_label_repel == FALSE")
-  }} 
-  
+  }}
+
   if (!is.logical(draw_edges)) {
     stop("'draw_edges' has to be logical'.")
   }
-  
-  if (!is.null(node_color_fix) && 
+
+  if (!is.null(node_color_fix) &&
       (!is.character(node_color_fix))){
     stop("'node_color_fix' has to be a character'.")
   }
-  
+
   if (!is.null(node_size_fix) &&
       (!is.character(node_size_fix))){
     stop("'node_size_fix' has to be a character'.")
   }
-  
+
   if (!is.null(node_label_color_fix) &&
       (!is.character(node_label_color_fix))){
     stop("'node_label_color_fix' has to be a character'.")
   }
-  
+
   if (!is.null(edge_color_fix) &&
       (!is.character(edge_color_fix))){
     stop("'edge_color_fix' has to be a character'.")
   }
-  
+
   if(!is.null(node_color_by) &&
      (!is.null(node_color_fix))){
-    stop("'node_color_by' and 'node_color_fix' can not be defined ", 
+    stop("'node_color_by' and 'node_color_fix' can not be defined ",
          "at the same time.")
   }
-  
+
   if(!is.null(node_label_color_by) &&
      (!is.null(node_label_color_fix))){
-    stop("'node_label_color_by' and 'node_label_color_fix' can not be defined ", 
+    stop("'node_label_color_by' and 'node_label_color_fix' can not be defined ",
          "at the same time.")
-  }  
-  
+  }
+
   if(!is.null(node_label_color_by) &&
-     (!is.null(node_color_by)) && 
+     (!is.null(node_color_by)) &&
      (node_label_color_by != node_color_by)){
     stop("'node_label_color_by' and 'node_color_by' have to be identical.")
   }
-    
+
   if(!is.null(node_size_by) &&
      (!is.null(node_size_fix))){
-    stop("'node_size_by' and 'node_size_fix' can not be defined ", 
+    stop("'node_size_by' and 'node_size_fix' can not be defined ",
          "at the same time.")
-  } 
-  
+  }
+
   if (!is.logical(return_data)) {
     stop("'return_data' has to be logical'.")
   }
 }
 
-.valid.detectCommunity.input <- function(object, 
-                                         colPairName, 
-                                         size_threshold, 
-                                         group_by, 
-                                         name, 
+.valid.detectCommunity.input <- function(object,
+                                         colPairName,
+                                         size_threshold,
+                                         group_by,
+                                         name,
                                          cluster_fun){
-  
-  
+
+
   if (!is(object, "SingleCellExperiment")) {
     stop("'object' needs to be a SingleCellExperiment object.")
-  } 
-  
-  if (is.null(colnames(object)) | 
+  }
+
+  if (is.null(colnames(object)) |
       length(unique(colnames(object))) != length(colnames(object))) {
     stop("'colnames' of 'object' need to be specified and unique (e.g. as cell IDs).")
-  } 
-  
+  }
+
   if (length(colPairName) != 1 | !is.character(colPairName)) {
     stop("'colPairName' must be a single string.")
   }
-  
+
   if (! colPairName %in% colPairNames(object)) {
     stop("'colPairName' not in 'colPairNames(object)'.")
   }
-  
+
   if (length(colPair(object, colPairName)) == 0) {
     stop("No interactions found.")
   }
-  
-  if (!is.numeric(size_threshold) | length(size_threshold) != 1 
+
+  if (!is.numeric(size_threshold) | length(size_threshold) != 1
        | size_threshold < 0){
     stop("'size_threshold' needs to be a positive single numeric.")
   }
-  
+
   if (!is.null(group_by) &&
-      (!group_by %in% names(colData(object)))) { 
+      (!group_by %in% names(colData(object)))) {
     stop("'group_by' not in 'colData(object)'.")
   }
-  
+
   if (length(name) != 1 | !is.character(name)) {
     stop("'name' has to be a single character.")
   }
-  
+
   if (length(cluster_fun) != 1 | !is.character(cluster_fun)) {
     stop("'cluster_fun' has to be a single character.")
   }
-} 
+}
 

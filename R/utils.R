@@ -129,14 +129,14 @@
                                                 extract_imagemetadata_from)),
                           show_col_types = FALSE)
     cur_img_meta$sample_id <- sub("\\.[^.]*$", "", cur_img_meta$image)
-    
-    cur_df <- as(left_join(x = as.data.frame(colData(object)), 
+
+    cur_df <- as(left_join(x = as.data.frame(colData(object)),
                            y = cur_img_meta[,-1],
                            by = "sample_id"), "DataFrame")
-    
+
     if (!all.equal(paste(cur_df[["sample_id"]], cur_df[["ObjectNumber"]]),
                    paste(object[["sample_id"]], object[["ObjectNumber"]]))) {
-        stop("Order of cells do not match")    
+        stop("Order of cells do not match")
     }
 
     colData(object) <- cur_df
@@ -285,16 +285,16 @@
                                                 extract_imagemetadata_from)),
                           show_col_types = FALSE)
     cur_img_meta$sample_id <- as.character(cur_img_meta[[extract_imgid_from]])
-    
-    cur_df <- as(left_join(x = as.data.frame(colData(object)), 
+
+    cur_df <- as(left_join(x = as.data.frame(colData(object)),
                            y = cur_img_meta,
                            by = "sample_id"), "DataFrame")
-    
+
     if (!all.equal(paste(cur_df[["sample_id"]], cur_df[[extract_cellid_from]]),
                    paste(object[["sample_id"]], object[[extract_cellid_from]]))) {
-        stop("Order of cells do not match")    
+        stop("Order of cells do not match")
     }
-    
+
     colData(object) <- cur_df
 
     return(object)
@@ -350,7 +350,7 @@
     if (!is.null(node_shape_by)) {
         nodes[,node_shape_by] <- as.character(nodes[,node_shape_by])
     }
-    
+
     nodes <- nodes[,unique(colnames(nodes)), drop = FALSE]
 
     return(nodes)
@@ -474,7 +474,7 @@
 }
 
 # Post process the plots
-#' @importFrom ggplot2 ggtitle scale_x_reverse scale_y_reverse
+#' @importFrom ggplot2 ggtitle scale_x_reverse scale_y_reverse coord_fixed
 #' @importFrom viridis scale_color_viridis
 .postProcessPlot <- function(p, object, img_id, nrows, ncols, node_color_by,
                              node_color_fix,
@@ -529,9 +529,22 @@
     if (flip_y) {
         p <- p + scale_y_reverse()
     }
-    
+
+    # Fix the aspect ratio to match the physical dimensions of the image
     if (!is.null(aspect_ratio)) {
-        p <- p + theme(aspect.ratio = aspect_ratio)
+        if (scales == "fixed") {
+            if (aspect_ratio == "auto") {
+                p <- p + coord_fixed()
+            } else {
+                p <- p + coord_fixed(ratio = aspect_ratio)
+            }
+        } else {
+            if (aspect_ratio == "auto") {
+                p <- p + theme(aspect.ratio = 1)
+            } else {
+                p <- p + theme(aspect.ratio = aspect_ratio)
+            }
+        }
     }
 
     return(p)
@@ -552,7 +565,7 @@
 
     cur_meta <- metadata(object)
     metadata(object) <- list()
-    
+
     cur_intmeta <- int_metadata(object)
 
     cur_out <- bplapply(
@@ -638,7 +651,7 @@
     cur_out <- do.call("cbind", cur_out)
     metadata(cur_out) <- cur_meta
     int_metadata(cur_out) <- cur_intmeta
-    
+
     return(cur_out)
 
 
@@ -857,11 +870,11 @@
                         function(x){
 
                             label_perm <- cur_lab_table[ ,
-                                                         .(label=sample(label), 
+                                                         .(label=sample(label),
                                                            index = index), by=group_by]
-                            
+
                             setorder(label_perm, "index")
-                            
+
                             cur_perm <- .prepare_table(object, group_by,
                                                        label_perm$label, colPairName)
 
@@ -913,8 +926,8 @@
     dat_stat[, p := p_gt * interaction + p_lt * (!interaction)]
     dat_stat[, sig := p < p_thres]
     dat_stat[, sigval := as.integer(sig) * sign(interaction - 0.5)]
-    
-    # In corner cases, the levels of the factors can be different and the 
+
+    # In corner cases, the levels of the factors can be different and the
     # ordering is incorrect
     dat_baseline$group_by <- as.character(dat_baseline$group_by)
     dat_baseline$from_label <- as.character(dat_baseline$from_label)
@@ -923,25 +936,25 @@
     dat_stat$group_by <- as.character(dat_stat$group_by)
     dat_stat$from_label <- as.character(dat_stat$from_label)
     dat_stat$to_label <- as.character(dat_stat$to_label)
-    
+
     setorder(dat_stat, "group_by", "from_label", "to_label")
     setorder(dat_baseline, "group_by", "from_label", "to_label")
-    
+
     stopifnot(all.equal(paste(dat_stat$group_by, dat_stat$from_label, dat_stat$to_label),
                         paste(dat_baseline$group_by, dat_baseline$from_label, dat_baseline$to_label)))
-    
+
     if (return_samples) {
-        dat_perm <- dcast.data.table(dat_perm[,c("from_label", "to_label", "group_by", "iter", "ct_perm")], 
+        dat_perm <- dcast.data.table(dat_perm[,c("from_label", "to_label", "group_by", "iter", "ct_perm")],
                           from_label + to_label + group_by ~ iter, value.var = "ct_perm")
-        
+
         dat_perm$group_by <- as.character(dat_perm$group_by)
         dat_perm$from_label <- as.character(dat_perm$from_label)
         dat_perm$to_label <- as.character(dat_perm$to_label)
-        
+
         setorder(dat_perm, "group_by", "from_label", "to_label")
-    
+
         stopifnot(all.equal(paste(dat_perm$group_by, dat_perm$from_label, dat_perm$to_label),
-                            paste(dat_baseline$group_by, dat_baseline$from_label, dat_baseline$to_label))) 
+                            paste(dat_baseline$group_by, dat_baseline$from_label, dat_baseline$to_label)))
         cols <- as.character(seq_len(n_perm))
         dat_perm <- dat_perm[,cols,with=FALSE]
         colnames(dat_perm) <- paste0("iter_", colnames(dat_perm))
@@ -958,20 +971,20 @@
 #### SpatialContext helpers ####
 
 .createEdgeList <- function(list, list_length){
-  
+
   out <- lapply(list, function(x){
     list_options <- list[length(x) + 1 == list_length]
-    
+
     if (length(list_options) != 0) {
       list_select <- list_options[vapply(list_options,
                                          function(y){length(intersect(y,x)) == length(x)},
-                                         logical(1))]  
-      
-      if (length(list_select) != 0) { 
+                                         logical(1))]
+
+      if (length(list_select) != 0) {
         out <- data.frame("from" = paste(x, collapse = "_"),
-                          "to" = vapply(list_select, 
+                          "to" = vapply(list_select,
                                         paste, collapse = "_",
-                                        character(1)), 
+                                        character(1)),
                           row.names = NULL)
         return(out)
       } else {
@@ -981,9 +994,9 @@
       return(NULL)
     }
   })
-  
+
   edges <- do.call(rbind, out)
-  
+
   return(edges)
 }
 
@@ -997,84 +1010,84 @@
                                         node_color_fix,
                                         node_size_fix,
                                         node_label_repel,
-                                        node_label_color_by, 
-                                        node_label_color_fix,  
+                                        node_label_color_by,
+                                        node_label_color_fix,
                                         draw_edges,
                                         edge_color_fix){
-  
+
   node_color_by <- if (is.null(node_color_by)) NULL else node_color_by
   node_size_by <- if (is.null(node_size_by)) NULL else node_size_by
   node_label_color_by <- if (is.null(node_label_color_by)) NULL else node_label_color_by
-  
-  edge_color_fix <- if (is.null(edge_color_fix)) "black" else edge_color_fix 
-  node_color_fix <- if (is.null(node_color_fix)) "darkgrey" else node_color_fix 
-  node_size_fix <- if (is.null(node_size_fix)) "3" else node_size_fix 
+
+  edge_color_fix <- if (is.null(edge_color_fix)) "black" else edge_color_fix
+  node_color_fix <- if (is.null(node_color_fix)) "darkgrey" else node_color_fix
+  node_size_fix <- if (is.null(node_size_fix)) "3" else node_size_fix
   node_label_color_fix <- if (is.null(node_label_color_fix)) "black" else node_label_color_fix
-  
-  ## edge geom  
+
+  ## edge geom
   if (draw_edges) {
       cur_geom_edge <- geom_edge_link(color = edge_color_fix)
   } else {
       cur_geom_edge <- NULL
   }
-  
+
   ## node geom
   if (!is.null(node_color_by)){
-      color <- vertex_attr(graph, node_color_by) 
+      color <- vertex_attr(graph, node_color_by)
   } else {
       color <- as.character(node_color_fix)
   }
-  
+
   if (!is.null(node_size_by)) {
-      size <- vertex_attr(graph, node_size_by) 
+      size <- vertex_attr(graph, node_size_by)
   } else {
       size <- as.character(node_size_fix)
   }
-  
+
   if (!is.null(node_color_by)) {
       cur_geom_node <- geom_node_point(aes_(color = color, size = size))
   } else {
       cur_geom_node <- geom_node_point(aes_(size = size), color = color)
   }
-  
+
   ## node geom label
   if (!is.null(node_label_color_by)) {
-    color_label <- vertex_attr(graph, node_label_color_by) 
+    color_label <- vertex_attr(graph, node_label_color_by)
   } else {
     color_label <- as.character(node_label_color_fix)
   }
-  
+
   if(node_label_repel){
     if (!is.null(node_label_color_by)) {
-      cur_geom_node_label <- geom_node_label(aes_(color = color_label, 
-                                             label = vertex_attr(graph, "name")), 
+      cur_geom_node_label <- geom_node_label(aes_(color = color_label,
+                                             label = vertex_attr(graph, "name")),
                                              repel = TRUE, show.legend = FALSE)
     } else {
-      cur_geom_node_label <- geom_node_label(aes_(label = vertex_attr(graph, "name")), 
-                                             color = color_label, 
+      cur_geom_node_label <- geom_node_label(aes_(label = vertex_attr(graph, "name")),
+                                             color = color_label,
                                              repel = TRUE, show.legend = FALSE)
     }
   } else {
     cur_geom_node_label = NULL
-  }  
-  
+  }
+
   # specify vertical layout with sugiyama
   LO <- layout.sugiyama(graph, vertex_attr(graph,"length"))
-  
+
   p <- ggraph(graph, layout = LO$layout) +
       cur_geom_edge +
       cur_geom_node +
       cur_geom_node_label +
       theme_graph(base_family = "")
-  
+
   # legend post-processing
   if (!is.null(node_color_by)) {
     if (node_color_by %in% c("n_cells","n_group")) {
-      p <- p + guides(color = guide_colorbar(node_color_by), 
+      p <- p + guides(color = guide_colorbar(node_color_by),
                       size = guide_legend(node_size_by))
     } else {
       if (node_label_repel == FALSE) {
-        p <- p + guides(color = guide_legend(node_color_by), 
+        p <- p + guides(color = guide_legend(node_color_by),
                         size = guide_legend(node_size_by))
         } else {
         p <- p + guides(color = "none", size = guide_legend(as.character(node_size_by)))
@@ -1083,12 +1096,12 @@
   } else {
     p <- p + guides(color = "none", size = guide_legend(as.character(node_size_by)))
   }
-  
+
   # node size post-processing
   if (is.null(node_size_by)) {
     p <- p + guides(size = "none") + scale_size_manual(values = as.numeric(node_size_fix))
   }
-  
+
   return(p)
 }
 
@@ -1100,16 +1113,16 @@
 
 
 .detectCommunity_function <- function(cur_object,
-                                      colPairName, 
+                                      colPairName,
                                       cluster_fun){
-  
-  gr <- graph_from_data_frame(as.data.frame(colPair(cur_object, colPairName)), 
-                              directed = FALSE, 
+
+  gr <- graph_from_data_frame(as.data.frame(colPair(cur_object, colPairName)),
+                              directed = FALSE,
                               vertices = data.frame(index = seq_len(ncol(cur_object))))
-  
+
   cluster_function <- getFromNamespace(paste0("cluster_",cluster_fun), ns = "igraph")
-  
+
   cl_comm <- cluster_function(gr)
-  
+
   return(cl_comm)
 }
