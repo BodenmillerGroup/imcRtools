@@ -19,7 +19,7 @@ in form of edges between points."><!-- mathjax --><script src="https://cdnjs.clo
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.7.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.7.3</span>
       </span>
     </div>
 
@@ -83,7 +83,7 @@ in form of edges between points.</p>
 <span>  scales <span class="op">=</span> <span class="st">"fixed"</span>,</span>
 <span>  flip_x <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  flip_y <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  aspect_ratio <span class="op">=</span> <span class="fl">1</span></span>
+<span>  aspect_ratio <span class="op">=</span> <span class="st">"auto"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -211,9 +211,12 @@ all images. Defaults to "fixed" to match physical units on the x- and y-axis.</p
 
 
 <dt>aspect_ratio</dt>
-<dd><p>relative ratio between the physical units of the x and y 
-axis (defaults to 1). Ignore setting the aspect ratio with 
-<code>aspect_ratio = NULL</code>.</p></dd>
+<dd><p>single numeric, "auto" or NULL to define the relative
+ratio between the physical units of the x and y axis. If <code>"auto"</code>
+(default), the physical units match between the x and y axis if
+<code>scales = "fixed"</code>. If <code>scales = "free"</code>, the default aspect
+ratio is set to 1. Ignore setting the aspect ratio with <code>aspect_ratio
+= NULL</code>.</p></dd>
 
 </dl></div>
     <div id="value">
