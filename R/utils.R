@@ -474,7 +474,7 @@
 }
 
 # Post process the plots
-#' @importFrom ggplot2 ggtitle scale_x_reverse scale_y_reverse
+#' @importFrom ggplot2 ggtitle scale_x_reverse scale_y_reverse coord_fixed
 #' @importFrom viridis scale_color_viridis
 .postProcessPlot <- function(p, object, img_id, nrows, ncols, node_color_by,
                              node_color_fix,
@@ -530,8 +530,21 @@
         p <- p + scale_y_reverse()
     }
     
+    # Fix the aspect ratio to match the physical dimensions of the image
     if (!is.null(aspect_ratio)) {
-        p <- p + theme(aspect.ratio = aspect_ratio)
+        if (scales == "fixed") {
+            if (aspect_ratio == "auto") {
+                p <- p + coord_fixed()
+            } else {
+                p <- p + coord_fixed(ratio = aspect_ratio)
+            }
+        } else {
+            if (aspect_ratio == "auto") {
+                p <- p + theme(aspect.ratio = 1)
+            } else {
+                p <- p + theme(aspect.ratio = aspect_ratio)
+            }
+        }
     }
 
     return(p)
