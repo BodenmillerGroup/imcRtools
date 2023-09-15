@@ -17,8 +17,8 @@ Its official package page can be found here: [https://bioconductor.org/packages/
 
 | Bioc branch | Checks |
 |:-----------:|:------:|
-| Release     |[![build-check-release](https://github.com/BodenmillerGroup/imcRtools/actions/workflows/build-checks-release.yml/badge.svg?branch=master)](https://github.com/BodenmillerGroup/imcRtools/actions/workflows/build-checks-release.yml)|
-| Devel       |[![build-check-devel](https://github.com/BodenmillerGroup/imcRtools/actions/workflows/build-checks-devel.yml/badge.svg?branch=master)](https://github.com/BodenmillerGroup/imcRtools/actions/workflows/build-checks-devel.yml)|
+| Release     |[![build-check-release](https://github.com/BodenmillerGroup/imcRtools/actions/workflows/build-checks-release.yml/badge.svg?branch=devel)](https://github.com/BodenmillerGroup/imcRtools/actions/workflows/build-checks-release.yml)|
+| Devel       |[![build-check-devel](https://github.com/BodenmillerGroup/imcRtools/actions/workflows/build-checks-devel.yml/badge.svg?branch=devel)](https://github.com/BodenmillerGroup/imcRtools/actions/workflows/build-checks-devel.yml)|
 
 ## Introduction
 
