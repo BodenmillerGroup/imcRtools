@@ -44,7 +44,7 @@ show_cpout_features <- function(path,
     }
     
     cur_features <- vroom(file.path(path, eval(parse(text = display))), 
-                            col_types = cols(), progress = FALSE)
+                          show_col_types = FALSE, progress = FALSE)
     
     datatable(cur_features)
 }

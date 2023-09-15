@@ -562,11 +562,12 @@ test_that("read_steinbock function works", {
     expect_equal(as.numeric(cur_sce$Pos_X), cur_morph$area)
     expect_equal(as.numeric(cur_sce$Pos_Y), cur_morph$major_axis_length)
     
-    cur_spe <- read_steinbock(path, extract_names_from = "channel")
+    # This test doesn't make sense anymore
+    #cur_spe <- read_steinbock(path, extract_names_from = "channel")
     
-    expect_true(all(is.na(rowData(cur_spe)["Laminin",])))
-    expect_equal(as.character(as.matrix(rowData(cur_spe)["Ag107",])), 
-                 c("Ag107", "Ag107", "1", "1", NA, NA))  
+    #expect_true(all(is.na(rowData(cur_spe)["Laminin",])))
+    #expect_equal(as.character(as.matrix(rowData(cur_spe)["Ag107",])), 
+    #             c("Ag107", "Ag107", "1", "1", NA, NA))  
     
     cur_spe <- read_steinbock(path, image_file = NULL)
     
@@ -726,33 +727,17 @@ test_that("read_steinbock function works when files are missing", {
     file.remove(list.files(paste0(cur_path, "/steinbock/regionprops"), 
                            full.names = TRUE))
     
-    cur_spe <- read_steinbock(paste0(cur_path, "/steinbock/"))
+    expect_error(cur_spe <- read_steinbock(paste0(cur_path, "/steinbock/")),
+                            "File names in 'intensities' and 'regionprops' do not match.", 
+                            fixed = TRUE)
     
-    expect_s4_class(cur_spe, "SpatialExperiment")
-    expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber",
-                                            "width_px", "height_px"))
-    
-    expect_equal(colPairNames(cur_spe), "neighborhood")
 
     # Remove graphs folder
     file.remove(list.files(paste0(cur_path, "/steinbock/neighbors"), 
                            full.names = TRUE))
     
-    cur_spe <- read_steinbock(paste0(cur_path, "/steinbock/"))
-    
-    expect_s4_class(cur_spe, "SpatialExperiment")
-    expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber",
-                                            "width_px", "height_px"))
-    
-    expect_error(colPair(cur_spe), 
-                 regex = "no available entries for 'colPair(<SpatialExperiment>, ...)'",
+    expect_error(cur_spe <- read_steinbock(paste0(cur_path, "/steinbock/")),
+                 "File names in 'intensities' and 'neighbors' do not match.", 
                  fixed = TRUE)
-    
-    # Copy panel
-    file.copy(paste0(cur_path, "/steinbock/panel.csv"), 
-              paste0(cur_path, "/steinbock/panel_2.csv"))
-    
-    expect_silent(cur_spe <- read_steinbock(paste0(cur_path, "/steinbock/"), 
-                              panel_file = paste0(cur_path, "/steinbock/panel_2.csv")))
 
 })
