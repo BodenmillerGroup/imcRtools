@@ -15,7 +15,12 @@
     cur_out <-  bplapply(seq_along(x),
                          function(y){
                              cur_int <- vroom(x[y], progress = FALSE,
-                                              col_types = cols())
+                                              show_col_types = FALSE)
+
+                             if (nrow(cur_int) == 0) {
+                               stop("No cells detected in ", basename(x[y]))
+                             }
+
                              cur_counts <- cur_int %>% select(-all_of(cell_id))
 
                              cur_name <- sub("\\.[^.]*$", "", basename(x[y]))
@@ -50,16 +55,16 @@
                                                     pattern = paste0("^", cur_sample, ".csv", "$"),
                                                     full.names = TRUE)
 
-                             if (length(cur_file) == 0) {
-                                 return(y)
-                             }
-
                              cur_props <- vroom(cur_file,
                                                 progress = FALSE,
-                                                col_types = cols()) %>%
+                                                show_col_types = FALSE) %>%
                                  as.data.frame()
-                             rownames(cur_props) <- cur_props[[cell_id]]
-                             cur_props <- cur_props[as.character(y$ObjectNumber),]
+
+                             if (!identical(cur_props[[cell_id]], y$ObjectNumber)) {
+                               stop("Object IDs do not match between intensities ",
+                                    "and regionprobs for file '", basename(cur_file),
+                                    "'.")
+                             }
 
                              if (return_as == "spe") {
                                  spatialCoords(y) <- matrix(c(cur_props[[coords[1]]],
@@ -96,14 +101,22 @@
                                                     pattern = paste0("^", cur_sample, ".csv", "$"),
                                                     full.names = TRUE)
 
-                             if (length(cur_file) == 0) {
-                                 return(y)
-                             }
-
                              cur_graphs <- vroom(cur_file,
                                                  progress = FALSE,
-                                                 col_types = cols()) %>%
+                                                 show_col_types = FALSE) %>%
                                  as.data.frame()
+
+                             if (any(!cur_graphs[,1] %in% y$ObjectNumber)) {
+                               stop("Object IDs do not match between intensities ",
+                                    "and graphs for file '", basename(cur_file),
+                                    "'.")
+                             }
+
+                             if (any(!cur_graphs[,2] %in% y$ObjectNumber)) {
+                               stop("Object IDs do not match between intensities ",
+                                    "and graphs for file '", basename(cur_file),
+                                    "'.")
+                             }
 
                              cur_hits <- SelfHits(from = match(cur_graphs[,1],
                                                                 y$ObjectNumber),
@@ -150,11 +163,11 @@
         if (file.exists(file.path(path, panel))) {
             cur_panel <- vroom(file.path(path, panel),
                                progress = FALSE,
-                               col_types = cols())
+                               show_col_types = FALSE)
         } else if (file.exists(panel)) {
             cur_panel <- vroom(panel,
                                progress = FALSE,
-                               col_types = cols())
+                               show_col_types = FALSE)
         } else {
             warning("'panel_file' does not exist.")
             return(x)
@@ -165,6 +178,8 @@
         cur_ind <- match(rownames(x), cur_panel[,extract_names_from])
 
         cur_panel <- cur_panel[cur_ind,]
+
+        stopifnot(identical(rownames(x), cur_panel[,extract_names_from]))
 
         rowData(x) <- cur_panel
     }

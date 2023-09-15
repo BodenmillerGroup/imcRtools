@@ -174,6 +174,39 @@
         stop("'intensities_folder' doesn't exist.")
     }
 
+  # Check if any files can be read in
+  all_files <- list.files(file.path(path, intensities_folder),
+                          pattern =  pattern, full.names = TRUE)
+
+  if (length(all_files) == 0) {
+    stop("No files were read in.")
+  }
+
+  # Check cell_id
+  cur_file <- vroom(all_files[1],
+                    progress = FALSE,
+                    show_col_types = FALSE)
+
+  if (length(cell_id) != 1 | !is.character(cell_id)) {
+    stop("'extract_cellid_from' must be a single string.")
+  }
+
+  if (!cell_id %in% colnames(cur_file)) {
+    stop("'extract_cellid_from' not in intensities files.")
+  }
+
+  cur_int <- lapply(all_files, function(x){
+    x <- vroom(x, n_max = 0, show_col_types = FALSE)
+    return(colnames(x))
+  })
+
+  if (length(unique(cur_int)) != 1) {
+    stop("'colnames' of files in '", intensities_folder, "' do not match.")
+  }
+
+  all_int <- list.files(file.path(path, intensities_folder),
+                        pattern =  pattern, full.names = FALSE)
+
     if (!is.null(graphs_folder)) {
 
         if (length(graphs_folder) != 1 | !is.character(graphs_folder)) {
@@ -183,6 +216,26 @@
         if (!dir.exists(file.path(path, graphs_folder))) {
             stop("'graphs_folder' doesn't exist.")
         }
+
+      all_graph <- list.files(file.path(path, graphs_folder),
+                              pattern =  pattern, full.names = FALSE)
+
+      if (!identical(all_int, all_graph)) {
+        stop("File names in '", intensities_folder, "' and '",
+             graphs_folder, "' do not match.")
+      }
+
+      all_files <- list.files(file.path(path, graphs_folder),
+                              pattern =  pattern, full.names = TRUE)
+
+      cur_graphs <- lapply(all_files, function(x){
+        x <- vroom(x, n_max = 0, show_col_types = FALSE)
+        return(colnames(x))
+      })
+
+      if (length(unique(cur_graphs)) != 1) {
+        stop("'colnames' of files in '", graphs_folder, "' do not match.")
+      }
 
     }
 
@@ -197,27 +250,14 @@
             stop("'regionprops_folder' doesn't exist.")
         }
 
-    }
+      all_region <- list.files(file.path(path, regionprops_folder),
+                               pattern =  pattern, full.names = FALSE)
 
-    # Check if any files can be read in
-    all_files <- list.files(file.path(path, intensities_folder),
-                            pattern =  pattern, full.names = TRUE)
+      if (!identical(all_int, all_region)) {
+        stop("File names in '", intensities_folder, "' and '",
+             regionprops_folder, "' do not match.")
+      }
 
-    if (length(all_files) == 0) {
-        stop("No files were read in.")
-    }
-
-    # Check cell_id
-    cur_file <- vroom(all_files[1],
-                        progress = FALSE,
-                        col_types = cols())
-
-    if (length(cell_id) != 1 | !is.character(cell_id)) {
-        stop("'extract_cellid_from' must be a single string.")
-    }
-
-    if (!cell_id %in% colnames(cur_file)) {
-        stop("'extract_cellid_from' not in intensities files.")
     }
 
     # Check coords
@@ -228,7 +268,7 @@
         if (length(all_files) > 0) {
             cur_file <- vroom(all_files[1],
                                 progress = FALSE,
-                                col_types = cols())
+                              show_col_types = FALSE)
 
             if (!all(is.character(coords))) {
                 stop("'extract_coords_from' must be characters.")
@@ -237,6 +277,15 @@
             if (!all(coords %in% colnames(cur_file))) {
                 stop("'coords' not in regionprops files.")
             }
+        }
+
+        cur_region <- lapply(all_files, function(x){
+          x <- vroom(x, n_max = 0, show_col_types = FALSE)
+          return(colnames(x))
+        })
+
+        if (length(unique(cur_region)) != 1) {
+          stop("'colnames' of files in '", regionprops_folder, "' do not match.")
         }
     }
 
@@ -255,10 +304,21 @@
         }
 
         cur_images_file <- vroom(file.path(path, image_file), progress = FALSE,
-                                    col_types = cols())
+                                 show_col_types = FALSE)
 
         if (!all(extract_imagemetadata_from %in% colnames(cur_images_file))) {
             stop("'extract_imagemetadata_from' not in images file.")
+        }
+
+        # Compare against intensity files
+        all_int <- list.files(file.path(path, intensities_folder),
+                              pattern =  pattern, full.names = FALSE)
+
+        cur_sample_id <- sub("\\.[^.]*$", "", all_int)
+
+        if (!all(cur_sample_id %in% sub("\\.[^.]*$", "", cur_images_file$image))) {
+          stop("Files found in '", intensities_folder,
+               "' do not match the 'image' entry in '", image_file, "'.")
         }
     }
 
@@ -271,11 +331,11 @@
         if (file.exists(file.path(path, panel))) {
             cur_panel <- vroom(file.path(path, panel),
                                 progress = FALSE,
-                                col_types = cols())
+                               show_col_types = FALSE)
         } else if (file.exists(panel)) {
             cur_panel <- vroom(panel,
                                 progress = FALSE,
-                                col_types = cols())
+                               show_col_types = FALSE)
         }
 
         if (exists("cur_panel")) {
@@ -369,11 +429,11 @@
         if (file.exists(file.path(path, panel_file))) {
             cur_panel <- vroom(file.path(path, panel_file),
                                 progress = FALSE,
-                                col_types = cols())
+                               show_col_types = FALSE)
         } else if (file.exists(panel_file)) {
             cur_panel <- vroom(panel_file,
                                 progress = FALSE,
-                                col_types = cols())
+                               show_col_types = FALSE)
         }
 
         if (exists("cur_panel")) {
@@ -395,7 +455,7 @@
 
     # Check object files
     cur_file <- vroom(file.path(path, object_file), n_max = 1,
-                      col_types = cols())
+                      show_col_types = FALSE)
 
     if (is.null(intensities)) {
         stop("'intensities' must be specified.")
@@ -478,7 +538,7 @@
 
     if (!is.null(image_file)) {
         cur_file <- vroom(file.path(path, image_file), n_max = 1,
-                          col_types = cols())
+                          show_col_types = FALSE)
 
         if (!is.null(extract_imagemetadata_from)) {
             if (!all(extract_imagemetadata_from %in% colnames(cur_file))) {
@@ -501,7 +561,7 @@
     # Check graph file
     if (!is.null(graph_file)) {
         cur_file <- vroom(file.path(path, graph_file), n_max = 1,
-                            col_types = cols())
+                          show_col_types = FALSE)
 
         if (is.null(extract_graphimageid_from)) {
             stop("'extract_graphimageid_from' must be specified.")
