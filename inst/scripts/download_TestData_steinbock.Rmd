@@ -20,7 +20,7 @@ Here, we will first download the output of the [steinbock](https://github.com/Bo
 For this, we an use the automatically generated Github assets.
 
 ```{r download-cpout}
-cur_url <- "https://github.com/BodenmillerGroup/TestData/releases/download/v1.0.7/210308_ImcTestData_steinbock.tar.gz"
+cur_url <- "https://github.com/BodenmillerGroup/TestData/releases/download/v1.0.10/210308_ImcTestData_steinbock.tar.gz"
 
 download.file(cur_url, "210308_ImcTestData_steinbock.tar.gz")
 untar("210308_ImcTestData_steinbock.tar.gz")
@@ -32,13 +32,13 @@ unlink("210308_ImcTestData_steinbock.tar.gz")
 For reading in the single-cell features, we will only need to copy the .csv files and the folders containing the individual measurements.
 
 ```{r copy-files, message=FALSE}
-files_of_interest <- c("cells.csv", "panel.csv", "steinbock.sh", "images.csv")
+files_of_interest <- c("panel.csv", "steinbock.sh", "images.csv")
 
 folders_of_interest <- c("neighbors", "intensities", "regionprops")
 
 lapply(folders_of_interest, function(x){
     dir.create(paste0("../extdata/mockData/steinbock/", x))
-    file.copy(list.files(paste0("datasets/210308_ImcTestData/steinbock/", x), 
+    file.copy(list.files(paste0("datasets/210308_ImcTestData/steinbock/", x, "_deepcell"), 
                          full.names = TRUE),
           paste0("../extdata/mockData/steinbock/", x), 
           overwrite = TRUE)
