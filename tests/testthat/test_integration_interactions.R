@@ -257,7 +257,12 @@ test_that("testInteractions gives same results as neighbouRhood", {
     expect_equal(cur_classic$group_by, classic_aggregation$group)
     expect_equal(cur_classic$from_label, classic_aggregation$FirstLabel)
     expect_equal(cur_classic$to_label, classic_aggregation$SecondLabel)
-    expect_equal(cur_classic$ct[!is.na(cur_classic$ct)], classic_aggregation$ct[!is.na(cur_classic$ct)])
+    
+    # There is one image where one cell is not connected to other cells
+    tmp_classic <- cur_classic[cur_classic$group_by != "1",]
+    tmp_aggregation <- classic_aggregation[classic_aggregation$group != "1",]
+    
+    expect_equal(tmp_classic$ct[!is.na(tmp_classic$ct)], tmp_aggregation$ct[!is.na(tmp_classic$ct)])
     expect_true(all(classic_aggregation$ct[is.na(cur_classic$ct)] == 0))
     
     patch_aggregation <- aggregate_classic_patch(labels_applied, patch_size = 3)

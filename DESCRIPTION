@@ -1,5 +1,5 @@
 Package: imcRtools
-Version: 1.7.5
+Version: 1.7.6
 Title: Methods for imaging mass cytometry data analysis
 Description: 
     This R package supports the handling and analysis of imaging mass cytometry 

@@ -201,3 +201,7 @@ Changes in version 1.7.5 (2023-09-14)
 + Stop allowing Object numbers to be different between intensities and regionprops
 + Stop allowing missing files in regionprops and neighbors 
 
+Changes in version 1.7.6 (2023-09-26)
+
++ Updated example data in "inst" to newest version
+
