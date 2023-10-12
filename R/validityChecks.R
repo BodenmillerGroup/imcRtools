@@ -959,7 +959,8 @@
     }
 }
 
-.valid.testInteractions.input <- function(iter, p_threshold, return_samples){
+.valid.testInteractions.input <- function(iter, p_threshold, return_samples,
+                                          tolerance, remove_unconnected){
     if (length(iter) != 1 | !is.numeric(iter)) {
         stop("'iter' must be a single positive numeric.")
     }
@@ -978,6 +979,18 @@
     
     if (length(return_samples) != 1 | !is.logical(return_samples)) {
         stop("'return_samples' must be a single logical.")
+    }
+    
+    if (length(tolerance) != 1 | !is.numeric(tolerance)) {
+        stop("'tolerance' must be a single numeric.")
+    }
+    
+    if (tolerance < 0) {
+        stop("'tolerance' must be larger than 0.")
+    }
+    
+    if (length(remove_unconnected) != 1 | !is.logical(remove_unconnected)) {
+        stop("'remove_unconnected' must be a single logical.")
     }
 }
 

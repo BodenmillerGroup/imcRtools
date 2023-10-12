@@ -205,3 +205,7 @@ Changes in version 1.7.6 (2023-09-26)
 
 + Updated example data in "inst" to newest version
 
+Changes in version 1.7.7 (2023-10-02)
+
++ Bug fix: in rare cases the testInteractions p-values were not correctly computed due to machine precision issues
+

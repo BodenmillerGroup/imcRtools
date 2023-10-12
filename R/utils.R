@@ -746,9 +746,9 @@
                                                   "to_label")]
 
     if (check_missing) {
-        dat_temp <- dat_temp[CJ(group_by = unique(dat_temp$group_by),
-                                from_label = as.factor(levels(dat_temp$from_label)),
-                                to_label = as.factor(levels(dat_temp$to_label))),
+        dat_temp <- dat_temp[CJ(group_by = unique(dat_table$group_by),
+                                from_label = as.factor(levels(dat_table$from_label)),
+                                to_label = as.factor(levels(dat_table$to_label))),
                              on = c("group_by", "from_label", "to_label")]
         ct <- from_label <- to_label <- NULL
         dat_temp[is.na(dat_temp$ct), ct := 0]
@@ -785,11 +785,11 @@
 
     total <- NULL
 
-    #dat_temp[,ct := ct/total]
+    dat_temp[,ct := ct/total]
 
     dat_temp <- dcast.data.table(dat_temp, "group_by + from_label ~ to_label",
                                  value.var = "ct",
-                                 fun.aggregate = mean,
+                                 fun.aggregate = sum,
                                  fill = 0, drop = FALSE)
 
     dat_temp <- melt.data.table(dat_temp, id.vars = c("group_by", "from_label"),
@@ -918,7 +918,8 @@
     return(cur_out)
 }
 
-.calc_p_vals<- function(dat_baseline, dat_perm, n_perm, p_thres, return_samples){
+.calc_p_vals<- function(dat_baseline, dat_perm, n_perm, p_thres, return_samples, 
+                        tolerance){
     dat_perm <- merge(dat_perm,
                       dat_baseline[, c("from_label", "to_label",
                                        "group_by", "ct")],
@@ -931,10 +932,12 @@
     dat_perm[, ':='(ct_perm = replace(ct_perm, is.na(ct_perm), 0),
                     ct_obs = replace(ct_obs, is.na(ct_obs), 0))]
 
+    # We introduced a more lenient way of checking equality to avoid issues
+    # with machine precision
     dat_stat <- dat_perm[ , .(ct = mean(ct_obs),
                               p_gt = ifelse(max(ct_obs) == 0, 1,
-                                            (sum(ct_perm >= ct_obs) + 1) / (n_perm + 1)),
-                              p_lt = (n_perm - sum(ct_perm > ct_obs) + 1) / (n_perm + 1)),
+                                            (sum((ct_perm - ct_obs) > -tolerance) + 1) / (n_perm + 1)),
+                              p_lt = (n_perm - sum((ct_perm - ct_obs) > tolerance) + 1) / (n_perm + 1)),
                           by=c("group_by", "from_label", "to_label")]
 
     dat_stat[, interaction := p_gt < p_lt]
