@@ -960,7 +960,7 @@
 }
 
 .valid.testInteractions.input <- function(iter, p_threshold, return_samples,
-                                          tolerance, remove_unconnected){
+                                          tolerance){
     if (length(iter) != 1 | !is.numeric(iter)) {
         stop("'iter' must be a single positive numeric.")
     }
@@ -987,10 +987,6 @@
     
     if (tolerance < 0) {
         stop("'tolerance' must be larger than 0.")
-    }
-    
-    if (length(remove_unconnected) != 1 | !is.logical(remove_unconnected)) {
-        stop("'remove_unconnected' must be a single logical.")
     }
 }
 

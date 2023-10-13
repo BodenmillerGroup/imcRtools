@@ -29,8 +29,6 @@
 #' @param tolerance single numeric larger than 0. This parameter defines the
 #' difference between the permuted count and the actual counts at which both
 #' are regarded as equal. Default taken from \code{all.equal}.
-#' @param remove_unconnected single logical indicating if cells that don't have 
-#' any neighbors should be removed before testing. Default \code{FALSE}.
 #' @param BPPARAM parameters for parallelized processing. 
 #'
 #' @section Counting and summarizing cell-cell interactions:
@@ -73,13 +71,6 @@
 #' Based on these empirical p-values, the \code{interaction} score (attraction
 #' or avoidance), overall \code{p} value and significance by comparison to
 #' \code{p_treshold} (\code{sig} and \code{sigval}) are derived.
-#' 
-#' @section Symmetry of interaction testing results: 
-#' From tests we observed that p-values and therefore sigificance values
-#' are symmetric if (i) a symmertic graph is used (e.g., an expansion graph)
-#' and (ii) if all cells are part of the graph. To achieve symmetric results,
-#' unconnected cells can be removed prior to testing via setting 
-#' \code{remove_unconnected = TRUE}.
 #' 
 #' @return a DataFrame containing one row per \code{group_by} entry and unique
 #' \code{label} entry combination (\code{from_label}, \code{to_label}). The
@@ -174,7 +165,6 @@ testInteractions <- function(object,
                                 p_threshold = 0.01,
                                 return_samples = FALSE,
                                 tolerance = sqrt(.Machine$double.eps),
-                                remove_unconnected = FALSE,
                                 BPPARAM = SerialParam()){
 
     # Input check
@@ -182,17 +172,7 @@ testInteractions <- function(object,
     .valid.countInteractions.input(object, group_by, label, method,
                                         patch_size, colPairName)
     .valid.testInteractions.input(iter, p_threshold, return_samples, 
-                                  tolerance, remove_unconnected)
-    
-    # Remove cells that are not part of the graph
-    if (remove_unconnected) {
-        cur_ids <- seq_len(ncol(object))
-        cur_cells <- cur_ids[!(cur_ids %in% from(colPair(object, colPairName)))]
-        
-        if (length(cur_cells) > 0) {
-            object <- object[,-cur_cells]
-        }
-    }
+                                  tolerance)
     
     # Re-level group_by label
     if(is.factor(colData(object)[[group_by]])) {
