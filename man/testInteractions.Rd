@@ -14,6 +14,7 @@ testInteractions(
   iter = 1000,
   p_threshold = 0.01,
   return_samples = FALSE,
+  tolerance = sqrt(.Machine$double.eps),
   BPPARAM = SerialParam()
 )
 }
@@ -47,6 +48,10 @@ enriched or depleted per group.}
 
 \item{return_samples}{single logical indicating if the permuted interaction
 counts of all iterations should be returned.}
+
+\item{tolerance}{single numeric larger than 0. This parameter defines the
+difference between the permuted count and the actual counts at which both
+are regarded as equal. Default taken from \code{all.equal}.}
 
 \item{BPPARAM}{parameters for parallelized processing.}
 }
