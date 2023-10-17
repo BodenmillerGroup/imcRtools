@@ -26,6 +26,9 @@
 #' enriched or depleted per group.
 #' @param return_samples single logical indicating if the permuted interaction
 #' counts of all iterations should be returned.
+#' @param tolerance single numeric larger than 0. This parameter defines the
+#' difference between the permuted count and the actual counts at which both
+#' are regarded as equal. Default taken from \code{all.equal}.
 #' @param BPPARAM parameters for parallelized processing. 
 #'
 #' @section Counting and summarizing cell-cell interactions:
@@ -161,13 +164,15 @@ testInteractions <- function(object,
                                 iter = 1000,
                                 p_threshold = 0.01,
                                 return_samples = FALSE,
+                                tolerance = sqrt(.Machine$double.eps),
                                 BPPARAM = SerialParam()){
 
     # Input check
     method <- match.arg(method)
     .valid.countInteractions.input(object, group_by, label, method,
                                         patch_size, colPairName)
-    .valid.testInteractions.input(iter, p_threshold, return_samples)
+    .valid.testInteractions.input(iter, p_threshold, return_samples, 
+                                  tolerance)
     
     # Re-level group_by label
     if(is.factor(colData(object)[[group_by]])) {
@@ -197,7 +202,8 @@ testInteractions <- function(object,
     
     cur_out <- .calc_p_vals(cur_count, cur_out, n_perm = iter, 
                             p_thres = p_threshold, 
-                            return_samples = return_samples)
+                            return_samples = return_samples,
+                            tolerance = tolerance)
     
     setorder(cur_out, "group_by", "from_label", "to_label")
     
