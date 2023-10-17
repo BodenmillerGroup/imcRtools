@@ -19,7 +19,7 @@ from random permutations."><!-- mathjax --><script src="https://cdnjs.cloudflare
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.7.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.7.7</span>
       </span>
     </div>
 
@@ -67,6 +67,7 @@ from random permutations.</p>
 <span>  iter <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>  p_threshold <span class="op">=</span> <span class="fl">0.01</span>,</span>
 <span>  return_samples <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  tolerance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span><span class="op">)</span>,</span>
 <span>  BPPARAM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SerialParam-class.html" class="external-link">SerialParam</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -119,6 +120,12 @@ enriched or depleted per group.</p></dd>
 <dt>return_samples</dt>
 <dd><p>single logical indicating if the permuted interaction
 counts of all iterations should be returned.</p></dd>
+
+
+<dt>tolerance</dt>
+<dd><p>single numeric larger than 0. This parameter defines the
+difference between the permuted count and the actual counts at which both
+are regarded as equal. Default taken from <code>all.equal</code>.</p></dd>
 
 
 <dt>BPPARAM</dt>
