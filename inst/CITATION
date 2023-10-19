@@ -4,9 +4,13 @@ citHeader("To cite the package 'imcRtools' in publications use:")
 citEntry(entry="article",
          title = "An end-to-end workflow for multiplexed image processing and analysis",
          author = personList(as.person("Jonas Windhager"),
+                             as.person("Vito R.T. Zanotelli"),
+                             as.person("Daniel Schulz"),
+                             as.person("Lasse Meyer"),
+                             as.person("Michelle Daniel"),
                              as.person("Bernd Bodenmiller"),
                              as.person("Nils Eling")),
-         year = 2021,
-         journal = "bioRxiv",
-	 doi = "10.1101/2021.11.12.468357",
-         textVersion = "Jonas Windhager, Bernd Bodenmiller, Nils Eling (2021). An end-to-end workflow for multiplexed image processing and analysis. bioRxiv, doi: 10.1101/2021.11.12.468357")
+         year = 2023,
+         journal = "Nature Protocols",
+	 doi = "10.1038/s41596-023-00881-0",
+         textVersion = "Windhager, J., Zanotelli, V.R.T., Schulz, D. et al. An end-to-end workflow for multiplexed image processing and analysis. Nat Protoc (2023). https://doi.org/10.1038/s41596-023-00881-0")
