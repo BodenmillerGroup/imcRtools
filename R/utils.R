@@ -70,7 +70,7 @@
                                  spatialCoords(y) <- matrix(c(cur_props[[coords[1]]],
                                                               cur_props[[coords[2]]]),
                                                             ncol = 2, byrow = FALSE,
-                                                            dimnames = list(as.character(y$ObjectNumber),
+                                                            dimnames = list(NULL,
                                                                             c("Pos_X", "Pos_Y")))
                                  colData(y) <- cbind(colData(y),
                                                      cur_props[,!colnames(cur_props) %in%
@@ -257,7 +257,7 @@
                 cur_counts[[extract_coords_from[1]]],
                 cur_counts[[extract_coords_from[2]]]),
                 ncol = 2, byrow = FALSE,
-                dimnames = list(as.character(object$ObjectNumber),
+                dimnames = list(NULL,
                                 c("Pos_X", "Pos_Y")))
         }
 
