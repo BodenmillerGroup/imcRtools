@@ -423,9 +423,9 @@
     if (is.null(node_color_by)) {node_mapping$colour <- NULL}
     if (is.null(node_size_by)) {node_mapping$size <- NULL}
     if (is.null(node_shape_by)) {node_mapping$shape <- NULL}
-    if (!is.null(node_color_fix)) {node_mapping$colour <- node_color_fix}
-    if (!is.null(node_size_fix)) {node_mapping$size <- node_size_fix}
-    if (!is.null(node_shape_fix)) {node_mapping$shape <- node_shape_fix}
+    if (!is.null(node_color_fix)) {node_mapping$colour <- as.character(node_color_fix)}
+    if (!is.null(node_size_fix)) {node_mapping$size <- as.character(node_size_fix)}
+    if (!is.null(node_shape_fix)) {node_mapping$shape <- as.character(node_shape_fix)}
 
     if (draw_edges) {
         
@@ -433,8 +433,8 @@
                             edge_width = .data[[edge_width_by]])
         if (is.null(edge_color_by)) {edge_mapping$edge_colour <- NULL}
         if (is.null(edge_width_by)) {edge_mapping$edge_width <- NULL}
-        if (!is.null(edge_color_fix)) {edge_mapping$edge_colour <- edge_color_fix}
-        if (!is.null(edge_width_fix)) {edge_mapping$edge_width <- edge_width_fix}
+        if (!is.null(edge_color_fix)) {edge_mapping$edge_colour <- as.character(edge_color_fix)}
+        if (!is.null(edge_width_fix)) {edge_mapping$edge_width <- as.character(edge_width_fix)}
         
         if (!is.null(arrow)) {
 
