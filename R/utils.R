@@ -1065,11 +1065,11 @@
   
   if(node_label_repel){
     if (!is.null(node_label_color_by)) {
-      cur_geom_node_label <- geom_node_label(aes_(color = color_label, 
+      cur_geom_node_label <- geom_node_label(aes(color = color_label, 
                                              label = vertex_attr(graph, "name")), 
                                              repel = TRUE, show.legend = FALSE)
     } else {
-      cur_geom_node_label <- geom_node_label(aes_(label = vertex_attr(graph, "name")), 
+      cur_geom_node_label <- geom_node_label(aes(label = vertex_attr(graph, "name")), 
                                              color = color_label, 
                                              repel = TRUE, show.legend = FALSE)
     }
