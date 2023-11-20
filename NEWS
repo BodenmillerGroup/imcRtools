@@ -213,3 +213,7 @@ Changes in version 1.7.8 (2023-10-19)
 
 + spatialCoords are not initialised with rownames anymore
 
+Changes in version 1.9.1 (2023-11-20)
+
++ Switched from aes_ to .data
+

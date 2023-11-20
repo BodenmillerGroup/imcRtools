@@ -133,8 +133,9 @@
 #' 
 #' @import ggraph
 #' @importFrom tidygraph tbl_graph  
-#' @importFrom ggplot2 aes_ theme element_text element_blank scale_color_manual
+#' @importFrom ggplot2 theme element_text element_blank scale_color_manual
 #' scale_size_manual scale_shape_manual
+#' @importFrom rlang .data
 #' @export
 plotSpatial <- function(object,
                         img_id,
