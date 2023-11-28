@@ -1074,7 +1074,7 @@
                                              repel = TRUE, show.legend = FALSE)
     }
   } else {
-    cur_geom_node_label = NULL
+    cur_geom_node_label <- NULL
   }  
   
   # specify vertical layout with sugiyama
