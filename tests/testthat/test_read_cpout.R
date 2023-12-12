@@ -5,6 +5,8 @@ test_that("read_cpout function works.", {
     # SpatialExperiment
     cur_spe <- read_cpout(path, graph_file = "Object_relationships.csv")
     
+    expect_equal(colnames(cur_spe), paste0(cur_spe$sample_id, "_", cur_spe$ObjectNumber))
+    
     expect_s4_class(cur_spe, "SpatialExperiment")
     
     expect_equal(rownames(cur_spe), c("Ag107", "Pr141", "Sm147", "Eu153", "Yb172"))
@@ -25,7 +27,10 @@ test_that("read_cpout function works.", {
     image_file <- vroom::vroom(file.path(path, "Image.csv"))
     object_file <- dplyr::left_join(object_file, image_file, by = "ImageNumber")
     
-    expect_equal(counts(cur_spe), cur_counts * (2^16 - 1))
+    test1 <- counts(cur_spe)
+    colnames(test1) <- NULL
+    
+    expect_equal(test1, cur_counts * (2^16 - 1))
     expect_equal(counts(cur_spe)[1:10], c(0.108695652148605, 0.0217391304297211, 0, 0.0434782608594421, 
                                           0.739130434610516, 0, 0, 0, 0, 1.1999999997206))
     
@@ -68,6 +73,7 @@ test_that("read_cpout function works.", {
     
     # SingleCellExperiment
     cur_sce <- read_cpout(path, return_as = "sce", graph_file = "Object_relationships.csv")
+    expect_equal(colnames(cur_sce), paste0(cur_sce$sample_id, "_", cur_sce$ObjectNumber))
     
     expect_s4_class(cur_sce, "SingleCellExperiment")
     
@@ -89,7 +95,10 @@ test_that("read_cpout function works.", {
     image_file <- vroom::vroom(file.path(path, "Image.csv"))
     object_file <- dplyr::left_join(object_file, image_file, by = "ImageNumber")
     
-    expect_equal(counts(cur_sce), cur_counts * (2^16 - 1))
+    test1 <- counts(cur_sce)
+    colnames(test1) <- NULL
+    
+    expect_equal(test1, cur_counts * (2^16 - 1))
     expect_equal(counts(cur_sce)[1:10], c(0.108695652148605, 0.0217391304297211, 0, 0.0434782608594421, 
                                           0.739130434610516, 0, 0, 0, 0, 1.1999999997206))
     
@@ -146,7 +155,10 @@ test_that("read_cpout function works.", {
     cur_counts <- t(object_file[,grepl("MeanIntensity_FullStack", colnames(object_file))])
     rownames(cur_counts) <- rownames(cur_spe)
     
-    expect_equal(counts(cur_spe), cur_counts)
+    test1 <- counts(cur_spe)
+    colnames(test1) <- NULL
+    
+    expect_equal(test1, cur_counts)
     expect_equal(counts(cur_spe)[1:10], c(1.65858933621127e-06, 3.31717867242253e-07, 0, 6.63435734484507e-07, 
                                           1.12784074862366e-05, 0, 0, 0, 0, 1.83108262717724e-05))
     
@@ -200,7 +212,10 @@ test_that("read_cpout function works.", {
     cur_counts <- t(object_file[,grepl("MeanIntensity_FullStack", colnames(object_file))])
     rownames(cur_counts) <- rownames(cur_sce)
 
-    expect_equal(counts(cur_sce), cur_counts)
+    test1 <- counts(cur_sce)
+    colnames(test1) <- NULL
+    
+    expect_equal(test1, cur_counts)
     expect_equal(counts(cur_sce)[1:10], c(1.65858933621127e-06, 3.31717867242253e-07, 0, 6.63435734484507e-07, 
                                           1.12784074862366e-05, 0, 0, 0, 0, 1.83108262717724e-05))
     
@@ -239,7 +254,10 @@ test_that("read_cpout function works.", {
     cur_counts <- t(object_file[,grepl("MeanIntensity_FullStack", colnames(object_file))])
     rownames(cur_counts) <- rownames(cur_spe)
     
-    expect_equal(counts(cur_spe), cur_counts)
+    test1 <- counts(cur_spe)
+    colnames(test1) <- NULL
+    
+    expect_equal(test1, cur_counts)
     expect_equal(counts(cur_spe)[1:10], c(1.65858933621127e-06, 3.31717867242253e-07, 0, 6.63435734484507e-07, 
                                           1.12784074862366e-05, 0, 0, 0, 0, 1.83108262717724e-05))
     
@@ -281,7 +299,10 @@ test_that("read_cpout function works.", {
     image_file <- vroom::vroom(file.path(path, "Image.csv"))
     object_file <- dplyr::left_join(object_file, image_file, by = "ImageNumber")
     
-    expect_equal(counts(cur_spe), cur_counts * (2^16 - 1))
+    test1 <- counts(cur_spe)
+    colnames(test1) <- NULL
+    
+    expect_equal(test1, cur_counts * (2^16 - 1))
     expect_equal(counts(cur_spe)[1:10], c(0.108695652148605, 0.0217391304297211, 0, 0.0434782608594421, 
                                           0.739130434610516, 0, 0, 0, 0, 1.1999999997206))
     
@@ -322,7 +343,10 @@ test_that("read_cpout function works.", {
     image_file <- vroom::vroom(file.path(path, "Image.csv"))
     object_file <- dplyr::left_join(object_file, image_file, by = "ImageNumber")
     
-    expect_equal(counts(cur_spe), cur_counts * (2^16 - 1))
+    test1 <- counts(cur_spe)
+    colnames(test1) <- NULL
+    
+    expect_equal(test1, cur_counts * (2^16 - 1))
     expect_equal(counts(cur_spe)[1:10], c(0.108695652148605, 0.0217391304297211, 0, 0.0434782608594421, 
                                           0.739130434610516, 0, 0, 0, 0, 1.1999999997206))
     
@@ -357,7 +381,10 @@ test_that("read_cpout function works.", {
     image_file <- vroom::vroom(file.path(path, "Image.csv"))
     object_file <- merge(object_file, image_file, by = "ImageNumber", order = FALSE)
     
-    expect_equal(counts(cur_spe), cur_counts * (2^16 - 1))
+    test1 <- counts(cur_spe)
+    colnames(test1) <- NULL
+    
+    expect_equal(test1, cur_counts * (2^16 - 1))
     expect_equal(counts(cur_spe)[1:10], c(0, 0, 0, 0, 0,
                                           0, 0, 0, 0, 1))
     
