@@ -171,5 +171,8 @@ read_cpout <- function(path,
     
     object <- .add_panel(object, path, panel_file, extract_metal_from)
     
+    # Add colnames
+    colnames(object) <- paste0(object$sample_id, "_", object$ObjectNumber)
+    
     return(object)
 }

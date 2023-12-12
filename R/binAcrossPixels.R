@@ -54,8 +54,12 @@ binAcrossPixels <- function(object,
         stop("'statistic' must be 'sum', 'mean' or 'median'.")
     }
     
-    cur_split <- split(object[[spot_id]], f = object[[spot_id]])
-    cur_split <- lapply(cur_split, function(x){ceiling(seq_along(x)/bin_size)})
+    cur_split_tmp <- split(object[[spot_id]], f = object[[spot_id]])
+    cur_split <- lapply(cur_split_tmp, function(x){ceiling(seq_along(x)/bin_size)})
+    
+    if (!isTRUE(all.equal(unlist(cur_split_tmp), object[[spot_id]]))) {
+        stop("Spot IDs of pixels within 'object' are not ordered alphabetically.")
+    }
     
     cur_df <- DataFrame(spot_id = object[[spot_id]],
                         bin = unlist(cur_split))
