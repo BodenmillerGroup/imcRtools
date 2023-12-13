@@ -33,7 +33,7 @@ test_that("binAcrossPixels function works.", {
     dimnames(test2) <- NULL
     dimnames(test)  <- NULL
     
-    all.equal(test2, test)
+    expect_equal(test2, test)
     
     expect_silent(out <- binAcrossPixels(cur_sce, bin_size = 10, statistic = "mean"))
     
@@ -46,7 +46,7 @@ test_that("binAcrossPixels function works.", {
     dimnames(test2) <- NULL
     dimnames(test)  <- NULL
     
-    all.equal(test2, test)
+    expect_equal(test2, test)
     
     # Works
     expect_silent(out <- binAcrossPixels(cur_sce, bin_size = 2))
