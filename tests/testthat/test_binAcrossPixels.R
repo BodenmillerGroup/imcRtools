@@ -24,6 +24,30 @@ test_that("binAcrossPixels function works.", {
     expect_equal(counts(out)[,out$sample_id == "Dy164"][,1], rowSums(counts(cur_sce)[,cur_sce$sample_id == "Dy164"][,1:10]))
     expect_equal(counts(out)[,out$sample_id == "Dy164"][,2], rowSums(counts(cur_sce)[,cur_sce$sample_id == "Dy164"][,11:20]))
     
+    test <- aggregate(t(counts(cur_sce)), by = list(cur_sce$sample_id, rep(rep(1:10, each = 10), 4)), FUN = "sum")
+    test <- test[order(test$Group.1, test$Group.2),]
+    
+    test2 <- counts(out)
+    test <- t(as.matrix(test[,-c(1,2)]))
+    
+    dimnames(test2) <- NULL
+    dimnames(test)  <- NULL
+    
+    expect_equal(test2, test)
+    
+    expect_silent(out <- binAcrossPixels(cur_sce, bin_size = 10, statistic = "mean"))
+    
+    test <- aggregate(t(counts(cur_sce)), by = list(cur_sce$sample_id, rep(rep(1:10, each = 10), 4)), FUN = "mean")
+    test <- test[order(test$Group.1, test$Group.2),]
+    
+    test2 <- counts(out)
+    test <- t(as.matrix(test[,-c(1,2)]))
+    
+    dimnames(test2) <- NULL
+    dimnames(test)  <- NULL
+    
+    expect_equal(test2, test)
+    
     # Works
     expect_silent(out <- binAcrossPixels(cur_sce, bin_size = 2))
     expect_s4_class(out, "SingleCellExperiment")
@@ -61,6 +85,26 @@ test_that("binAcrossPixels function works.", {
     expect_equal(counts(out)[,out$sample_id == "Dy164"][,1], rowMeans(counts(cur_sce)[,cur_sce$sample_id == "Dy164"][,1:5]))
     expect_equal(counts(out)[,out$sample_id == "Dy164"][,2], rowMeans(counts(cur_sce)[,cur_sce$sample_id == "Dy164"][,6:10]))
     
+    # Works
+    expect_silent(out <- binAcrossPixels(cur_sce, bin_size = 3))
+    expect_s4_class(out, "SingleCellExperiment")
+    
+    # colData are correct
+    expect_equal(out$sample_id, rep(c("Dy161", "Dy162", "Dy163", "Dy164"), each = 34))
+    expect_equal(out$spot_id, rep(c("Dy161", "Dy162", "Dy163", "Dy164"), each = 34))
+    expect_equal(as.numeric(out$bin), rep(1:34, 4))
+    expect_equal(as.numeric(out$ncells), rep(c(rep(3, 33), 1), 4))
+    
+    # rowData are correct
+    expect_equal(rowData(cur_sce), rowData(out))
+    
+    # Summarized counts are correct
+    expect_equal(counts(out)[,1], rowSums(counts(cur_sce)[,1:3]))
+    expect_equal(counts(out)[,2], rowSums(counts(cur_sce)[,4:6]))
+    expect_equal(counts(out)[,3], rowSums(counts(cur_sce)[,7:9]))
+    expect_equal(counts(out)[,4], rowSums(counts(cur_sce)[,10:12]))
+    expect_equal(counts(out)[,34], counts(cur_sce)[,100])    
+    
     # Error
     expect_error(binAcrossPixels("test"),
                  regexp = "'object' needs to be a SingleCellExperiment object.",
@@ -79,5 +123,11 @@ test_that("binAcrossPixels function works.", {
                  fixed = TRUE)
     expect_error(binAcrossPixels(cur_sce, bin_size = 10, statistic = "test"),
                  regexp = "'statistic' must be 'sum', 'mean' or 'median'.",
+                 fixed = TRUE)
+    
+    cur_sce <- cur_sce[,sample(ncol(cur_sce))]
+    
+    expect_error(binAcrossPixels(cur_sce, bin_size = 10),
+                 regexp = "Spot IDs of pixels within 'object' are not ordered alphabetically.",
                  fixed = TRUE)
 })

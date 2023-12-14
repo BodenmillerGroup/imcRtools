@@ -175,6 +175,6 @@ test_that("findBorderCells function works if cells are not ordered by image", {
     expect_silent(sce2  <- findBorderCells(sce2, img_id = "ImageNb", border_dist = 10))
     plotSpatial(sce2, img_id = "ImageNb", node_color_by = "border_cells")
     
-    all.equal(pancreasSCE$border_cells, sce2[,colnames(pancreasSCE)]$border_cells)
+    expect_equal(pancreasSCE$border_cells, sce2[,colnames(pancreasSCE)]$border_cells)
 
     })

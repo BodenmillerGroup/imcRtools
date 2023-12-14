@@ -4,6 +4,8 @@ test_that("read_steinbock function works", {
     # SpatialExperiment
     cur_spe <- read_steinbock(path)
     
+    expect_equal(colnames(cur_spe), paste0(cur_spe$sample_id, "_", cur_spe$ObjectNumber))
+    
     expect_s4_class(cur_spe, "SpatialExperiment")
     
     expect_equal(rownames(cur_spe), c("Ag107", "Cytokeratin 5", "Laminin", 
@@ -23,7 +25,10 @@ test_that("read_steinbock function works", {
     cur_counts <- lapply(cur_files, readr::read_csv, show_col_types = FALSE)
     cur_counts <- do.call("rbind", cur_counts)
     
-    expect_equal(counts(cur_spe), t(cur_counts[,-1]))
+    test1 <- counts(cur_spe)
+    colnames(test1) <- NULL
+    
+    expect_equal(test1, t(cur_counts[,-1]))
     expect_equal(counts(cur_spe)[1:10], c(0.0909090909090909, 0.181818181818182, 0.0909090909090909, 
                                           0.0909090909090909, 0.938306353308938, 0.181163804871695, 0, 
                                           0.142857142857143, 0.501448290688651, 1.00346943310329))
@@ -73,6 +78,8 @@ test_that("read_steinbock function works", {
     # SingleCellExperiment
     cur_sce <- read_steinbock(path, return_as = "sce")
     
+    expect_equal(colnames(cur_sce), paste0(cur_sce$sample_id, "_", cur_sce$ObjectNumber)) 
+    
     expect_s4_class(cur_sce, "SingleCellExperiment")
     
     expect_equal(rownames(cur_sce), c("Ag107", "Cytokeratin 5", "Laminin", 
@@ -91,7 +98,10 @@ test_that("read_steinbock function works", {
     cur_counts <- lapply(cur_files, readr::read_csv, show_col_types = FALSE)
     cur_counts <- do.call("rbind", cur_counts)
     
-    expect_equal(counts(cur_sce), t(cur_counts[,-1]))
+    test1 <- counts(cur_spe)
+    colnames(test1) <- NULL
+    
+    expect_equal(test1, t(cur_counts[,-1]))
     expect_equal(counts(cur_sce)[1:10], c(0.0909090909090909, 0.181818181818182, 0.0909090909090909, 
                                          0.0909090909090909, 0.938306353308938, 0.181163804871695, 0, 
                                          0.142857142857143, 0.501448290688651, 1.00346943310329))
@@ -152,7 +162,10 @@ test_that("read_steinbock function works", {
     cur_counts <- lapply(cur_files, readr::read_csv, show_col_types = FALSE)
     cur_counts <- do.call("rbind", cur_counts)
     
-    expect_equal(counts(cur_spe), t(cur_counts[,-1]))
+    test1 <- counts(cur_spe)
+    colnames(test1) <- NULL
+    
+    expect_equal(test1, t(cur_counts[,-1]))
     
     cur_files <- list.files(file.path(path, "regionprops"), full.names = TRUE)
     cur_morph <- lapply(cur_files, readr::read_csv, show_col_types = FALSE)
@@ -203,7 +216,10 @@ test_that("read_steinbock function works", {
     cur_counts <- lapply(cur_files, readr::read_csv, show_col_types = FALSE)
     cur_counts <- do.call("rbind", cur_counts)
     
-    expect_equal(counts(cur_sce), t(cur_counts[,-1]))
+    test1 <- counts(cur_sce)
+    colnames(test1) <- NULL
+    
+    expect_equal(test1, t(cur_counts[,-1]))
     
     cur_files <- list.files(file.path(path, "regionprops"), full.names = TRUE)
     cur_morph <- lapply(cur_files, readr::read_csv, show_col_types = FALSE)
@@ -239,7 +255,10 @@ test_that("read_steinbock function works", {
     cur_counts <- lapply(cur_files, readr::read_csv, show_col_types = FALSE)
     cur_counts <- do.call("rbind", cur_counts)
     
-    expect_equal(counts(cur_spe), t(cur_counts[,-1]))
+    test1 <- counts(cur_spe)
+    colnames(test1) <- NULL
+    
+    expect_equal(test1, t(cur_counts[,-1]))
     
     cur_files <- list.files(file.path(path, "regionprops"), full.names = TRUE)
     cur_morph <- lapply(cur_files, readr::read_csv, show_col_types = FALSE)
@@ -282,7 +301,10 @@ test_that("read_steinbock function works", {
     cur_counts <- lapply(cur_files, readr::read_csv, show_col_types = FALSE)
     cur_counts <- do.call("rbind", cur_counts)
     
-    expect_equal(counts(cur_sce), t(cur_counts[,-1]))
+    test1 <- counts(cur_sce)
+    colnames(test1) <- NULL
+    
+    expect_equal(test1, t(cur_counts[,-1]))
     
     cur_files <- list.files(file.path(path, "regionprops"), full.names = TRUE)
     cur_morph <- lapply(cur_files, readr::read_csv, show_col_types = FALSE)
@@ -321,7 +343,10 @@ test_that("read_steinbock function works", {
     cur_counts <- lapply(cur_files, readr::read_csv, show_col_types = FALSE)
     cur_counts <- do.call("rbind", cur_counts)
     
-    expect_equal(counts(cur_spe), t(cur_counts[,-1]))
+    test1 <- counts(cur_spe)
+    colnames(test1) <- NULL
+    
+    expect_equal(test1, t(cur_counts[,-1]))
     
     expect_equal(cur_spe$ObjectNumber, cur_counts$Object)
     
@@ -359,7 +384,10 @@ test_that("read_steinbock function works", {
     cur_counts <- lapply(cur_files, readr::read_csv, show_col_types = FALSE)
     cur_counts <- do.call("rbind", cur_counts)
     
-    expect_equal(counts(cur_sce), t(cur_counts[,-1]))
+    test1 <- counts(cur_sce)
+    colnames(test1) <- NULL
+    
+    expect_equal(test1, t(cur_counts[,-1]))
     
     cur_panel <- readr::read_csv(file.path(path, "panel.csv"), show_col_types = FALSE)
     expect_equal(rowData(cur_sce)$name, cur_panel$name)
@@ -372,6 +400,8 @@ test_that("read_steinbock function works", {
     expect_equal(length(colPairs(cur_sce)), 0)
     
     cur_spe <- read_steinbock(path, pattern = "mockData2")
+    
+    expect_equal(colnames(cur_spe), paste0(cur_spe$sample_id, "_", cur_spe$ObjectNumber))
     
     expect_s4_class(cur_spe, "SpatialExperiment")
     
@@ -391,7 +421,11 @@ test_that("read_steinbock function works", {
     cur_counts <- lapply(cur_files, readr::read_csv, show_col_types = FALSE)
     cur_counts <- do.call("rbind", cur_counts)
     
-    expect_equal(counts(cur_spe), t(cur_counts[,-1]))
+    test1 <- counts(cur_spe)
+    colnames(test1) <- NULL
+    
+    expect_equal(test1, t(cur_counts[,-1]))
+    
     expect_equal(counts(cur_spe)[1:10], c(0.399655099572807, 0.0344827586206896, 4.64201253035973, 6.50705560733532, 
                                           3.57779644892133, 0.428760413080454, 0.0945868939161301, 1.56471130624413, 
                                           8.0167475938797, 1.46797196567059))
@@ -455,7 +489,10 @@ test_that("read_steinbock function works", {
     cur_counts <- lapply(cur_files, readr::read_csv)
     cur_counts <- do.call("rbind", cur_counts)
     
-    expect_equal(counts(cur_sce), t(cur_counts[,-1]))
+    test1 <- counts(cur_sce)
+    colnames(test1) <- NULL
+    
+    expect_equal(test1, t(cur_counts[,-1]))
     
     cur_files <- list.files(file.path(path, "regionprops"), full.names = TRUE, pattern = "mockData2")
     cur_morph <- lapply(cur_files, readr::read_csv)
