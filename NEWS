@@ -219,3 +219,7 @@ Changes in version 1.9.1 (2023-11-20)
 + Initialise SPE and SCE objects with colnames
 + Additional test within binAcrossPixels
 
+Changes in version 1.9.2 (2023-12-14)
+
++ maintainer change
+

@@ -1,5 +1,5 @@
 Package: imcRtools
-Version: 1.9.1
+Version: 1.9.2
 Title: Methods for imaging mass cytometry data analysis
 Description: 
     This R package supports the handling and analysis of imaging mass cytometry 
@@ -15,11 +15,11 @@ Description:
     interact more (attraction) or less (avoidance) frequently than expected by 
     chance are detected. 
 Authors@R: 
-    c(person("Nils", "Eling", role = c("aut", "cre"), email = "nils.eling@dqbm.uzh.ch", comment = c(ORCID = "0000-0002-4711-1176")),
+    c(person("Nils", "Eling", role = "aut"),
       person("Tobias", "Hoch", role = "ctb"),
       person("Vito", "Zanotelli", role = "ctb"),
       person("Jana", "Fischer", role = "ctb"),
-      person("Daniel", "Schulz", role = "ctb"),
+      person("Daniel", "Schulz", role = c("ctb", "cre"),email = "daniel.schulz@uzh.ch",comment = c(ORCID = "0000-0002-0913-1678"))
       person("Lasse","Meyer", role = "ctb"))
 License: GPL-3
 Depends:
