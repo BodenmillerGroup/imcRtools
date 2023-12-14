@@ -19,7 +19,7 @@ Authors@R:
       person("Tobias", "Hoch", role = "ctb"),
       person("Vito", "Zanotelli", role = "ctb"),
       person("Jana", "Fischer", role = "ctb"),
-      person("Daniel", "Schulz", role = c("ctb", "cre"),email = "daniel.schulz@uzh.ch",comment = c(ORCID = "0000-0002-0913-1678"))
+      person("Daniel", "Schulz", role = c("ctb", "cre"),email = "daniel.schulz@uzh.ch",comment = c(ORCID = "0000-0002-0913-1678")),
       person("Lasse","Meyer", role = "ctb"))
 License: GPL-3
 Depends:
