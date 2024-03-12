@@ -36,10 +36,10 @@ test_that("aggregateNeighbors function works", {
     expect_true(all(rowSums(as.matrix(cur_sce$aggregatedNeighbors)) == 1))
     
     # check for correct results of neighboring metadata
-    cur_dat <- data.frame(colPair(pancreasSCE,"knn_10"))
+    cur_dat <- data.frame((colPair(pancreasSCE,"knn_10")))
     cur_dat$celltype <- factor(colData(cur_sce)$CellType[cur_dat$to])
     
-    cur_dat <- cur_dat %>% group_by(from) %>% count(celltype, .drop = FALSE) %>% 
+    cur_dat <- cur_dat %>% group_by(from) %>% dplyr::count(celltype, .drop = FALSE) %>% 
         tidyr::pivot_wider(names_from = "celltype", values_from = "n") %>% ungroup() %>% 
         select(-from) %>% as.matrix()
     
@@ -62,10 +62,10 @@ test_that("aggregateNeighbors function works", {
     expect_true(all(rowSums(as.matrix(cur_sce$aggregatedNeighbors)) == 10))
     
     # check for correct results of neighboring metadata
-    cur_dat <- data.frame(colPair(pancreasSCE,"knn_10"))
+    cur_dat <- data.frame(as.matrix(colPair(pancreasSCE,"knn_10")))
     cur_dat$celltype <- factor(colData(cur_sce)$CellType[cur_dat$to])
     
-    cur_dat <- cur_dat %>% group_by(from) %>% count(celltype, .drop = FALSE) %>% 
+    cur_dat <- cur_dat %>% group_by(from) %>% dplyr::count(celltype, .drop = FALSE) %>% 
         tidyr::pivot_wider(names_from = "celltype", values_from = "n") %>% ungroup() %>% 
         select(-from) %>% as.matrix()
     
@@ -116,10 +116,10 @@ test_that("aggregateNeighbors function works", {
     expect_true(all(rowSums(as.matrix(cur_sce$aggregatedNeighbors)) == 1))
     
     # check for correct results of neighboring metadata
-    cur_dat <- data.frame(colPair(pancreasSCE,"knn_10"))
+    cur_dat <- data.frame(as.matrix(colPair(pancreasSCE,"knn_10")))
     cur_dat$celltype <- factor(colData(cur_sce)$CellType[cur_dat$to])
     
-    cur_dat <- cur_dat %>% group_by(from) %>% count(celltype, .drop = FALSE) %>% 
+    cur_dat <- cur_dat %>% group_by(from) %>% dplyr::count(celltype, .drop = FALSE) %>% 
         tidyr::pivot_wider(names_from = "celltype", values_from = "n") %>% ungroup() %>% 
         select(-from) %>% as.matrix()
     
@@ -142,10 +142,10 @@ test_that("aggregateNeighbors function works", {
     expect_true(all(rowSums(as.matrix(cur_sce$aggregatedNeighbors)) == countLnodeHits(colPair(cur_sce, "knn_10"))))
     
     # check for correct results of neighboring metadata
-    cur_dat <- data.frame(colPair(pancreasSCE,"knn_10"))
+    cur_dat <- data.frame(as.matrix(colPair(pancreasSCE,"knn_10")))
     cur_dat$celltype <- factor(colData(cur_sce)$CellType[cur_dat$to])
     
-    cur_dat <- cur_dat %>% group_by(from) %>% count(celltype, .drop = FALSE) %>% 
+    cur_dat <- cur_dat %>% group_by(from) %>% dplyr::count(celltype, .drop = FALSE) %>% 
         tidyr::pivot_wider(names_from = "celltype", values_from = "n") %>% ungroup() %>% 
         select(-from) %>% as.matrix()
     
@@ -400,10 +400,10 @@ test_that("aggregateNeighbors function works", {
     expect_s4_class(cur_sce$aggregatedNeighbors, "DataFrame")
     
     # check for correct results of neighboring metadata
-    cur_dat <- data.frame(colPair(pancreasSCE,"exp_20"))
+    cur_dat <- data.frame(as.matrix(colPair(pancreasSCE,"exp_20")))
     cur_dat$celltype <- factor(colData(cur_sce)$CellType)[cur_dat$to]
     
-    cur_dat <- cur_dat %>% group_by(from) %>% count(celltype, .drop = FALSE) %>% 
+    cur_dat <- cur_dat %>% group_by(from) %>% dplyr::count(celltype, .drop = FALSE) %>% 
         tidyr::pivot_wider(names_from = "celltype", values_from = "n") %>% ungroup() %>% as.matrix()
     
     cur_dat[,-1] <- cur_dat[,-1] / rowSums(cur_dat[,-1])
@@ -442,10 +442,10 @@ test_that("aggregateNeighbors function works", {
     expect_s4_class(cur_sce$aggregatedNeighbors, "DataFrame")
     
     # check for correct results of neighboring metadata
-    cur_dat <- data.frame(colPair(pancreasSCE,"exp_20"))
+    cur_dat <- data.frame(as.matrix(colPair(pancreasSCE,"exp_20")))
     cur_dat$celltype <- factor(colData(cur_sce)$CellType)[cur_dat$to]
     
-    cur_dat <- cur_dat %>% group_by(from) %>% count(celltype, .drop = FALSE) %>% 
+    cur_dat <- cur_dat %>% group_by(from) %>% dplyr::count(celltype, .drop = FALSE) %>% 
         tidyr::pivot_wider(names_from = "celltype", values_from = "n") %>% ungroup() %>% as.matrix()
     
     cur_dat[,-1] <- cur_dat[,-1] / rowSums(cur_dat[,-1])
@@ -484,10 +484,10 @@ test_that("aggregateNeighbors function works", {
     expect_s4_class(cur_sce$aggregatedNeighbors, "DataFrame")
     
     # check for correct results of neighboring metadata
-    cur_dat <- data.frame(colPair(pancreasSCE,"exp_20"))
+    cur_dat <- data.frame(as.matrix(colPair(pancreasSCE,"exp_20")))
     cur_dat$celltype <- factor(colData(cur_sce)$CellType)[cur_dat$to]
     
-    cur_dat <- cur_dat %>% group_by(from) %>% count(celltype, .drop = FALSE) %>% 
+    cur_dat <- cur_dat %>% group_by(from) %>% dplyr::count(celltype, .drop = FALSE) %>% 
         tidyr::pivot_wider(names_from = "celltype", values_from = "n") %>% ungroup() %>% as.matrix()
     
     cur_dat[,-1] <- cur_dat[,-1] / rowSums(cur_dat[,-1])
@@ -521,10 +521,10 @@ test_that("aggregateNeighbors function works", {
     expect_s4_class(cur_sce$aggregatedNeighbors, "DataFrame")
     expect_true(all(rowSums(as.matrix(cur_sce$aggregatedNeighbors)) == 1))
     
-    cur_dat <- data.frame(colPair(pancreasSCE,"exp_20"))
+    cur_dat <- data.frame(as.matrix(colPair(pancreasSCE,"exp_20")))
     cur_dat$Pattern <- factor(colData(cur_sce)$Pattern)[cur_dat$to]
     
-    cur_dat <- cur_dat %>% group_by(from) %>% count(Pattern, .drop = FALSE) %>% 
+    cur_dat <- cur_dat %>% group_by(from) %>% dplyr::count(Pattern, .drop = FALSE) %>% 
         tidyr::pivot_wider(names_from = "Pattern", values_from = "n") %>% ungroup() %>% as.matrix()
     
     cur_dat[,-1] <- cur_dat[,-1] / rowSums(cur_dat[,-1])
@@ -544,10 +544,10 @@ test_that("aggregateNeighbors function works", {
     expect_s4_class(cur_sce$aggregatedNeighbors, "DataFrame")
     expect_true(all(rowSums(as.matrix(cur_sce$aggregatedNeighbors)) == 1))
     
-    cur_dat <- data.frame(colPair(pancreasSCE,"exp_20"))
+    cur_dat <- data.frame(as.matrix(colPair(pancreasSCE,"exp_20")))
     cur_dat$Area <- factor(colData(cur_sce)$Area)[cur_dat$to]
     
-    cur_dat <- cur_dat %>% group_by(from) %>% count(Area, .drop = FALSE) %>% 
+    cur_dat <- cur_dat %>% group_by(from) %>% dplyr::count(Area, .drop = FALSE) %>% 
         tidyr::pivot_wider(names_from = "Area", values_from = "n") %>% ungroup() %>% as.matrix()
     
     cur_dat[,-1] <- cur_dat[,-1] / rowSums(cur_dat[,-1])
@@ -678,10 +678,10 @@ test_that("aggregateNeighbors function works", {
     expect_s4_class(cur_sce$aggregatedNeighbors, "DataFrame")
     
     # check for correct results of neighboring metadata
-    cur_dat <- data.frame(colPair(pancreasSCE,"delaunay_interaction_graph"))
+    cur_dat <- data.frame(as.matrix(colPair(pancreasSCE,"delaunay_interaction_graph")))
     cur_dat$celltype <- factor(colData(cur_sce)$CellType)[cur_dat$to]
     
-    cur_dat <- cur_dat %>% group_by(from) %>% count(celltype, .drop = FALSE) %>% 
+    cur_dat <- cur_dat %>% group_by(from) %>% dplyr::count(celltype, .drop = FALSE) %>% 
         tidyr::pivot_wider(names_from = "celltype", values_from = "n") %>% ungroup() %>% as.matrix()
     
     cur_dat[,-1] <- cur_dat[,-1] / rowSums(cur_dat[,-1])

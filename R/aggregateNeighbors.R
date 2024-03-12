@@ -83,7 +83,7 @@ aggregateNeighbors <- function(object,
 
     if (summarize_by == "metadata") {
 
-        cur_dat <- as.data.table(colPair(object, colPairName))
+        cur_dat <- as.data.table(as.matrix(colPair(object, colPairName)))
         
         cur_factor <- factor(colData(object)[[count_by]])
         
@@ -117,7 +117,7 @@ aggregateNeighbors <- function(object,
             subset_row <- rownames(object)
         }
 
-        cur_dat <- as.data.table(colPair(object, colPairName))
+        cur_dat <- as.data.table(as.matrix(colPair(object, colPairName)))
 
         cur_dat <- cbind(cur_dat,t(assay(object, assay_type))[cur_dat$to,
                                                                 subset_row])
