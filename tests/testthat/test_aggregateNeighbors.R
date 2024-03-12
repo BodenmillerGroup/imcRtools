@@ -36,7 +36,7 @@ test_that("aggregateNeighbors function works", {
     expect_true(all(rowSums(as.matrix(cur_sce$aggregatedNeighbors)) == 1))
     
     # check for correct results of neighboring metadata
-    cur_dat <- data.frame((colPair(pancreasSCE,"knn_10")))
+    cur_dat <- data.frame(as.matrix(colPair(pancreasSCE,"knn_10")))
     cur_dat$celltype <- factor(colData(cur_sce)$CellType[cur_dat$to])
     
     cur_dat <- cur_dat %>% group_by(from) %>% dplyr::count(celltype, .drop = FALSE) %>% 
