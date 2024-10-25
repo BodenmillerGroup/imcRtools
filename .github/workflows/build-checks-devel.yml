@@ -34,7 +34,7 @@ jobs:
          install.packages("BiocManager")
          BiocManager::install(version = "devel", update = TRUE, ask = FALSE, force = TRUE)
          remotes::install_deps(dependencies = TRUE, repos = BiocManager::repositories(), Ncpu = 2L)
-         BiocManager::install("CATALYST", update = TRUE, ask = FALSE, force = TRUE) 
+         BiocManager::install(c("CATALYST","pbkrtest", "lme4", "drc", "scater") update = TRUE, ask = FALSE, force = TRUE) 
         shell: Rscript {0}
         
       - name: Check
