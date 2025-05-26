@@ -159,7 +159,7 @@ testInteractions <- function(object,
                                 group_by,
                                 label,
                                 colPairName,
-                                method = c("classic", "histocat", "patch"),
+                                method = c("classic", "histocat", "patch", "interaction_abundance"),
                                 patch_size = NULL,
                                 iter = 1000,
                                 p_threshold = 0.01,
@@ -194,20 +194,24 @@ testInteractions <- function(object,
         cur_count <- .aggregate_classic_patch(cur_table, 
                                             patch_size = patch_size, 
                                             object, group_by, label)
+    } else if (method == "interaction_abundance") {
+        cur_count <- .aggregate_interaction_abundance(cur_table, object, group_by, label)
     }
     
     # Permute the labels
     cur_out <- .permute_labels(object, group_by, label, iter, patch_size,
                                 colPairName, method, BPPARAM)
     
-    cur_out <- .calc_p_vals(cur_count, cur_out, n_perm = iter, 
-                            p_thres = p_threshold, 
-                            return_samples = return_samples,
-                            tolerance = tolerance)
-    
-    setorder(cur_out, "group_by", "from_label", "to_label")
-    
     cur_out <- as(cur_out, "DataFrame")
     
+    cur_out <- .calc_p_vals(cur_count, cur_out, n_perm = iter,
+                            p_thres = p_threshold,
+                            return_samples = return_samples,
+                            tolerance = tolerance)
+
+    setorder(cur_out, "group_by", "from_label", "to_label")
+
+    cur_out <- as(cur_out, "DataFrame")
+
     return(cur_out)
 }

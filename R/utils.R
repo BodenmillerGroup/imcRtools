@@ -859,6 +859,58 @@
     return(dat_temp)
 }
 
+.aggregate_interaction_abundance <- function(dat_table, object, group_by, label,
+                                             check_missing = TRUE) {
+  # 1. Precompute per-group “abundance” + sqrt(total)
+  ab <- dat_table[, .(total = unique(total)), 
+                  by = .(group_by, from_label)][
+                    , `:=`(abundant = total > 2, sqrt_n   = sqrt(total))]
+  
+  # 2. Build a full grid of all group × from_label × to_label
+  groups <- unique(dat_table$group_by)
+  cts    <- intersect(unique(dat_table$from_label), unique(dat_table$to_label))
+  grid   <- CJ(group_by   = groups,
+               from_label = cts,
+               to_label   = cts,
+               unique     = TRUE)
+  
+  # 3. Count observed interactions
+  obs <- dat_table[, .N, 
+                   by = .(group_by, from_label, to_label)]
+  setnames(obs, "N", "n_specific_int")
+  
+  # 4. Left-join onto grid, fill zeros
+  res <- obs[grid, on = .(group_by, from_label, to_label)]
+  res[is.na(n_specific_int), n_specific_int := 0L]
+  
+  # 5. Attach abundance flags + sqrt_n
+  res[, `:=`(abundant_from = FALSE, abundant_to = FALSE, total_from = NA_real_, sqrt_n = NA_real_)]
+  res[ab, 
+      on = .(group_by, from_label),
+      `:=`(
+        abundant_from = i.abundant,
+        total_from    = i.total,
+        sqrt_n        = i.sqrt_n)]
+  res[is.na(total_from), `:=`(total_from = 0, sqrt_n = 0)]
+  res[ab,
+      on = .(group_by, to_label = from_label),
+      abundant_to := i.abundant]
+  
+  # 6. Compute per-“from” totals, pseudocounted weight, zero-out non-abundant pairs
+  res[, n_tot_int := sum(n_specific_int), by = .(group_by, from_label)]
+  res[, weight    := fifelse(abundant_from & abundant_to,
+                             n_specific_int / (n_tot_int + 10), 0)]
+  
+  # 7. Final “ct” score
+  dat_temp <- res[, .(ct = weight / sqrt_n),
+                  by = .(group_by, from_label, to_label)]
+  dat_temp[is.na(ct), ct := 0]
+  
+  # 8. Order and return
+  setorder(dat_temp, "group_by", "from_label", "to_label")
+  return(dat_temp)
+}
+
 #' @importFrom data.table data.table
 .permute_labels <- function(object, group_by, label, iter, patch_size,
                             colPairName, method, BPPARAM) {
@@ -894,6 +946,10 @@
                                                                      patch_size = patch_size,
                                                                      object, group_by, label,
                                                                      check_missing = FALSE)
+                            } else if (method == "interaction_abundance") {
+                                cur_perm <- .aggregate_interaction_abundance(cur_perm,
+                                                                     object, group_by, label,
+                                                                     check_missing = FALSE)
                             }
                             cur_perm$iter <- x
 
@@ -913,6 +969,8 @@
                                        "group_by", "ct")],
                       by = c("from_label", "to_label", "group_by"),
                       suffixes = c("_perm", "_obs"), all = TRUE)
+    
+    dat_perm <- as.data.table(as.data.frame(dat_perm))
 
     . <- ct_perm <- ct_obs <- p_gt <- p_lt <- NULL
     direction <- sig <- sigval <- p <-  NULL
