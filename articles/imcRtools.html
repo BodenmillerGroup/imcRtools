@@ -12,14 +12,13 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Tools for IMC data analysis">
-<meta property="og:description" content="imcRtools">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -33,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.11.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.15.0</span>
       </span>
     </div>
 
@@ -50,7 +49,7 @@
 <li>
   <a href="https://github.com/BodenmillerGroup/imcRtools/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -61,7 +60,7 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><link href="imcRtools_files/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
 <script src="imcRtools_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><link href="imcRtools_files/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
@@ -93,9 +92,9 @@ ZurichInstitute for Molecular Health Sciences, ETH
 Zurich<br><a class="author_email" href="mailto:#">daniel.schulz@<span class="citation">(<strong>uzh.ch?</strong>)</span></a>
       </address>
                   
-            <h4 data-toc-skip class="date">25 June 2024</h4>
+            <h4 data-toc-skip class="date">27 May 2025</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/BodenmillerGroup/imcRtools/blob/HEAD/vignettes/imcRtools.Rmd" class="external-link"><code>vignettes/imcRtools.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/BodenmillerGroup/imcRtools/blob/devel/vignettes/imcRtools.Rmd" class="external-link"><code>vignettes/imcRtools.Rmd</code></a></small>
       <div class="hidden name"><code>imcRtools.Rmd</code></div>
 
     </div>
@@ -181,11 +180,11 @@ equally applicable.</p>
 <p>IMC <span class="citation">(Giesen et al. 2014)</span> is a highly
 multiplexed imaging approach to measure spatial protein abundance. In
 IMC, tissue sections on slides are stained with a mix of around 40
-metal-conjugated antibodies prior to laser ablation with <span class="math inline">\(1\mu{}m\)</span> resolution. The ablated material
-is transferred to a mass cytometer for time-of-flight detection of the
-metal ions <span class="citation">(Giesen et al. 2014)</span>. At an
-ablation frequency of 200Hz, a 1mm x 1mm region can be acquired within
-1.5 hours.</p>
+metal-conjugated antibodies prior to laser ablation with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>μ</mi><mrow></mrow><mi>m</mi></mrow><annotation encoding="application/x-tex">1\mu{}m</annotation></semantics></math>
+resolution. The ablated material is transferred to a mass cytometer for
+time-of-flight detection of the metal ions <span class="citation">(Giesen et al. 2014)</span>. At an ablation frequency
+of 200Hz, a 1mm x 1mm region can be acquired within 1.5 hours.</p>
 </div>
 <div class="section level4">
 <h4 id="dataTypes">Data types<a class="anchor" aria-label="anchor" href="#dataTypes"></a>
@@ -232,8 +231,8 @@ exported features are comparable:</p>
 <li>cell-cell interactions exported as graph</li>
 </ol>
 <p>By combining these with availabel channel information, the data can
-be read into a <em><a href="https://bioconductor.org/packages/3.19/SpatialExperiment" class="external-link">SpatialExperiment</a></em>
-or <em><a href="https://bioconductor.org/packages/3.19/SingleCellExperiment" class="external-link">SingleCellExperiment</a></em>
+be read into a <em><a href="https://bioconductor.org/packages/3.21/SpatialExperiment" class="external-link">SpatialExperiment</a></em>
+or <em><a href="https://bioconductor.org/packages/3.21/SingleCellExperiment" class="external-link">SingleCellExperiment</a></em>
 object (see <a href="#read-in-data">below</a>).</p>
 </div>
 </div>
@@ -366,17 +365,17 @@ and <code>steinbock</code> can also be accessed <a href="https://github.com/Bode
 by the <a href="https://github.com/BodenmillerGroup/ImcSegmentationPipeline" class="external-link">ImcSegmentationPipeline</a>
 or <a href="https://github.com/BodenmillerGroup/steinbock" class="external-link">steinbock</a>
 pipeline.</p>
-<p>To read in the outpout data into a <em><a href="https://bioconductor.org/packages/3.19/SpatialExperiment" class="external-link">SpatialExperiment</a></em>
-or <em><a href="https://bioconductor.org/packages/3.19/SingleCellExperiment" class="external-link">SingleCellExperiment</a></em>,
+<p>To read in the outpout data into a <em><a href="https://bioconductor.org/packages/3.21/SpatialExperiment" class="external-link">SpatialExperiment</a></em>
+or <em><a href="https://bioconductor.org/packages/3.21/SingleCellExperiment" class="external-link">SingleCellExperiment</a></em>,
 the <code>imcRtools</code> package exports the <code>read_cpout</code>
 function.</p>
-<p>By default, the single-cell data is read into a <em><a href="https://bioconductor.org/packages/3.19/SpatialExperiment" class="external-link">SpatialExperiment</a></em>
+<p>By default, the single-cell data is read into a <em><a href="https://bioconductor.org/packages/3.21/SpatialExperiment" class="external-link">SpatialExperiment</a></em>
 object. Here, the extracted channel- and cell-specific intensities are
 stored in the <code>counts(spe)</code> slot. All morphological features
 are stored in <code>colData(spe)</code> and the spatial locations of the
 cells are stored in <code>spatialCoords(spe)</code>. The interaction
 graph is stored in <code>colPair(spe, "neighbourhood")</code>.</p>
-<p>Alternatively, the data can be read into a <em><a href="https://bioconductor.org/packages/3.19/SingleCellExperiment" class="external-link">SingleCellExperiment</a></em>
+<p>Alternatively, the data can be read into a <em><a href="https://bioconductor.org/packages/3.21/SingleCellExperiment" class="external-link">SingleCellExperiment</a></em>
 object. The only difference is the lack of
 <code>spatialCoords(sce)</code>. Here, the spatial coordinates are
 stored in <code>colData(spe)$Pos_X</code> and
@@ -483,7 +482,7 @@ function:</p>
 <h3 id="read-raw--txt-files-into-image-objects">Read raw .txt files into Image objects<a class="anchor" aria-label="anchor" href="#read-raw--txt-files-into-image-objects"></a>
 </h3>
 <p>For reading in and visualization of multi-channel images and
-segmentation masks, please refer to the <em><a href="https://bioconductor.org/packages/3.19/cytomapper" class="external-link">cytomapper</a></em>
+segmentation masks, please refer to the <em><a href="https://bioconductor.org/packages/3.21/cytomapper" class="external-link">cytomapper</a></em>
 package. The <code>imcRtools</code> package however supports reading in
 raw .txt files generated by the Hyperion imaging system into a
 <code>CytoImageList</code> object; a data container exported by
@@ -522,7 +521,7 @@ data analysis book</a>.</p>
 </h3>
 <p>In the first step, the pixel intensities of individually spotted
 metals need to be read into a <code>SingleCellExperiment</code>
-container for downstream use with the <em><a href="https://bioconductor.org/packages/3.19/CATALYST" class="external-link">CATALYST</a></em>
+container for downstream use with the <em><a href="https://bioconductor.org/packages/3.21/CATALYST" class="external-link">CATALYST</a></em>
 package. For this, the <code>readSCEfromTXT</code> function can be
 used:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
@@ -586,7 +585,7 @@ optional for spillover estimation.</p>
 <div class="section level3">
 <h3 id="pixel-filtering">Pixel filtering<a class="anchor" aria-label="anchor" href="#pixel-filtering"></a>
 </h3>
-<p>Prior to spillover estimation, the <em><a href="https://bioconductor.org/packages/3.19/CATALYST" class="external-link">CATALYST</a></em>
+<p>Prior to spillover estimation, the <em><a href="https://bioconductor.org/packages/3.21/CATALYST" class="external-link">CATALYST</a></em>
 package provides the <code>assignPrelim</code>, <code>estCutoffs</code>
 and <code>applyCutoffs</code> functions to estimate the spotted mass for
 each pixel based on their channel intensities. For more information on
@@ -1167,8 +1166,9 @@ weakly connected in the graph in
 the previously computed <code>expansion</code> graph and defining cells
 of <code>celltype_B</code> as the cells of interest. Here, the function
 additionally draws a concave hull around the detected patch, expands the
-hull by 20<span class="math inline">\(\mu{}m\)</span> and defines all
-cells within this expanded hulls as patch cells.</p>
+hull by
+20<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mrow></mrow><mi>m</mi></mrow><annotation encoding="application/x-tex">\mu{}m</annotation></semantics></math>
+and defines all cells within this expanded hulls as patch cells.</p>
 <div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pancreasSCE</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/patchDetection.html">patchDetection</a></span><span class="op">(</span><span class="va">pancreasSCE</span>, </span>
 <span>                              patch_cells <span class="op">=</span> <span class="va">pancreasSCE</span><span class="op">$</span><span class="va">CellType</span> <span class="op">==</span> <span class="st">"celltype_B"</span>,</span>
@@ -1376,13 +1376,13 @@ implemented the functions for spatial context analysis.</p>
 <div class="section level2">
 <h2 class="unnumbered" id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<pre><code><span><span class="co">## R version 4.4.1 (2024-06-14)</span></span>
+<pre><code><span><span class="co">## R version 4.5.0 (2025-04-11)</span></span>
 <span><span class="co">## Platform: aarch64-apple-darwin20</span></span>
-<span><span class="co">## Running under: macOS Sonoma 14.5</span></span>
+<span><span class="co">## Running under: macOS Sonoma 14.7.5</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Matrix products: default</span></span>
-<span><span class="co">## BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib </span></span>
-<span><span class="co">## LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0</span></span>
+<span><span class="co">## BLAS:   /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRblas.0.dylib </span></span>
+<span><span class="co">## LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## locale:</span></span>
 <span><span class="co">## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span></span>
@@ -1395,108 +1395,107 @@ implemented the functions for spatial context analysis.</p>
 <span><span class="co">## [8] base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">##  [1] ggraph_2.2.1                ggplot2_3.5.1              </span></span>
-<span><span class="co">##  [3] cytomapper_1.14.0           EBImage_4.44.0             </span></span>
-<span><span class="co">##  [5] CATALYST_1.26.1             imcRtools_1.11.0           </span></span>
-<span><span class="co">##  [7] SpatialExperiment_1.12.0    SingleCellExperiment_1.24.0</span></span>
-<span><span class="co">##  [9] SummarizedExperiment_1.32.0 Biobase_2.62.0             </span></span>
-<span><span class="co">## [11] GenomicRanges_1.54.1        GenomeInfoDb_1.38.8        </span></span>
-<span><span class="co">## [13] IRanges_2.36.0              S4Vectors_0.40.2           </span></span>
-<span><span class="co">## [15] BiocGenerics_0.48.1         MatrixGenerics_1.14.0      </span></span>
-<span><span class="co">## [17] matrixStats_1.3.0           BiocStyle_2.30.0           </span></span>
+<span><span class="co">##  [1] ggraph_2.2.1                ggplot2_3.5.2              </span></span>
+<span><span class="co">##  [3] cytomapper_1.20.0           EBImage_4.50.0             </span></span>
+<span><span class="co">##  [5] CATALYST_1.32.0             imcRtools_1.15.0           </span></span>
+<span><span class="co">##  [7] SpatialExperiment_1.18.1    SingleCellExperiment_1.30.1</span></span>
+<span><span class="co">##  [9] SummarizedExperiment_1.38.1 Biobase_2.68.0             </span></span>
+<span><span class="co">## [11] GenomicRanges_1.60.0        GenomeInfoDb_1.44.0        </span></span>
+<span><span class="co">## [13] IRanges_2.42.0              S4Vectors_0.46.0           </span></span>
+<span><span class="co">## [15] BiocGenerics_0.54.0         generics_0.1.4             </span></span>
+<span><span class="co">## [17] MatrixGenerics_1.20.0       matrixStats_1.5.0          </span></span>
+<span><span class="co">## [19] BiocStyle_2.36.0           </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
-<span><span class="co">##   [1] fs_1.6.4                    bitops_1.0-7               </span></span>
-<span><span class="co">##   [3] sf_1.0-16                   RColorBrewer_1.1-3         </span></span>
-<span><span class="co">##   [5] doParallel_1.0.17           tools_4.4.1                </span></span>
-<span><span class="co">##   [7] backports_1.5.0             utf8_1.2.4                 </span></span>
-<span><span class="co">##   [9] R6_2.5.1                    DT_0.33                    </span></span>
-<span><span class="co">##  [11] HDF5Array_1.30.1            rhdf5filters_1.14.1        </span></span>
-<span><span class="co">##  [13] GetoptLong_1.0.5            withr_3.0.0                </span></span>
-<span><span class="co">##  [15] sp_2.1-4                    gridExtra_2.3              </span></span>
-<span><span class="co">##  [17] cli_3.6.3                   textshaping_0.4.0          </span></span>
-<span><span class="co">##  [19] sandwich_3.1-0              labeling_0.4.3             </span></span>
-<span><span class="co">##  [21] sass_0.4.9                  nnls_1.5                   </span></span>
-<span><span class="co">##  [23] mvtnorm_1.2-5               readr_2.1.5                </span></span>
+<span><span class="co">##   [1] fs_1.6.6                    bitops_1.0-9               </span></span>
+<span><span class="co">##   [3] sf_1.0-21                   httr_1.4.7                 </span></span>
+<span><span class="co">##   [5] RColorBrewer_1.1-3          doParallel_1.0.17          </span></span>
+<span><span class="co">##   [7] tools_4.5.0                 backports_1.5.0            </span></span>
+<span><span class="co">##   [9] R6_2.6.1                    DT_0.33                    </span></span>
+<span><span class="co">##  [11] HDF5Array_1.36.0            rhdf5filters_1.20.0        </span></span>
+<span><span class="co">##  [13] GetoptLong_1.0.5            withr_3.0.2                </span></span>
+<span><span class="co">##  [15] sp_2.2-0                    gridExtra_2.3              </span></span>
+<span><span class="co">##  [17] cli_3.6.5                   textshaping_1.0.1          </span></span>
+<span><span class="co">##  [19] sandwich_3.1-1              labeling_0.4.3             </span></span>
+<span><span class="co">##  [21] sass_0.4.10                 nnls_1.6                   </span></span>
+<span><span class="co">##  [23] mvtnorm_1.3-3               readr_2.1.5                </span></span>
 <span><span class="co">##  [25] ggridges_0.5.6              proxy_0.4-27               </span></span>
-<span><span class="co">##  [27] pkgdown_2.0.9               systemfonts_1.1.0          </span></span>
-<span><span class="co">##  [29] colorRamps_2.3.4            svglite_2.1.3              </span></span>
-<span><span class="co">##  [31] scater_1.30.1               plotrix_3.8-4              </span></span>
-<span><span class="co">##  [33] flowCore_2.14.2             generics_0.1.3             </span></span>
-<span><span class="co">##  [35] shape_1.4.6.1               gtools_3.9.5               </span></span>
-<span><span class="co">##  [37] crosstalk_1.2.1             vroom_1.6.5                </span></span>
-<span><span class="co">##  [39] car_3.1-2                   dplyr_1.1.4                </span></span>
-<span><span class="co">##  [41] Matrix_1.7-0                RProtoBufLib_2.14.1        </span></span>
-<span><span class="co">##  [43] ggbeeswarm_0.7.2            fansi_1.0.6                </span></span>
-<span><span class="co">##  [45] abind_1.4-5                 terra_1.7-78               </span></span>
-<span><span class="co">##  [47] lifecycle_1.0.4             multcomp_1.4-25            </span></span>
-<span><span class="co">##  [49] yaml_2.3.8                  carData_3.0-5              </span></span>
-<span><span class="co">##  [51] rhdf5_2.46.1                SparseArray_1.2.4          </span></span>
-<span><span class="co">##  [53] Rtsne_0.17                  grid_4.4.1                 </span></span>
-<span><span class="co">##  [55] promises_1.3.0              crayon_1.5.3               </span></span>
-<span><span class="co">##  [57] shinydashboard_0.7.2        lattice_0.22-6             </span></span>
-<span><span class="co">##  [59] beachmat_2.18.1             cowplot_1.1.3              </span></span>
-<span><span class="co">##  [61] magick_2.8.3                pillar_1.9.0               </span></span>
-<span><span class="co">##  [63] knitr_1.47                  ComplexHeatmap_2.18.0      </span></span>
-<span><span class="co">##  [65] RTriangle_1.6-0.13          rjson_0.2.21               </span></span>
-<span><span class="co">##  [67] codetools_0.2-20            glue_1.7.0                 </span></span>
-<span><span class="co">##  [69] V8_4.4.2                    data.table_1.15.4          </span></span>
-<span><span class="co">##  [71] vctrs_0.6.5                 png_0.1-8                  </span></span>
-<span><span class="co">##  [73] gtable_0.3.5                cachem_1.1.0               </span></span>
-<span><span class="co">##  [75] xfun_0.45                   S4Arrays_1.2.1             </span></span>
-<span><span class="co">##  [77] mime_0.12                   tidygraph_1.3.1            </span></span>
-<span><span class="co">##  [79] ConsensusClusterPlus_1.66.0 survival_3.6-4             </span></span>
-<span><span class="co">##  [81] pheatmap_1.0.12             iterators_1.0.14           </span></span>
-<span><span class="co">##  [83] cytolib_2.14.1              units_0.8-5                </span></span>
-<span><span class="co">##  [85] TH.data_1.1-2               bit64_4.0.5                </span></span>
-<span><span class="co">##  [87] bslib_0.7.0                 irlba_2.3.5.1              </span></span>
-<span><span class="co">##  [89] svgPanZoom_0.3.4            vipor_0.4.7                </span></span>
-<span><span class="co">##  [91] KernSmooth_2.23-24          colorspace_2.1-0           </span></span>
-<span><span class="co">##  [93] DBI_1.2.3                   raster_3.6-26              </span></span>
-<span><span class="co">##  [95] tidyselect_1.2.1            curl_5.2.1                 </span></span>
-<span><span class="co">##  [97] bit_4.0.5                   compiler_4.4.1             </span></span>
-<span><span class="co">##  [99] BiocNeighbors_1.20.2        desc_1.4.3                 </span></span>
-<span><span class="co">## [101] DelayedArray_0.28.0         bookdown_0.39              </span></span>
-<span><span class="co">## [103] scales_1.3.0                classInt_0.4-10            </span></span>
-<span><span class="co">## [105] distances_0.1.10            tiff_0.1-12                </span></span>
-<span><span class="co">## [107] stringr_1.5.1               digest_0.6.36              </span></span>
-<span><span class="co">## [109] fftwtools_0.9-11            rmarkdown_2.27             </span></span>
-<span><span class="co">## [111] XVector_0.42.0              htmltools_0.5.8.1          </span></span>
-<span><span class="co">## [113] pkgconfig_2.0.3             jpeg_0.1-10                </span></span>
-<span><span class="co">## [115] sparseMatrixStats_1.14.0    highr_0.11                 </span></span>
-<span><span class="co">## [117] fastmap_1.2.0               rlang_1.1.4                </span></span>
-<span><span class="co">## [119] GlobalOptions_0.1.2         htmlwidgets_1.6.4          </span></span>
-<span><span class="co">## [121] shiny_1.8.1.1               DelayedMatrixStats_1.24.0  </span></span>
-<span><span class="co">## [123] farver_2.1.2                jquerylib_0.1.4            </span></span>
-<span><span class="co">## [125] zoo_1.8-12                  jsonlite_1.8.8             </span></span>
-<span><span class="co">## [127] BiocParallel_1.36.0         BiocSingular_1.18.0        </span></span>
-<span><span class="co">## [129] RCurl_1.98-1.14             magrittr_2.0.3             </span></span>
-<span><span class="co">## [131] scuttle_1.12.0              GenomeInfoDbData_1.2.11    </span></span>
-<span><span class="co">## [133] Rhdf5lib_1.24.2             munsell_0.5.1              </span></span>
-<span><span class="co">## [135] Rcpp_1.0.12                 ggnewscale_0.4.10          </span></span>
-<span><span class="co">## [137] viridis_0.6.5               stringi_1.8.4              </span></span>
-<span><span class="co">## [139] zlibbioc_1.48.2             MASS_7.3-60.2              </span></span>
-<span><span class="co">## [141] plyr_1.8.9                  parallel_4.4.1             </span></span>
-<span><span class="co">## [143] ggrepel_0.9.5               graphlayouts_1.1.1         </span></span>
-<span><span class="co">## [145] splines_4.4.1               hms_1.1.3                  </span></span>
-<span><span class="co">## [147] circlize_0.4.16             locfit_1.5-9.10            </span></span>
-<span><span class="co">## [149] igraph_2.0.3                ggpubr_0.6.0               </span></span>
-<span><span class="co">## [151] ggsignif_0.6.4              ScaledMatrix_1.10.0        </span></span>
-<span><span class="co">## [153] reshape2_1.4.4              XML_3.99-0.16.1            </span></span>
-<span><span class="co">## [155] drc_3.0-1                   evaluate_0.24.0            </span></span>
-<span><span class="co">## [157] BiocManager_1.30.23         tzdb_0.4.0                 </span></span>
-<span><span class="co">## [159] foreach_1.5.2               tweenr_2.0.3               </span></span>
-<span><span class="co">## [161] httpuv_1.6.15               tidyr_1.3.1                </span></span>
-<span><span class="co">## [163] purrr_1.0.2                 polyclip_1.10-6            </span></span>
-<span><span class="co">## [165] clue_0.3-65                 ggforce_0.4.2              </span></span>
-<span><span class="co">## [167] rsvd_1.0.5                  broom_1.0.6                </span></span>
-<span><span class="co">## [169] xtable_1.8-4                e1071_1.7-14               </span></span>
-<span><span class="co">## [171] rstatix_0.7.2               later_1.3.2                </span></span>
-<span><span class="co">## [173] viridisLite_0.4.2           class_7.3-22               </span></span>
-<span><span class="co">## [175] ragg_1.3.2                  tibble_3.2.1               </span></span>
-<span><span class="co">## [177] memoise_2.0.1               FlowSOM_2.10.0             </span></span>
-<span><span class="co">## [179] beeswarm_0.4.0              cluster_2.1.6              </span></span>
-<span><span class="co">## [181] concaveman_1.1.0</span></span></code></pre>
+<span><span class="co">##  [27] pkgdown_2.1.3               systemfonts_1.2.3          </span></span>
+<span><span class="co">##  [29] colorRamps_2.3.4            svglite_2.2.1              </span></span>
+<span><span class="co">##  [31] scater_1.36.0               plotrix_3.8-4              </span></span>
+<span><span class="co">##  [33] flowCore_2.20.0             shape_1.4.6.1              </span></span>
+<span><span class="co">##  [35] gtools_3.9.5                crosstalk_1.2.1            </span></span>
+<span><span class="co">##  [37] vroom_1.6.5                 car_3.1-3                  </span></span>
+<span><span class="co">##  [39] dplyr_1.1.4                 Matrix_1.7-3               </span></span>
+<span><span class="co">##  [41] RProtoBufLib_2.20.0         ggbeeswarm_0.7.2           </span></span>
+<span><span class="co">##  [43] abind_1.4-8                 terra_1.8-50               </span></span>
+<span><span class="co">##  [45] lifecycle_1.0.4             multcomp_1.4-28            </span></span>
+<span><span class="co">##  [47] yaml_2.3.10                 carData_3.0-5              </span></span>
+<span><span class="co">##  [49] rhdf5_2.52.0                SparseArray_1.8.0          </span></span>
+<span><span class="co">##  [51] Rtsne_0.17                  grid_4.5.0                 </span></span>
+<span><span class="co">##  [53] promises_1.3.2              crayon_1.5.3               </span></span>
+<span><span class="co">##  [55] shinydashboard_0.7.3        lattice_0.22-6             </span></span>
+<span><span class="co">##  [57] beachmat_2.24.0             cowplot_1.1.3              </span></span>
+<span><span class="co">##  [59] magick_2.8.6                pillar_1.10.2              </span></span>
+<span><span class="co">##  [61] knitr_1.50                  ComplexHeatmap_2.24.0      </span></span>
+<span><span class="co">##  [63] RTriangle_1.6-0.15          rjson_0.2.23               </span></span>
+<span><span class="co">##  [65] codetools_0.2-20            glue_1.8.0                 </span></span>
+<span><span class="co">##  [67] V8_6.0.3                    data.table_1.17.4          </span></span>
+<span><span class="co">##  [69] vctrs_0.6.5                 png_0.1-8                  </span></span>
+<span><span class="co">##  [71] gtable_0.3.6                cachem_1.1.0               </span></span>
+<span><span class="co">##  [73] xfun_0.52                   S4Arrays_1.8.0             </span></span>
+<span><span class="co">##  [75] mime_0.13                   tidygraph_1.3.1            </span></span>
+<span><span class="co">##  [77] ConsensusClusterPlus_1.72.0 survival_3.8-3             </span></span>
+<span><span class="co">##  [79] pheatmap_1.0.12             iterators_1.0.14           </span></span>
+<span><span class="co">##  [81] cytolib_2.20.0              units_0.8-7                </span></span>
+<span><span class="co">##  [83] TH.data_1.1-3               bit64_4.6.0-1              </span></span>
+<span><span class="co">##  [85] bslib_0.9.0                 irlba_2.3.5.1              </span></span>
+<span><span class="co">##  [87] svgPanZoom_0.3.4            vipor_0.4.7                </span></span>
+<span><span class="co">##  [89] KernSmooth_2.23-26          colorspace_2.1-1           </span></span>
+<span><span class="co">##  [91] DBI_1.2.3                   raster_3.6-32              </span></span>
+<span><span class="co">##  [93] tidyselect_1.2.1            curl_6.2.3                 </span></span>
+<span><span class="co">##  [95] bit_4.6.0                   compiler_4.5.0             </span></span>
+<span><span class="co">##  [97] BiocNeighbors_2.2.0         h5mread_1.0.1              </span></span>
+<span><span class="co">##  [99] desc_1.4.3                  DelayedArray_0.34.1        </span></span>
+<span><span class="co">## [101] bookdown_0.43               scales_1.4.0               </span></span>
+<span><span class="co">## [103] classInt_0.4-11             distances_0.1.12           </span></span>
+<span><span class="co">## [105] tiff_0.1-12                 stringr_1.5.1              </span></span>
+<span><span class="co">## [107] digest_0.6.37               fftwtools_0.9-11           </span></span>
+<span><span class="co">## [109] rmarkdown_2.29              XVector_0.48.0             </span></span>
+<span><span class="co">## [111] htmltools_0.5.8.1           pkgconfig_2.0.3            </span></span>
+<span><span class="co">## [113] jpeg_0.1-11                 fastmap_1.2.0              </span></span>
+<span><span class="co">## [115] rlang_1.1.6                 GlobalOptions_0.1.2        </span></span>
+<span><span class="co">## [117] htmlwidgets_1.6.4           UCSC.utils_1.4.0           </span></span>
+<span><span class="co">## [119] shiny_1.10.0                farver_2.1.2               </span></span>
+<span><span class="co">## [121] jquerylib_0.1.4             zoo_1.8-14                 </span></span>
+<span><span class="co">## [123] jsonlite_2.0.0              BiocParallel_1.42.0        </span></span>
+<span><span class="co">## [125] BiocSingular_1.24.0         RCurl_1.98-1.17            </span></span>
+<span><span class="co">## [127] magrittr_2.0.3              Formula_1.2-5              </span></span>
+<span><span class="co">## [129] scuttle_1.18.0              GenomeInfoDbData_1.2.14    </span></span>
+<span><span class="co">## [131] Rhdf5lib_1.30.0             Rcpp_1.0.14                </span></span>
+<span><span class="co">## [133] ggnewscale_0.5.1            viridis_0.6.5              </span></span>
+<span><span class="co">## [135] stringi_1.8.7               MASS_7.3-65                </span></span>
+<span><span class="co">## [137] plyr_1.8.9                  parallel_4.5.0             </span></span>
+<span><span class="co">## [139] ggrepel_0.9.6               graphlayouts_1.2.2         </span></span>
+<span><span class="co">## [141] splines_4.5.0               hms_1.1.3                  </span></span>
+<span><span class="co">## [143] circlize_0.4.16             locfit_1.5-9.12            </span></span>
+<span><span class="co">## [145] igraph_2.1.4                ggpubr_0.6.0               </span></span>
+<span><span class="co">## [147] ggsignif_0.6.4              ScaledMatrix_1.16.0        </span></span>
+<span><span class="co">## [149] reshape2_1.4.4              XML_3.99-0.18              </span></span>
+<span><span class="co">## [151] drc_3.0-1                   evaluate_1.0.3             </span></span>
+<span><span class="co">## [153] BiocManager_1.30.25         tzdb_0.5.0                 </span></span>
+<span><span class="co">## [155] foreach_1.5.2               tweenr_2.0.3               </span></span>
+<span><span class="co">## [157] httpuv_1.6.16               tidyr_1.3.1                </span></span>
+<span><span class="co">## [159] purrr_1.0.4                 polyclip_1.10-7            </span></span>
+<span><span class="co">## [161] clue_0.3-66                 ggforce_0.4.2              </span></span>
+<span><span class="co">## [163] rsvd_1.0.5                  broom_1.0.8                </span></span>
+<span><span class="co">## [165] xtable_1.8-4                e1071_1.7-16               </span></span>
+<span><span class="co">## [167] rstatix_0.7.2               later_1.4.2                </span></span>
+<span><span class="co">## [169] viridisLite_0.4.2           class_7.3-23               </span></span>
+<span><span class="co">## [171] ragg_1.4.0                  tibble_3.2.1               </span></span>
+<span><span class="co">## [173] memoise_2.0.1               FlowSOM_2.16.0             </span></span>
+<span><span class="co">## [175] beeswarm_0.4.0              cluster_2.1.8.1            </span></span>
+<span><span class="co">## [177] concaveman_1.1.0</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
@@ -1594,9 +1593,7 @@ Immunity at the Colorectal Cancer Invasive Front.”</span> <em>Cell</em>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 
@@ -1609,16 +1606,16 @@ Immunity at the Colorectal Cancer Invasive Front.”</span> <em>Cell</em>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>
