@@ -15,28 +15,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Query dependencies
-        run: |
-          install.packages('remotes')
-          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
-        shell: Rscript {0}        
-      
-      - name: Install system requirements
-        run: |
-          apt-get update 
-          apt-get install -y --no-install-recommends apt-utils 
-          apt-get install -y --no-install-recommends libharfbuzz-dev libfribidi-dev zlib1g-dev libfftw3-dev libxml2-dev libxt-dev curl libglpk-dev libcairo2-dev libmagick++-dev libcurl4-gnutls-dev libudunits2-dev libgdal-dev libproj-dev pandoc libnode-dev tk libv8-dev
-          apt-get clean
-          rm -rf /var/lib/apt/ilists/*
+      - name: Setup Bioconductor and install dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: |
+            BiocManager
+            rcmdcheck
+            BiocCheck
+            sf
+            concaveman
+            svglite
+          needs: vignette
 
-      - name: Install dependencies
-        run: |
-         install.packages("BiocManager")
-         install.packages("svglite")
-         BiocManager::install(version = "devel", update = TRUE, ask = FALSE, force = TRUE) 
-         remotes::install_deps(dependencies = TRUE, repos = BiocManager::repositories(), Ncpu = 2L)
-        shell: Rscript {0}
-        
       - name: Check
         run: |
           install.packages("rcmdcheck")          
