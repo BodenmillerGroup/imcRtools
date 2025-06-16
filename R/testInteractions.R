@@ -55,6 +55,11 @@
 #' fraction of cells of type A have at least a given number of neighbors of 
 #' type B?"
 #' 
+#' 4. \code{method = "interaction"}: This method normalizes the interaction count 
+#' between two cell types (A → B) by the number of interactions originating from 
+#' cells of type A. The final interaction score can be interpreted as a normalized 
+#' measure of how frequently cells of type A interact with cells of type B.
+#' 
 #' @section Testing for significance: Within each unique entry to
 #' \code{colData(object)[[group_by]]}, the entries of
 #' \code{colData(object)[[label]]} are randomized \code{iter} times. For each
@@ -133,6 +138,13 @@
 #'                          colPairName = "knn_interaction_graph",
 #'                          iter = 1000,
 #'                          BPPARAM = SerialParam(RNGseed = 123)))
+#'                          
+#' # Interaction style calculation
+#' (out <- countInteractions(pancreasSCE, 
+#'                                 group_by = "ImageNb",
+#'                                 label = "CellType", 
+#'                                 method = "interaction",
+#'                                 colPairName = "knn_interaction_graph"))
 #' 
 #' @seealso 
 #' \code{\link{countInteractions}} for counting (but not testing) cell-cell
@@ -159,7 +171,7 @@ testInteractions <- function(object,
                                 group_by,
                                 label,
                                 colPairName,
-                                method = c("classic", "histocat", "patch", "interaction_abundance"),
+                                method = c("classic", "histocat", "patch", "interaction"),
                                 patch_size = NULL,
                                 iter = 1000,
                                 p_threshold = 0.01,
@@ -194,8 +206,8 @@ testInteractions <- function(object,
         cur_count <- .aggregate_classic_patch(cur_table, 
                                             patch_size = patch_size, 
                                             object, group_by, label)
-    } else if (method == "interaction_abundance") {
-        cur_count <- .aggregate_interaction_abundance(cur_table, object, group_by, label)
+    } else if (method == "interaction") {
+        cur_count <- .aggregate_interaction(cur_table, object, group_by, label)
     }
     
     # Permute the labels

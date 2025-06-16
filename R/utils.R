@@ -859,55 +859,39 @@
     return(dat_temp)
 }
 
-.aggregate_interaction_abundance <- function(dat_table, object, group_by, label,
+.aggregate_interaction <- function(dat_table, object, group_by, label,
                                              check_missing = TRUE) {
-  # 1. Precompute per-group “abundance” + sqrt(total)
-  ab <- dat_table[, .(total = unique(total)), 
-                  by = .(group_by, from_label)][
-                    , `:=`(abundant = total > 2, sqrt_n   = sqrt(total))]
   
-  # 2. Build a full grid of all group × from_label × to_label
-  groups <- unique(dat_table$group_by)
-  cts    <- intersect(unique(dat_table$from_label), unique(dat_table$to_label))
-  grid   <- CJ(group_by   = groups,
-               from_label = cts,
-               to_label   = cts,
-               unique     = TRUE)
+  . <- ct <- .N <- N <- n_tot_int <- NULL
   
-  # 3. Count observed interactions
-  obs <- dat_table[, .N, 
-                   by = .(group_by, from_label, to_label)]
-  setnames(obs, "N", "n_specific_int")
+  dat_temp <- dat_table[, .N, by = .(group_by, from_label, to_label)
+  ][, n_tot_int := sum(N), by = .(group_by, from_label)
+  ][, ct := N / n_tot_int]
   
-  # 4. Left-join onto grid, fill zeros
-  res <- obs[grid, on = .(group_by, from_label, to_label)]
-  res[is.na(n_specific_int), n_specific_int := 0L]
+  if (check_missing) {
+    dat_temp <- dat_temp[CJ(group_by = unique(dat_table$group_by),
+                            from_label = as.factor(levels(dat_table$from_label)),
+                            to_label = as.factor(levels(dat_table$to_label))),
+                         on = c("group_by", "from_label", "to_label")]
+    ct <- from_label <- to_label <- NULL
+    dat_temp[is.na(dat_temp$ct), ct := 0]
+    
+    # Set all cells that are not contained in specific groups to NA
+    cur_dat <- unclass(table(colData(object)[[group_by]],
+                             colData(object)[[label]]))
+    cur_ind <- which(cur_dat == 0, arr.ind = TRUE)
+    
+    if (nrow(cur_ind) > 0) {
+      apply(cur_ind, 1 , function(x){
+        dat_temp[group_by == rownames(cur_dat)[x[1]] &
+                   (from_label == colnames(cur_dat)[x[2]] |
+                      to_label == colnames(cur_dat)[x[2]]),
+                 ct := NA]
+      })
+    }
+  }
   
-  # 5. Attach abundance flags + sqrt_n
-  res[, `:=`(abundant_from = FALSE, abundant_to = FALSE, total_from = NA_real_, sqrt_n = NA_real_)]
-  res[ab, 
-      on = .(group_by, from_label),
-      `:=`(
-        abundant_from = i.abundant,
-        total_from    = i.total,
-        sqrt_n        = i.sqrt_n)]
-  res[is.na(total_from), `:=`(total_from = 0, sqrt_n = 0)]
-  res[ab,
-      on = .(group_by, to_label = from_label),
-      abundant_to := i.abundant]
-  
-  # 6. Compute per-“from” totals, pseudocounted weight, zero-out non-abundant pairs
-  res[, n_tot_int := sum(n_specific_int), by = .(group_by, from_label)]
-  res[, weight    := fifelse(abundant_from & abundant_to,
-                             n_specific_int / (n_tot_int + 10), 0)]
-  
-  # 7. Final “ct” score
-  dat_temp <- res[, .(ct = weight / sqrt_n),
-                  by = .(group_by, from_label, to_label)]
-  dat_temp[is.na(ct), ct := 0]
-  
-  # 8. Order and return
-  setorder(dat_temp, "group_by", "from_label", "to_label")
+  dat_temp <- dat_temp[, .(group_by, from_label, to_label, ct)]
   return(dat_temp)
 }
 
@@ -946,8 +930,8 @@
                                                                      patch_size = patch_size,
                                                                      object, group_by, label,
                                                                      check_missing = FALSE)
-                            } else if (method == "interaction_abundance") {
-                                cur_perm <- .aggregate_interaction_abundance(cur_perm,
+                            } else if (method == "interaction") {
+                                cur_perm <- .aggregate_interaction(cur_perm,
                                                                      object, group_by, label,
                                                                      check_missing = FALSE)
                             }
@@ -1154,6 +1138,199 @@
         p <- p + guides(color = guide_legend(node_color_by), 
                         size = guide_legend(node_size_by))
         } else {
+        p <- p + guides(color = "none", size = guide_legend(as.character(node_size_by)))
+      }
+    }
+  } else {
+    p <- p + guides(color = "none", size = guide_legend(as.character(node_size_by)))
+  }
+  
+  # node size post-processing
+  if (is.null(node_size_by)) {
+    p <- p + guides(size = "none") + scale_size_manual(values = as.numeric(node_size_fix))
+  }
+  
+  return(p)
+}
+
+#### plotInteractions helpers ####
+
+#' @importFrom grid arrow unit
+#' @importFrom ggplot2 labs
+#' @importFrom igraph edge_attr
+
+.generateInteractionsPlot <- function(graph,
+                                      node_color_by,
+                                      node_size_by,
+                                      node_color_fix,
+                                      node_size_fix,
+                                      node_color_palette,
+                                      node_label_repel,
+                                      node_label_color_by, 
+                                      node_label_color_fix,
+                                      edge_color_by,
+                                      edge_color_fix,
+                                      edge_width_by,
+                                      edge_width_fix,
+                                      draw_edges,
+                                      graph_layout){
+  
+  node_color_by <- if (is.null(node_color_by)) NULL else node_color_by
+  node_size_by <- if (is.null(node_size_by)) NULL else node_size_by
+  node_label_color_by <- if (is.null(node_label_color_by)) NULL else node_label_color_by
+  edge_color_by <- if (is.null(edge_color_by)) NULL else edge_color_by
+  edge_width_by <- if (is.null(edge_width_by)) NULL else edge_width_by
+  
+  edge_color_fix <- if (is.null(edge_color_fix)) "black" else edge_color_fix
+  edge_width_fix <- if (is.null(edge_width_fix)) 1 else as.numeric(edge_width_fix) 
+  node_color_fix <- if (is.null(node_color_fix)) "darkgrey" else node_color_fix 
+  node_size_fix <- if (is.null(node_size_fix)) "3" else node_size_fix 
+  node_label_color_fix <- if (is.null(node_label_color_fix)) "black" else node_label_color_fix
+  
+  if (draw_edges) {
+    
+    if (!is.null(edge_color_by) && !is.null(edge_width_by)) {
+      
+      cur_geom_edge <- geom_edge_arc(
+        aes(edge_colour = as.factor(color), width = weight),
+        show.legend = TRUE,
+        arrow   = arrow(length = unit(4, 'mm')),
+        end_cap = circle(3, 'mm')
+      )
+      cur_geom_loop <- geom_edge_loop(
+        aes(edge_colour = as.factor(color), width = weight),
+        show.legend = TRUE,
+        arrow   = arrow(length = unit(4, 'mm')),
+        end_cap = circle(3, 'mm')
+      )
+      
+    } else if (!is.null(edge_color_by)) {
+      
+      cur_geom_edge <- geom_edge_arc(
+        aes(edge_colour = as.factor(color)),
+        width      = edge_width_fix,
+        show.legend= TRUE,
+        arrow      = arrow(length = unit(4, 'mm')),
+        end_cap    = circle(3, 'mm')
+      )
+      cur_geom_loop <- geom_edge_loop(
+        aes(edge_colour = as.factor(color)),
+        width       = edge_width_fix,
+        show.legend = TRUE,
+        arrow       = arrow(length = unit(4, 'mm')),
+        end_cap     = circle(3, 'mm')
+      )
+      
+    } else if (!is.null(edge_width_by)) {
+      
+      cur_geom_edge <- geom_edge_arc(
+        aes(width = weight),
+        edge_colour = edge_color_fix,
+        show.legend = TRUE,
+        arrow       = arrow(length = unit(4, 'mm')),
+        end_cap     = circle(3, 'mm')
+      )
+      cur_geom_loop <- geom_edge_loop(
+        aes(width = weight),
+        edge_colour = edge_color_fix,
+        show.legend = TRUE,
+        arrow       = arrow(length = unit(4, 'mm')),
+        end_cap     = circle(3, 'mm')
+      )
+      
+    } else {
+      
+      cur_geom_edge <- geom_edge_arc(
+        edge_colour = edge_color_fix,
+        width       = edge_width_fix,
+        show.legend = TRUE,
+        arrow       = arrow(length = unit(4, 'mm')),
+        end_cap     = circle(3, 'mm')
+      )
+      cur_geom_loop <- geom_edge_loop(
+        edge_colour = edge_color_fix,
+        width       = edge_width_fix,
+        show.legend = TRUE,
+        arrow       = arrow(length = unit(4, 'mm')),
+        end_cap     = circle(3, 'mm')
+      )
+      
+    }
+    
+  } else {
+    cur_geom_edge <- NULL
+    cur_geom_loop <- NULL
+  }
+  
+  ## node geom
+  if (!is.null(node_color_by)){
+    color <- vertex_attr(graph, node_color_by) 
+  } else {
+    color <- as.character(node_color_fix)
+  }
+  
+  if (!is.null(node_size_by)) {
+    size <- vertex_attr(graph, node_size_by) 
+  } else {
+    size <- as.character(node_size_fix)
+  }
+  
+  if (!is.null(node_color_by)) {
+    cur_geom_node <- geom_node_point(aes(color = color, size = size))
+  } else {
+    cur_geom_node <- geom_node_point(aes(size = size), color = color)
+  }
+  
+  ## node geom label
+  if (!is.null(node_label_color_by)) {
+    color_label <- vertex_attr(graph, node_label_color_by) 
+  } else {
+    color_label <- as.character(node_label_color_fix)
+  }
+  
+  if(node_label_repel){
+    if (!is.null(node_label_color_by)) {
+      cur_geom_node_label <- geom_node_label(aes(color = color_label, 
+                                                 label = vertex_attr(graph, "name")), 
+                                             repel = TRUE, show.legend = FALSE)
+    } else {
+      cur_geom_node_label <- geom_node_label(aes(label = vertex_attr(graph, "name")), 
+                                             color = color_label, 
+                                             repel = TRUE, show.legend = FALSE)
+    }
+  } else {
+    cur_geom_node_label <- NULL
+  }  
+  
+  ## layout
+  if (graph_layout == "chord"){
+    graph_layout <- "linear"
+    circular <- TRUE
+  } else {
+    circular <- FALSE
+  }
+
+  p <- ggraph(graph, layout = graph_layout, circular = circular) +
+    cur_geom_edge +
+    cur_geom_loop +
+    cur_geom_node +
+    cur_geom_node_label +
+    theme_graph(base_family = "")+
+    labs(
+      edge_colour = if (!is.null(edge_color_by)) edge_color_by else NULL,
+      edge_width = if (!is.null(edge_width_by)) edge_width_by else NULL
+    )
+  
+  # legend post-processing
+  if (!is.null(node_color_by)) {
+    if (node_color_by %in% c("n_cells","n_group")) {
+      p <- p + guides(color = guide_colorbar(node_color_by), 
+                      size = guide_legend(node_size_by))
+    } else {
+      if (node_label_repel == FALSE) {
+        p <- p + guides(color = guide_legend(node_color_by), 
+                        size = guide_legend(node_size_by))
+      } else {
         p <- p + guides(color = "none", size = guide_legend(as.character(node_size_by)))
       }
     }

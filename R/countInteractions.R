@@ -44,18 +44,10 @@
 #' fraction of cells of type A have at least a given number of neighbors of 
 #' type B?"
 #' 
-#' 4. \code{method = "interaction_abundance"}:
-#' This method normalizes the interaction count between two cell types (A → B)
-#' by the number of interactions originating from cells of type A 
-#' that occur at least twice.
-#'
-#' To prevent inflated scores from low-abundance cell types, a pseudocount of 10 
-#' is added to the denominator. Additionally, the result is divided by the 
-#' square root of the number of cells of type A to further account for cell abundance.
-#'
-#' The final interaction score can be interpreted as a normalized measure of how
-#' frequently cells of type A interact with cells of type B, adjusted for both 
-#' the interaction density and the abundance of cell type A.
+#' 4. \code{method = "interaction"}: This method normalizes the interaction count 
+#' between two cell types by the number of interactions originating from 
+#' cells of type A. The final interaction score can be interpreted as a normalized 
+#' measure of how frequently cells of type A interact with cells of type B.
 #' 
 #' @return a DataFrame containing one row per \code{group_by} entry and unique
 #' \code{label} entry combination (\code{from_label}, \code{to_label}). The
@@ -92,11 +84,11 @@
 #'                                 patch_size = 3,
 #'                                 colPairName = "knn_interaction_graph"))
 #'
-#' # Patch style calculation
+#' # Interaction style calculation
 #' (out <- countInteractions(pancreasSCE, 
 #'                                 group_by = "ImageNb",
 #'                                 label = "CellType", 
-#'                                 method = "interaction_abundance",
+#'                                 method = "interaction",
 #'                                 colPairName = "knn_interaction_graph"))
 #'                                 
 #' @seealso 
@@ -124,7 +116,7 @@ countInteractions <- function(object,
                                  group_by,
                                  label,
                                  colPairName,
-                                 method = c("classic", "histocat", "patch", "interaction_abundance"),
+                                 method = c("classic", "histocat", "patch", "interaction"),
                                  patch_size = NULL){
     
     # Input check
@@ -149,8 +141,8 @@ countInteractions <- function(object,
         cur_count <- .aggregate_classic_patch(cur_table, 
                                                 patch_size = patch_size,
                                                 object, group_by, label)
-    } else if (method == "interaction_abundance") {
-        cur_count <- .aggregate_interaction_abundance(cur_table, object, group_by, label)
+    } else if (method == "interaction") {
+        cur_count <- .aggregate_interaction(cur_table, object, group_by, label)
     }
     
     setorder(cur_count, "group_by", "from_label", "to_label")

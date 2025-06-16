@@ -241,7 +241,86 @@ test_that("testInteractions function works", {
     expect_equal(rowMin(as.matrix(cur_test[,c("p_gt", "p_lt")])), cur_test$p)
     expect_equal(cur_test$p_gt < cur_test$p_lt, cur_test$interaction)
     expect_equal(cur_test$p < 0.5, cur_test$sig)
-    expect_equal(cur_test$sig * sign(cur_test$interaction - 0.5), cur_test$sigval)  
+    expect_equal(cur_test$sig * sign(cur_test$interaction - 0.5), cur_test$sigval)
+    
+    ############################ interaction ###############################
+    expect_silent(cur_out <- testInteractions(pancreasSCE, 
+                                              group_by = "ImageNb", 
+                                              label = "CellType",
+                                              colPairName = "knn_interaction_graph",
+                                              iter = 100))
+    
+    expect_silent(cur_out <- testInteractions(pancreasSCE, 
+                                              group_by = "ImageNb", 
+                                              label = "CellType",
+                                              method = "interaction",
+                                              colPairName = "knn_interaction_graph",
+                                              iter = 100,
+                                              BPPARAM = SerialParam(RNGseed = 123)))
+    
+    expect_silent(cur_out_2 <- testInteractions(pancreasSCE, 
+                                                group_by = "ImageNb", 
+                                                label = "CellType",
+                                                method = "interaction",
+                                                colPairName = "knn_interaction_graph",
+                                                iter = 100,
+                                                BPPARAM = SerialParam(RNGseed = 123)))
+    
+    expect_identical(cur_out, cur_out_2)
+    
+    # Check numerical values
+    expect_equal(cur_out$ct, c(0.60784314, 0.15686275, 0.23529412, 0.29166667, 0.08333333, 0.62500000, 
+                               0.04166667, 0.05681818, 0.90151515, 0.77037037, 0.17037037, 0.05925926, 
+                               0.26126126, 0.52252252, 0.21621622, 0.06666667, 0.20833333, 0.72500000,
+                               NA, NA, NA, NA, 0.78787879, 0.21212121, NA, 0.23497268, 0.76502732),
+                 tolerance = 0.00001)
+    expect_equal(cur_out$p_gt, c(0.00990099, 0.01980198, 1.00000000, 0.02970297, 0.53465347, 0.96039604, 
+                                 1.00000000, 0.90099010, 0.00990099, 0.00990099, 1.00000000, 1.00000000, 
+                                 0.99009901, 0.00990099, 1.00000000, 1.00000000, 0.99009901, 0.00990099,         
+                                 NA, NA, NA, NA, 0.00990099, 1.00000000, NA, 1.00000000, 0.00990099),
+                 tolerance = 0.00001)
+    expect_equal(cur_out$p_lt, c(1.00000000, 0.99009901, 0.00990099, 1.00000000, 0.80198020, 0.06930693, 
+                                 0.00990099, 0.19801980, 1.00000000, 1.00000000, 0.00990099, 0.00990099, 
+                                 0.01980198, 1.00000000, 0.00990099, 0.00990099, 0.01980198, 1.00000000,         
+                                 NA, NA, NA, NA, 1.00000000, 0.00990099, NA, 0.00990099, 1.00000000),
+                 tolerance = 0.00001)
+    
+    # Check against countInteractions
+    expect_silent(cur_sn <- countInteractions(pancreasSCE, 
+                                              group_by = "ImageNb", 
+                                              label = "CellType",
+                                              method = "interaction",
+                                              colPairName = "knn_interaction_graph"))
+    
+    expect_equal(cur_out$group_by, as.character(cur_sn$group_by))
+    expect_equal(cur_out$from_label, as.character(cur_sn$from_label))
+    expect_equal(cur_out$to_label, as.character(cur_sn$to_label))
+    expect_equal(cur_out$ct, cur_sn$ct)
+    
+    cur_test <- cur_out[!is.na(cur_out$ct),]
+    expect_equal(rowMin(as.matrix(cur_test[,c("p_gt", "p_lt")])), cur_test$p)
+    expect_equal(cur_test$p_gt < cur_test$p_lt, cur_test$interaction)
+    expect_equal(cur_test$p < 0.01, cur_test$sig)
+    expect_equal(cur_test$sig * sign(cur_test$interaction - 0.5), cur_test$sigval)
+    
+    expect_silent(cur_out_2 <- testInteractions(pancreasSCE, 
+                                                group_by = "ImageNb", 
+                                                label = "CellType",
+                                                method = "interaction",
+                                                colPairName = "knn_interaction_graph",
+                                                iter = 100, p_threshold = 0.5,
+                                                BPPARAM = SerialParam(RNGseed = 123)))    
+    
+    expect_equal(cur_out_2$group_by, as.character(cur_sn$group_by))
+    expect_equal(cur_out_2$from_label, as.character(cur_sn$from_label))
+    expect_equal(cur_out_2$to_label, as.character(cur_sn$to_label))
+    expect_equal(cur_out_2$ct, cur_sn$ct)
+    
+    cur_test <- cur_out_2[!is.na(cur_out_2$ct),]
+    expect_equal(rowMin(as.matrix(cur_test[,c("p_gt", "p_lt")])), cur_test$p)
+    expect_equal(cur_test$p_gt < cur_test$p_lt, cur_test$interaction)
+    expect_equal(cur_test$p < 0.5, cur_test$sig)
+    expect_equal(cur_test$sig * sign(cur_test$interaction - 0.5), cur_test$sigval)
     
     # Corner case settings
     # one cell of a given cell-type and no neighbors
@@ -261,19 +340,20 @@ test_that("testInteractions function works", {
                                               BPPARAM = SerialParam(RNGseed = 123)))
     
     # Check numerical values
-    expect_equal(cur_out$ct, c(0.235294117647059, 0, 0, NA, 0, 0, 0, NA, 0, 0, 0.204545454545455, 
-                               NA, NA, NA, NA, NA, 0.133333333333333, 0.0666666666666667, 0, 
-                               0, 0.0810810810810811, 0.0540540540540541, 0.0810810810810811, 
-                               0, 0, 0.0769230769230769, 0.102564102564103, 0, 0, 0, 0, 0, NA, 
-                               NA, NA, NA, NA, 0.303030303030303, 0.0606060606060606, NA, NA, 
-                               0.0655737704918033, 0.360655737704918, NA, NA, NA, NA, NA), 
+    expect_equal(cur_out$ct, c(0.23529412, 0.00000000, 0.00000000, NA, 0.00000000, 0.00000000, 
+                               0.00000000, NA, 0.00000000, 0.00000000, 0.20454545, NA, NA, NA, 
+                               NA, NA, 0.13333333, 0.06666667, 0.00000000, 0.00000000, 0.08108108, 
+                               0.05405405, 0.08108108, 0.00000000, 0.00000000, 0.07692308, 0.10256410, 
+                               0.00000000, 0.00000000, 0.00000000, 0.00000000, 0.00000000, NA, NA, NA,
+                               NA, NA, 0.30303030, 0.06060606, NA, NA, 0.06557377, 0.36065574, NA, NA,
+                               NA, NA, NA), 
                  tolerance = 0.00001)
-    expect_equal(cur_out$p_gt, c(0.0198019801980198, 1, 1, NA, 1, 1, 1, NA, 1, 1, 0.108910891089109, 
-                                 NA, NA, NA, NA, NA, 0.227722772277228, 0.504950495049505, 1, 
-                                 1, 0.504950495049505, 0.702970297029703, 0.455445544554455, 1, 
-                                 1, 0.455445544554455, 0.376237623762376, 1, 1, 1, 1, 1, NA, NA, 
-                                 NA, NA, NA, 0.108910891089109, 1, NA, NA, 1, 0.0198019801980198, 
-                                 NA, NA, NA, NA, NA), 
+    expect_equal(cur_out$p_gt, c(0.01980198, 1.00000000, 1.00000000, NA, 1.00000000, 1.00000000, 1.00000000, 
+                                 NA, 1.00000000, 1.00000000, 0.10891089, NA, NA, NA, NA, NA, 0.22772277, 
+                                 0.50495050, 1.00000000, 1.00000000, 0.50495050, 0.70297030, 0.45544554, 1.00000000, 
+                                 1.00000000, 0.45544554, 0.37623762, 1.00000000, 1.00000000, 1.00000000, 1.00000000,
+                                 1.00000000, NA, NA, NA, NA, NA, 0.10891089, 1.00000000, NA, NA, 1.00000000, 
+                                 0.01980198, NA, NA, NA, NA, NA), 
                  tolerance = 0.00001)
     expect_equal(cur_out$p_lt, c(1, 0.782178217821782, 0.0297029702970297, NA, 0.782178217821782, 
                                  0.97029702970297, 0.247524752475248, NA, 0.0297029702970297, 
@@ -344,6 +424,54 @@ test_that("testInteractions function works", {
                                               group_by = "ImageNb", 
                                               label = "CellType",
                                               method = "histocat",
+                                              colPairName = "expansion_interaction_graph"))
+    expect_equal(cur_out$group_by, as.character(cur_sn$group_by))
+    expect_equal(cur_out$from_label, as.character(cur_sn$from_label))
+    expect_equal(cur_out$to_label, as.character(cur_sn$to_label))
+    expect_equal(cur_out$ct, cur_sn$ct)
+    
+    cur_test <- cur_out[!is.na(cur_out$ct),]
+    expect_equal(rowMin(as.matrix(cur_test[,c("p_gt", "p_lt")])), cur_test$p)
+    expect_equal(cur_test$p_gt < cur_test$p_lt, cur_test$interaction)
+    expect_equal(cur_test$p < 0.01, cur_test$sig)
+    expect_equal(cur_test$sig * sign(cur_test$interaction - 0.5), cur_test$sigval)
+    
+    ## interaction
+    expect_silent(cur_out <- testInteractions(cur_sce, 
+                                              group_by = "ImageNb", 
+                                              label = "CellType",
+                                              method = "interaction",
+                                              colPairName = "expansion_interaction_graph",
+                                              iter = 100,
+                                              BPPARAM = SerialParam(RNGseed = 123)))
+    
+    expect_equal(cur_out$ct, c(1.0000000, 0.0000000, 0.0000000, NA, 0.0000000, 0.0000000, 0.0000000, 
+                               NA, 0.0000000, 0.0000000, 1.0000000, NA, NA, NA, NA, NA, 0.6666667, 
+                               0.3333333, 0.0000000, 0.0000000, 0.3750000, 0.2500000, 0.3750000, 
+                               0.0000000, 0.0000000, 0.4285714, 0.5714286, 0.0000000, 0.0000000, 
+                               0.0000000, 0.0000000, 0.0000000, NA, NA, NA, NA, NA, 0.8333333, 0.1666667,
+                               NA, NA, 0.1538462, 0.8461538, NA, NA, NA, NA, NA),
+                 tolerance = 0.00001)
+    expect_equal(cur_out$p_gt, c(0.00990099, 1.00000000, 1.00000000, NA, 1.00000000, 1.00000000, 1.00000000,
+                                 NA, 1.00000000, 1.00000000, 0.00990099, NA, NA, NA, NA, NA, 0.10891089,
+                                 0.46534653, 1.00000000, 1.00000000, 0.43564356, 0.64356436, 0.45544554, 
+                                 1.00000000, 1.00000000, 0.30693069, 0.14851485, 1.00000000, 1.00000000,
+                                 1.00000000, 1.00000000, 1.00000000, NA, NA, NA, NA, NA, 0.00990099,
+                                 1.00000000, NA, NA, 1.00000000, 0.00990099, NA, NA, NA, NA, NA),
+                 tolerance = 0.00001)
+    expect_equal(cur_out$p_lt, c(1.00000000, 0.78217822, 0.02970297, NA, 0.78217822, 0.97029703, 0.24752475,
+                                 NA, 0.02970297, 0.24752475, 1.00000000, NA, NA, NA, NA, NA, 0.95049505, 
+                                 0.62376238, 0.05940594, 0.93069307, 0.61386139, 0.49504950, 0.56435644, 
+                                 0.94059406, 0.05940594, 0.71287129, 0.92079208, 0.95049505, 0.93069307, 
+                                 0.94059406, 0.95049505, 1.00000000, NA, NA, NA, NA, NA, 1.00000000, 
+                                 0.00990099, NA, NA, 0.00990099, 1.00000000, NA, NA, NA, NA, NA),
+                 tolerance = 0.00001)
+    
+    # Check against countInteractions
+    expect_silent(cur_sn <- countInteractions(cur_sce, 
+                                              group_by = "ImageNb", 
+                                              label = "CellType",
+                                              method = "interaction",
                                               colPairName = "expansion_interaction_graph"))
     expect_equal(cur_out$group_by, as.character(cur_sn$group_by))
     expect_equal(cur_out$from_label, as.character(cur_sn$from_label))

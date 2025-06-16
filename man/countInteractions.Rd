@@ -9,7 +9,7 @@ countInteractions(
   group_by,
   label,
   colPairName,
-  method = c("classic", "histocat", "patch"),
+  method = c("classic", "histocat", "patch", "interaction"),
   patch_size = NULL
 )
 }
@@ -70,6 +70,11 @@ average, given it has at least one neighbor of type B?"
 across all cells of type A. The final count can be interpreted as "What 
 fraction of cells of type A have at least a given number of neighbors of 
 type B?"
+
+4. \code{method = "interaction"}: This method normalizes the interaction count 
+between two cell types by the number of interactions originating from 
+cells of type A. The final interaction score can be interpreted as a normalized 
+measure of how frequently cells of type A interact with cells of type B.
 }
 
 \examples{
@@ -99,6 +104,13 @@ pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",
                                 label = "CellType", 
                                 method = "patch",
                                 patch_size = 3,
+                                colPairName = "knn_interaction_graph"))
+
+# Interaction style calculation
+(out <- countInteractions(pancreasSCE, 
+                                group_by = "ImageNb",
+                                label = "CellType", 
+                                method = "interaction",
                                 colPairName = "knn_interaction_graph"))
                                 
 }
