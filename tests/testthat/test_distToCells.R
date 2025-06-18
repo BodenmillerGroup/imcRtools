@@ -2,7 +2,7 @@ test_that("distToCells works",{
   library(cytomapper)
   data("pancreasSCE")
 
-  # min
+  ################################ min ###################################
   # works when cell types present and with negative distances returned
   expect_message(cur_sce <- distToCells(object = pancreasSCE,
                                         x_cells = pancreasSCE$CellType == "celltype_B",
@@ -136,7 +136,7 @@ test_that("distToCells works",{
   expect_true(all(is.na(cur_sce$distToCells[cur_sce$ImageName == "J02_imc.tiff"])))
   expect_true(all(!is.na(cur_sce$distToCells[cur_sce$ImageName != "J02_imc.tiff"])))
 
-  # max
+  ################################ max ###################################
   # works when cell types present and with negative distances returned
   expect_message(cur_sce <- distToCells(object = pancreasSCE,
                                         x_cells = pancreasSCE$CellType == "celltype_B",
@@ -270,7 +270,7 @@ test_that("distToCells works",{
   expect_true(all(!is.na(cur_sce$distToCells[cur_sce$ImageName != "J02_imc.tiff"])))
 
 
-  # mean
+  ################################ mean ###################################
   # works when cell types present and with negative distances returned
   expect_message(cur_sce <- distToCells(object = pancreasSCE,
                                         x_cells = pancreasSCE$CellType == "celltype_B",
@@ -404,7 +404,7 @@ test_that("distToCells works",{
   expect_true(all(!is.na(cur_sce$distToCells[cur_sce$ImageName != "J02_imc.tiff"])))
 
 
-  # median
+  ################################ median ###################################
   # works when cell types present and with negative distances returned
   expect_message(cur_sce <- distToCells(object = pancreasSCE,
                                         x_cells = pancreasSCE$CellType == "celltype_B",
