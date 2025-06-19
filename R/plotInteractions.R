@@ -99,7 +99,7 @@
 #' @author Marlene Lutz (\email{marlene.lutz@@uzh.ch})
 #' 
 #' @importFrom SingleCellExperiment colData
-#' @importFrom dplyr %>% group_by summarise filter mutate select n count across group_by_at
+#' @importFrom dplyr group_by summarise filter mutate select n count across group_by_at
 #' @importFrom tidyselect all_of
 #' @importFrom igraph graph_from_data_frame
 #' @importFrom stats na.omit
