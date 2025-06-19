@@ -238,7 +238,7 @@ test_that("plotInteractions function works", {
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
-                                node_size_by = "n_group", node_size_fix = "22"),
+                                node_size_by = "n_group", node_size_fix = 22),
                regexp = "'node_size_by' and 'node_size_fix' can not be defined at the same time.",
                fixed = TRUE)
   
@@ -295,13 +295,13 @@ test_that("plotInteractions function works", {
   )
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
-                                edge_width_by = "ct", edge_width_fix = "2"),
+                                edge_width_by = "ct", edge_width_fix = 2),
                regexp = "'edge_width_by' and 'edge_width_fix' can not be defined at the same time.",
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
                                 edge_width_fix = "3"),
-               regexp = "edge_width_fix has to be numeric.",
+               regexp = "'edge_width_fix' has to be numeric.",
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
@@ -546,7 +546,7 @@ test_that("plotInteractions function works", {
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
-                                node_size_by = "n_group", node_size_fix = "22"),
+                                node_size_by = "n_group", node_size_fix = 22),
                regexp = "'node_size_by' and 'node_size_fix' can not be defined at the same time.",
                fixed = TRUE)
   
@@ -603,13 +603,13 @@ test_that("plotInteractions function works", {
   )
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
-                                edge_width_by = "ct", edge_width_fix = "2"),
+                                edge_width_by = "ct", edge_width_fix = 2),
                regexp = "'edge_width_by' and 'edge_width_fix' can not be defined at the same time.",
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
                                 edge_width_fix = "3"),
-               regexp = "edge_width_fix has to be numeric.",
+               regexp = "'edge_width_fix' has to be numeric.",
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
@@ -854,7 +854,7 @@ test_that("plotInteractions function works", {
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
-                                node_size_by = "n_group", node_size_fix = "22"),
+                                node_size_by = "n_group", node_size_fix = 22),
                regexp = "'node_size_by' and 'node_size_fix' can not be defined at the same time.",
                fixed = TRUE)
   
@@ -911,13 +911,13 @@ test_that("plotInteractions function works", {
   )
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
-                                edge_width_by = "ct", edge_width_fix = "2"),
+                                edge_width_by = "ct", edge_width_fix = 2),
                regexp = "'edge_width_by' and 'edge_width_fix' can not be defined at the same time.",
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
                                 edge_width_fix = "3"),
-               regexp = "edge_width_fix has to be numeric.",
+               regexp = "'edge_width_fix' has to be numeric.",
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
@@ -1161,7 +1161,7 @@ test_that("plotInteractions function works", {
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
-                                node_size_by = "n_group", node_size_fix = "22"),
+                                node_size_by = "n_group", node_size_fix = 22),
                regexp = "'node_size_by' and 'node_size_fix' can not be defined at the same time.",
                fixed = TRUE)
   
@@ -1218,13 +1218,13 @@ test_that("plotInteractions function works", {
   )
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
-                                edge_width_by = "ct", edge_width_fix = "2"),
+                                edge_width_by = "ct", edge_width_fix = 2),
                regexp = "'edge_width_by' and 'edge_width_fix' can not be defined at the same time.",
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
                                 edge_width_fix = "3"),
-               regexp = "edge_width_fix has to be numeric.",
+               regexp = "'edge_width_fix' has to be numeric.",
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
