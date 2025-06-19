@@ -1456,8 +1456,8 @@
   }
   
   if (!is.null(node_size_fix) &&
-      (!is.character(node_size_fix))){
-    stop("'node_size_fix' has to be a character.")
+      (!is.numeric(node_size_fix))){
+    stop("'node_size_fix' has to be numeric.")
   }
   
   if (!is.null(node_label_color_fix) &&
@@ -1507,7 +1507,7 @@
     
     test <- out %>% group_by(from_label, to_label) %>% summarise(n_unique = n_distinct(.data[[edge_color_by]]))
     if (any(test$n_unique > 1)) {
-      stop("'color_by' needs to be unique for all 'from_label'-'to_label' pairs.")
+      stop("'edge_color_by' needs to be unique for all 'from_label'-'to_label' pairs.")
     }
   }
   
@@ -1535,7 +1535,7 @@
     }
     
     if (!is.numeric(out[[edge_width_by]])){
-      stop("'edge_width_by' needs to be numeric.")
+      stop("'edge_width_by' entries need to be numeric.")
     }
     
     test <- out %>% as.data.frame() %>% group_by(from_label, to_label) %>% summarise(mean = mean(.data[[edge_width_by]], na.rm = TRUE))
@@ -1544,6 +1544,11 @@
       stop("Missing weights for some 'from_label'-'to_label' pairs:\n", 
            paste(capture.output(print(missing)), collapse = "\n"))
     }
+  }
+  
+  if (!is.null(edge_width_fix) &&
+      (!is.numeric(edge_width_fix))){
+    stop("'edge_width_fix' has to be numeric.")
   }
   
   if(!is.null(edge_width_by) &&

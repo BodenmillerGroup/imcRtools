@@ -26,7 +26,7 @@
 #' \code{colData(object)[[label]]}. Simplified, it counts for each cell of
 #' type A the number of neighbors of type B.
 #' This count is averaged within each unique entry 
-#' \code{colData(object)[[group_by]]} in three different ways:
+#' \code{colData(object)[[group_by]]} in four different ways:
 #' 
 #' 1. \code{method = "classic"}: The count is divided by the total number of 
 #' cells of type A. The final count can be interpreted as "How many neighbors 
@@ -44,10 +44,9 @@
 #' fraction of cells of type A have at least a given number of neighbors of 
 #' type B?"
 #' 
-#' 4. \code{method = "interaction"}: This method normalizes the interaction count 
-#' between two cell types by the number of interactions originating from 
-#' cells of type A. The final interaction score can be interpreted as a normalized 
-#' measure of how frequently cells of type A interact with cells of type B.
+#' 4. \code{method = "interaction"}: The count is divided by the total number of 
+#' interactions from cell type A. The final count can be interpreted as the 
+#' fraction of interactions of cell type A that occur with cell type B.
 #' 
 #' @return a DataFrame containing one row per \code{group_by} entry and unique
 #' \code{label} entry combination (\code{from_label}, \code{to_label}). The
@@ -98,6 +97,7 @@
 #' @author Vito Zanotelli
 #' @author Jana Fischer
 #' @author adapted by Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
+#' @author adapted by Marlene Lutz (\email{marlene.lutz@@uzh.ch})
 #' 
 #' @references
 #' \href{https://www.sciencedirect.com/science/article/pii/S2405471217305434}{

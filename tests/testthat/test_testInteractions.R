@@ -322,6 +322,19 @@ test_that("testInteractions function works", {
     expect_equal(cur_test$p < 0.5, cur_test$sig)
     expect_equal(cur_test$sig * sign(cur_test$interaction - 0.5), cur_test$sigval)
     
+    # ct values sum up to 1 for the "from_label" cell-type per grouping level
+    expect_silent(cur_out <- testInteractions(pancreasSCE, 
+                                              group_by = "ImageNb", 
+                                              label = "CellType",
+                                              method = "interaction",
+                                              colPairName = "knn_interaction_graph",
+                                              iter = 100, p_threshold = 0.5,
+                                              BPPARAM = SerialParam(RNGseed = 123))) 
+    
+    test <- cur_out %>% as.data.frame() %>% filter(!is.na(ct)) %>% group_by(group_by, from_label) %>% summarise(sum_ct = sum(ct))
+    
+    expect_equal(sum(test$sum_ct)/nrow(test), 1)
+    
     # Corner case settings
     # one cell of a given cell-type and no neighbors
     cur_sce <- pancreasSCE

@@ -38,7 +38,8 @@ which stores the cell labels. These can be cell-types labels or other
 metadata entries.}
 
 \item{group_by}{a single character indicating the \code{colData(object)}
-entry by which interactions are grouped. This is usually the image or patient ID.}
+entry by which interactions are grouped. This is usually the image or patient ID. 
+a single character indicating the \code{colData(object)}}
 
 \item{node_color_by}{single character either
 \code{NULL, "name","n_cells", "n_group"} by which the nodes should be
@@ -75,7 +76,7 @@ by which the width of the edges are scaled.}
 \item{return_data}{should the edge list and vertex metadata for graph
 construction be returned as a \code{list} of two \code{data.frames}?}
 
-\item{graph_layout}{single character either
+\item{graph_layout}{single character of
 \code{"circle", "chord", "linear", "fr", "kk", "drl", "stress", "graphopt", 
 "lgl", "tree", "sugiyama", "star", "nicely", "manual", "grid", "mds", "sphere", 
 "randomly", "gem", "dh"} which defines the graph layout.
@@ -88,83 +89,59 @@ returns a \code{ggplot} object or a \code{list} of two
 \description{
 Function to plot directed interaction graphs based on symbolic 
 edge-lists and vertex metadata.
-The user can specify node, node_label and edge aesthetics.
+The user can specify node, node_label and edge aesthetics using dedicated
+arguments. The resulting plot can be further refined with `ggplot2` for node 
+styling and `ggraph` for edge-specific customization.
 }
 \examples{
 set.seed(22)
 library(cytomapper)
 library(BiocParallel)
-library(dplyr)
-library(ggplot2)
-library(ggraph)
 data(pancreasSCE)
 
 ## 1. countInteractions or testInteractions
 sce  <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn", k = 3)
 
-cur_out <- countInteractions(sce,
-                             group_by = "ImageNb",
-                             label = "CellType",
-                             method = "classic", # choose from c("classic", "histocat", "patch", "interaction")
-                             colPairName = "knn_interaction_graph")
+count_out <- countInteractions(sce,
+                               group_by = "ImageNb",
+                               label = "CellType",
+                               method = "classic", # choose from c("classic", "histocat", "patch", "interaction")
+                               colPairName = "knn_interaction_graph")
 
-cur_out <- testInteractions(sce, 
-                            group_by = "ImageNb",
-                            label = "CellType", 
-                            method = "classic", # choose from c("classic", "histocat", "patch", "interaction")
-                            patch_size = 3,
-                            colPairName = "knn_interaction_graph", 
-                            iter = 100, 
-                            p_threshold = 0.5, 
-                            BPPARAM = SerialParam(RNGseed = 123))
+test_out <- testInteractions(sce, 
+                             group_by = "ImageNb",
+                             label = "CellType", 
+                             method = "classic", # choose from c("classic", "histocat", "patch", "interaction")
+                             colPairName = "knn_interaction_graph", 
+                             iter = 100, 
+                             p_threshold = 0.5, 
+                             BPPARAM = SerialParam(RNGseed = 123))
 
 ## 2. Plot interactions 
 
 # default                
-plotInteractions(cur_out, sce, "CellType", "ImageNb")
+plotInteractions(count_out, sce, "CellType", "ImageNb")
 
 # adjust node aesthetics
-plotInteractions(cur_out, sce, "CellType", "ImageNb",
+plotInteractions(count_out, sce, "CellType", "ImageNb",
                  node_color_by = "name",
                  node_size_by = "n_cells")
                  
-## specify custom node and node label colors
-node_color <- setNames(c("red", "blue", "green"), c("celltype_A", "celltype_B", "celltype_C"))
-plotInteractions(cur_out, sce, "CellType", "ImageNb", node_color_by = "name", node_label_color_by = "name") +
-scale_color_manual(values = node_color)
-                 
 # adjust edge aesthetics
-## edge width based on the summarized count derived from \code{countInteractions} averaged per 'from_label'-'to_label' pair
-plotInteractions(cur_out, sce, "CellType", "ImageNb",
+plotInteractions(test_out, sce, "CellType", "ImageNb", 
                  edge_width_by = "ct")
-                 
-## edge color based on interaction significance derived from \code{testInteractions}
-cur_out <- cur_out \%>\% as.data.frame() \%>\% group_by(from_label, to_label) \%>\% mutate(color_by_sig = sum(sigval, na.rm = TRUE) > 0)
-plotInteractions(cur_out, sce, "CellType", "ImageNb",
-                 edge_color_by = "color_by_sig")
-                 
-## specify custom edge colors
-edge_color <- setNames(c("red", "blue"),c(TRUE, FALSE))
-plotInteractions(cur_out, sce, "CellType", "ImageNb",
-                 edge_color_by = "color_by_sig") +
-                 scale_edge_colour_manual(values = edge_color)
                    
-# Plot spatial context - return data
-plotInteractions(cur_out, sce, "CellType", "ImageNb",
+# Plot interactions - return data
+plotInteractions(test_out, sce, "CellType", "ImageNb",
                  return_data = TRUE)          
                   
 }
-\references{
-\href{https://doi.org/10.1016/j.cels.2021.09.012}{
-Bhate S. et al., Tissue schematics map the specialization of immune tissue 
-motifs and their appropriation by tumors, Cell Systems, 2022}
-}
 \seealso{
-#' \code{\link{countInteractions}} for counting (but not testing) cell-cell
+\code{\link{countInteractions}} for counting (but not testing) cell-cell
 interactions per grouping level.
-#' \code{\link{testInteractions}} for testing cell-cell 
+\code{\link{testInteractions}} for testing cell-cell 
 interactions per grouping level.
 }
 \author{
-Lasse Meyer (\email{lasse.meyer@uzh.ch})
+Marlene Lutz (\email{marlene.lutz@uzh.ch})
 }

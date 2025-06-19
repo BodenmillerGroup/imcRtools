@@ -94,7 +94,7 @@ of edges (interactions) between each set of unique entries in
 \code{colData(object)[[label]]}. Simplified, it counts for each cell of
 type A the number of neighbors of type B.
 This count is averaged within each unique entry 
-\code{colData(object)[[group_by]]} in three different ways:
+\code{colData(object)[[group_by]]} in four different ways:
 
 1. \code{method = "classic"}: The count is divided by the total number of 
 cells of type A. The final count can be interpreted as "How many neighbors 
@@ -112,10 +112,9 @@ across all cells of type A. The final count can be interpreted as "What
 fraction of cells of type A have at least a given number of neighbors of 
 type B?"
 
-4. \code{method = "interaction"}: This method normalizes the interaction count 
-between two cell types (A → B) by the number of interactions originating from 
-cells of type A. The final interaction score can be interpreted as a normalized 
-measure of how frequently cells of type A interact with cells of type B.
+4. \code{method = "interaction"}: The count is divided by the total number of 
+interactions from cell type A. The final count can be interpreted as the 
+fraction of interactions of cell type A that occur with cell type B.
 }
 
 \section{Testing for significance}{
@@ -174,11 +173,11 @@ pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",
                          BPPARAM = SerialParam(RNGseed = 123)))
                          
 # Interaction style calculation
-(out <- countInteractions(pancreasSCE, 
-                                group_by = "ImageNb",
-                                label = "CellType", 
-                                method = "interaction",
-                                colPairName = "knn_interaction_graph"))
+(out <- testInteractions(pancreasSCE, 
+                         group_by = "ImageNb",
+                         label = "CellType", 
+                         method = "interaction",
+                         colPairName = "knn_interaction_graph"))
 
 }
 \references{
@@ -203,4 +202,6 @@ Vito Zanotelli
 Jana Fischer
 
 adapted by Nils Eling (\email{nils.eling@dqbm.uzh.ch})
+
+adapted by Marlene Lutz (\email{marlene.lutz@uzh.ch})
 }

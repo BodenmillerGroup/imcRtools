@@ -188,8 +188,8 @@ test_that("plotInteractions function works", {
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
-                                node_size_fix = 3),
-               regexp = "'node_size_fix' has to be a character.",
+                                node_size_fix = "3"),
+               regexp = "'node_size_fix' has to be numeric.",
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
@@ -257,7 +257,7 @@ test_that("plotInteractions function works", {
   cur_out$color_by_random <- rownames(cur_out)
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
                                 edge_color_by = "color_by_random"),
-               regexp = "'color_by' needs to be unique for all 'from_label'-'to_label' pairs.",
+               regexp = "'edge_color_by' needs to be unique for all 'from_label'-'to_label' pairs.",
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
@@ -283,7 +283,7 @@ test_that("plotInteractions function works", {
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
                                 edge_width_by = "interaction"),
-               regexp = "'edge_width_by' needs to be numeric.",
+               regexp = "'edge_width_by' entries need to be numeric.",
                fixed = TRUE)
   
   cur_out$weight <- ifelse(cur_out$from_label == "celltype_A" & cur_out$to_label == "celltype_B", NA, cur_out$ct)
@@ -297,6 +297,11 @@ test_that("plotInteractions function works", {
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
                                 edge_width_by = "ct", edge_width_fix = "2"),
                regexp = "'edge_width_by' and 'edge_width_fix' can not be defined at the same time.",
+               fixed = TRUE)
+  
+  expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
+                                edge_width_fix = "3"),
+               regexp = "'edge_width_fix' has to be numeric.",
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
@@ -491,8 +496,8 @@ test_that("plotInteractions function works", {
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
-                                node_size_fix = 3),
-               regexp = "'node_size_fix' has to be a character.",
+                                node_size_fix = "3"),
+               regexp = "'node_size_fix' has to be numeric.",
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
@@ -560,7 +565,7 @@ test_that("plotInteractions function works", {
   cur_out$color_by_random <- rownames(cur_out)
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
                                 edge_color_by = "color_by_random"),
-               regexp = "'color_by' needs to be unique for all 'from_label'-'to_label' pairs.",
+               regexp = "'edge_color_by' needs to be unique for all 'from_label'-'to_label' pairs.",
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
@@ -586,7 +591,7 @@ test_that("plotInteractions function works", {
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
                                 edge_width_by = "interaction"),
-               regexp = "'edge_width_by' needs to be numeric.",
+               regexp = "'edge_width_by' entries need to be numeric.",
                fixed = TRUE)
   
   cur_out$weight <- ifelse(cur_out$from_label == "celltype_A" & cur_out$to_label == "celltype_B", NA, cur_out$ct)
@@ -600,6 +605,11 @@ test_that("plotInteractions function works", {
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
                                 edge_width_by = "ct", edge_width_fix = "2"),
                regexp = "'edge_width_by' and 'edge_width_fix' can not be defined at the same time.",
+               fixed = TRUE)
+  
+  expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
+                                edge_width_fix = "3"),
+               regexp = "'edge_width_fix' has to be numeric.",
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
@@ -794,8 +804,8 @@ test_that("plotInteractions function works", {
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
-                                node_size_fix = 3),
-               regexp = "'node_size_fix' has to be a character.",
+                                node_size_fix = "3"),
+               regexp = "'node_size_fix' has to be numeric.",
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
@@ -863,7 +873,7 @@ test_that("plotInteractions function works", {
   cur_out$color_by_random <- rownames(cur_out)
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
                                 edge_color_by = "color_by_random"),
-               regexp = "'color_by' needs to be unique for all 'from_label'-'to_label' pairs.",
+               regexp = "'edge_color_by' needs to be unique for all 'from_label'-'to_label' pairs.",
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
@@ -889,7 +899,7 @@ test_that("plotInteractions function works", {
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
                                 edge_width_by = "interaction"),
-               regexp = "'edge_width_by' needs to be numeric.",
+               regexp = "'edge_width_by' entries need to be numeric.",
                fixed = TRUE)
   
   cur_out$weight <- ifelse(cur_out$from_label == "celltype_A" & cur_out$to_label == "celltype_B", NA, cur_out$ct)
@@ -903,6 +913,11 @@ test_that("plotInteractions function works", {
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
                                 edge_width_by = "ct", edge_width_fix = "2"),
                regexp = "'edge_width_by' and 'edge_width_fix' can not be defined at the same time.",
+               fixed = TRUE)
+  
+  expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
+                                edge_width_fix = "3"),
+               regexp = "'edge_width_fix' has to be numeric.",
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
@@ -1096,8 +1111,8 @@ test_that("plotInteractions function works", {
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
-                                node_size_fix = 3),
-               regexp = "'node_size_fix' has to be a character.",
+                                node_size_fix = "3"),
+               regexp = "'node_size_fix' has to be numeric.",
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
@@ -1165,7 +1180,7 @@ test_that("plotInteractions function works", {
   cur_out$color_by_random <- rownames(cur_out)
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
                                 edge_color_by = "color_by_random"),
-               regexp = "'color_by' needs to be unique for all 'from_label'-'to_label' pairs.",
+               regexp = "'edge_color_by' needs to be unique for all 'from_label'-'to_label' pairs.",
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
@@ -1191,7 +1206,7 @@ test_that("plotInteractions function works", {
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
                                 edge_width_by = "interaction"),
-               regexp = "'edge_width_by' needs to be numeric.",
+               regexp = "'edge_width_by' entries need to be numeric.",
                fixed = TRUE)
   
   cur_out$weight <- ifelse(cur_out$from_label == "celltype_A" & cur_out$to_label == "celltype_B", NA, cur_out$ct)
@@ -1205,6 +1220,11 @@ test_that("plotInteractions function works", {
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
                                 edge_width_by = "ct", edge_width_fix = "2"),
                regexp = "'edge_width_by' and 'edge_width_fix' can not be defined at the same time.",
+               fixed = TRUE)
+  
+  expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
+                                edge_width_fix = "3"),
+               regexp = "'edge_width_fix' has to be numeric.",
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",

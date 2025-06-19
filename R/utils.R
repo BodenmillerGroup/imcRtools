@@ -954,7 +954,7 @@
                       by = c("from_label", "to_label", "group_by"),
                       suffixes = c("_perm", "_obs"), all = TRUE)
     
-    dat_perm <- as.data.table(as.data.frame(dat_perm))
+    # dat_perm <- as.data.table(as.data.frame(dat_perm))
 
     . <- ct_perm <- ct_obs <- p_gt <- p_lt <- NULL
     direction <- sig <- sigval <- p <-  NULL
@@ -1182,9 +1182,9 @@
   edge_width_by <- if (is.null(edge_width_by)) NULL else edge_width_by
   
   edge_color_fix <- if (is.null(edge_color_fix)) "black" else edge_color_fix
-  edge_width_fix <- if (is.null(edge_width_fix)) 1 else as.numeric(edge_width_fix) 
+  edge_width_fix <- if (is.null(edge_width_fix)) 1 else edge_width_fix
   node_color_fix <- if (is.null(node_color_fix)) "darkgrey" else node_color_fix 
-  node_size_fix <- if (is.null(node_size_fix)) "3" else node_size_fix 
+  node_size_fix <- if (is.null(node_size_fix)) 3 else node_size_fix 
   node_label_color_fix <- if (is.null(node_label_color_fix)) "black" else node_label_color_fix
   
   if (draw_edges) {
@@ -1193,15 +1193,25 @@
       
       cur_geom_edge <- geom_edge_arc(
         aes(edge_colour = as.factor(color), width = weight),
-        show.legend = TRUE,
+        show.legend = FALSE,
         arrow   = arrow(length = unit(4, 'mm')),
         end_cap = circle(3, 'mm')
       )
       cur_geom_loop <- geom_edge_loop(
         aes(edge_colour = as.factor(color), width = weight),
-        show.legend = TRUE,
+        show.legend = FALSE,
         arrow   = arrow(length = unit(4, 'mm')),
         end_cap = circle(3, 'mm')
+      )
+      
+      # without arrows for legend
+      cur_geom_edge_legend <- geom_edge_arc(
+        aes(edge_colour = as.factor(color), width = weight),
+        show.legend = TRUE
+      )
+      cur_geom_loop_legend <- geom_edge_loop(
+        aes(edge_colour = as.factor(color), width = weight),
+        show.legend = TRUE
       )
       
     } else if (!is.null(edge_color_by)) {
@@ -1209,16 +1219,28 @@
       cur_geom_edge <- geom_edge_arc(
         aes(edge_colour = as.factor(color)),
         width      = edge_width_fix,
-        show.legend= TRUE,
+        show.legend= FALSE,
         arrow      = arrow(length = unit(4, 'mm')),
         end_cap    = circle(3, 'mm')
       )
       cur_geom_loop <- geom_edge_loop(
         aes(edge_colour = as.factor(color)),
         width       = edge_width_fix,
-        show.legend = TRUE,
+        show.legend = FALSE,
         arrow       = arrow(length = unit(4, 'mm')),
         end_cap     = circle(3, 'mm')
+      )
+      
+      # without arrows for legend
+      cur_geom_edge_legend <- geom_edge_arc(
+        aes(edge_colour = as.factor(color)),
+        width      = edge_width_fix,
+        show.legend = TRUE
+      )
+      cur_geom_loop_legend <- geom_edge_loop(
+        aes(edge_colour = as.factor(color)),
+        width      = edge_width_fix,
+        show.legend = TRUE
       )
       
     } else if (!is.null(edge_width_by)) {
@@ -1226,16 +1248,28 @@
       cur_geom_edge <- geom_edge_arc(
         aes(width = weight),
         edge_colour = edge_color_fix,
-        show.legend = TRUE,
+        show.legend = FALSE,
         arrow       = arrow(length = unit(4, 'mm')),
         end_cap     = circle(3, 'mm')
       )
       cur_geom_loop <- geom_edge_loop(
         aes(width = weight),
         edge_colour = edge_color_fix,
-        show.legend = TRUE,
+        show.legend = FALSE,
         arrow       = arrow(length = unit(4, 'mm')),
         end_cap     = circle(3, 'mm')
+      )
+      
+      # without arrows for legend
+      cur_geom_edge_legend <- geom_edge_arc(
+        aes(width = weight),
+        edge_colour = edge_color_fix,
+        show.legend = TRUE
+      )
+      cur_geom_loop_legend <- geom_edge_loop(
+        aes(width = weight),
+        edge_colour = edge_color_fix,
+        show.legend = TRUE
       )
       
     } else {
@@ -1243,16 +1277,28 @@
       cur_geom_edge <- geom_edge_arc(
         edge_colour = edge_color_fix,
         width       = edge_width_fix,
-        show.legend = TRUE,
+        show.legend = FALSE,
         arrow       = arrow(length = unit(4, 'mm')),
         end_cap     = circle(3, 'mm')
       )
       cur_geom_loop <- geom_edge_loop(
         edge_colour = edge_color_fix,
         width       = edge_width_fix,
-        show.legend = TRUE,
+        show.legend = FALSE,
         arrow       = arrow(length = unit(4, 'mm')),
         end_cap     = circle(3, 'mm')
+      )
+      
+      # without arrows for legend
+      cur_geom_edge_legend <- geom_edge_arc(
+        edge_colour = edge_color_fix,
+        width       = edge_width_fix,
+        show.legend = TRUE
+      )
+      cur_geom_loop_legend <- geom_edge_loop(
+        edge_colour = edge_color_fix,
+        width       = edge_width_fix,
+        show.legend = TRUE
       )
       
     }
@@ -1260,6 +1306,8 @@
   } else {
     cur_geom_edge <- NULL
     cur_geom_loop <- NULL
+    cur_geom_edge_legend <- NULL
+    cur_geom_loop_legend <- NULL
   }
   
   ## node geom
@@ -1313,6 +1361,8 @@
   p <- ggraph(graph, layout = graph_layout, circular = circular) +
     cur_geom_edge +
     cur_geom_loop +
+    cur_geom_edge_legend +
+    cur_geom_loop_legend +
     cur_geom_node +
     cur_geom_node_label +
     theme_graph(base_family = "")+
@@ -1322,6 +1372,7 @@
     )
   
   # legend post-processing
+  ## node color
   if (!is.null(node_color_by)) {
     if (node_color_by %in% c("n_cells","n_group")) {
       p <- p + guides(color = guide_colorbar(node_color_by), 
@@ -1337,6 +1388,7 @@
   } else {
     p <- p + guides(color = "none", size = guide_legend(as.character(node_size_by)))
   }
+  
   
   # node size post-processing
   if (is.null(node_size_by)) {

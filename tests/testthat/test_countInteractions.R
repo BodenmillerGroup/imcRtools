@@ -523,7 +523,16 @@ test_that("countInteractions function works", {
       group_by(image, from_label) %>% mutate(n_tot_int = sum(N)) %>%
       ungroup() %>% mutate(ct = N / n_tot_int)
     
-    expect_equal(cur_out_2$ct[!is.na(cur_out_2$ct)], test$ct[!is.na(cur_out_2$ct)]) 
+    expect_equal(cur_out_2$ct[!is.na(cur_out_2$ct)], test$ct[!is.na(cur_out_2$ct)])
+    
+    # ct values sum up to 1 for the "from_label" cell-type per grouping level
+    expect_silent(cur_out <- countInteractions(pancreasSCE, group_by = "ImageNb",
+                                               label = "CellType", method = "interaction",
+                                               colPairName = "knn_interaction_graph")) 
+    
+    test <- cur_out %>% as.data.frame() %>% filter(!is.na(ct)) %>% group_by(group_by, from_label) %>% summarise(sum_ct = sum(ct))
+    
+    expect_equal(sum(test$sum_ct)/nrow(test), 1)
     
     # One image only contains one cell type
     data(pancreasSCE)

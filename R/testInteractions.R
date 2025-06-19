@@ -37,7 +37,7 @@
 #' \code{colData(object)[[label]]}. Simplified, it counts for each cell of
 #' type A the number of neighbors of type B.
 #' This count is averaged within each unique entry 
-#' \code{colData(object)[[group_by]]} in three different ways:
+#' \code{colData(object)[[group_by]]} in four different ways:
 #' 
 #' 1. \code{method = "classic"}: The count is divided by the total number of 
 #' cells of type A. The final count can be interpreted as "How many neighbors 
@@ -55,10 +55,9 @@
 #' fraction of cells of type A have at least a given number of neighbors of 
 #' type B?"
 #' 
-#' 4. \code{method = "interaction"}: This method normalizes the interaction count 
-#' between two cell types (A → B) by the number of interactions originating from 
-#' cells of type A. The final interaction score can be interpreted as a normalized 
-#' measure of how frequently cells of type A interact with cells of type B.
+#' 4. \code{method = "interaction"}: The count is divided by the total number of 
+#' interactions from cell type A. The final count can be interpreted as the 
+#' fraction of interactions of cell type A that occur with cell type B.
 #' 
 #' @section Testing for significance: Within each unique entry to
 #' \code{colData(object)[[group_by]]}, the entries of
@@ -140,11 +139,11 @@
 #'                          BPPARAM = SerialParam(RNGseed = 123)))
 #'                          
 #' # Interaction style calculation
-#' (out <- countInteractions(pancreasSCE, 
-#'                                 group_by = "ImageNb",
-#'                                 label = "CellType", 
-#'                                 method = "interaction",
-#'                                 colPairName = "knn_interaction_graph"))
+#' (out <- testInteractions(pancreasSCE, 
+#'                          group_by = "ImageNb",
+#'                          label = "CellType", 
+#'                          method = "interaction",
+#'                          colPairName = "knn_interaction_graph"))
 #' 
 #' @seealso 
 #' \code{\link{countInteractions}} for counting (but not testing) cell-cell
@@ -155,6 +154,7 @@
 #' @author Vito Zanotelli
 #' @author Jana Fischer
 #' @author adapted by Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
+#' @author adapted by Marlene Lutz (\email{marlene.lutz@@uzh.ch})
 #' 
 #' @references
 #' \href{https://www.sciencedirect.com/science/article/pii/S2405471217305434}{
@@ -213,8 +213,6 @@ testInteractions <- function(object,
     # Permute the labels
     cur_out <- .permute_labels(object, group_by, label, iter, patch_size,
                                 colPairName, method, BPPARAM)
-    
-    cur_out <- as(cur_out, "DataFrame")
     
     cur_out <- .calc_p_vals(cur_count, cur_out, n_perm = iter,
                             p_thres = p_threshold,
