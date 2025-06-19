@@ -223,3 +223,7 @@ Changes in version 1.9.2 (2023-12-14)
 
 + maintainer change
 
+Changes in version 1.15.1
+
++ Replaced minDistToCells function with distToCells function
+
