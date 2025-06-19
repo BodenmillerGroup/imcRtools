@@ -124,7 +124,7 @@ test_that("plotInteractions function works", {
   expect_equal(p$data$n_cells, as.integer(table(pancreasSCE$CellType)[p$data$name[order(p$data$n_cells)]] %>% unname))
   expect_equal(p$data$n_group, colSums(table(pancreasSCE$ImageNb, pancreasSCE$CellType)[, p$data$name[order(p$data$n_group)]] != 0) %>% unname)
   
-  p <- plotInteractions(cur_out, pancreasSCE, "CellType", "ImageNb", edge_width_fix = "3")
+  p <- plotInteractions(cur_out, pancreasSCE, "CellType", "ImageNb", edge_width_fix = 3)
   expect_s3_class(p, "ggraph")
   expect_silent(print(p))
   expect_equal(p$data$name, sort(unique(pancreasSCE$CellType)))
@@ -432,7 +432,7 @@ test_that("plotInteractions function works", {
   expect_equal(p$data$n_cells, as.integer(table(pancreasSCE$CellType)[p$data$name[order(p$data$n_cells)]] %>% unname))
   expect_equal(p$data$n_group, colSums(table(pancreasSCE$ImageNb, pancreasSCE$CellType)[, p$data$name[order(p$data$n_group)]] != 0) %>% unname)
   
-  p <- plotInteractions(cur_out, pancreasSCE, "CellType", "ImageNb", edge_width_fix = "3")
+  p <- plotInteractions(cur_out, pancreasSCE, "CellType", "ImageNb", edge_width_fix = 3)
   expect_s3_class(p, "ggraph")
   expect_silent(print(p))
   expect_equal(p$data$name, sort(unique(pancreasSCE$CellType)))
@@ -740,7 +740,7 @@ test_that("plotInteractions function works", {
   expect_equal(p$data$n_cells, as.integer(table(pancreasSCE$CellType)[p$data$name[order(p$data$n_cells)]] %>% unname))
   expect_equal(p$data$n_group, colSums(table(pancreasSCE$ImageNb, pancreasSCE$CellType)[, p$data$name[order(p$data$n_group)]] != 0) %>% unname)
   
-  p <- plotInteractions(cur_out, pancreasSCE, "CellType", "ImageNb", edge_width_fix = "3")
+  p <- plotInteractions(cur_out, pancreasSCE, "CellType", "ImageNb", edge_width_fix = 3)
   expect_s3_class(p, "ggraph")
   expect_silent(print(p))
   expect_equal(p$data$name, sort(unique(pancreasSCE$CellType)))
@@ -1047,7 +1047,7 @@ test_that("plotInteractions function works", {
   expect_equal(p$data$n_cells, as.integer(table(pancreasSCE$CellType)[p$data$name[order(p$data$n_cells)]] %>% unname))
   expect_equal(p$data$n_group, colSums(table(pancreasSCE$ImageNb, pancreasSCE$CellType)[, p$data$name[order(p$data$n_group)]] != 0) %>% unname)
   
-  p <- plotInteractions(cur_out, pancreasSCE, "CellType", "ImageNb", edge_width_fix = "3")
+  p <- plotInteractions(cur_out, pancreasSCE, "CellType", "ImageNb", edge_width_fix = 3)
   expect_s3_class(p, "ggraph")
   expect_silent(print(p))
   expect_equal(p$data$name, sort(unique(pancreasSCE$CellType)))
