@@ -1548,7 +1548,7 @@
   
   if (!is.null(edge_width_fix) &&
       (!is.numeric(edge_width_fix))){
-    stop("'edge_width_fix' has to be numeric.")
+    stop("edge_width_fix has to be numeric.")
   }
   
   if(!is.null(edge_width_by) &&

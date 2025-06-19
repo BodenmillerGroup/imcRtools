@@ -301,7 +301,7 @@ test_that("plotInteractions function works", {
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
                                 edge_width_fix = "3"),
-               regexp = "'edge_width_fix' has to be numeric.",
+               regexp = "edge_width_fix has to be numeric.",
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
@@ -609,7 +609,7 @@ test_that("plotInteractions function works", {
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
                                 edge_width_fix = "3"),
-               regexp = "'edge_width_fix' has to be numeric.",
+               regexp = "edge_width_fix has to be numeric.",
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
@@ -917,7 +917,7 @@ test_that("plotInteractions function works", {
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
                                 edge_width_fix = "3"),
-               regexp = "'edge_width_fix' has to be numeric.",
+               regexp = "edge_width_fix has to be numeric.",
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
@@ -1224,7 +1224,7 @@ test_that("plotInteractions function works", {
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
                                 edge_width_fix = "3"),
-               regexp = "'edge_width_fix' has to be numeric.",
+               regexp = "edge_width_fix has to be numeric.",
                fixed = TRUE)
   
   expect_error(plotInteractions(out = cur_out, object = pancreasSCE, label = "CellType", group_by = "ImageNb",
