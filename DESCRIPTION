@@ -1,5 +1,5 @@
 Package: imcRtools
-Version: 1.9.2
+Version: 1.15.1
 Title: Methods for imaging mass cytometry data analysis
 Description: 
     This R package supports the handling and analysis of imaging mass cytometry 
@@ -20,7 +20,8 @@ Authors@R:
       person("Vito", "Zanotelli", role = "ctb"),
       person("Jana", "Fischer", role = "ctb"),
       person("Daniel", "Schulz", role = c("ctb", "cre"),email = "daniel.schulz@uzh.ch",comment = c(ORCID = "0000-0002-0913-1678")),
-      person("Lasse","Meyer", role = "ctb"))
+      person("Lasse","Meyer", role = "ctb"),
+      person("Marlene","Lutz", role = "ctb"))
 License: GPL-3
 Depends:
     R (>= 4.1),
