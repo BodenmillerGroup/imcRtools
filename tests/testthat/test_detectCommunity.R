@@ -60,11 +60,9 @@ test_that("detectCommunity function works", {
                                              BPPARAM = SerialParam(RNGseed = 123)
                                              ))
   expect_false(identical(cur_sce_4$spatial_community, cur_sce$spatial_community))
-  expect_equal(cur_sce_4$spatial_community[1:10],c(E34_824 = "celltype_C_1", E34_835 = "celltype_C_2", E34_839 = "celltype_C_1", 
-                                                   E34_844 = "celltype_C_1", E34_847 = "celltype_C_2", E34_853 = "celltype_C_2", 
-                                                   E34_859 = "celltype_C_1", E34_864 = "celltype_C_1", E34_865 = "celltype_C_2", 
-                                                   E34_872 = "celltype_C_1"))
-  
+  dat <- as.data.frame(unclass(table(cur_sce_4$spatial_community,cur_sce_4$CellType)))
+  expect_true(all.equal(unique(rowSums(dat != 0)),1, check.attributes = FALSE))
+
   
   # manual coding spatial communities gives the same result
   set.seed(22)

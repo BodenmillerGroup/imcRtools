@@ -3,8 +3,8 @@
 # imcRtools
 
 <!-- badges: start -->
-[![codecov](https://codecov.io/gh/BodenmillerGroup/imcRtools/branch/master/graph/badge.svg)](https://codecov.io/gh/BodenmillerGroup/imcRtools)
-[![docs](https://github.com/BodenmillerGroup/imcRtools/actions/workflows/docs.yml/badge.svg?branch=master)](https://github.com/BodenmillerGroup/imcRtools/actions/workflows/docs.yml)
+[![codecov](https://codecov.io/gh/BodenmillerGroup/imcRtools/branch/devel/graph/badge.svg)](https://codecov.io/gh/BodenmillerGroup/imcRtools)
+[![docs](https://github.com/BodenmillerGroup/imcRtools/actions/workflows/docs.yml/badge.svg?branch=devel)](https://github.com/BodenmillerGroup/imcRtools/actions/workflows/docs.yml)
 <!-- badges: end -->
 
 This R/Bioconductor package contains helper functions to analyse IMC (or other multiplexed imaging) data.
@@ -109,4 +109,4 @@ Alternatively, you can fork the repository, add your change and issue a pull req
 
 ## Maintainer
 
-[Nils Eling](https://github.com/nilseling)
+**Daniel Schulz**

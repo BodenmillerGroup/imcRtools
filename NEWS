@@ -223,7 +223,25 @@ Changes in version 1.9.2 (2023-12-14)
 
 + maintainer change
 
+<<<<<<< brunop
 Changes in version 1.15.1
 
 + Replaced minDistToCells function with distToCells function
 
+=======
+Changes in version 1.11.1 (2024-10-03)
+
++ fixed BiocNeighbors error for DFrame type data
+
+Changes in version 1.11.2 (2024-10-08)
+
++ fixed testInteraction and countInteraction tests due to machine precision issues
+
+Changes in version 1.11.3 (2024-10-25)
+
++ fixed testdetectCommunity function
+
+Changes in version 1.11.4 (2024-10-28)
+
++ changed testdetectCommunity function for group_by parameter
+>>>>>>> devel
