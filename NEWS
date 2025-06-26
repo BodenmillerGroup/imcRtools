@@ -239,7 +239,7 @@ Changes in version 1.11.4 (2024-10-28)
 
 + changed testdetectCommunity function for group_by parameter
 
-Changes in version 1.15.1 (2025-06-18)
+Changes in version 1.15.2 (2025-06-18)
 
 + Added "interaction" method to countInteractions and testInteractions
 + Added plotInteractions function
