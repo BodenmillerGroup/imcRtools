@@ -1087,7 +1087,7 @@ Before visualization, the edge list can be filtered to focus on relevant
 cell-cell interactions, groupings, and significance.
 
 In the example below we retain interactions whose fraction of significant pairs
-(based on sigval) exceeds 25% and tag the edges as attraction or repulsion.
+(based on sigval) exceeds 75% and tag the edges as attraction or repulsion.
 
 ```{r plotInteractions-filter data}
 library(dplyr)
