@@ -1094,7 +1094,8 @@
     }
 }
 
-.valid.distToCells.input <- function(object,x_cells,name,coords,metric,img_id,return_neg){
+.valid.distToCells.input <- function(object, x_cells, name, coords, statistics,
+                                     img_id, return_neg){
   if(!is(object, "SingleCellExperiment")) {
     stop("'object' not of type 'SingleCellExperiment'.")
   }
@@ -1115,8 +1116,8 @@
     stop("'name' must be a single string.")
   }
 
-  if (!metric %in% c("min", "max", "mean", "median")){
-    stop("'metric' not supported. Must be one of 'min', 'max', 'mean' or 'median'")
+  if (!statistics %in% c("min", "max", "mean", "median")){
+    stop("'statistics' not supported. Must be one of 'min', 'max', 'mean' or 'median'")
   }
 
   if (length(coords) != 2 | !all(is.character(coords))) {

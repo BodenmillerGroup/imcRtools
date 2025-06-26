@@ -10,7 +10,7 @@ distToCells(
   img_id,
   name = "distToCells",
   coords = c("Pos_X", "Pos_Y"),
-  metric = "min",
+  statistics = "min",
   return_neg = TRUE,
   BPPARAM = SerialParam()
 )
@@ -33,7 +33,7 @@ the distances in.}
 \code{colData} (for a \code{SingleCellExperiment} object) or the
 \code{spatialCoords} entries of the cells' x and y locations.}
 
-\item{metric}{one of "min", "max", "mean" or "meadian" specifying the distance metric to use when computing
+\item{statistics}{one of "min", "max", "mean" or "meadian" specifying the distance statistics to use when computing
 the distances.}
 
 \item{return_neg}{logical indicating whether negative distances are to be
@@ -88,7 +88,7 @@ plotSpatial(pancreasSCE,
 pancreasSCE <- distToCells(pancreasSCE,
                              x_cells = !is.na(pancreasSCE$patch_id),
                              coords = c("Pos_X","Pos_Y"),
-                             metric = "min",
+                             statistics = "min",
                              img_id = "ImageNb")
 
 plotSpatial(pancreasSCE,

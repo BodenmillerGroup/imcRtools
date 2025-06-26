@@ -7,7 +7,7 @@ test_that("distToCells works",{
   expect_message(cur_sce <- distToCells(object = pancreasSCE,
                                         x_cells = pancreasSCE$CellType == "celltype_B",
                                         coords = c("Pos_X","Pos_Y"),
-                                        metric = "min",
+                                        statistics = "min",
                                         img_id = "ImageName"), regexp = "The returned object is ordered by the 'ImageName' entry.")
 
   expect_s4_class(cur_sce , class = "SingleCellExperiment")
@@ -57,7 +57,7 @@ test_that("distToCells works",{
   expect_message(cur_sce_2 <- distToCells(object = pancreasSCE,
                                           x_cells = pancreasSCE$CellType == "celltype_B",
                                           coords = c("Pos_X","Pos_Y"),
-                                          metric = "min",
+                                          statistics = "min",
                                           img_id = "ImageName",
                                           return_neg = FALSE), regexp = "The returned object is ordered by the 'ImageName' entry.")
 
@@ -76,7 +76,7 @@ test_that("distToCells works",{
   expect_message(cur_sce_3 <- distToCells(object = pancreasSCE,
                                           x_cells = pancreasSCE$CellType == "celltype_A",
                                           coords = c("Pos_X","Pos_Y"),
-                                          metric = "min",
+                                          statistics = "min",
                                           img_id = "ImageName"), regexp = "The returned object is ordered by the 'ImageName' entry.")
 
   expect_true(is(cur_sce_3, "SingleCellExperiment"))
@@ -95,7 +95,7 @@ test_that("distToCells works",{
   expect_message(cur_sce_4 <- distToCells(object = pancreasSCE,
                                           x_cells = pancreasSCE$CellType == "celltype_A",
                                           coords = c("Pos_X","Pos_Y"),
-                                          metric = "min",
+                                          statistics = "min",
                                           img_id = "ImageName",
                                           return_neg = FALSE), regexp = "The returned object is ordered by the 'ImageName' entry.")
 
@@ -119,7 +119,7 @@ test_that("distToCells works",{
   cur_spe_1 <- distToCells(cur_spe,
                            x_cells = cur_spe$CellType == "celltype_B",
                            coords = c("Pos_X","Pos_Y"),
-                           metric = "min",
+                           statistics = "min",
                            img_id = "ImageName")
 
   expect_true(is(cur_spe_1, "SingleCellExperiment"))
@@ -181,7 +181,7 @@ test_that("distToCells works",{
   expect_message(cur_spe_2 <- distToCells(object = pancreasSCE,
                                           x_cells = pancreasSCE$CellType == "celltype_B",
                                           coords = c("Pos_X","Pos_Y"),
-                                          metric = "min",
+                                          statistics = "min",
                                           img_id = "ImageName",
                                           return_neg = FALSE), regexp = "The returned object is ordered by the 'ImageName' entry.")
 
@@ -204,7 +204,7 @@ test_that("distToCells works",{
   expect_message(cur_sce <- distToCells(object = pancreasSCE,
                                         x_cells = pancreasSCE$ImageName == "J02_imc.tiff",
                                         coords = c("Pos_X","Pos_Y"),
-                                        metric = "min",
+                                        statistics = "min",
                                         img_id = "ImageName"), regexp = "The returned object is ordered by the 'ImageName' entry.")
 
   expect_s4_class(cur_sce , class = "SingleCellExperiment")
@@ -215,7 +215,7 @@ test_that("distToCells works",{
   expect_message(cur_sce <- distToCells(object = cur_sce,
                                         x_cells = cur_sce$CellType == "celltype_A",
                                         coords = c("Pos_X","Pos_Y"),
-                                        metric = "min",
+                                        statistics = "min",
                                         img_id = "ImageName"), regexp = "The returned object is ordered by the 'ImageName' entry.")
   expect_s4_class(cur_sce , class = "SingleCellExperiment")
   expect_true("distToCells" %in% names(colData(cur_sce)))
@@ -227,7 +227,7 @@ test_that("distToCells works",{
   expect_message(cur_sce <- distToCells(object = pancreasSCE,
                                         x_cells = pancreasSCE$CellType == "celltype_B",
                                         coords = c("Pos_X","Pos_Y"),
-                                        metric = "max",
+                                        statistics = "max",
                                         img_id = "ImageName"), regexp = "The returned object is ordered by the 'ImageName' entry.")
 
   expect_s4_class(cur_sce , class = "SingleCellExperiment")
@@ -281,7 +281,7 @@ test_that("distToCells works",{
   expect_message(cur_sce_2 <- distToCells(object = pancreasSCE,
                                           x_cells = pancreasSCE$CellType == "celltype_B",
                                           coords = c("Pos_X","Pos_Y"),
-                                          metric = "max",
+                                          statistics = "max",
                                           img_id = "ImageName",
                                           return_neg = FALSE), regexp = "The returned object is ordered by the 'ImageName' entry.")
 
@@ -298,7 +298,7 @@ test_that("distToCells works",{
   expect_message(cur_sce_3 <- distToCells(object = pancreasSCE,
                                           x_cells = pancreasSCE$CellType == "celltype_A",
                                           coords = c("Pos_X","Pos_Y"),
-                                          metric = "max",
+                                          statistics = "max",
                                           img_id = "ImageName"), regexp = "The returned object is ordered by the 'ImageName' entry.")
 
   expect_true(is(cur_sce_3, "SingleCellExperiment"))
@@ -317,7 +317,7 @@ test_that("distToCells works",{
   expect_message(cur_sce_4 <- distToCells(object = pancreasSCE,
                                           x_cells = pancreasSCE$CellType == "celltype_A",
                                           coords = c("Pos_X","Pos_Y"),
-                                          metric = "max",
+                                          statistics = "max",
                                           img_id = "ImageName",
                                           return_neg = FALSE), regexp = "The returned object is ordered by the 'ImageName' entry.")
 
@@ -341,7 +341,7 @@ test_that("distToCells works",{
   cur_spe_1 <- distToCells(cur_spe,
                            x_cells = cur_spe$CellType == "celltype_B",
                            coords = c("Pos_X","Pos_Y"),
-                           metric = "max",
+                           statistics = "max",
                            img_id = "ImageName")
 
   expect_true(is(cur_spe_1, "SingleCellExperiment"))
@@ -392,7 +392,7 @@ test_that("distToCells works",{
   expect_message(cur_spe_2 <- distToCells(object = cur_spe,
                                           x_cells = cur_spe$CellType == "celltype_B",
                                           coords = c("Pos_X","Pos_Y"),
-                                          metric = "max",
+                                          statistics = "max",
                                           img_id = "ImageName",
                                           return_neg = FALSE), regexp = "The returned object is ordered by the 'ImageName' entry.")
 
@@ -415,7 +415,7 @@ test_that("distToCells works",{
   expect_message(cur_sce <- distToCells(object = pancreasSCE,
                                         x_cells = pancreasSCE$ImageName == "J02_imc.tiff",
                                         coords = c("Pos_X","Pos_Y"),
-                                        metric = "max",
+                                        statistics = "max",
                                         img_id = "ImageName"), regexp = "The returned object is ordered by the 'ImageName' entry.")
 
   expect_s4_class(cur_sce , class = "SingleCellExperiment")
@@ -426,7 +426,7 @@ test_that("distToCells works",{
   expect_message(cur_sce <- distToCells(object = cur_sce,
                                         x_cells = cur_sce$CellType == "celltype_A",
                                         coords = c("Pos_X","Pos_Y"),
-                                        metric = "max",
+                                        statistics = "max",
                                         img_id = "ImageName"), regexp = "The returned object is ordered by the 'ImageName' entry.")
   expect_s4_class(cur_sce , class = "SingleCellExperiment")
   expect_true("distToCells" %in% names(colData(cur_sce)))
@@ -439,7 +439,7 @@ test_that("distToCells works",{
   expect_message(cur_sce <- distToCells(object = pancreasSCE,
                                         x_cells = pancreasSCE$CellType == "celltype_B",
                                         coords = c("Pos_X","Pos_Y"),
-                                        metric = "mean",
+                                        statistics = "mean",
                                         img_id = "ImageName"), regexp = "The returned object is ordered by the 'ImageName' entry.")
 
   expect_s4_class(cur_sce , class = "SingleCellExperiment")
@@ -494,7 +494,7 @@ test_that("distToCells works",{
   expect_message(cur_sce_2 <- distToCells(object = pancreasSCE,
                                           x_cells = pancreasSCE$CellType == "celltype_B",
                                           coords = c("Pos_X","Pos_Y"),
-                                          metric = "mean",
+                                          statistics = "mean",
                                           img_id = "ImageName",
                                           return_neg = FALSE), regexp = "The returned object is ordered by the 'ImageName' entry.")
 
@@ -511,7 +511,7 @@ test_that("distToCells works",{
   expect_message(cur_sce_3 <- distToCells(object = pancreasSCE,
                                           x_cells = pancreasSCE$CellType == "celltype_A",
                                           coords = c("Pos_X","Pos_Y"),
-                                          metric = "mean",
+                                          statistics = "mean",
                                           img_id = "ImageName"), regexp = "The returned object is ordered by the 'ImageName' entry.")
 
   expect_true(is(cur_sce_3, "SingleCellExperiment"))
@@ -530,7 +530,7 @@ test_that("distToCells works",{
   expect_message(cur_sce_4 <- distToCells(object = pancreasSCE,
                                           x_cells = pancreasSCE$CellType == "celltype_A",
                                           coords = c("Pos_X","Pos_Y"),
-                                          metric = "mean",
+                                          statistics = "mean",
                                           img_id = "ImageName",
                                           return_neg = FALSE), regexp = "The returned object is ordered by the 'ImageName' entry.")
 
@@ -554,7 +554,7 @@ test_that("distToCells works",{
   cur_spe_1 <- distToCells(cur_spe,
                            x_cells = cur_spe$CellType == "celltype_B",
                            coords = c("Pos_X","Pos_Y"),
-                           metric = "mean",
+                           statistics = "mean",
                            img_id = "ImageName")
 
   expect_true(is(cur_spe_1, "SingleCellExperiment"))
@@ -596,7 +596,7 @@ test_that("distToCells works",{
   expect_message(cur_spe_2 <- distToCells(object = cur_spe,
                                           x_cells = cur_spe$CellType == "celltype_B",
                                           coords = c("Pos_X","Pos_Y"),
-                                          metric = "mean",
+                                          statistics = "mean",
                                           img_id = "ImageName",
                                           return_neg = FALSE), regexp = "The returned object is ordered by the 'ImageName' entry.")
 
@@ -619,7 +619,7 @@ test_that("distToCells works",{
   expect_message(cur_sce <- distToCells(object = pancreasSCE,
                                         x_cells = pancreasSCE$ImageName == "J02_imc.tiff",
                                         coords = c("Pos_X","Pos_Y"),
-                                        metric = "mean",
+                                        statistics = "mean",
                                         img_id = "ImageName"), regexp = "The returned object is ordered by the 'ImageName' entry.")
 
   expect_s4_class(cur_sce , class = "SingleCellExperiment")
@@ -630,7 +630,7 @@ test_that("distToCells works",{
   expect_message(cur_sce <- distToCells(object = cur_sce,
                                         x_cells = cur_sce$CellType == "celltype_A",
                                         coords = c("Pos_X","Pos_Y"),
-                                        metric = "mean",
+                                        statistics = "mean",
                                         img_id = "ImageName"), regexp = "The returned object is ordered by the 'ImageName' entry.")
   expect_s4_class(cur_sce , class = "SingleCellExperiment")
   expect_true("distToCells" %in% names(colData(cur_sce)))
@@ -643,7 +643,7 @@ test_that("distToCells works",{
   expect_message(cur_sce <- distToCells(object = pancreasSCE,
                                         x_cells = pancreasSCE$CellType == "celltype_B",
                                         coords = c("Pos_X","Pos_Y"),
-                                        metric = "median",
+                                        statistics = "median",
                                         img_id = "ImageName"), regexp = "The returned object is ordered by the 'ImageName' entry.")
 
   expect_s4_class(cur_sce , class = "SingleCellExperiment")
@@ -690,7 +690,7 @@ test_that("distToCells works",{
   expect_message(cur_sce_2 <- distToCells(object = pancreasSCE,
                                           x_cells = pancreasSCE$CellType == "celltype_B",
                                           coords = c("Pos_X","Pos_Y"),
-                                          metric = "median",
+                                          statistics = "median",
                                           img_id = "ImageName",
                                           return_neg = FALSE), regexp = "The returned object is ordered by the 'ImageName' entry.")
 
@@ -707,7 +707,7 @@ test_that("distToCells works",{
   expect_message(cur_sce_3 <- distToCells(object = pancreasSCE,
                                           x_cells = pancreasSCE$CellType == "celltype_A",
                                           coords = c("Pos_X","Pos_Y"),
-                                          metric = "median",
+                                          statistics = "median",
                                           img_id = "ImageName"), regexp = "The returned object is ordered by the 'ImageName' entry.")
 
   expect_true(is(cur_sce_3, "SingleCellExperiment"))
@@ -726,7 +726,7 @@ test_that("distToCells works",{
   expect_message(cur_sce_4 <- distToCells(object = pancreasSCE,
                                           x_cells = pancreasSCE$CellType == "celltype_A",
                                           coords = c("Pos_X","Pos_Y"),
-                                          metric = "median",
+                                          statistics = "median",
                                           img_id = "ImageName",
                                           return_neg = FALSE), regexp = "The returned object is ordered by the 'ImageName' entry.")
 
@@ -750,7 +750,7 @@ test_that("distToCells works",{
   cur_spe_1 <- distToCells(cur_spe,
                            x_cells = cur_spe$CellType == "celltype_B",
                            coords = c("Pos_X","Pos_Y"),
-                           metric = "median",
+                           statistics = "median",
                            img_id = "ImageName")
 
   expect_true(is(cur_spe_1, "SingleCellExperiment"))
@@ -791,7 +791,7 @@ test_that("distToCells works",{
   expect_message(cur_spe_2 <- distToCells(object = cur_spe,
                                           x_cells = cur_spe$CellType == "celltype_B",
                                           coords = c("Pos_X","Pos_Y"),
-                                          metric = "median",
+                                          statistics = "median",
                                           img_id = "ImageName",
                                           return_neg = FALSE), regexp = "The returned object is ordered by the 'ImageName' entry.")
 
@@ -814,7 +814,7 @@ test_that("distToCells works",{
   expect_message(cur_sce <- distToCells(object = pancreasSCE,
                                         x_cells = pancreasSCE$ImageName == "J02_imc.tiff",
                                         coords = c("Pos_X","Pos_Y"),
-                                        metric = "median",
+                                        statistics = "median",
                                         img_id = "ImageName"), regexp = "The returned object is ordered by the 'ImageName' entry.")
 
   expect_s4_class(cur_sce , class = "SingleCellExperiment")
@@ -825,7 +825,7 @@ test_that("distToCells works",{
   expect_message(cur_sce <- distToCells(object = cur_sce,
                                         x_cells = cur_sce$CellType == "celltype_A",
                                         coords = c("Pos_X","Pos_Y"),
-                                        metric = "median",
+                                        statistics = "median",
                                         img_id = "ImageName"), regexp = "The returned object is ordered by the 'ImageName' entry.")
   expect_s4_class(cur_sce , class = "SingleCellExperiment")
   expect_true("distToCells" %in% names(colData(cur_sce)))
@@ -860,8 +860,8 @@ test_that("distToCells works",{
   expect_error(distToCells(pancreasSCE, x_cells = pancreasSCE$CellType ==  "celltype_B",name = 1),
                regexp = "'name' must be a single string.",
                fixed = TRUE)
-  expect_error(distToCells(pancreasSCE, x_cells = pancreasSCE$CellType ==  "celltype_B",metric = "test"),
-               regexp = "'metric' not supported. Must be one of 'min', 'max', 'mean' or 'median'",
+  expect_error(distToCells(pancreasSCE, x_cells = pancreasSCE$CellType ==  "celltype_B",statistics = "test"),
+               regexp = "'statistics' not supported. Must be one of 'min', 'max', 'mean' or 'median'",
                fixed = TRUE)
   expect_error(distToCells(pancreasSCE, x_cells = pancreasSCE$CellType ==  "celltype_B",name = "test",coords = c(1,2)),
                regexp = "'coords' must be a character vector of length 2.",

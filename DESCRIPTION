@@ -73,5 +73,5 @@ biocViews: ImmunoOncology, SingleCell, Spatial, DataImport, Clustering
 VignetteBuilder: knitr
 URL: https://github.com/BodenmillerGroup/imcRtools
 BugReports: https://github.com/BodenmillerGroup/imcRtools/issues
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Encoding: UTF-8

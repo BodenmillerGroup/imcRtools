@@ -13,7 +13,7 @@
 #' distances will be calculated.
 #' @param name character specifying the name of the \code{colData} entry to safe
 #' the distances in.
-#' @param metric one of "min", "max", "mean" or "meadian" specifying the distance metric to use when computing
+#' @param statistics one of "min", "max", "mean" or "meadian" specifying the distance statistics to use when computing
 #' the distances.
 #' @param coords character vector of length 2 specifying the names of the
 #' \code{colData} (for a \code{SingleCellExperiment} object) or the
@@ -61,7 +61,7 @@
 #' pancreasSCE <- distToCells(pancreasSCE,
 #'                              x_cells = !is.na(pancreasSCE$patch_id),
 #'                              coords = c("Pos_X","Pos_Y"),
-#'                              metric = "min",
+#'                              statistics = "min",
 #'                              img_id = "ImageNb")
 #'
 #' plotSpatial(pancreasSCE,
@@ -78,10 +78,10 @@ distToCells <- function (object,
                         img_id,
                         name = "distToCells",
                         coords = c("Pos_X","Pos_Y"),
-                        metric="min",
+                        statistics = "min",
                         return_neg = TRUE,
                         BPPARAM = SerialParam()){
-  .valid.distToCells.input(object, x_cells, name, coords, metric,
+  .valid.distToCells.input(object, x_cells, name, coords, statistics,
                               img_id, return_neg)
   cur_meta <- metadata(object)
   metadata(object) <- list()
@@ -107,7 +107,7 @@ distToCells <- function (object,
       }
       pos_dist <- distance_columns(dist_mat, column_indices = patch_cells)
       neg_dist <- distance_columns(dist_mat, column_indices = non_patch_cells)
-      dist_to_patch <- switch(metric,
+      dist_to_patch <- switch(statistics,
                               mean = rowMeans(pos_dist),
                               median = rowMedians(pos_dist),
                               min = rowMins(pos_dist),
@@ -115,7 +115,7 @@ distToCells <- function (object,
 
 
       if (return_neg == TRUE) {
-        dist_from_patch <- switch(metric,
+        dist_from_patch <- switch(statistics,
                                   mean = rowMeans(neg_dist),
                                   median = rowMedians(neg_dist),
                                   min = rowMins(neg_dist),
