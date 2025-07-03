@@ -386,14 +386,14 @@ test_that("countInteractions function works", {
                                                    patch_size = 4,
                                                    colPairName = "knn_interaction_graph")) 
     
-    expect_true(all(cur_out$ct[!is.na(cur_out$ct)] == 0))
+    expect_equal(cur_out$ct[!is.na(cur_out$ct)], rep(0, 22))
     
     expect_silent(cur_out <- countInteractions(pancreasSCE, group_by = "ImageNb",
                                                    label = "CellType", method = "patch",
                                                    patch_size = 0,
                                                    colPairName = "knn_interaction_graph")) 
     
-    expect_true(all(cur_out$ct[!is.na(cur_out$ct)] == 1))
+    expect_equal(cur_out$ct[!is.na(cur_out$ct)], rep(1, 22))
     
     expect_silent(cur_out <- countInteractions(pancreasSCE, group_by = "ImageNb",
                                                    label = "CellType", method = "patch",

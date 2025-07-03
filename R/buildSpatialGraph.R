@@ -164,7 +164,7 @@ buildSpatialGraph <- function(object,
                             }
 
                             if (type == "expansion") {
-                                cur_graph <- findNeighbors(cur_coords,
+                                cur_graph <- findNeighbors(as.matrix(cur_coords),
                                                     threshold = threshold,
                                                 get.distance = FALSE,
                                                             BNPARAM = BNPARAM,
@@ -191,7 +191,7 @@ buildSpatialGraph <- function(object,
 
                             } else {
                                 if (is.null(max_dist)) {
-                                    cur_graph <- findKNN(cur_coords,
+                                    cur_graph <- findKNN(as.matrix(cur_coords),
                                                     k = k,
                                                     BNPARAM = BNPARAM,
                                                     get.distance = FALSE,
@@ -200,7 +200,7 @@ buildSpatialGraph <- function(object,
                                         t(cur_graph$index)))
                                     cur_graph <- graph_from_adj_list(cur_graph)
                                 } else {
-                                    cur_graph <- findKNN(cur_coords,
+                                    cur_graph <- findKNN(as.matrix(cur_coords),
                                                         k = k,
                                                         BNPARAM = BNPARAM,
                                                         get.distance = TRUE,
