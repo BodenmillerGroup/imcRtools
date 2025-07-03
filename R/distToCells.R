@@ -102,8 +102,7 @@ distToCells <- function (object,
         dist_mat <- distances(spatialCoords(cur_obj))
       }
       else {
-        dist_mat <- distances::distances(as.matrix(colData(cur_obj)[,
-                                                                    coords]))
+        dist_mat <- distances(as.matrix(colData(cur_obj)[, coords]))
       }
       pos_dist <- distance_columns(dist_mat, column_indices = patch_cells)
       neg_dist <- distance_columns(dist_mat, column_indices = non_patch_cells)
