@@ -10,11 +10,11 @@
 <url><loc>/reference/countInteractions.html</loc></url>
 <url><loc>/reference/detectCommunity.html</loc></url>
 <url><loc>/reference/detectSpatialContext.html</loc></url>
+<url><loc>/reference/distToCells.html</loc></url>
 <url><loc>/reference/filterPixels.html</loc></url>
 <url><loc>/reference/filterSpatialContext.html</loc></url>
 <url><loc>/reference/findBorderCells.html</loc></url>
 <url><loc>/reference/index.html</loc></url>
-<url><loc>/reference/minDistToCells.html</loc></url>
 <url><loc>/reference/patchDetection.html</loc></url>
 <url><loc>/reference/patchSize.html</loc></url>
 <url><loc>/reference/plotSpatial.html</loc></url>
