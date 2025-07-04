@@ -949,30 +949,45 @@ For each patch larger than 2 cells, the spatial area can be computed using the
 patchSize(pancreasSCE)
 ```
 
-## Minimal distances to cells of interest
+## Distance statistics to cells of interest
 
-Calculate the minimal distance for each cell to a given cell type or class of
-cells of interest, the function `minDistToCells` is available. Cells of interest
+To calculate the min, max, mean or median distance for each cell to a given cell type or class of
+cells of interest, the function `distToCells` is available. Cells of interest
 are defined via the `x_cells` parameter as `logical` and distances to for all
 cells to those cells will be reported in a new column in the `colData` of the
 `SingleCellExperiment`.
 
 If the cells of interest form patches (many cells of the same type next to each
 other) or similarly if a patch detection has previously been performed the
-positive distances reflect the distances from cells outside of patches to the
-closest patch border and the negative distances reflect the distances from cells
-inside the patches to the patch border. If `return_neg` is set to `FALSE`
-negative distances are set to 0.
+positive distances reflect the distances from cells outside of patches (or non cells of interest) to the patch cells (or cells of interest) and the negative distances reflect the distances from cells
+inside the patches to the cells outside the patches.
+For `statistics` = "min" this corresponds to the distance from the cells outside to the closest point on the patch border and from the cells inside to the closest point on the patch border.
+If `return_neg` is set to `FALSE`, distances from the cells of interest (or cells inside the patches) to non cells of interest are computed as positive distances.
 
-```{r minDistToCells}
-pancreasSCE <- minDistToCells(pancreasSCE,
+```{r distToCells}
+pancreasSCE <- distToCells(pancreasSCE,
                               x_cells = pancreasSCE$CellType == "celltype_B",
                               coords = c("Pos_X","Pos_Y"),
+                              statistics = "min",
+                              name = "minDist",
+                              img_id = "ImageNb")
+
+pancreasSCE <- distToCells(pancreasSCE,
+                              x_cells = pancreasSCE$CellType == "celltype_B",
+                              coords = c("Pos_X","Pos_Y"),
+                              statistics = "mean",
+                              name = "meanDist",
                               img_id = "ImageNb")
 
 plotSpatial(pancreasSCE,
             img_id = "ImageNb",
-            node_color_by = "distToCells",
+            node_color_by = "minDist",
+            scales = "free") +
+    scale_color_viridis()
+
+plotSpatial(pancreasSCE,
+            img_id = "ImageNb",
+            node_color_by = "meanDist",
             scales = "free") +
     scale_color_viridis()
 ```
