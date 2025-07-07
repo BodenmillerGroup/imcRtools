@@ -26,7 +26,7 @@
 #' \code{colData(object)[[label]]}. Simplified, it counts for each cell of
 #' type A the number of neighbors of type B.
 #' This count is averaged within each unique entry 
-#' \code{colData(object)[[group_by]]} in three different ways:
+#' \code{colData(object)[[group_by]]} in four different ways:
 #' 
 #' 1. \code{method = "classic"}: The count is divided by the total number of 
 #' cells of type A. The final count can be interpreted as "How many neighbors 
@@ -43,6 +43,10 @@
 #' across all cells of type A. The final count can be interpreted as "What 
 #' fraction of cells of type A have at least a given number of neighbors of 
 #' type B?"
+#' 
+#' 4. \code{method = "interaction"}: The count is divided by the total number of 
+#' interactions from cell type A. The final count can be interpreted as the 
+#' fraction of interactions of cell type A that occur with cell type B.
 #' 
 #' @return a DataFrame containing one row per \code{group_by} entry and unique
 #' \code{label} entry combination (\code{from_label}, \code{to_label}). The
@@ -78,6 +82,13 @@
 #'                                 method = "patch",
 #'                                 patch_size = 3,
 #'                                 colPairName = "knn_interaction_graph"))
+#'
+#' # Interaction style calculation
+#' (out <- countInteractions(pancreasSCE, 
+#'                                 group_by = "ImageNb",
+#'                                 label = "CellType", 
+#'                                 method = "interaction",
+#'                                 colPairName = "knn_interaction_graph"))
 #'                                 
 #' @seealso 
 #' \code{\link{testInteractions}} for testing cell-cell
@@ -86,6 +97,7 @@
 #' @author Vito Zanotelli
 #' @author Jana Fischer
 #' @author adapted by Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
+#' @author adapted by Marlene Lutz (\email{marlene.lutz@@uzh.ch})
 #' 
 #' @references
 #' \href{https://www.sciencedirect.com/science/article/pii/S2405471217305434}{
@@ -104,7 +116,7 @@ countInteractions <- function(object,
                                  group_by,
                                  label,
                                  colPairName,
-                                 method = c("classic", "histocat", "patch"),
+                                 method = c("classic", "histocat", "patch", "interaction"),
                                  patch_size = NULL){
     
     # Input check
@@ -129,6 +141,8 @@ countInteractions <- function(object,
         cur_count <- .aggregate_classic_patch(cur_table, 
                                                 patch_size = patch_size,
                                                 object, group_by, label)
+    } else if (method == "interaction") {
+        cur_count <- .aggregate_interaction(cur_table, object, group_by, label)
     }
     
     setorder(cur_count, "group_by", "from_label", "to_label")
@@ -136,3 +150,6 @@ countInteractions <- function(object,
     
     return(cur_count)
 }
+
+
+

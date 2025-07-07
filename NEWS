@@ -242,3 +242,8 @@ Changes in version 1.11.4 (2024-10-28)
 Changes in version 1.15.1
 
 + Replaced minDistToCells function with distToCells function
+
+Changes in version 1.15.2 (2025-06-18)
+
++ Added "interaction" method to countInteractions and testInteractions
++ Added plotInteractions function

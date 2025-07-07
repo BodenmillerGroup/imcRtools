@@ -1395,3 +1395,190 @@
   }
 }
 
+.valid.plotInteractions.input <- function(out,
+                                          object,
+                                          label,
+                                          group_by,
+                                          node_color_by, 
+                                          node_size_by,
+                                          node_color_fix,
+                                          node_size_fix,
+                                          node_label_repel,
+                                          node_label_color_by,
+                                          node_label_color_fix,
+                                          edge_color_by, 
+                                          edge_color_fix,
+                                          edge_width_by,
+                                          edge_width_fix,
+                                          draw_edges,
+                                          graph_layout,
+                                          return_data){
+  
+  if (!all(c("group_by", "from_label", "to_label") %in% colnames(out))){
+    stop("'out' needs to contain columns 'group_by', 'from_label', 'to_label'.")
+  }
+  
+  if (!is(object, "SingleCellExperiment")) {
+    stop("'object' needs to be a SingleCellExperiment object.")
+  }
+  
+  if (!label %in% names(colData(object))){
+    stop("'label' not in 'colData(object)'.")
+  }
+  
+  if (!group_by %in% names(colData(object))) { 
+    stop("'group_by' not in 'colData(object)'.")
+  }
+  
+  if (!is.null(node_color_by) &&
+      (!node_color_by %in% c("name", "n_cells", "n_group"))){
+    stop("'node_color_by' has to be one off 'name', 'n_cells' or 'n_group'.")
+  }
+  
+  if (!is.null(node_size_by) &&
+      (!node_size_by %in% c("n_cells", "n_group"))){
+    stop("'node_size_by' has to be 'n_cells' or 'n_group'.")
+  }
+  
+  if (!is.null(node_label_color_by) && 
+      (!node_label_color_by %in% c("name","n_cells","n_group"))){
+    stop("'node_label_color_by' has to be one off 'name', 'n_cells' or 'n_group'.")
+  }
+  
+  if (!is.logical(node_label_repel)) {
+    stop("'node_label_repel' has to be logical.")
+  }
+  
+  if(node_label_repel == FALSE){
+    if(!is.null(node_label_color_by) | (!is.null(node_label_color_fix))){
+      stop("'node_label_color_by' and 'node_label_color_fix' can not be defined ", 
+           "when node_label_repel == FALSE")
+    }} 
+  
+  if (!is.logical(draw_edges)) {
+    stop("'draw_edges' has to be logical.")
+  }
+  
+  if (!is.null(node_color_fix) && 
+      (!is.character(node_color_fix))){
+    stop("'node_color_fix' has to be a character.")
+  }
+  
+  if (!is.null(node_size_fix) &&
+      (!is.numeric(node_size_fix))){
+    stop("'node_size_fix' has to be numeric.")
+  }
+  
+  if (!is.null(node_label_color_fix) &&
+      (!is.character(node_label_color_fix))){
+    stop("'node_label_color_fix' has to be a character.")
+  }
+  
+  if(!is.null(node_color_by) &&
+     (!is.null(node_color_fix))){
+    stop("'node_color_by' and 'node_color_fix' can not be defined ", 
+         "at the same time.")
+  }
+  
+  if(!is.null(node_label_color_by) &&
+     (!is.null(node_label_color_fix))){
+    stop("'node_label_color_by' and 'node_label_color_fix' can not be defined ", 
+         "at the same time.")
+  }  
+  
+  if(!is.null(node_label_color_by) &&
+     (!is.null(node_color_by)) && 
+     (node_label_color_by != node_color_by)){
+    stop("'node_label_color_by' and 'node_color_by' have to be identical.")
+  }
+  
+  if(!is.null(node_size_by) &&
+     (!is.null(node_size_fix))){
+    stop("'node_size_by' and 'node_size_fix' can not be defined ", 
+         "at the same time.")
+  } 
+  
+  if (!is.logical(return_data)) {
+    stop("'return_data' has to be logical.")
+  }
+  
+  
+  # edge_color_by
+  if (!is.null(edge_color_by)){
+    
+    if (any(is.na(out[[edge_color_by]]))){
+      stop("'edge_color_by' contains NA values.")
+    }
+    
+    if (!edge_color_by %in% names(out)) {
+      stop("'edge_color_by' needs to be contained in 'out'.")
+    }
+    
+    test <- out %>% group_by(from_label, to_label) %>% summarise(n_unique = n_distinct(.data[[edge_color_by]]))
+    if (any(test$n_unique > 1)) {
+      stop("'edge_color_by' needs to be unique for all 'from_label'-'to_label' pairs.")
+    }
+  }
+  
+  # edge_color_fix
+  if (!is.null(edge_color_fix) && 
+      (!is.character(edge_color_fix))){
+    stop("'edge_color_fix' has to be a character.")
+  }
+  
+  if (!is.null(edge_color_by) &&
+     (!is.null(edge_color_fix))){
+    stop("'edge_color_by' and 'edge_color_fix' can not be defined ", 
+         "at the same time.")
+  }
+  
+  # edge_width_by
+  if (!is.null(edge_width_by)){
+    
+    if (!is.character(edge_width_by)){
+      stop("'edge_width_by' has to be a character.")
+    }
+    
+    if (!edge_width_by %in% names(out)) {
+      stop("'edge_width_by' needs to be contained in 'out'.")
+    }
+    
+    if (!is.numeric(out[[edge_width_by]])){
+      stop("'edge_width_by' entries need to be numeric.")
+    }
+    
+    test <- out %>% as.data.frame() %>% group_by(from_label, to_label) %>% summarise(mean = mean(.data[[edge_width_by]], na.rm = TRUE))
+    if (anyNA(test$mean)) {
+      missing <- test %>% filter(is.na(mean))
+      stop("Missing weights for some 'from_label'-'to_label' pairs:\n", 
+           paste(capture.output(print(missing)), collapse = "\n"))
+    }
+  }
+  
+  if (!is.null(edge_width_fix) &&
+      (!is.numeric(edge_width_fix))){
+    stop("'edge_width_fix' has to be numeric.")
+  }
+  
+  if(!is.null(edge_width_by) &&
+     (!is.null(edge_width_fix))){
+    stop("'edge_width_by' and 'edge_width_fix' can not be defined ", 
+         "at the same time.")
+  }
+  
+  if (!is.null(graph_layout)) {
+    if (!is.character(graph_layout)) {
+      stop("'graph_layout' has to be a character.")
+    }
+    
+    allowed_layouts <- c("nicely", "kk", "drl", "tree", "circle", "linear", 
+                         "manual", "fr", "lgl", "chord", "stress", "graphopt",
+                         "sugiyama", "star", "dh", "gem", "grid", "mds", "sphere",
+                         "randomly")
+    
+    if (!graph_layout %in% allowed_layouts) {
+      stop(paste0("Layout '", graph_layout, "' not in supported list. Refer to: ",
+                     "https://cran.r-project.org/web/packages/ggraph/vignettes/Layouts.html"))
+    }
+  }
+  }

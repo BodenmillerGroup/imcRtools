@@ -442,6 +442,151 @@ test_that("countInteractions function works", {
     pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn",
                                      k = 3)
     
+    ############################ interaction ############################
+    
+    data(pancreasSCE)
+    
+    pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn",
+                                     k = 3)
+    
+    expect_silent(cur_out <- countInteractions(pancreasSCE, group_by = "ImageNb",
+                                               label = "CellType", method = "interaction",
+                                               colPairName = "knn_interaction_graph")) 
+    cur_out <- as.data.frame(cur_out)
+    cur_out <- cur_out[order(cur_out$group_by, cur_out$from_label, cur_out$to_label),]
+    
+    # Check against manual calculations
+    cur_table <- as.data.frame(colPair(pancreasSCE, "knn_interaction_graph"))
+    cur_table$from_label <- colData(pancreasSCE)[["CellType"]][cur_table$from]
+    cur_table$to_label <- colData(pancreasSCE)[["CellType"]][cur_table$to]
+    cur_table$image <- colData(pancreasSCE)[["ImageNb"]][cur_table$from]
+    
+    test <- cur_table %>% group_by(image, from_label, to_label) %>%
+      summarize(N = n(), .groups = "drop") %>%
+      group_by(image, from_label) %>% mutate(n_tot_int = sum(N)) %>%
+      ungroup() %>% mutate(ct = N / n_tot_int)
+    
+    test <- as.data.frame(test)
+    test <- test[order(test$image, test$from_label, test$to_label),]
+    
+    cur_out_2 <- cur_out
+    cur_out_2 <- cur_out_2[match(paste(test$image, test$from_label, test$to_label),
+                                 paste(cur_out_2$group_by, cur_out_2$from_label, cur_out_2$to_label)),]
+    
+    expect_equal(cur_out_2$ct[!is.na(cur_out_2$ct)], test$ct[!is.na(cur_out_2$ct)]) 
+    
+    # As factor
+    pancreasSCE$CellType <- as.factor(pancreasSCE$CellType)
+    expect_silent(cur_out_2 <- countInteractions(pancreasSCE, group_by = "ImageNb",
+                                                 label = "CellType", method = "interaction",
+                                                 colPairName = "knn_interaction_graph")) 
+    cur_out_2 <- as.data.frame(cur_out_2)
+    cur_out_2 <- cur_out_2[order(cur_out_2$group_by, cur_out_2$from_label, cur_out_2$to_label),]
+    
+    expect_equal(cur_out_2$ct, cur_out$ct)
+    
+    # As character
+    pancreasSCE$CellType <- as.character(pancreasSCE$CellType)
+    expect_silent(cur_out_2 <- countInteractions(pancreasSCE, group_by = "ImageNb",
+                                                 label = "CellType", method = "interaction",
+                                                 colPairName = "knn_interaction_graph")) 
+    cur_out_2 <- as.data.frame(cur_out_2)
+    cur_out_2 <- cur_out_2[order(cur_out_2$group_by, cur_out_2$from_label, cur_out_2$to_label),]
+    
+    expect_equal(cur_out_2, cur_out)
+    
+    # As numeric
+    pancreasSCE$CellType <- as.numeric(as.factor(pancreasSCE$CellType))
+    expect_silent(cur_out_2 <- countInteractions(pancreasSCE, group_by = "ImageNb",
+                                                 label = "CellType", method = "interaction",
+                                                 colPairName = "knn_interaction_graph")) 
+    cur_out_2 <- as.data.frame(cur_out_2)
+    cur_out_2 <- cur_out_2[order(cur_out_2$group_by, cur_out_2$from_label, cur_out_2$to_label),]
+    
+    expect_equal(cur_out_2$ct, cur_out$ct)
+    
+    # Logical
+    expect_silent(cur_out_2 <- countInteractions(pancreasSCE, group_by = "ImageNb",
+                                                 label = "Pattern", method = "interaction",
+                                                 colPairName = "knn_interaction_graph")) 
+    
+    cur_out_2 <- as.data.frame(cur_out_2)
+    cur_out_2 <- cur_out_2[order(cur_out_2$group_by, cur_out_2$from_label, cur_out_2$to_label),]
+    
+    cur_table <- as.data.frame(colPair(pancreasSCE, "knn_interaction_graph"))
+    cur_table$from_label <- colData(pancreasSCE)[["Pattern"]][cur_table$from]
+    cur_table$to_label <- colData(pancreasSCE)[["Pattern"]][cur_table$to]
+    cur_table$image <- colData(pancreasSCE)[["ImageNb"]][cur_table$from]
+    
+    test <- cur_table %>% group_by(image, from_label, to_label) %>%
+      summarize(N = n(), .groups = "drop") %>%
+      group_by(image, from_label) %>% mutate(n_tot_int = sum(N)) %>%
+      ungroup() %>% mutate(ct = N / n_tot_int)
+    
+    expect_equal(cur_out_2$ct[!is.na(cur_out_2$ct)], test$ct[!is.na(cur_out_2$ct)])
+    
+    # ct values sum up to 1 for the "from_label" cell-type per grouping level
+    expect_silent(cur_out <- countInteractions(pancreasSCE, group_by = "ImageNb",
+                                               label = "CellType", method = "interaction",
+                                               colPairName = "knn_interaction_graph")) 
+    
+    test <- cur_out %>% as.data.frame() %>% filter(!is.na(ct)) %>% group_by(group_by, from_label) %>% summarise(sum_ct = sum(ct))
+    
+    expect_equal(sum(test$sum_ct)/nrow(test), 1)
+    
+    # One image only contains one cell type
+    data(pancreasSCE)
+    
+    pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn",
+                                     k = 3)
+    
+    pancreasSCE$test <- pancreasSCE$CellType
+    pancreasSCE$test[pancreasSCE$ImageNb == 3] <- "test" 
+    expect_silent(cur_out_3 <- countInteractions(pancreasSCE, group_by = "ImageNb",
+                                                 label = "test", method = "interaction",
+                                                 colPairName = "knn_interaction_graph")) 
+    
+    cur_out_3 <- as.data.frame(cur_out_3)
+    cur_out_3 <- cur_out_3[order(cur_out_3$group_by, cur_out_3$from_label, cur_out_3$to_label),]
+    
+    cur_table <- as.data.frame(colPair(pancreasSCE, "knn_interaction_graph"))
+    cur_table$from_label <- colData(pancreasSCE)[["test"]][cur_table$from]
+    cur_table$to_label <- colData(pancreasSCE)[["test"]][cur_table$to]
+    cur_table$image <- colData(pancreasSCE)[["ImageNb"]][cur_table$from]
+    
+    test <- cur_table %>% group_by(image, from_label, to_label) %>%
+      summarize(N = n(), .groups = "drop") %>%
+      group_by(image, from_label) %>% mutate(n_tot_int = sum(N)) %>%
+      ungroup() %>% mutate(ct = N / n_tot_int)
+    
+    cur_out_4 <- cur_out_3
+    cur_out_4 <- cur_out_4[match(paste(test$image, test$from_label, test$to_label),
+                                 paste(cur_out_4$group_by, cur_out_4$from_label, cur_out_4$to_label)),]
+    
+    expect_equal(cur_out_4$ct[!is.na(cur_out_4$ct)], test$ct[!is.na(cur_out_4$ct)]) 
+    expect_equal(cur_out_3$ct[!is.na(cur_out_3$ct) & cur_out_3$group_by != 3], cur_out$ct[!is.na(cur_out$ct) & cur_out$group_by != 3]) 
+    
+    data(pancreasSCE)
+    pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn",
+                                     k = 3)
+    pancreasSCE$ImageName <- "test"
+    
+    expect_silent(cur_out <- countInteractions(pancreasSCE, group_by = "ImageName",
+                                               label = "CellType", method = "interaction",
+                                               colPairName = "knn_interaction_graph")) 
+    
+    cur_table <- as.data.frame(colPair(pancreasSCE, "knn_interaction_graph"))
+    cur_table$from_label <- colData(pancreasSCE)[["CellType"]][cur_table$from]
+    cur_table$to_label <- colData(pancreasSCE)[["CellType"]][cur_table$to]
+    cur_table$image <- colData(pancreasSCE)[["ImageName"]][cur_table$from]
+    
+    test <- cur_table %>% group_by(image, from_label, to_label) %>%
+      summarize(N = n(), .groups = "drop") %>%
+      group_by(image, from_label) %>% mutate(n_tot_int = sum(N)) %>%
+      ungroup() %>% mutate(ct = N / n_tot_int)
+    
+    expect_equal(cur_out$ct, test$ct)
+    
     # Fail
     expect_error(countInteractions("test"),
                  regexp = "'object' not of type 'SingleCellExperiment'.",

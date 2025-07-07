@@ -42,6 +42,7 @@ vignette: |
 editor_options: 
   markdown: 
     wrap: 72
+  chunk_output_type: console
 ---
 
 ```{r, echo=FALSE, results="hide"}
@@ -1016,7 +1017,7 @@ The `countInteractions` function counts the number of edges
 (interactions) between each set of unique cell labels per grouping
 level. Simplified, it counts for each cell of type A the number of
 neighbors of type B. This count is averaged within each unique grouping
-level (e.g. image) in three different ways:
+level (e.g. image) in four different ways:
 
 1.  `method = "classic"`: The count is divided by the total number of
     cells of type A. The final count can be interpreted as "How many
@@ -1033,6 +1034,10 @@ level (e.g. image) in three different ways:
     across all cells of type A. The final count can be interpreted as
     "What fraction of cells of type A have at least a given number of
     neighbors of type B?"
+
+4.  `method = "interaction"`: The count is divided by the total number of 
+    interactions from cell type A. The final count can be interpreted as the 
+    fraction of interactions of cell type A that occur with cell type B.
 
 The `countInteractions` returns a `DataFrame` containing the summarized
 counts (`ct`) for all combinations of `from_label`, `to_label` and
@@ -1080,6 +1085,148 @@ out <- testInteractions(pancreasSCE,
 out
 ```
 
+### Visualizing interactions
+
+The `plotInteractions` function is used to visualize interaction networks from an
+edge list, typically the output of the `countInteractions`and `testInteractions`
+functions. 
+
+```{r plotInteractions}
+plotInteractions(out,
+                 pancreasSCE,
+                 group_by = "ImageNb",
+                 label = "CellType")
+```
+
+Before visualization, the edge list can be filtered to focus on relevant 
+cell-cell interactions, groupings, and significance.
+
+In the example below we retain interactions whose fraction of significant pairs
+(based on sigval) exceeds 75% and tag the edges as attraction or repulsion.
+
+```{r plotInteractions-filter data}
+library(dplyr)
+
+out <- out %>% as.data.frame() %>% mutate(pair_id = paste(from_label, to_label, sep = "__"),
+                                          is_sig = !is.na(sig))
+summary_df <- out %>%
+  group_by(pair_id) %>%
+  summarise(
+    sum_sigval = sum(sigval, na.rm = TRUE),
+    total_count = sum(is_sig),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    fraction_sig = sum_sigval / total_count,
+    int_type = case_when(
+      fraction_sig > 0.75 ~ "attraction",
+      fraction_sig < -0.75 ~ "repulsion",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  filter(!is.na(int_type))
+
+subset_out <- out %>%
+  semi_join(summary_df, by = "pair_id") %>%
+  left_join(summary_df %>% select(pair_id, int_type), by = "pair_id")
+
+# Now we can visualise only these filtered edges
+plotInteractions(subset_out,
+                 pancreasSCE,
+                 group_by = "ImageNb",
+                 label = "CellType")
+```
+
+You can customize node and edge aesthetics directly using `plotInteractions`
+arguments. The plot can also be modified further using `ggplot2` syntax.
+Node properties such as color, shape, and size can be controlled using
+`scale_color_*`, `scale_shape_*` and `scale_size_*`. Edge aesthetics can be 
+modified using `scale_edge_*` functions from `ggraph`.
+
+To color edges based on subsetted significant interaction type (attraction, repulsion), 
+specify the `int_type` column via `edge_color_by`, and use `scale_edge_colour_manual()` 
+for custom colors.
+
+You can also control edge thickness via `edge_width_by`. For example, "ct" 
+represents the summarized interaction count derived from `countInteractions` 
+or `testInteractions`, averaged per cell-pair and grouping level. 
+In our example, the "ct" value refers to the average neighboring cells of 
+cell type B from cell type A averaged across all images.
+
+```{r plotInteractions-edge aesthetics}
+library(ggraph)
+
+edge_color <- setNames(c("blue", "red"),c("attraction", "repulsion"))
+
+plotInteractions(subset_out,
+                 pancreasSCE,
+                 group_by = "ImageNb",
+                 label = "CellType",
+                 edge_color_by = "int_type",
+                 edge_width_by = "ct") +
+                 scale_edge_colour_manual(values = edge_color)
+```
+
+Control node properties via: `node_color_by`, `node_size_by`, `node_label_color_by`.
+
+```{r plotInteractions-node aesthetics}
+plotInteractions(out,
+                 pancreasSCE,
+                 group_by = "ImageNb",
+                 label = "CellType",
+                 node_color_by = "name",
+                 node_label_color_by = "name",
+                 node_size_by = "n_cells")
+
+# Define custom colors for node and node_label
+node_color <- setNames(c("red", "blue", "green"), c("celltype_A", "celltype_B", "celltype_C"))
+plotInteractions(out,
+                 pancreasSCE,
+                 group_by = "ImageNb",
+                 label = "CellType",
+                 node_color_by = "name",
+                 node_label_color_by = "name",
+                 node_size_by = "n_cells")+
+  scale_color_manual(values = node_color)
+```
+
+The layout of the graph can be customized using the `graph_layout`argument. 
+For more information see \link[ggraph]{ggraph}.
+
+```{r plotInteractions-layout}
+# Default is "circle"
+plotInteractions(out,
+                 pancreasSCE,
+                 group_by = "ImageNb",
+                 label = "CellType")
+
+# Chord diagram layout
+plotInteractions(out,
+                 pancreasSCE,
+                 group_by = "ImageNb",
+                 label = "CellType",
+                 graph_layout = "chord")
+
+# Linear layout
+plotInteractions(out,
+                 pancreasSCE,
+                 group_by = "ImageNb",
+                 label = "CellType",
+                 graph_layout = "linear")
+```
+
+Furthermore, setting `return_data = TRUE` returns the symbolic edge-list, 
+along with any specified edge aesthetic parameters and vertex metadata used 
+for graph construction, as a `list` of two `data.frames`.
+
+```{r plotInteractions-return data}
+# return data
+plotInteractions(out, pancreasSCE, "CellType", "ImageNb",
+                return_data = TRUE)
+```
+
+
+
 # Contributions
 
 Large chunks of the code of the `imcRtools` package is based on the work
@@ -1095,7 +1242,10 @@ has written the first version of reading in the
 [Daniel Schulz](https://github.com/SchulzDan) has build the
 `aggregateNeighbors` and `minDistToCells` functions and contributed to developing the spatial
 clustering approach. [Lasse Meyer](https://github.com/lassedochreden) has 
-implemented the functions for spatial context analysis.
+implemented the functions for spatial context analysis and developed the 
+`detectCommunity` function. [Marlene Lutz](https://github.com/marlene1) has 
+contributed the "interaction" method for interaction counting and testing, and
+implemented the `plotInteractions` function.
 
 # Session info {.unnumbered}
 
