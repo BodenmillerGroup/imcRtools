@@ -19,7 +19,7 @@ from random permutations."><!-- mathjax --><script src="https://cdnjs.cloudflare
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.15.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.15.2</span>
       </span>
     </div>
 
@@ -62,7 +62,7 @@ from random permutations.</p>
 <span>  <span class="va">group_by</span>,</span>
 <span>  <span class="va">label</span>,</span>
 <span>  <span class="va">colPairName</span>,</span>
-<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"classic"</span>, <span class="st">"histocat"</span>, <span class="st">"patch"</span><span class="op">)</span>,</span>
+<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"classic"</span>, <span class="st">"histocat"</span>, <span class="st">"patch"</span>, <span class="st">"interaction"</span><span class="op">)</span>,</span>
 <span>  patch_size <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  iter <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>  p_threshold <span class="op">=</span> <span class="fl">0.01</span>,</span>
@@ -165,7 +165,7 @@ of edges (interactions) between each set of unique entries in
 <code>colData(object)[[label]]</code>. Simplified, it counts for each cell of
 type A the number of neighbors of type B.
 This count is averaged within each unique entry
-<code>colData(object)[[group_by]]</code> in three different ways:</p>
+<code>colData(object)[[group_by]]</code> in four different ways:</p>
 <p>1. <code>method = "classic"</code>: The count is divided by the total number of
 cells of type A. The final count can be interpreted as "How many neighbors
 of type B does a cell of type A have on average?"</p>
@@ -179,6 +179,9 @@ average, given it has at least one neighbor of type B?"</p>
 across all cells of type A. The final count can be interpreted as "What
 fraction of cells of type A have at least a given number of neighbors of
 type B?"</p>
+<p>4. <code>method = "interaction"</code>: The count is divided by the total number of
+interactions from cell type A. The final count can be interpreted as the
+fraction of interactions of cell type A that occur with cell type B.</p>
     </div>
     <div id="testing-for-significance">
     <h2>Testing for significance</h2>
@@ -217,6 +220,7 @@ interactions per grouping level.</p>
     <p>Vito Zanotelli</p>
 <p>Jana Fischer</p>
 <p>adapted by Nils Eling (<a href="mailto:nils.eling@dqbm.uzh.ch">nils.eling@dqbm.uzh.ch</a>)</p>
+<p>adapted by Marlene Lutz (<a href="mailto:marlene.lutz@uzh.ch">marlene.lutz@uzh.ch</a>)</p>
     </div>
 
     <div id="ref-examples">
@@ -336,6 +340,40 @@ interactions per grouping level.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 24        FALSE 0.001998002      TRUE        -1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 25           NA          NA        NA        NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 26        FALSE 0.055944056     FALSE         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27         TRUE 0.000999001      TRUE         1</span>
+<span class="r-in"><span>                         </span></span>
+<span class="r-in"><span><span class="co"># Interaction style calculation</span></span></span>
+<span class="r-in"><span><span class="op">(</span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">testInteractions</span><span class="op">(</span><span class="va">pancreasSCE</span>, </span></span>
+<span class="r-in"><span>                         group_by <span class="op">=</span> <span class="st">"ImageNb"</span>,</span></span>
+<span class="r-in"><span>                         label <span class="op">=</span> <span class="st">"CellType"</span>, </span></span>
+<span class="r-in"><span>                         method <span class="op">=</span> <span class="st">"interaction"</span>,</span></span>
+<span class="r-in"><span>                         colPairName <span class="op">=</span> <span class="st">"knn_interaction_graph"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DataFrame with 27 rows and 10 columns</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        group_by  from_label    to_label        ct        p_gt        p_lt</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;character&gt; &lt;character&gt; &lt;character&gt; &lt;numeric&gt;   &lt;numeric&gt;   &lt;numeric&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1             1  celltype_A  celltype_A 0.6078431 0.000999001 1.000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2             1  celltype_A  celltype_B 0.1568627 0.023976024 0.992007992</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3             1  celltype_A  celltype_C 0.2352941 1.000000000 0.000999001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4             1  celltype_B  celltype_A 0.2916667 0.053946054 0.979020979</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5             1  celltype_B  celltype_B 0.0833333 0.504495504 0.774225774</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ...         ...         ...         ...       ...         ...         ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23            3  celltype_B  celltype_B  0.787879 0.000999001 1.000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24            3  celltype_B  celltype_C  0.212121 1.000000000 0.000999001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25            3  celltype_C  celltype_A        NA          NA          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26            3  celltype_C  celltype_B  0.234973 1.000000000 0.000999001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27            3  celltype_C  celltype_C  0.765027 0.000999001 1.000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     interaction           p       sig    sigval</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;logical&gt;   &lt;numeric&gt; &lt;logical&gt; &lt;numeric&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          TRUE 0.000999001      TRUE         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          TRUE 0.023976024     FALSE         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3         FALSE 0.000999001      TRUE        -1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          TRUE 0.053946054     FALSE         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          TRUE 0.504495504     FALSE         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ...         ...         ...       ...       ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23         TRUE 0.000999001      TRUE         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24        FALSE 0.000999001      TRUE        -1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25           NA          NA        NA        NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26        FALSE 0.000999001      TRUE        -1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 27         TRUE 0.000999001      TRUE         1</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

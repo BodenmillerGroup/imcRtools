@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.15.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.15.2</span>
       </span>
     </div>
 
@@ -92,7 +92,7 @@ ZurichInstitute for Molecular Health Sciences, ETH
 Zurich<br><a class="author_email" href="mailto:#">daniel.schulz@<span class="citation">(<strong>uzh.ch?</strong>)</span></a>
       </address>
                   
-            <h4 data-toc-skip class="date">4 July 2025</h4>
+            <h4 data-toc-skip class="date">7 July 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BodenmillerGroup/imcRtools/blob/devel/vignettes/imcRtools.Rmd" class="external-link"><code>vignettes/imcRtools.Rmd</code></a></small>
       <div class="hidden name"><code>imcRtools.Rmd</code></div>
@@ -1273,7 +1273,7 @@ interactions are summarized.</p>
 edges (interactions) between each set of unique cell labels per grouping
 level. Simplified, it counts for each cell of type A the number of
 neighbors of type B. This count is averaged within each unique grouping
-level (e.g. image) in three different ways:</p>
+level (e.g. image) in four different ways:</p>
 <ol style="list-style-type: decimal">
 <li><p><code>method = "classic"</code>: The count is divided by the
 total number of cells of type A. The final count can be interpreted as
@@ -1290,6 +1290,10 @@ or 1 (more or equal to <code>patch_size</code> neighbors of type B). The
 binarized counts are averaged across all cells of type A. The final
 count can be interpreted as “What fraction of cells of type A have at
 least a given number of neighbors of type B?”</p></li>
+<li><p><code>method = "interaction"</code>: The count is divided by the
+total number of interactions from cell type A. The final count can be
+interpreted as the fraction of interactions of cell type A that occur
+with cell type B.</p></li>
 </ol>
 <p>The <code>countInteractions</code> returns a <code>DataFrame</code>
 containing the summarized counts (<code>ct</code>) for all combinations
@@ -1375,6 +1379,178 @@ by comparison to <code>p_treshold</code> (<code>sig</code> and
 <span><span class="co">## 26        FALSE 0.000999001      TRUE        -1</span></span>
 <span><span class="co">## 27         TRUE 0.000999001      TRUE         1</span></span></code></pre>
 </div>
+<div class="section level4">
+<h4 id="visualizing-interactions">Visualizing interactions<a class="anchor" aria-label="anchor" href="#visualizing-interactions"></a>
+</h4>
+<p>The <code>plotInteractions</code> function is used to visualize
+interaction networks from an edge list, typically the output of the
+<code>countInteractions</code>and <code>testInteractions</code>
+functions.</p>
+<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plotInteractions.html">plotInteractions</a></span><span class="op">(</span><span class="va">out</span>,</span>
+<span>                 <span class="va">pancreasSCE</span>,</span>
+<span>                 group_by <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
+<span>                 label <span class="op">=</span> <span class="st">"CellType"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="imcRtools_files/figure-html/plotInteractions-1.png" width="700"></p>
+<p>Before visualization, the edge list can be filtered to focus on
+relevant cell-cell interactions, groupings, and significance.</p>
+<p>In the example below we retain interactions whose fraction of
+significant pairs (based on sigval) exceeds 75% and tag the edges as
+attraction or repulsion.</p>
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">out</span> <span class="op">&lt;-</span> <span class="va">out</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pair_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">from_label</span>, <span class="va">to_label</span>, sep <span class="op">=</span> <span class="st">"__"</span><span class="op">)</span>,</span>
+<span>                                          is_sig <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">sig</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">summary_df</span> <span class="op">&lt;-</span> <span class="va">out</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">pair_id</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span></span>
+<span>    sum_sigval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">sigval</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    total_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">is_sig</span><span class="op">)</span>,</span>
+<span>    .groups <span class="op">=</span> <span class="st">"drop"</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    fraction_sig <span class="op">=</span> <span class="va">sum_sigval</span> <span class="op">/</span> <span class="va">total_count</span>,</span>
+<span>    int_type <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>      <span class="va">fraction_sig</span> <span class="op">&gt;</span> <span class="fl">0.75</span> <span class="op">~</span> <span class="st">"attraction"</span>,</span>
+<span>      <span class="va">fraction_sig</span> <span class="op">&lt;</span> <span class="op">-</span><span class="fl">0.75</span> <span class="op">~</span> <span class="st">"repulsion"</span>,</span>
+<span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="cn">NA_character_</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">int_type</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">subset_out</span> <span class="op">&lt;-</span> <span class="va">out</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter-joins.html" class="external-link">semi_join</a></span><span class="op">(</span><span class="va">summary_df</span>, by <span class="op">=</span> <span class="st">"pair_id"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">summary_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">pair_id</span>, <span class="va">int_type</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"pair_id"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Now we can visualise only these filtered edges</span></span>
+<span><span class="fu"><a href="../reference/plotInteractions.html">plotInteractions</a></span><span class="op">(</span><span class="va">subset_out</span>,</span>
+<span>                 <span class="va">pancreasSCE</span>,</span>
+<span>                 group_by <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
+<span>                 label <span class="op">=</span> <span class="st">"CellType"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="imcRtools_files/figure-html/plotInteractions-filter%20data-1.png" width="700"></p>
+<p>You can customize node and edge aesthetics directly using
+<code>plotInteractions</code> arguments. The plot can also be modified
+further using <code>ggplot2</code> syntax. Node properties such as
+color, shape, and size can be controlled using
+<code>scale_color_*</code>, <code>scale_shape_*</code> and
+<code>scale_size_*</code>. Edge aesthetics can be modified using
+<code>scale_edge_*</code> functions from <code>ggraph</code>.</p>
+<p>To color edges based on subsetted significant interaction type
+(attraction, repulsion), specify the <code>int_type</code> column via
+<code>edge_color_by</code>, and use
+<code><a href="https://ggraph.data-imaginist.com/reference/scale_edge_colour.html" class="external-link">scale_edge_colour_manual()</a></code> for custom colors.</p>
+<p>You can also control edge thickness via <code>edge_width_by</code>.
+For example, “ct” represents the summarized interaction count derived
+from <code>countInteractions</code> or <code>testInteractions</code>,
+averaged per cell-pair and grouping level. In our example, the “ct”
+value refers to the average neighboring cells of cell type B from cell
+type A averaged across all images.</p>
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggraph.data-imaginist.com" class="external-link">ggraph</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">edge_color</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blue"</span>, <span class="st">"red"</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"attraction"</span>, <span class="st">"repulsion"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/plotInteractions.html">plotInteractions</a></span><span class="op">(</span><span class="va">subset_out</span>,</span>
+<span>                 <span class="va">pancreasSCE</span>,</span>
+<span>                 group_by <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
+<span>                 label <span class="op">=</span> <span class="st">"CellType"</span>,</span>
+<span>                 edge_color_by <span class="op">=</span> <span class="st">"int_type"</span>,</span>
+<span>                 edge_width_by <span class="op">=</span> <span class="st">"ct"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>                 <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/scale_edge_colour.html" class="external-link">scale_edge_colour_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="va">edge_color</span><span class="op">)</span></span></code></pre></div>
+<p><img src="imcRtools_files/figure-html/plotInteractions-edge%20aesthetics-1.png" width="700"></p>
+<p>Control node properties via: <code>node_color_by</code>,
+<code>node_size_by</code>, <code>node_label_color_by</code>.</p>
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plotInteractions.html">plotInteractions</a></span><span class="op">(</span><span class="va">out</span>,</span>
+<span>                 <span class="va">pancreasSCE</span>,</span>
+<span>                 group_by <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
+<span>                 label <span class="op">=</span> <span class="st">"CellType"</span>,</span>
+<span>                 node_color_by <span class="op">=</span> <span class="st">"name"</span>,</span>
+<span>                 node_label_color_by <span class="op">=</span> <span class="st">"name"</span>,</span>
+<span>                 node_size_by <span class="op">=</span> <span class="st">"n_cells"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="imcRtools_files/figure-html/plotInteractions-node%20aesthetics-1.png" width="700"></p>
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Define custom colors for node and node_label</span></span>
+<span><span class="va">node_color</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"blue"</span>, <span class="st">"green"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"celltype_A"</span>, <span class="st">"celltype_B"</span>, <span class="st">"celltype_C"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/plotInteractions.html">plotInteractions</a></span><span class="op">(</span><span class="va">out</span>,</span>
+<span>                 <span class="va">pancreasSCE</span>,</span>
+<span>                 group_by <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
+<span>                 label <span class="op">=</span> <span class="st">"CellType"</span>,</span>
+<span>                 node_color_by <span class="op">=</span> <span class="st">"name"</span>,</span>
+<span>                 node_label_color_by <span class="op">=</span> <span class="st">"name"</span>,</span>
+<span>                 node_size_by <span class="op">=</span> <span class="st">"n_cells"</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="va">node_color</span><span class="op">)</span></span></code></pre></div>
+<p><img src="imcRtools_files/figure-html/plotInteractions-node%20aesthetics-2.png" width="700"></p>
+<p>The layout of the graph can be customized using the
+<code>graph_layout</code>argument. For more information see .</p>
+<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Default is "circle"</span></span>
+<span><span class="fu"><a href="../reference/plotInteractions.html">plotInteractions</a></span><span class="op">(</span><span class="va">out</span>,</span>
+<span>                 <span class="va">pancreasSCE</span>,</span>
+<span>                 group_by <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
+<span>                 label <span class="op">=</span> <span class="st">"CellType"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="imcRtools_files/figure-html/plotInteractions-layout-1.png" width="700"></p>
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Chord diagram layout</span></span>
+<span><span class="fu"><a href="../reference/plotInteractions.html">plotInteractions</a></span><span class="op">(</span><span class="va">out</span>,</span>
+<span>                 <span class="va">pancreasSCE</span>,</span>
+<span>                 group_by <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
+<span>                 label <span class="op">=</span> <span class="st">"CellType"</span>,</span>
+<span>                 graph_layout <span class="op">=</span> <span class="st">"chord"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="imcRtools_files/figure-html/plotInteractions-layout-2.png" width="700"></p>
+<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Linear layout</span></span>
+<span><span class="fu"><a href="../reference/plotInteractions.html">plotInteractions</a></span><span class="op">(</span><span class="va">out</span>,</span>
+<span>                 <span class="va">pancreasSCE</span>,</span>
+<span>                 group_by <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
+<span>                 label <span class="op">=</span> <span class="st">"CellType"</span>,</span>
+<span>                 graph_layout <span class="op">=</span> <span class="st">"linear"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="imcRtools_files/figure-html/plotInteractions-layout-3.png" width="700"></p>
+<p>Furthermore, setting <code>return_data = TRUE</code> returns the
+symbolic edge-list, along with any specified edge aesthetic parameters
+and vertex metadata used for graph construction, as a <code>list</code>
+of two <code>data.frames</code>.</p>
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># return data</span></span>
+<span><span class="fu"><a href="../reference/plotInteractions.html">plotInteractions</a></span><span class="op">(</span><span class="va">out</span>, <span class="va">pancreasSCE</span>, <span class="st">"CellType"</span>, <span class="st">"ImageNb"</span>,</span>
+<span>                return_data <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## $edges</span></span>
+<span><span class="co">##    from_label   to_label weight</span></span>
+<span><span class="co">## 1  celltype_A celltype_A      1</span></span>
+<span><span class="co">## 2  celltype_A celltype_B      1</span></span>
+<span><span class="co">## 3  celltype_A celltype_C      1</span></span>
+<span><span class="co">## 4  celltype_B celltype_A      1</span></span>
+<span><span class="co">## 5  celltype_B celltype_B      1</span></span>
+<span><span class="co">## 6  celltype_B celltype_C      1</span></span>
+<span><span class="co">## 7  celltype_C celltype_A      1</span></span>
+<span><span class="co">## 8  celltype_C celltype_B      1</span></span>
+<span><span class="co">## 9  celltype_C celltype_C      1</span></span>
+<span><span class="co">## 10 celltype_A celltype_A      1</span></span>
+<span><span class="co">## 11 celltype_A celltype_B      1</span></span>
+<span><span class="co">## 12 celltype_A celltype_C      1</span></span>
+<span><span class="co">## 13 celltype_B celltype_A      1</span></span>
+<span><span class="co">## 14 celltype_B celltype_B      1</span></span>
+<span><span class="co">## 15 celltype_B celltype_C      1</span></span>
+<span><span class="co">## 16 celltype_C celltype_A      1</span></span>
+<span><span class="co">## 17 celltype_C celltype_B      1</span></span>
+<span><span class="co">## 18 celltype_C celltype_C      1</span></span>
+<span><span class="co">## 19 celltype_A celltype_A      1</span></span>
+<span><span class="co">## 20 celltype_A celltype_B      1</span></span>
+<span><span class="co">## 21 celltype_A celltype_C      1</span></span>
+<span><span class="co">## 22 celltype_B celltype_A      1</span></span>
+<span><span class="co">## 23 celltype_B celltype_B      1</span></span>
+<span><span class="co">## 24 celltype_B celltype_C      1</span></span>
+<span><span class="co">## 25 celltype_C celltype_A      1</span></span>
+<span><span class="co">## 26 celltype_C celltype_B      1</span></span>
+<span><span class="co">## 27 celltype_C celltype_C      1</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $vertices</span></span>
+<span><span class="co">##     CellType n_cells n_group</span></span>
+<span><span class="co">## 1 celltype_A      62       2</span></span>
+<span><span class="co">## 2 celltype_B     111       3</span></span>
+<span><span class="co">## 3 celltype_C     189       3</span></span></code></pre>
+</div>
 </div>
 </div>
 <div class="section level2">
@@ -1392,7 +1568,10 @@ output and the <code>patchDetection</code> function. <a href="https://github.com
 <code>aggregateNeighbors</code> and <code>minDistToCells</code>
 functions and contributed to developing the spatial clustering approach.
 <a href="https://github.com/lassedochreden" class="external-link">Lasse Meyer</a> has
-implemented the functions for spatial context analysis.</p>
+implemented the functions for spatial context analysis and developed the
+<code>detectCommunity</code> function. <a href="https://github.com/marlene1" class="external-link">Marlene Lutz</a> has contributed the
+“interaction” method for interaction counting and testing, and
+implemented the <code>plotInteractions</code> function.</p>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
@@ -1416,16 +1595,16 @@ implemented the functions for spatial context analysis.</p>
 <span><span class="co">## [8] base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">##  [1] ggraph_2.2.1                ggplot2_3.5.2              </span></span>
-<span><span class="co">##  [3] cytomapper_1.20.0           EBImage_4.50.0             </span></span>
-<span><span class="co">##  [5] CATALYST_1.32.0             imcRtools_1.15.1           </span></span>
-<span><span class="co">##  [7] SpatialExperiment_1.18.1    SingleCellExperiment_1.30.1</span></span>
-<span><span class="co">##  [9] SummarizedExperiment_1.38.1 Biobase_2.68.0             </span></span>
-<span><span class="co">## [11] GenomicRanges_1.60.0        GenomeInfoDb_1.44.0        </span></span>
-<span><span class="co">## [13] IRanges_2.42.0              S4Vectors_0.46.0           </span></span>
-<span><span class="co">## [15] BiocGenerics_0.54.0         generics_0.1.4             </span></span>
-<span><span class="co">## [17] MatrixGenerics_1.20.0       matrixStats_1.5.0          </span></span>
-<span><span class="co">## [19] BiocStyle_2.36.0           </span></span>
+<span><span class="co">##  [1] dplyr_1.1.4                 ggraph_2.2.1               </span></span>
+<span><span class="co">##  [3] ggplot2_3.5.2               cytomapper_1.20.0          </span></span>
+<span><span class="co">##  [5] EBImage_4.50.0              CATALYST_1.32.0            </span></span>
+<span><span class="co">##  [7] imcRtools_1.15.2            SpatialExperiment_1.18.1   </span></span>
+<span><span class="co">##  [9] SingleCellExperiment_1.30.1 SummarizedExperiment_1.38.1</span></span>
+<span><span class="co">## [11] Biobase_2.68.0              GenomicRanges_1.60.0       </span></span>
+<span><span class="co">## [13] GenomeInfoDb_1.44.0         IRanges_2.42.0             </span></span>
+<span><span class="co">## [15] S4Vectors_0.46.0            BiocGenerics_0.54.0        </span></span>
+<span><span class="co">## [17] generics_0.1.4              MatrixGenerics_1.20.0      </span></span>
+<span><span class="co">## [19] matrixStats_1.5.0           BiocStyle_2.36.0           </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
 <span><span class="co">##   [1] fs_1.6.6                    bitops_1.0-9               </span></span>
@@ -1447,76 +1626,75 @@ implemented the functions for spatial context analysis.</p>
 <span><span class="co">##  [33] flowCore_2.20.0             shape_1.4.6.1              </span></span>
 <span><span class="co">##  [35] gtools_3.9.5                crosstalk_1.2.1            </span></span>
 <span><span class="co">##  [37] vroom_1.6.5                 car_3.1-3                  </span></span>
-<span><span class="co">##  [39] dplyr_1.1.4                 Matrix_1.7-3               </span></span>
-<span><span class="co">##  [41] RProtoBufLib_2.20.0         ggbeeswarm_0.7.2           </span></span>
-<span><span class="co">##  [43] abind_1.4-8                 terra_1.8-54               </span></span>
-<span><span class="co">##  [45] lifecycle_1.0.4             multcomp_1.4-28            </span></span>
-<span><span class="co">##  [47] yaml_2.3.10                 carData_3.0-5              </span></span>
-<span><span class="co">##  [49] rhdf5_2.52.1                SparseArray_1.8.0          </span></span>
-<span><span class="co">##  [51] Rtsne_0.17                  grid_4.5.1                 </span></span>
-<span><span class="co">##  [53] promises_1.3.3              crayon_1.5.3               </span></span>
-<span><span class="co">##  [55] shinydashboard_0.7.3        lattice_0.22-7             </span></span>
-<span><span class="co">##  [57] beachmat_2.24.0             cowplot_1.1.3              </span></span>
-<span><span class="co">##  [59] magick_2.8.7                pillar_1.10.2              </span></span>
-<span><span class="co">##  [61] knitr_1.50                  ComplexHeatmap_2.24.1      </span></span>
-<span><span class="co">##  [63] RTriangle_1.6-0.15          rjson_0.2.23               </span></span>
-<span><span class="co">##  [65] codetools_0.2-20            glue_1.8.0                 </span></span>
-<span><span class="co">##  [67] V8_6.0.4                    data.table_1.17.6          </span></span>
-<span><span class="co">##  [69] vctrs_0.6.5                 png_0.1-8                  </span></span>
-<span><span class="co">##  [71] gtable_0.3.6                cachem_1.1.0               </span></span>
-<span><span class="co">##  [73] xfun_0.52                   S4Arrays_1.8.1             </span></span>
-<span><span class="co">##  [75] mime_0.13                   tidygraph_1.3.1            </span></span>
-<span><span class="co">##  [77] ConsensusClusterPlus_1.72.0 survival_3.8-3             </span></span>
-<span><span class="co">##  [79] pheatmap_1.0.13             iterators_1.0.14           </span></span>
-<span><span class="co">##  [81] cytolib_2.20.0              units_0.8-7                </span></span>
-<span><span class="co">##  [83] TH.data_1.1-3               bit64_4.6.0-1              </span></span>
-<span><span class="co">##  [85] bslib_0.9.0                 irlba_2.3.5.1              </span></span>
-<span><span class="co">##  [87] svgPanZoom_0.3.4            vipor_0.4.7                </span></span>
-<span><span class="co">##  [89] KernSmooth_2.23-26          colorspace_2.1-1           </span></span>
-<span><span class="co">##  [91] DBI_1.2.3                   raster_3.6-32              </span></span>
-<span><span class="co">##  [93] tidyselect_1.2.1            curl_6.4.0                 </span></span>
-<span><span class="co">##  [95] bit_4.6.0                   compiler_4.5.1             </span></span>
-<span><span class="co">##  [97] BiocNeighbors_2.2.0         h5mread_1.0.1              </span></span>
-<span><span class="co">##  [99] desc_1.4.3                  DelayedArray_0.34.1        </span></span>
-<span><span class="co">## [101] bookdown_0.43               scales_1.4.0               </span></span>
-<span><span class="co">## [103] classInt_0.4-11             distances_0.1.12           </span></span>
-<span><span class="co">## [105] tiff_0.1-12                 stringr_1.5.1              </span></span>
-<span><span class="co">## [107] digest_0.6.37               fftwtools_0.9-11           </span></span>
-<span><span class="co">## [109] rmarkdown_2.29              XVector_0.48.0             </span></span>
-<span><span class="co">## [111] htmltools_0.5.8.1           pkgconfig_2.0.3            </span></span>
-<span><span class="co">## [113] jpeg_0.1-11                 fastmap_1.2.0              </span></span>
-<span><span class="co">## [115] rlang_1.1.6                 GlobalOptions_0.1.2        </span></span>
-<span><span class="co">## [117] htmlwidgets_1.6.4           UCSC.utils_1.4.0           </span></span>
-<span><span class="co">## [119] shiny_1.11.1                farver_2.1.2               </span></span>
-<span><span class="co">## [121] jquerylib_0.1.4             zoo_1.8-14                 </span></span>
-<span><span class="co">## [123] jsonlite_2.0.0              BiocParallel_1.42.1        </span></span>
-<span><span class="co">## [125] BiocSingular_1.24.0         RCurl_1.98-1.17            </span></span>
-<span><span class="co">## [127] magrittr_2.0.3              Formula_1.2-5              </span></span>
-<span><span class="co">## [129] scuttle_1.18.0              GenomeInfoDbData_1.2.14    </span></span>
-<span><span class="co">## [131] Rhdf5lib_1.30.0             Rcpp_1.1.0                 </span></span>
-<span><span class="co">## [133] ggnewscale_0.5.2            viridis_0.6.5              </span></span>
-<span><span class="co">## [135] stringi_1.8.7               MASS_7.3-65                </span></span>
-<span><span class="co">## [137] plyr_1.8.9                  parallel_4.5.1             </span></span>
-<span><span class="co">## [139] ggrepel_0.9.6               graphlayouts_1.2.2         </span></span>
-<span><span class="co">## [141] splines_4.5.1               hms_1.1.3                  </span></span>
-<span><span class="co">## [143] circlize_0.4.16             locfit_1.5-9.12            </span></span>
-<span><span class="co">## [145] igraph_2.1.4                ggpubr_0.6.1               </span></span>
-<span><span class="co">## [147] ggsignif_0.6.4              ScaledMatrix_1.16.0        </span></span>
-<span><span class="co">## [149] reshape2_1.4.4              XML_3.99-0.18              </span></span>
-<span><span class="co">## [151] drc_3.0-1                   evaluate_1.0.4             </span></span>
-<span><span class="co">## [153] BiocManager_1.30.26         tzdb_0.5.0                 </span></span>
-<span><span class="co">## [155] foreach_1.5.2               tweenr_2.0.3               </span></span>
-<span><span class="co">## [157] httpuv_1.6.16               tidyr_1.3.1                </span></span>
-<span><span class="co">## [159] purrr_1.0.4                 polyclip_1.10-7            </span></span>
-<span><span class="co">## [161] clue_0.3-66                 ggforce_0.5.0              </span></span>
-<span><span class="co">## [163] rsvd_1.0.5                  broom_1.0.8                </span></span>
-<span><span class="co">## [165] xtable_1.8-4                e1071_1.7-16               </span></span>
-<span><span class="co">## [167] rstatix_0.7.2               later_1.4.2                </span></span>
-<span><span class="co">## [169] viridisLite_0.4.2           class_7.3-23               </span></span>
-<span><span class="co">## [171] ragg_1.4.0                  tibble_3.3.0               </span></span>
-<span><span class="co">## [173] memoise_2.0.1               FlowSOM_2.16.0             </span></span>
-<span><span class="co">## [175] beeswarm_0.4.0              cluster_2.1.8.1            </span></span>
-<span><span class="co">## [177] concaveman_1.1.0</span></span></code></pre>
+<span><span class="co">##  [39] Matrix_1.7-3                RProtoBufLib_2.20.0        </span></span>
+<span><span class="co">##  [41] ggbeeswarm_0.7.2            abind_1.4-8                </span></span>
+<span><span class="co">##  [43] terra_1.8-54                lifecycle_1.0.4            </span></span>
+<span><span class="co">##  [45] multcomp_1.4-28             yaml_2.3.10                </span></span>
+<span><span class="co">##  [47] carData_3.0-5               rhdf5_2.52.1               </span></span>
+<span><span class="co">##  [49] SparseArray_1.8.0           Rtsne_0.17                 </span></span>
+<span><span class="co">##  [51] grid_4.5.1                  promises_1.3.3             </span></span>
+<span><span class="co">##  [53] crayon_1.5.3                shinydashboard_0.7.3       </span></span>
+<span><span class="co">##  [55] lattice_0.22-7              beachmat_2.24.0            </span></span>
+<span><span class="co">##  [57] cowplot_1.1.3               magick_2.8.7               </span></span>
+<span><span class="co">##  [59] pillar_1.11.0               knitr_1.50                 </span></span>
+<span><span class="co">##  [61] ComplexHeatmap_2.24.1       RTriangle_1.6-0.15         </span></span>
+<span><span class="co">##  [63] rjson_0.2.23                codetools_0.2-20           </span></span>
+<span><span class="co">##  [65] glue_1.8.0                  V8_6.0.4                   </span></span>
+<span><span class="co">##  [67] data.table_1.17.6           vctrs_0.6.5                </span></span>
+<span><span class="co">##  [69] png_0.1-8                   gtable_0.3.6               </span></span>
+<span><span class="co">##  [71] cachem_1.1.0                xfun_0.52                  </span></span>
+<span><span class="co">##  [73] S4Arrays_1.8.1              mime_0.13                  </span></span>
+<span><span class="co">##  [75] tidygraph_1.3.1             ConsensusClusterPlus_1.72.0</span></span>
+<span><span class="co">##  [77] survival_3.8-3              pheatmap_1.0.13            </span></span>
+<span><span class="co">##  [79] iterators_1.0.14            cytolib_2.20.0             </span></span>
+<span><span class="co">##  [81] units_0.8-7                 TH.data_1.1-3              </span></span>
+<span><span class="co">##  [83] bit64_4.6.0-1               bslib_0.9.0                </span></span>
+<span><span class="co">##  [85] irlba_2.3.5.1               svgPanZoom_0.3.4           </span></span>
+<span><span class="co">##  [87] vipor_0.4.7                 KernSmooth_2.23-26         </span></span>
+<span><span class="co">##  [89] colorspace_2.1-1            DBI_1.2.3                  </span></span>
+<span><span class="co">##  [91] raster_3.6-32               tidyselect_1.2.1           </span></span>
+<span><span class="co">##  [93] curl_6.4.0                  bit_4.6.0                  </span></span>
+<span><span class="co">##  [95] compiler_4.5.1              BiocNeighbors_2.2.0        </span></span>
+<span><span class="co">##  [97] h5mread_1.0.1               desc_1.4.3                 </span></span>
+<span><span class="co">##  [99] DelayedArray_0.34.1         bookdown_0.43              </span></span>
+<span><span class="co">## [101] scales_1.4.0                classInt_0.4-11            </span></span>
+<span><span class="co">## [103] distances_0.1.12            tiff_0.1-12                </span></span>
+<span><span class="co">## [105] stringr_1.5.1               digest_0.6.37              </span></span>
+<span><span class="co">## [107] fftwtools_0.9-11            rmarkdown_2.29             </span></span>
+<span><span class="co">## [109] XVector_0.48.0              htmltools_0.5.8.1          </span></span>
+<span><span class="co">## [111] pkgconfig_2.0.3             jpeg_0.1-11                </span></span>
+<span><span class="co">## [113] fastmap_1.2.0               rlang_1.1.6                </span></span>
+<span><span class="co">## [115] GlobalOptions_0.1.2         htmlwidgets_1.6.4          </span></span>
+<span><span class="co">## [117] UCSC.utils_1.4.0            shiny_1.11.1               </span></span>
+<span><span class="co">## [119] farver_2.1.2                jquerylib_0.1.4            </span></span>
+<span><span class="co">## [121] zoo_1.8-14                  jsonlite_2.0.0             </span></span>
+<span><span class="co">## [123] BiocParallel_1.42.1         BiocSingular_1.24.0        </span></span>
+<span><span class="co">## [125] RCurl_1.98-1.17             magrittr_2.0.3             </span></span>
+<span><span class="co">## [127] Formula_1.2-5               scuttle_1.18.0             </span></span>
+<span><span class="co">## [129] GenomeInfoDbData_1.2.14     Rhdf5lib_1.30.0            </span></span>
+<span><span class="co">## [131] Rcpp_1.1.0                  ggnewscale_0.5.2           </span></span>
+<span><span class="co">## [133] viridis_0.6.5               stringi_1.8.7              </span></span>
+<span><span class="co">## [135] MASS_7.3-65                 plyr_1.8.9                 </span></span>
+<span><span class="co">## [137] parallel_4.5.1              ggrepel_0.9.6              </span></span>
+<span><span class="co">## [139] graphlayouts_1.2.2          splines_4.5.1              </span></span>
+<span><span class="co">## [141] hms_1.1.3                   circlize_0.4.16            </span></span>
+<span><span class="co">## [143] locfit_1.5-9.12             igraph_2.1.4               </span></span>
+<span><span class="co">## [145] ggpubr_0.6.1                ggsignif_0.6.4             </span></span>
+<span><span class="co">## [147] ScaledMatrix_1.16.0         reshape2_1.4.4             </span></span>
+<span><span class="co">## [149] XML_3.99-0.18               drc_3.0-1                  </span></span>
+<span><span class="co">## [151] evaluate_1.0.4              BiocManager_1.30.26        </span></span>
+<span><span class="co">## [153] tzdb_0.5.0                  foreach_1.5.2              </span></span>
+<span><span class="co">## [155] tweenr_2.0.3                httpuv_1.6.16              </span></span>
+<span><span class="co">## [157] tidyr_1.3.1                 purrr_1.0.4                </span></span>
+<span><span class="co">## [159] polyclip_1.10-7             clue_0.3-66                </span></span>
+<span><span class="co">## [161] ggforce_0.5.0               rsvd_1.0.5                 </span></span>
+<span><span class="co">## [163] broom_1.0.8                 xtable_1.8-4               </span></span>
+<span><span class="co">## [165] e1071_1.7-16                rstatix_0.7.2              </span></span>
+<span><span class="co">## [167] later_1.4.2                 viridisLite_0.4.2          </span></span>
+<span><span class="co">## [169] class_7.3-23                ragg_1.4.0                 </span></span>
+<span><span class="co">## [171] tibble_3.3.0                memoise_2.0.1              </span></span>
+<span><span class="co">## [173] FlowSOM_2.16.0              beeswarm_0.4.0             </span></span>
+<span><span class="co">## [175] cluster_2.1.8.1             concaveman_1.1.0</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
