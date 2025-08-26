@@ -957,7 +957,7 @@
     # dat_perm <- as.data.table(as.data.frame(dat_perm))
 
     . <- ct_perm <- ct_obs <- p_gt <- p_lt <- NULL
-    direction <- sig <- sigval <- p <-  NULL
+    direction <- sig <- sigval <- p <- zscore <- NULL
 
     dat_perm[, ':='(ct_perm = replace(ct_perm, is.na(ct_perm), 0),
                     ct_obs = replace(ct_obs, is.na(ct_obs), 0))]
@@ -967,7 +967,8 @@
     dat_stat <- dat_perm[ , .(ct = mean(ct_obs),
                               p_gt = ifelse(max(ct_obs) == 0, 1,
                                             (sum((ct_perm - ct_obs) > -tolerance) + 1) / (n_perm + 1)),
-                              p_lt = (n_perm - sum((ct_perm - ct_obs) > tolerance) + 1) / (n_perm + 1)),
+                              p_lt = (n_perm - sum((ct_perm - ct_obs) > tolerance) + 1) / (n_perm + 1),
+                              zscore = (mean(ct_obs) - mean(ct_perm)) / sd(ct_perm)),
                           by=c("group_by", "from_label", "to_label")]
 
     dat_stat[, interaction := p_gt < p_lt]
@@ -1011,7 +1012,7 @@
 
     dat_stat[is.na(dat_baseline$ct),
              c("p_gt", "p_lt", "ct", "interaction",
-               "p", "sig", "sigval") := NA]
+               "p", "sig", "sigval", "zscore") := NA]
 
     return(dat_stat)
 }
