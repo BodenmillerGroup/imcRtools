@@ -20,17 +20,54 @@
 #'
 #' @return returns a \code{ggplot} object.
 #'
-#' @examples
-#' # Assume `out` is a data frame from testInteractions with `method = "conditional"`
-#' # and contains columns "zscore" and "cond_ratio".
-#' # plotInteractionsCozi(out, img_id = "group_by")
+#' @examples 
+#' set.seed(22)
+#' library(cytomapper)
+#' library(BiocParallel)
+#' library(data.table)
+#' data(pancreasSCE)
+#'
+#' ## 1. countInteractions or testInteractions with setting method = "conditional"
+#' sce  <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn", k = 3)
+#' 
+#' count_out <- countInteractions(sce,
+#'                                group_by = "ImageNb",
+#'                                label = "CellType",
+#'                                method = "conditional", 
+#'                                colPairName = "knn_interaction_graph")
+#' 
+#' test_out <- testInteractions(sce, 
+#'                              group_by = "ImageNb",
+#'                              label = "CellType", 
+#'                              method = "conditional", 
+#'                              colPairName = "knn_interaction_graph", 
+#'                              iter = 100, 
+#'                              p_threshold = 0.5, 
+#'                              BPPARAM = SerialParam(RNGseed = 123))
+#' 
+#' ## 2. Plot interactions as dotplot
+#' 
+#' # default                
+#' plotInteractionsCozi(test_out)
+#' 
+#' # adjust zscore and dot size limits
+#' plotInteractionsCozi(test_out,
+#'                     zscore_lim = c(-50, 50),
+#'                    dot_size_lim = c(0, 0.5))  
+#' 
+#' # filter for significant interactions only
+#' plotInteractionsCozi(test_out,
+#'                    filter_sig = TRUE)   
+#'                   
+#' @seealso 
+#' \code{\link{countInteractions}} for counting (but not testing) cell-cell
+#' interactions per grouping level.
+#' \code{\link{testInteractions}} for testing cell-cell 
+#' interactions per grouping level.
 #'
 #' @author Chiara Schiller (\email{chiara.schiller@uni-heidelberg.de})
 #'
-#' @importFrom ggplot2 ggplot aes geom_point scale_size_continuous scale_color_gradientn
-#' @importFrom ggplot2 facet_wrap theme element_blank labs
 #' @importFrom RColorBrewer brewer.pal
-#' @importFrom dplyr select all_of
 #' @export
 
 plotInteractionsCozi <- function(out,

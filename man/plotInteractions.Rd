@@ -26,7 +26,8 @@ plotInteractions(
 )
 }
 \arguments{
-\item{out}{a data frame representing an edge list with columns \code{"group_by",
+\item{out}{a data frame, usually the output from \code{countInteractions} or 
+\code{testInteractions}, representing an edge list with columns \code{"group_by",
 "from_label" and "to_label"}. Additional columns may be included to specify 
 edge attributes (weight or color).}
 
@@ -61,13 +62,17 @@ colored.}
 \item{node_label_color_fix}{single character specifying the color of all node
 labels.}
 
-\item{edge_color_by}{single character indicating the column name of \code{"out"} 
-by which the edges are colored.}
+\item{edge_color_by}{single character indicating the name of the column of \code{"out"} 
+used represent edge colors. This column is usually newly added by the user and must assign a 
+unique value to each 'from_label'–'to_label' pair. Typically, these values could encode 
+the direction of significantly interacting cell type pairs.}
 
 \item{edge_color_fix}{single character specifying the color of all edges.}
 
-\item{edge_width_by}{single character indicating the column name of \code{"out"} 
-by which the width of the edges are scaled.}
+\item{edge_width_by}{single character indicating the name of the column of \code{"out"} 
+used to scale edge widths. The values in this column are averaged for each 
+'from_label'–'to_label' pair. Typically, this could be the 'ct' column from 
+of \code{"out"} or a newly added column representing an interaction feature.}
 
 \item{edge_width_fix}{single numeric specifying the width of all edges.}
 

@@ -126,16 +126,14 @@ fraction of interactions of cell type A that occur with cell type B.
 iteration, the interactions are counted as described above. The result is a
 distribution of the interaction count under spatial randomness. The
 observed interaction count is compared against this Null distribution to
-derive z-scores and empirical p-values:
+derive empirical p-values:
 
 \code{p_gt}: fraction of perturbations equal or greater than the observed 
 count
 
 \code{p_lt}: fraction of perturbations equal or less than the observed count
 
-\code{zscore}: (observed count - mean of permuted counts) / sd of permuted counts
-
-Based on the empirical p-values, the \code{interaction} score (attraction
+Based on these empirical p-values, the \code{interaction} score (attraction
 or avoidance), overall \code{p} value and significance by comparison to
 \code{p_treshold} (\code{sig} and \code{sigval}) are derived.
 }
@@ -191,8 +189,12 @@ Subcellular Resolution in Breast Cancer Tissue Samples by Mass Cytometry.,
 Cell Systems 2018 6(1):25-36.e5}
 
 \href{https://www.nature.com/articles/nmeth.4391}{
-Shapiro, D. et al., histoCAT: analysis of cell phenotypes and interactions in 
+Schapiro, D. et al., histoCAT: analysis of cell phenotypes and interactions in 
 multiplex image cytometry data, Nature Methods 2017 14, p. 873–876}
+
+\href{https://doi.org/10.1101/2025.03.31.646289}{
+Schiller, C. et al., Comparison and Optimization of Cellular Neighbor Preference Methods 
+for Quantitative Tissue Analysis, biorRxiv 2025.03.31.646289}
 }
 \seealso{
 \code{\link{countInteractions}} for counting (but not testing) cell-cell
@@ -208,4 +210,6 @@ Jana Fischer
 adapted by Nils Eling (\email{nils.eling@dqbm.uzh.ch})
 
 adapted by Marlene Lutz (\email{marlene.lutz@uzh.ch})
+
+adapted by Chiara Schiller (\email{chiara.schiller@uni-heidelberg.de})
 }

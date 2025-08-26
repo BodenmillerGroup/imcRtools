@@ -157,6 +157,7 @@
 #' @author Jana Fischer
 #' @author adapted by Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #' @author adapted by Marlene Lutz (\email{marlene.lutz@@uzh.ch})
+#' @author adapted by Chiara Schiller (\email{chiara.schiller@uni-heidelberg.de})
 #' 
 #' @references
 #' \href{https://www.sciencedirect.com/science/article/pii/S2405471217305434}{
@@ -165,8 +166,12 @@
 #' Cell Systems 2018 6(1):25-36.e5}
 #' 
 #' \href{https://www.nature.com/articles/nmeth.4391}{
-#' Shapiro, D. et al., histoCAT: analysis of cell phenotypes and interactions in 
+#' Schapiro, D. et al., histoCAT: analysis of cell phenotypes and interactions in 
 #' multiplex image cytometry data, Nature Methods 2017 14, p. 873–876}
+#' 
+#' \href{https://doi.org/10.1101/2025.03.31.646289}{
+#' Schiller, C. et al., Comparison and Optimization of Cellular Neighbor Preference Methods 
+#' for Quantitative Tissue Analysis, biorRxiv 2025.03.31.646289}
 #' 
 #' @export
 testInteractions <- function(object, 
