@@ -43,10 +43,12 @@
 #' cells of type A. The final count can be interpreted as "How many neighbors 
 #' of type B does a cell of type A have on average?" 
 #' 
-#' 2. \code{method = "histocat"}: The count is divided by the number of cells
+#' 2. \code{method = "conditional"}: The count is divided by the number of cells
 #' of type A that have at least one neighbor of type B. The final count can be 
 #' interpreted as "How many many neighbors of type B has a cell of type A on 
-#' average, given it has at least one neighbor of type B?"
+#' average, given it has at least one neighbor of type B?". This method additionally
+#' outputs the conditional cell ratio \code{cond_ratio}, which is the fraction of cells
+#' of type A that have at least one neighbor of type B.
 #' 
 #' 3. \code{method = "patch"}: For each cell, the count is binarized to 0 
 #' (less than \code{patch_size} neighbors of type B) or 1 (more or equal to 
@@ -119,11 +121,11 @@
 #'                          iter = 1000,
 #'                          BPPARAM = SerialParam(RNGseed = 123)))
 #'                                 
-#' # Histocat style calculation
+#' # Conditional style calculation
 #' (out <- testInteractions(pancreasSCE, 
 #'                          group_by = "ImageNb",
 #'                          label = "CellType", 
-#'                          method = "histocat",
+#'                          method = "conditional",
 #'                          colPairName = "knn_interaction_graph",
 #'                          iter = 1000,
 #'                          BPPARAM = SerialParam(RNGseed = 123)))
@@ -171,7 +173,7 @@ testInteractions <- function(object,
                                 group_by,
                                 label,
                                 colPairName,
-                                method = c("classic", "histocat", "patch", "interaction"),
+                                method = c("classic", "conditional", "patch", "interaction"),
                                 patch_size = NULL,
                                 iter = 1000,
                                 p_threshold = 0.01,
@@ -200,8 +202,8 @@ testInteractions <- function(object,
     # Count interactions
     if (method == "classic") {
         cur_count <- .aggregate_classic(cur_table, object, group_by, label)
-    } else if (method == "histocat") {
-        cur_count <- .aggregate_histo(cur_table, object, group_by, label)
+    } else if (method == "conditional") {
+        cur_count <- .aggregate_conditional(cur_table, object, group_by, label)
     } else if (method == "patch") {
         cur_count <- .aggregate_classic_patch(cur_table, 
                                             patch_size = patch_size, 
@@ -217,6 +219,7 @@ testInteractions <- function(object,
     cur_out <- .calc_p_vals(cur_count, cur_out, n_perm = iter,
                             p_thres = p_threshold,
                             return_samples = return_samples,
+                            method = method,
                             tolerance = tolerance)
 
     setorder(cur_out, "group_by", "from_label", "to_label")

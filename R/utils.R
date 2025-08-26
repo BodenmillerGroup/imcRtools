@@ -725,7 +725,7 @@
 }
 
 #' @importFrom data.table CJ
-.aggregate_histo <- function(dat_table, object, group_by, label,
+.aggregate_conditional <- function(dat_table, object, group_by, label,
                              check_missing = TRUE) {
     . <- ct <- .N <- cond_ratio <- total_from_cells <- NULL
     dat_temp <- dat_table[, .(ct=.N), by = c("group_by", "from_label",
@@ -930,8 +930,8 @@
                                 cur_perm <- .aggregate_classic(cur_perm, object,
                                                                group_by, label,
                                                                check_missing = FALSE)
-                            } else if (method == "histocat") {
-                                cur_perm <- .aggregate_histo(cur_perm, object,
+                            } else if (method == "conditional") {
+                                cur_perm <- .aggregate_conditional(cur_perm, object,
                                                              group_by, label,
                                                              check_missing = FALSE)
                             } else if (method == "patch") {
@@ -955,7 +955,7 @@
     return(cur_out)
 }
 
-.calc_p_vals<- function(dat_baseline, dat_perm, n_perm, p_thres, return_samples, 
+.calc_p_vals<- function(dat_baseline, dat_perm, n_perm, p_thres, return_samples, method,
                         tolerance){
     dat_perm <- merge(dat_perm,
                       dat_baseline[, c("from_label", "to_label",
@@ -995,7 +995,7 @@
     dat_stat$from_label <- as.character(dat_stat$from_label)
     dat_stat$to_label <- as.character(dat_stat$to_label)
 
-    if (method == "histocat"){
+    if (method == "conditional"){
       dat_stat <- merge(dat_stat,
                   dat_baseline[, c("from_label", "to_label", "group_by", "cond_ratio")],
                   by = c("group_by", "from_label", "to_label"),

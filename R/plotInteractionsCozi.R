@@ -34,7 +34,7 @@
 #' @importFrom dplyr select all_of
 #' @export
 
-PlotInteractionsCozi <- function(out,
+plotInteractionsCozi <- function(out,
                                  img_id = "group_by",
                                  zscore = "zscore",
                                  cond_ratio = "cond_ratio",
@@ -48,7 +48,7 @@ PlotInteractionsCozi <- function(out,
         required_cols <- c(required_cols, "sig")
     }
     if (!all(required_cols %in% colnames(out))) {
-        stop("Input data frame is missing one or more required columns. Make sure you ran count and testInteractions() with method = 'histocat'.")
+        stop("Input data frame is missing one or more required columns. Make sure you ran count and testInteractions() with method = 'conditional'.")
     }
     out = as.data.frame(out)
 

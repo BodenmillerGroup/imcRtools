@@ -9,7 +9,7 @@ testInteractions(
   group_by,
   label,
   colPairName,
-  method = c("classic", "histocat", "patch", "interaction"),
+  method = c("classic", "conditional", "patch", "interaction"),
   patch_size = NULL,
   iter = 1000,
   p_threshold = 0.01,
@@ -100,10 +100,12 @@ This count is averaged within each unique entry
 cells of type A. The final count can be interpreted as "How many neighbors 
 of type B does a cell of type A have on average?" 
 
-2. \code{method = "histocat"}: The count is divided by the number of cells
+2. \code{method = "conditional"}: The count is divided by the number of cells
 of type A that have at least one neighbor of type B. The final count can be 
 interpreted as "How many many neighbors of type B has a cell of type A on 
-average, given it has at least one neighbor of type B?"
+average, given it has at least one neighbor of type B?". This method additionally
+outputs the conditional cell ratio \code{cond_ratio}, which is the fraction of cells
+of type A that have at least one neighbor of type B.
 
 3. \code{method = "patch"}: For each cell, the count is binarized to 0 
 (less than \code{patch_size} neighbors of type B) or 1 (more or equal to 
@@ -124,14 +126,16 @@ fraction of interactions of cell type A that occur with cell type B.
 iteration, the interactions are counted as described above. The result is a
 distribution of the interaction count under spatial randomness. The
 observed interaction count is compared against this Null distribution to
-derive empirical p-values:
+derive z-scores and empirical p-values:
 
 \code{p_gt}: fraction of perturbations equal or greater than the observed 
 count
 
 \code{p_lt}: fraction of perturbations equal or less than the observed count
 
-Based on these empirical p-values, the \code{interaction} score (attraction
+\code{zscore}: (observed count - mean of permuted counts) / sd of permuted counts
+
+Based on the empirical p-values, the \code{interaction} score (attraction
 or avoidance), overall \code{p} value and significance by comparison to
 \code{p_treshold} (\code{sig} and \code{sigval}) are derived.
 }
@@ -153,11 +157,11 @@ pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",
                          iter = 1000,
                          BPPARAM = SerialParam(RNGseed = 123)))
                                 
-# Histocat style calculation
+# Conditional style calculation
 (out <- testInteractions(pancreasSCE, 
                          group_by = "ImageNb",
                          label = "CellType", 
-                         method = "histocat",
+                         method = "conditional",
                          colPairName = "knn_interaction_graph",
                          iter = 1000,
                          BPPARAM = SerialParam(RNGseed = 123)))
