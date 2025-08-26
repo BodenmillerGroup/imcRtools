@@ -1582,3 +1582,52 @@
     }
   }
   }
+
+  .valid.plotInteractionsCozi.input <- function(out,
+                                             img_id,
+                                             zscore,
+                                             cond_ratio,
+                                             sig,
+                                             filter_sig,
+                                             zscore_lim,
+                                             dot_size_lim) {
+
+  # Check if 'out' is a data frame
+  if (!is.data.frame(out)) {
+    stop("'out' must be a data frame.")
+  }
+
+  required_cols <- c(img_id, "from_label", "to_label", zscore, cond_ratio)
+  if (!all(required_cols %in% colnames(out))) {
+    stop("Input data frame is missing one or more required columns: '",
+         paste(setdiff(required_cols, colnames(out)), collapse = "', '"),
+         "'. Make sure you ran count and testInteractions with method = 'conditional'")
+  }
+  
+  if (isTRUE(filter_sig)) {
+    if (!sig %in% colnames(out)) {
+      stop("'sig' column is not found in 'out' when 'filter_sig' is TRUE.")
+    }
+    if (!is.logical(out[[sig]])) {
+      stop("'sig' column must contain logical values (TRUE/FALSE).")
+    }
+  }
+
+  if (!is.numeric(out[[zscore]])) {
+    stop("The 'zscore' column must be numeric.")
+  }
+  if (!is.numeric(out[[cond_ratio]])) {
+    stop("The 'cond_ratio' column must be numeric.")
+  }
+  
+  if (!is.null(zscore_lim) && (!is.numeric(zscore_lim) || length(zscore_lim) != 2)) {
+    stop("'zscore_lim' must be a numeric vector of length 2.")
+  }
+  if (!is.null(dot_size_lim) && (!is.numeric(dot_size_lim) || length(dot_size_lim) != 2)) {
+    stop("'dot_size_lim' must be a numeric vector of length 2.")
+  }
+  
+  if (!is.logical(filter_sig)) {
+    stop("'filter_sig' must be a logical (TRUE/FALSE).")
+  }
+}

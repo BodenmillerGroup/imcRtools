@@ -1,8 +1,7 @@
 #' @title Plot interaction conditional ratio and z-score
 #'
 #' @description Function to plot a dot plot visualizing the conditional ratio and
-#' z-score of cell-cell interactions calculated with cozi.
-#'
+#' z-score of cell-cell interactions calculated with testInteractinos() with method= "conditional"
 #' @param out a data frame, usually the output from \code{testInteractions},
 #' representing an edge list with columns \code{"group_by", "from_label",
 #' "to_label", "zscore", "cond_ratio"}.
@@ -22,7 +21,7 @@
 #' @return returns a \code{ggplot} object.
 #'
 #' @examples
-#' # Assume `out` is a data frame from testInteractions with `method = "cozi"`
+#' # Assume `out` is a data frame from testInteractions with `method = "conditional"`
 #' # and contains columns "zscore" and "cond_ratio".
 #' # plotInteractionsCozi(out, img_id = "group_by")
 #'
@@ -43,6 +42,16 @@ plotInteractionsCozi <- function(out,
                                  zscore_lim = NULL,
                                  dot_size_lim = NULL) {
 
+                                  # Call the validity check function first
+    .valid.plotInteractionsCozi.input(out,
+                                      img_id,
+                                      zscore,
+                                      cond_ratio,
+                                      sig,
+                                      filter_sig,
+                                      zscore_lim,
+                                      dot_size_lim)
+
     required_cols <- c(img_id, "from_label", "to_label", zscore, cond_ratio)
     if (filter_sig) {
         required_cols <- c(required_cols, "sig")
@@ -62,7 +71,6 @@ plotInteractionsCozi <- function(out,
     
     if (filter_sig) {
         plot_data <- plot_data[plot_data$sig == TRUE, ]
-        print(sum(plot_data$sig == FALSE, na.rm = TRUE))
     }
 
     plot_data <- na.omit(plot_data)
