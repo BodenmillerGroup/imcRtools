@@ -48,6 +48,7 @@ editor_options:
 ```{r, echo=FALSE, results="hide"}
 knitr::opts_chunk$set(error=FALSE, warning=FALSE, message=FALSE, crop = NULL)
 library(BiocStyle)
+library(data.table)
 ```
 
 ```{r library, echo=FALSE}
@@ -1023,10 +1024,13 @@ level (e.g. image) in four different ways:
     cells of type A. The final count can be interpreted as "How many
     neighbors of type B does a cell of type A have on average?"
 
-2.  `method = "histocat"`: The count is divided by the number of cells
+2.  `method = "conditional"`: The count is divided by the number of cells
     of type A that have at least one neighbor of type B. The final count
     can be interpreted as "How many many neighbors of type B has a cell
-    of type A on average, given it has at least one neighbor of type B?"
+    of type A on average, given it has at least one neighbor of type B?".
+    This method additionall outputs the conditional cell ratio 
+    \code{cond_ratio}, which is the fraction of cells of type A that 
+    have at least one neighbor of type B.
 
 3.  `method = "patch"`: For each cell, the count is binarized to 0 (less
     than `patch_size` neighbors of type B) or 1 (more or equal to
@@ -1060,12 +1064,14 @@ labels. For this, the `testInteractions` function permutes the cell
 labels `iter` times and counts interactions as described above. This
 approach generates a distribution of the interaction count under a
 random distribution of cell labels. The observed interaction count is
-compared against this Null distribution to derive empirical p-values:
+compared against this Null distribution to derive z-scores and empirical p-values:
 
 `p_gt`: fraction of perturbations equal or greater than the observed
 count
 
 `p_lt`: fraction of perturbations equal or less than the observed count
+
+`zscore`: (observed count - mean of permuted counts) / sd of permuted counts
 
 Based on these empirical p-values, the `interaction` score (attraction
 or avoidance), overall `p` value and significance by comparison to
@@ -1225,6 +1231,36 @@ plotInteractions(out, pancreasSCE, "CellType", "ImageNb",
                 return_data = TRUE)
 ```
 
+### Visualizing interactions when choosing method = "conditional"
+
+The `plotInteractionsCozi()` function can be used to visualize interaction safter running `testInteractions()` with the "conditional" method.
+
+We first run the count and tesInteractions() functions again with the "conditional" method. 
+
+```{r run-cozi}
+out <- countInteractions(pancreasSCE,
+                         group_by = "ImageNb",
+                         label = "CellType",
+                         method = "conditional",
+                         colPairName = "knn_interaction_graph")
+
+out <- testInteractions(pancreasSCE,
+                        group_by = "ImageNb",
+                        label = "CellType",
+                        method = "conditional",
+                        colPairName = "knn_interaction_graph",
+                        BPPARAM = BiocParallel::SerialParam(RNGseed = 123))
+
+```
+
+The output additionally has the cond_ratio column. The cond_ratio is the ratio of cells of type A with at least one neighbor of type B. 
+We can use the `plotInteractionsCozi()` function to create a dotplot where the color of the dots is the z-score and the size of the dots is the 
+cond_ratio. 
+```{r plotInteractionsCozi}
+library(ggplot2)
+library(RColorBrewer)
+plotInteractionsCozi(out, img_id = "group_by")
+```
 
 
 # Contributions
@@ -1245,7 +1281,9 @@ clustering approach. [Lasse Meyer](https://github.com/lassedochreden) has
 implemented the functions for spatial context analysis and developed the 
 `detectCommunity` function. [Marlene Lutz](https://github.com/marlene1) has 
 contributed the "interaction" method for interaction counting and testing, and
-implemented the `plotInteractions` function.
+implemented the `plotInteractions` function. [Chiara Schiller](https://github.com/chiarasch) has 
+contributed the zscore and cond_ratio calculation within the `testInteractions()` function, and
+implemented the `plotInteractionsCozi` function.
 
 # Session info {.unnumbered}
 
