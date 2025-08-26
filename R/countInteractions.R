@@ -35,7 +35,9 @@
 #' 2. \code{method = "conditional"}: The count is divided by the number of cells
 #' of type A that have at least one neighbor of type B. The final count can be 
 #' interpreted as "How many many neighbors of type B has a cell of type A on 
-#' average, given it has at least one neighbor of type B?"
+#' average, given it has at least one neighbor of type B?". This method additionally
+#' outputs the conditional cell ratio \code{cond_ratio}, which is the fraction of cells
+#' of type A that have at least one neighbor of type B.
 #' 
 #' 3. \code{method = "patch"}: For each cell, the count is binarized to 0 
 #' (less than \code{patch_size} neighbors of type B) or 1 (more or equal to 
@@ -106,9 +108,9 @@
 #' Cell Systems 2018 6(1):25-36.e5}
 #' 
 #' \href{https://www.nature.com/articles/nmeth.4391}{
-#' Shapiro, D. et al., histoCAT: analysis of cell phenotypes and interactions in 
+#' Schapiro, D. et al., histoCAT: analysis of cell phenotypes and interactions in 
 #' multiplex image cytometry data, Nature Methods 2017 14, p. 873–876}
-#'
+#' 
 #' @importFrom data.table setorder
 #'
 #' @export
