@@ -570,7 +570,6 @@ test_that("testInteractions function works", {
                                               method = "classic",
                                               iter = 100,
                                               colPairName = "expansion_interaction_graph",
-                                              return_samples = FALSE,
                                               BPPARAM = SerialParam(RNGseed = 123)))
     
     expect_equal(cur_out$group_by, as.character(cur_out_2$group_by))

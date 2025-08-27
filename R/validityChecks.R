@@ -1593,9 +1593,9 @@
                                              dot_size_lim) {
 
   # Check if 'out' is a data frame
-  if (!is.data.frame(out)) {
-    stop("'out' must be a data frame.")
-  }
+  if (!inherits(out, c("data.frame", "DataFrame"))) {
+    stop("'out' must be a data.frame or DataFrame.")
+}
 
   required_cols <- c(img_id, "from_label", "to_label", zscore, cond_ratio)
   if (!all(required_cols %in% colnames(out))) {
