@@ -52,8 +52,7 @@ library(data.table)
 ```
 
 ```{r library, echo=FALSE}
-#library(imcRtools)
-devtools::load_all(".")
+library(imcRtools)
 ```
 
 # Introduction
@@ -1269,7 +1268,7 @@ plotInteractionsCozi(out, img_id = "group_by")
 Large chunks of the code of the `imcRtools` package is based on the work
 of [Vito Zanotelli](https://github.com/votti). Vito has co-developed the
 spillover correction approach and translated the interaction testing
-approach developed by [Denis Shapiro](https://github.com/DenisSch) and
+approach developed by [Denis Schapiro](https://github.com/DenisSch) and
 [Jana Fischer](https://github.com/JanaFischer) into R (formerly known as
 the [neighbouRhood](https://github.com/BodenmillerGroup/neighbouRhood) R
 package). Jana has furthermore added the "patch" method for interaction
