@@ -52,7 +52,8 @@ library(data.table)
 ```
 
 ```{r library, echo=FALSE}
-library(imcRtools)
+#library(imcRtools)
+devtools::load_all(".")
 ```
 
 # Introduction
@@ -1233,7 +1234,7 @@ plotInteractions(out, pancreasSCE, "CellType", "ImageNb",
 
 ### Visualizing interactions when choosing method = "conditional"
 
-The `plotInteractionsCozi()` function can be used to visualize interaction safter running `testInteractions()` with the "conditional" method.
+The `plotInteractionsCozi()` function can be used to visualize interactions after running `testInteractions()` with the "conditional" method.
 
 We first run the count and tesInteractions() functions again with the "conditional" method. 
 
