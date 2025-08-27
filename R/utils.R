@@ -764,6 +764,7 @@
         }
 
     }
+    dat_temp[is.na(cond_ratio), cond_ratio := 0]
     dat_temp <- dat_temp[, .(group_by, from_label, to_label, ct, cond_ratio)]
     return(dat_temp)
 }
@@ -994,6 +995,7 @@
     dat_stat$group_by <- as.character(dat_stat$group_by)
     dat_stat$from_label <- as.character(dat_stat$from_label)
     dat_stat$to_label <- as.character(dat_stat$to_label)
+    dat_stat[is.infinite(zscore), zscore := NA]
 
     if (method == "conditional"){
       dat_stat <- merge(dat_stat,
