@@ -125,6 +125,12 @@ test_that("testInteractions function works", {
                                  1.00000000, NA, NA, NA, NA, 1.00000000, 0.00990099,
                                  NA, 0.18811881, 1.00000000), 
                  tolerance = 0.00001)
+    expect_equal(cur_out$zscore, c(3.54062176, 0.37556137, -5.60655578, -0.01781509, -0.29137853,
+                                -2.13349269, 0.81789731, 4.48870979, 5.13383290, 7.79746558,
+                                -0.08460062, -2.54180172, -0.22904290, 3.65574596, -1.39152154,
+                                -1.20085979, 2.99514694, 9.00740472, NA, NA, NA, NA, 5.71983107,
+                                -4.28630534, NA, -0.97188642, 7.43428730), 
+                 tolerance = 0.00001)
     
     # Check against countInteractions
     expect_silent(cur_sn <- countInteractions(pancreasSCE, 
