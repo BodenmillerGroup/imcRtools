@@ -1032,7 +1032,7 @@
     }
 
     dat_stat[is.na(dat_baseline$ct),
-             c("p_gt", "p_lt", "ct", "interaction",
+             c("p_gt", "p_lt", "ct", "cond_ratio", "interaction",
                "p", "sig", "sigval", "zscore") := NA]
 
     return(dat_stat)
