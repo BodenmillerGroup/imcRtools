@@ -253,4 +253,3 @@ Changes in version 1.15.3 (2025-08-26)
 + Added general zscore output to 'testInteractions()'
 + Changed name "histocat" method to "conditional" method in countInteractions and testInteractions
 + Added cond_ratio output to testInteractions if method == "conditional"
-+ Added plotInteractionsCozi function
