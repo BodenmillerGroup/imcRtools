@@ -1253,13 +1253,48 @@ out <- testInteractions(pancreasSCE,
 
 ```
 
-The output additionally has the cond_ratio column. The cond_ratio is the ratio of cells of type A with at least one neighbor of type B. 
-We can use the `plotInteractionsCozi()` function to create a dotplot where the color of the dots is the z-score and the size of the dots is the 
-cond_ratio. 
+The output additionally has the cond_ratio column. The cond_ratio is the ratio of cells of type A with at least one neighbor of type B in the image. 
+When performing conditional normalization, it can be helpful to visualize both the z-score and the cond_ratio simultaneously in a dotplot to help 
+interpreting results. With that, you know how many cells of type A neighbor a cell of type B (cond_ratio), and how strong this interaction is (z-score). 
+For example, if the cond_ratio is very low (small dot) but the z-score is very high, this means that a small amount of cells of type A are strongly 
+surrounded by cells of type B. 
+We show how to plot the results in the following:
 ```{r plotInteractionsCozi}
 library(ggplot2)
 library(RColorBrewer)
-plotInteractionsCozi(out, img_id = "group_by")
+
+filter_sig <- TRUE
+
+plot_data <- as.data.frame(out) %>%
+  select(group_by, from_label, to_label, sig, zscore, cond_ratio) %>%
+  { if (filter_sig) filter(., sig) else . } %>%
+  na.omit()
+
+p <- ggplot(plot_data, aes(from_label, to_label)) +
+  geom_point(aes(size = cond_ratio, color = zscore), shape = 16) +
+  scale_size_continuous(range = c(1, 10)) +
+  scale_color_gradient2(
+    low  = brewer.pal(11, "RdBu")[10],
+    mid  = "white",
+    high = brewer.pal(11, "RdBu")[2],
+    midpoint = 0,
+    oob = scales::squish
+  ) +
+  facet_wrap(~group_by) +
+  labs(
+    title = "COZI Z-score and Conditional Ratio",
+    x = "Cell Type (From)", y = "Cell Type (To)",
+    size = "Conditional Ratio", color = "Z-score"
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+    panel.background = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.line = element_line(colour = "black")
+  )
+
+p
 ```
 
 
@@ -1282,8 +1317,7 @@ implemented the functions for spatial context analysis and developed the
 `detectCommunity` function. [Marlene Lutz](https://github.com/marlene1) has 
 contributed the "interaction" method for interaction counting and testing, and
 implemented the `plotInteractions` function. [Chiara Schiller](https://github.com/chiarasch) has 
-contributed the zscore and cond_ratio calculation within the `testInteractions()` function, and
-implemented the `plotInteractionsCozi` function.
+contributed the zscore and cond_ratio calculation within the `testInteractions()` function.
 
 # Session info {.unnumbered}
 
