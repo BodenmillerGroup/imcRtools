@@ -85,12 +85,17 @@ readSCEfromTIFF <- function(x,
     
     mat <- matrix(img, nrow = dims[1]*dims[2], ncol = dims[3])
     
-    colnames(mat) <- paste0(basename(img_df$acquisition_description[i]), "_", seq_len(ncol(mat)))
+    rownames(mat) <- paste0(basename(img_df$acquisition_description[i]), "_", seq_len(nrow(mat)))
     
     return(mat)
   })
   
   cur_counts <- do.call(rbind, tiff_list)
+  cell_meta <- DataFrame(cur_counts[,1]) 
+  print(nrow(cell_meta))
+  cell_meta$sample_id <- str_split(rownames(cell_meta), "\\_", 
+                                   simplify = TRUE)[,1]
+  print(length(cell_meta$sample_id))
   cur_counts <- t(cur_counts)
   
   channel_meta <- DataFrame(
@@ -98,17 +103,10 @@ readSCEfromTIFF <- function(x,
     marker_name  = panel_df$channel
   )
   
-  pixels_per_img <- nrow(tiff_list[[1]])
-  expanded_meta <- img_df[rep(seq_len(nrow(img_df)), each = pixels_per_img), ]
-  expanded_meta$sample_id <- expanded_meta$acquisition_description
-  expanded_meta$sample_metal <- sub("[0-9]+$", "", expanded_meta$acquisition_description)
-  expanded_meta$sample_mass  <- sub("^[A-Za-z]+", "", expanded_meta$acquisition_description)
-  expanded_meta$pixel_id <- seq_len(nrow(expanded_meta))
-  cell_meta <- DataFrame(expanded_meta)
-  
   sce <- SingleCellExperiment(assays = list(counts = cur_counts))
   rowData(sce) <- channel_meta
   colData(sce) <- cell_meta
+  sce <- sce[, order(colData(sce)$sample_id, colnames(sce))]
   
   return(sce)
 }
