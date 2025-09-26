@@ -92,10 +92,8 @@ readSCEfromTIFF <- function(x,
   
   cur_counts <- do.call(rbind, tiff_list)
   cell_meta <- DataFrame(cur_counts[,1]) 
-  print(nrow(cell_meta))
   cell_meta$sample_id <- str_split(rownames(cell_meta), "\\_", 
                                    simplify = TRUE)[,1]
-  print(length(cell_meta$sample_id))
   cur_counts <- t(cur_counts)
   
   channel_meta <- DataFrame(
