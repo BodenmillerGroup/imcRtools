@@ -90,6 +90,8 @@ readSCEfromTIFF <- function(x,
     return(mat)
   })
   
+  .valid.readSCEfromTIFF.input(img_df, panel_df, verbose)
+  
   cur_counts <- do.call(rbind, tiff_list)
   cell_meta <- DataFrame(cur_counts[,1]) 
   cell_meta$sample_id <- str_split(rownames(cell_meta), "\\_", 
