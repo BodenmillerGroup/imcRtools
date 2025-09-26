@@ -52,7 +52,9 @@ library(data.table)
 ```
 
 ```{r library, echo=FALSE}
-library(imcRtools)
+#library(imcRtools)
+# load the imcrtools version I am working in this directory
+devtools::load_all(".")
 ```
 
 # Introduction
@@ -1024,13 +1026,11 @@ level (e.g. image) in four different ways:
     cells of type A. The final count can be interpreted as "How many
     neighbors of type B does a cell of type A have on average?"
 
-2.  `method = "conditional"`: The count is divided by the number of cells
-    of type A that have at least one neighbor of type B. The final count
-    can be interpreted as "How many many neighbors of type B has a cell
-    of type A on average, given it has at least one neighbor of type B?".
-    This method additionall outputs the conditional cell ratio 
-    \code{cond_ratio}, which is the fraction of cells of type A that 
-    have at least one neighbor of type B.
+2.  `method = "conditional"`: Previously named "histocat". The count is 
+    divided by the number of cells of type A that have at least one neighbor 
+    of type B. The final count can be interpreted as "How many many neighbors 
+    of type B has a cell of type A on average, given it has at least one 
+    neighbor of type B?".
 
 3.  `method = "patch"`: For each cell, the count is binarized to 0 (less
     than `patch_size` neighbors of type B) or 1 (more or equal to
@@ -1233,70 +1233,66 @@ plotInteractions(out, pancreasSCE, "CellType", "ImageNb",
 
 ### Visualizing interactions when choosing method = "conditional"
 
-The `plotInteractionsCozi()` function can be used to visualize interactions after running `testInteractions()` with the "conditional" method.
-
-We first run the count and tesInteractions() functions again with the "conditional" method. 
+We first run the testInteractions() functions with the "conditional" method. 
 
 ```{r run-cozi}
-out <- countInteractions(pancreasSCE,
-                         group_by = "ImageNb",
-                         label = "CellType",
-                         method = "conditional",
-                         colPairName = "knn_interaction_graph")
-
 out <- testInteractions(pancreasSCE,
                         group_by = "ImageNb",
                         label = "CellType",
                         method = "conditional",
                         colPairName = "knn_interaction_graph",
                         BPPARAM = BiocParallel::SerialParam(RNGseed = 123))
-
 ```
 
-The output additionally has the cond_ratio column. The cond_ratio is the ratio of cells of type A with at least one neighbor of type B in the image. 
-When performing conditional normalization, it can be helpful to visualize both the z-score and the cond_ratio simultaneously in a dotplot to help 
-interpreting results. With that, you know how many cells of type A neighbor a cell of type B (cond_ratio), and how strong this interaction is (z-score). 
-For example, if the cond_ratio is very low (small dot) but the z-score is very high, this means that a small amount of cells of type A are strongly 
+Interaction z-scores from conditional normalization, described as COZI in [Schiller et al. 2025](https://www.biorxiv.org/content/10.1101/2025.03.31.646289v2), can be 
+best interpreted by additionally considering the conditional cell ratio (CCR). The CCR is the ratio of cells of type A with at least one neighbor of type B in an image. 
+
+We can calculate the CCR for the priorly chosen neighborhood size and append the output from the testInteractions() function as follows:
+```{r}
+cd <- as.data.table(colData(pancreasSCE))
+
+cond_ratio_df <- as.data.table(colPair(pancreasSCE, "knn_interaction_graph"))[
+  , .(from_label = cd$CellType[from],
+      to_label   = cd$CellType[to],
+      group_by   = cd$ImageNb[from],
+      from)
+][, .(N = uniqueN(from)), by = .(group_by, from_label, to_label)
+][cd[, .(total_from_type = .N), by = .(group_by = ImageNb, from_label = CellType)], 
+  on = .(group_by, from_label)
+][, .(group_by, from_label, to_label, cond_ratio = N / total_from_type)]
+
+out_cr <- merge(
+  as.data.table(out)[, `:=`(
+    group_by   = as.integer(group_by),
+    from_label = as.character(from_label),
+    to_label   = as.character(to_label)
+  )],
+  cond_ratio_df,
+  by = c("group_by", "from_label", "to_label"),
+  all.x = TRUE
+)
+```
+
+We visualize both the z-score and the CCR simultaneously in a dotplot to help interpreting results. 
+With that, you know how many cells of type A neighbor a cell of type B (CCR), and how strong this interaction is (z-score). 
+For example, if the CCR is very low (small dot) but the z-score is very high, this means that a small amount of cells of type A are strongly 
 surrounded by cells of type B. 
 We show how to plot the results in the following:
-```{r plotInteractionsCozi}
-library(ggplot2)
+
+```{r}
 library(RColorBrewer)
 
-filter_sig <- TRUE
-
-plot_data <- as.data.frame(out) %>%
-  select(group_by, from_label, to_label, sig, zscore, cond_ratio) %>%
-  { if (filter_sig) filter(., sig) else . } %>%
-  na.omit()
-
-p <- ggplot(plot_data, aes(from_label, to_label)) +
-  geom_point(aes(size = cond_ratio, color = zscore), shape = 16) +
-  scale_size_continuous(range = c(1, 10)) +
-  scale_color_gradient2(
-    low  = brewer.pal(11, "RdBu")[10],
-    mid  = "white",
-    high = brewer.pal(11, "RdBu")[2],
-    midpoint = 0,
-    oob = scales::squish
-  ) +
-  facet_wrap(~group_by) +
-  labs(
-    title = "COZI Z-score and Conditional Ratio",
-    x = "Cell Type (From)", y = "Cell Type (To)",
-    size = "Conditional Ratio", color = "Z-score"
-  ) +
-  theme(
-    axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
-    panel.background = element_blank(),
-    panel.grid.major = element_blank(),
-    panel.grid.minor = element_blank(),
-    axis.line = element_line(colour = "black")
-  )
+p <- out_cr %>%
+  filter(!is.na(zscore), !is.na(cond_ratio), sig) %>%
+  ggplot(aes(from_label, to_label, size = cond_ratio, color = zscore)) +
+  geom_point() +
+  theme_bw() +
+  scale_size(range = c(1,10)) +
+  scale_color_gradient2(low = brewer.pal(11,"RdBu")[10], mid = "white", high = brewer.pal(11,"RdBu")[2], midpoint = 0) +
+  facet_wrap(~group_by)
 
 p
 ```
-
 
 # Contributions
 
@@ -1317,7 +1313,8 @@ implemented the functions for spatial context analysis and developed the
 `detectCommunity` function. [Marlene Lutz](https://github.com/marlene1) has 
 contributed the "interaction" method for interaction counting and testing, and
 implemented the `plotInteractions` function. [Chiara Schiller](https://github.com/chiarasch) has 
-contributed the zscore and cond_ratio calculation within the `testInteractions()` function.
+implemented the zscore calculation within the `testInteractions()` function and introduced the 
+conditional cell ratio for interpreting results.
 
 # Session info {.unnumbered}
 
