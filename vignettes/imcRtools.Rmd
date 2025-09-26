@@ -52,9 +52,7 @@ library(data.table)
 ```
 
 ```{r library, echo=FALSE}
-#library(imcRtools)
-# load the imcrtools version I am working in this directory
-devtools::load_all(".")
+library(imcRtools)
 ```
 
 # Introduction
