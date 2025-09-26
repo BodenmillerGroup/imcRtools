@@ -948,7 +948,11 @@
         stop("Please remove NAs from the label vector.")
     }
 
-    if (method == "patch") {
+    if (length(method) == 1 && method == "histocat") {
+        stop("The method 'histocat' has been renamed to 'conditional' since imcRtools version 1.15.3. Please rename.")
+    }
+
+    if (length(method) == 1 && method == "patch") {
         if (is.null(patch_size)) {
             stop("When method = 'patch', please specify 'patch_size'.")
         }
@@ -959,7 +963,7 @@
     }
 }
 
-.valid.testInteractions.input <- function(iter, p_threshold, return_samples,
+.valid.testInteractions.input <- function(iter, p_threshold, return_samples, method,
                                           tolerance){
     if (length(iter) != 1 | !is.numeric(iter)) {
         stop("'iter' must be a single positive numeric.")
