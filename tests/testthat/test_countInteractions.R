@@ -168,7 +168,6 @@ test_that("countInteractions function works", {
     cur_out_2 <- cur_out_2[order(cur_out_2$group_by, cur_out_2$from_label, cur_out_2$to_label),]
     
     expect_equal(cur_out_2$ct, cur_out$ct)
-    expect_equal(cur_out_2$cond_ratio, cur_out$cond_ratio)
     
     # As character
     pancreasSCE$CellType <- as.character(pancreasSCE$CellType)
@@ -179,7 +178,6 @@ test_that("countInteractions function works", {
     cur_out_2 <- cur_out_2[order(cur_out_2$group_by, cur_out_2$from_label, cur_out_2$to_label),]
     
     expect_equal(cur_out_2$ct, cur_out$ct)
-    expect_equal(cur_out_2$cond_ratio, cur_out$cond_ratio)
     
     # As numeric
     pancreasSCE$CellType <- as.numeric(as.factor(pancreasSCE$CellType))
@@ -190,7 +188,6 @@ test_that("countInteractions function works", {
     cur_out_2 <- cur_out_2[order(cur_out_2$group_by, cur_out_2$from_label, cur_out_2$to_label),]
     
     expect_equal(cur_out_2$ct, cur_out$ct)
-    expect_equal(cur_out_2$cond_ratio, cur_out$cond_ratio)
     
     # Logical
     expect_silent(cur_out_2 <- countInteractions(pancreasSCE, group_by = "ImageNb",

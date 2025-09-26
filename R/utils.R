@@ -727,27 +727,19 @@
 #' @importFrom data.table CJ
 .aggregate_conditional <- function(dat_table, object, group_by, label,
                              check_missing = TRUE) {
-    . <- ct <- .N <- cond_ratio <- total_from_cells <- NULL
+    . <- ct <- .N <- NULL
     dat_temp <- dat_table[, .(ct=.N), by = c("group_by", "from_label",
                                              "to_label", "from")]
     dat_temp <- dat_temp[, .(ct=mean(ct)), by = c("group_by", "from_label",
                                                   "to_label")]
 
-    interacting_from <- dat_table[, .(interacting_cells=uniqueN(from)), by = c("group_by", "from_label", "to_label")]
-    total_from_cells <- dat_table[, .(total_from_cells=uniqueN(from)), by = c("group_by", "from_label")]
-    dat_temp <- merge(dat_temp, interacting_from, 
-                      by = c("group_by", "from_label", "to_label"), all.x = TRUE)
-    dat_temp <- merge(dat_temp, total_from_cells, 
-                      by = c("group_by", "from_label"), all.x = TRUE)
-    dat_temp[, cond_ratio := interacting_cells / total_from_cells]
-    
     if (check_missing) {
         dat_temp <- dat_temp[CJ(group_by = unique(dat_table$group_by),
                                 from_label = as.factor(levels(dat_table$from_label)),
                                 to_label = as.factor(levels(dat_table$to_label))),
                              on = c("group_by", "from_label", "to_label")]
-        ct <- from_label <- to_label <- cond_ratio <- NULL
-        dat_temp[is.na(dat_temp$ct), ct:= 0]
+        ct <- from_label <- to_label <- NULL
+        dat_temp[is.na(dat_temp$ct), ct := 0]
 
         # Set all cells that are not contained in specific groups to NA
         cur_dat <- unclass(table(colData(object)[[group_by]],
@@ -759,13 +751,11 @@
                 dat_temp[group_by == rownames(cur_dat)[x[1]] &
                              (from_label == colnames(cur_dat)[x[2]] |
                                   to_label == colnames(cur_dat)[x[2]]),
-                         `:=`(ct = NA, cond_ratio = NA)]
+                         ct := NA]
             })
         }
 
     }
-    dat_temp[is.na(cond_ratio), cond_ratio := 0]
-    dat_temp <- dat_temp[, .(group_by, from_label, to_label, ct, cond_ratio)]
     return(dat_temp)
 }
 
@@ -956,7 +946,7 @@
     return(cur_out)
 }
 
-.calc_p_vals<- function(dat_baseline, dat_perm, n_perm, p_thres, return_samples, method,
+.calc_p_vals<- function(dat_baseline, dat_perm, n_perm, p_thres, return_samples,
                         tolerance){
     dat_perm <- merge(dat_perm,
                       dat_baseline[, c("from_label", "to_label",
@@ -996,16 +986,6 @@
     dat_stat$from_label <- as.character(dat_stat$from_label)
     dat_stat$to_label <- as.character(dat_stat$to_label)
     dat_stat[is.infinite(zscore), zscore := NA]
-
-    if (method == "conditional"){
-      dat_stat <- merge(dat_stat,
-                  dat_baseline[, c("from_label", "to_label", "group_by", "cond_ratio")],
-                  by = c("group_by", "from_label", "to_label"),
-                  all.x = TRUE)
-
-      dat_stat <- dat_stat[, c("group_by", "from_label", "to_label", "ct", "cond_ratio",
-                         "p_gt", "p_lt", "zscore", "interaction", "p", "sig", "sigval")]
-    }
     
     setorder(dat_stat, "group_by", "from_label", "to_label")
     setorder(dat_baseline, "group_by", "from_label", "to_label")
@@ -1032,7 +1012,7 @@
     }
 
     dat_stat[is.na(dat_baseline$ct),
-             c("p_gt", "p_lt", "ct", "cond_ratio", "interaction",
+             c("p_gt", "p_lt", "ct", "interaction",
                "p", "sig", "sigval", "zscore") := NA]
 
     return(dat_stat)

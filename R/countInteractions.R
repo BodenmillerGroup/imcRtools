@@ -32,12 +32,10 @@
 #' cells of type A. The final count can be interpreted as "How many neighbors 
 #' of type B does a cell of type A have on average?" 
 #' 
-#' 2. \code{method = "conditional"}: The count is divided by the number of cells
-#' of type A that have at least one neighbor of type B. The final count can be 
-#' interpreted as "How many many neighbors of type B has a cell of type A on 
-#' average, given it has at least one neighbor of type B?". This method additionally
-#' outputs the conditional cell ratio \code{cond_ratio}, which is the fraction of cells
-#' of type A that have at least one neighbor of type B.
+#' 2. \code{method = "conditional"}: Formerly named "histocat". The count is divided 
+#' by the number of cells of type A that have at least one neighbor of type B. The 
+#' final count can be interpreted as "How many neighbors of type B has a cell of 
+#' type A on average, given it has at least one neighbor of type B?".
 #' 
 #' 3. \code{method = "patch"}: For each cell, the count is binarized to 0 
 #' (less than \code{patch_size} neighbors of type B) or 1 (more or equal to 
@@ -122,9 +120,9 @@ countInteractions <- function(object,
                                  patch_size = NULL){
     
     # Input check
-    method <- match.arg(method)
     .valid.countInteractions.input(object, group_by, label, method,
-                                        patch_size, colPairName)
+                                    patch_size, colPairName)
+    method <- match.arg(method)
     
     # Re-level group_by label
     if(is.factor(colData(object)[[group_by]])) {

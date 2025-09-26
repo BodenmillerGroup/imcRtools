@@ -142,7 +142,6 @@ test_that("testInteractions function works", {
     expect_equal(cur_out$from_label, as.character(cur_sn$from_label))
     expect_equal(cur_out$to_label, as.character(cur_sn$to_label))
     expect_equal(cur_out$ct, cur_sn$ct)
-    expect_equal(cur_out$cond_ratio, cur_sn$cond_ratio)
     
     cur_test <- cur_out[!is.na(cur_out$ct),]
     expect_equal(rowMin(as.matrix(cur_test[,c("p_gt", "p_lt")])), cur_test$p)
@@ -162,7 +161,6 @@ test_that("testInteractions function works", {
     expect_equal(cur_out_2$from_label, as.character(cur_sn$from_label))
     expect_equal(cur_out_2$to_label, as.character(cur_sn$to_label))
     expect_equal(cur_out_2$ct, cur_sn$ct)
-    expect_equal(cur_out_2$cond_ratio, cur_sn$cond_ratio)
     
     cur_test <- cur_out_2[!is.na(cur_out_2$ct),]
     expect_equal(rowMin(as.matrix(cur_test[,c("p_gt", "p_lt")])), cur_test$p)
@@ -449,7 +447,6 @@ test_that("testInteractions function works", {
     expect_equal(cur_out$from_label, as.character(cur_sn$from_label))
     expect_equal(cur_out$to_label, as.character(cur_sn$to_label))
     expect_equal(cur_out$ct, cur_sn$ct)
-    expect_equal(cur_out$cond_ratio, cur_sn$cond_ratio)
     
     cur_test <- cur_out[!is.na(cur_out$ct),]
     expect_equal(rowMin(as.matrix(cur_test[,c("p_gt", "p_lt")])), cur_test$p)
@@ -766,7 +763,6 @@ test_that("testInteractions function works if cells are not grouped by image", {
     #expect_equal(out$sig, out2$sig)
     #expect_equal(out$sigval, out2$sigval)
     expect_equal(out$zscore, out2$zscore, tolerance = 0.1)
-    expect_equal(out$cond_ratio, out2$cond_ratio, tolerance = 0.1)
     
     out <- testInteractions(pancreasSCE, group_by = "ImageNb", 
                             label = "CellType", method = "patch", patch_size = 2,
