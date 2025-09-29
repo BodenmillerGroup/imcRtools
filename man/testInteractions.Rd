@@ -9,7 +9,7 @@ testInteractions(
   group_by,
   label,
   colPairName,
-  method = c("classic", "histocat", "patch", "interaction"),
+  method = c("classic", "conditional", "patch", "interaction"),
   patch_size = NULL,
   iter = 1000,
   p_threshold = 0.01,
@@ -100,10 +100,10 @@ This count is averaged within each unique entry
 cells of type A. The final count can be interpreted as "How many neighbors 
 of type B does a cell of type A have on average?" 
 
-2. \code{method = "histocat"}: The count is divided by the number of cells
-of type A that have at least one neighbor of type B. The final count can be 
-interpreted as "How many many neighbors of type B has a cell of type A on 
-average, given it has at least one neighbor of type B?"
+2. \code{method = "conditional"}: Formerly named "histocat". The count is divided 
+by the number of cells of type A that have at least one neighbor of type B. The 
+final count can be interpreted as "How many neighbors of type B has a cell of 
+type A on average, given it has at least one neighbor of type B?".
 
 3. \code{method = "patch"}: For each cell, the count is binarized to 0 
 (less than \code{patch_size} neighbors of type B) or 1 (more or equal to 
@@ -153,11 +153,11 @@ pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb",
                          iter = 1000,
                          BPPARAM = SerialParam(RNGseed = 123)))
                                 
-# Histocat style calculation
+# Conditional style calculation
 (out <- testInteractions(pancreasSCE, 
                          group_by = "ImageNb",
                          label = "CellType", 
-                         method = "histocat",
+                         method = "conditional",
                          colPairName = "knn_interaction_graph",
                          iter = 1000,
                          BPPARAM = SerialParam(RNGseed = 123)))
@@ -187,8 +187,12 @@ Subcellular Resolution in Breast Cancer Tissue Samples by Mass Cytometry.,
 Cell Systems 2018 6(1):25-36.e5}
 
 \href{https://www.nature.com/articles/nmeth.4391}{
-Shapiro, D. et al., histoCAT: analysis of cell phenotypes and interactions in 
+Schapiro, D. et al., histoCAT: analysis of cell phenotypes and interactions in 
 multiplex image cytometry data, Nature Methods 2017 14, p. 873–876}
+
+\href{https://doi.org/10.1101/2025.03.31.646289}{
+Schiller, C. et al., Comparison and Optimization of Cellular Neighbor Preference Methods 
+for Quantitative Tissue Analysis, biorRxiv 2025.03.31.646289}
 }
 \seealso{
 \code{\link{countInteractions}} for counting (but not testing) cell-cell
@@ -204,4 +208,6 @@ Jana Fischer
 adapted by Nils Eling (\email{nils.eling@dqbm.uzh.ch})
 
 adapted by Marlene Lutz (\email{marlene.lutz@uzh.ch})
+
+adapted by Chiara Schiller (\email{chiara.schiller@uni-heidelberg.de})
 }

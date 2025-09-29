@@ -32,10 +32,10 @@
 #' cells of type A. The final count can be interpreted as "How many neighbors 
 #' of type B does a cell of type A have on average?" 
 #' 
-#' 2. \code{method = "histocat"}: The count is divided by the number of cells
-#' of type A that have at least one neighbor of type B. The final count can be 
-#' interpreted as "How many many neighbors of type B has a cell of type A on 
-#' average, given it has at least one neighbor of type B?"
+#' 2. \code{method = "conditional"}: Formerly named "histocat". The count is divided 
+#' by the number of cells of type A that have at least one neighbor of type B. The 
+#' final count can be interpreted as "How many neighbors of type B has a cell of 
+#' type A on average, given it has at least one neighbor of type B?".
 #' 
 #' 3. \code{method = "patch"}: For each cell, the count is binarized to 0 
 #' (less than \code{patch_size} neighbors of type B) or 1 (more or equal to 
@@ -68,11 +68,11 @@
 #'                                 method = "classic",
 #'                                 colPairName = "knn_interaction_graph"))
 #'                                 
-#' # Histocat style calculation
+#' # Conditional style calculation
 #' (out <- countInteractions(pancreasSCE, 
 #'                                 group_by = "ImageNb",
 #'                                 label = "CellType", 
-#'                                 method = "histocat",
+#'                                 method = "conditional",
 #'                                 colPairName = "knn_interaction_graph"))
 #'                                 
 #' # Patch style calculation
@@ -106,9 +106,9 @@
 #' Cell Systems 2018 6(1):25-36.e5}
 #' 
 #' \href{https://www.nature.com/articles/nmeth.4391}{
-#' Shapiro, D. et al., histoCAT: analysis of cell phenotypes and interactions in 
+#' Schapiro, D. et al., histoCAT: analysis of cell phenotypes and interactions in 
 #' multiplex image cytometry data, Nature Methods 2017 14, p. 873–876}
-#'
+#' 
 #' @importFrom data.table setorder
 #'
 #' @export
@@ -116,13 +116,13 @@ countInteractions <- function(object,
                                  group_by,
                                  label,
                                  colPairName,
-                                 method = c("classic", "histocat", "patch", "interaction"),
+                                 method = c("classic", "conditional", "patch", "interaction"),
                                  patch_size = NULL){
     
     # Input check
-    method <- match.arg(method)
     .valid.countInteractions.input(object, group_by, label, method,
-                                        patch_size, colPairName)
+                                    patch_size, colPairName)
+    method <- match.arg(method)
     
     # Re-level group_by label
     if(is.factor(colData(object)[[group_by]])) {
@@ -135,8 +135,8 @@ countInteractions <- function(object,
     # Count interactions
     if (method == "classic") {
         cur_count <- .aggregate_classic(cur_table, object, group_by, label)
-    } else if (method == "histocat") {
-        cur_count <- .aggregate_histo(cur_table, object, group_by, label)
+    } else if (method == "conditional") {
+        cur_count <- .aggregate_conditional(cur_table, object, group_by, label)
     } else if (method == "patch") {
         cur_count <- .aggregate_classic_patch(cur_table, 
                                                 patch_size = patch_size,

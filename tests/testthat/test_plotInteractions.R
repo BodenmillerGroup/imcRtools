@@ -315,11 +315,11 @@ test_that("plotInteractions function works", {
                  fixed = TRUE)
   
   
-  ################################ histocat ###################################
+  ################################ conditional ###################################
   cur_out <- testInteractions(pancreasSCE, 
                               group_by = "ImageNb",
                               label = "CellType",
-                              method = "histocat",
+                              method = "conditional",
                               colPairName = "knn_interaction_graph",
                               iter = 100, p_threshold = 0.5,
                               BPPARAM = SerialParam(RNGseed = 123))

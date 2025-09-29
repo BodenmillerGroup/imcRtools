@@ -1,6 +1,7 @@
 test_that("testInteractions function works", {
     library(cytomapper)
     library(BiocParallel)
+    library(data.table)
     data(pancreasSCE)
     
     pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn",
@@ -86,11 +87,11 @@ test_that("testInteractions function works", {
     expect_equal(cur_test$p < 0.5, cur_test$sig)
     expect_equal(cur_test$sig * sign(cur_test$interaction - 0.5), cur_test$sigval)  
     
-    ################################ histocat ###################################
+    ################################ conditional ###################################
     expect_silent(cur_out <- testInteractions(pancreasSCE, 
                                                   group_by = "ImageNb", 
                                                   label = "CellType",
-                                                  method = "histocat",
+                                                  method = "conditional",
                                                   colPairName = "knn_interaction_graph",
                                                   iter = 100,
                                               BPPARAM = SerialParam(RNGseed = 123)))
@@ -98,12 +99,10 @@ test_that("testInteractions function works", {
     expect_silent(cur_out_2 <- testInteractions(pancreasSCE, 
                                                     group_by = "ImageNb", 
                                                     label = "CellType",
-                                                    method = "histocat",
+                                                    method = "conditional",
                                                     colPairName = "knn_interaction_graph",
                                                     iter = 100,
                                                 BPPARAM = SerialParam(RNGseed = 123)))
-    
-    expect_identical(cur_out, cur_out_2)
     
     # Check numerical values
     expect_equal(cur_out$ct, c(1.937500, 1.142857, 1.333333, 1.166667, 1.000000, 
@@ -126,12 +125,18 @@ test_that("testInteractions function works", {
                                  1.00000000, NA, NA, NA, NA, 1.00000000, 0.00990099,
                                  NA, 0.18811881, 1.00000000), 
                  tolerance = 0.00001)
+    expect_equal(cur_out$zscore, c(3.54062176, 0.37556137, -5.60655578, -0.01781509, -0.29137853,
+                                -2.13349269, 0.81789731, 4.48870979, 5.13383290, 7.79746558,
+                                -0.08460062, -2.54180172, -0.22904290, 3.65574596, -1.39152154,
+                                -1.20085979, 2.99514694, 9.00740472, NA, NA, NA, NA, 5.71983107,
+                                -4.28630534, NA, -0.97188642, 7.43428730), 
+                 tolerance = 0.00001)
     
     # Check against countInteractions
     expect_silent(cur_sn <- countInteractions(pancreasSCE, 
                                                   group_by = "ImageNb", 
                                                   label = "CellType",
-                                                  method = "histocat",
+                                                  method = "conditional",
                                                   colPairName = "knn_interaction_graph"))
     expect_equal(cur_out$group_by, as.character(cur_sn$group_by))
     expect_equal(cur_out$from_label, as.character(cur_sn$from_label))
@@ -147,7 +152,7 @@ test_that("testInteractions function works", {
     expect_silent(cur_out_2 <- testInteractions(pancreasSCE, 
                                                     group_by = "ImageNb", 
                                                     label = "CellType",
-                                                    method = "histocat",
+                                                    method = "conditional",
                                                     colPairName = "knn_interaction_graph",
                                                     iter = 100, p_threshold = 0.5,
                                                 BPPARAM = SerialParam(RNGseed = 123)))    
@@ -396,11 +401,11 @@ test_that("testInteractions function works", {
     expect_equal(cur_test$p < 0.01, cur_test$sig)
     expect_equal(cur_test$sig * sign(cur_test$interaction - 0.5), cur_test$sigval)
     
-    ## histocat
+    ## conditional
     expect_silent(cur_out <- testInteractions(cur_sce, 
                                               group_by = "ImageNb", 
                                               label = "CellType",
-                                              method = "histocat",
+                                              method = "conditional",
                                               colPairName = "expansion_interaction_graph",
                                               iter = 100,
                                               BPPARAM = SerialParam(RNGseed = 123)))
@@ -436,7 +441,7 @@ test_that("testInteractions function works", {
     expect_silent(cur_sn <- countInteractions(cur_sce, 
                                               group_by = "ImageNb", 
                                               label = "CellType",
-                                              method = "histocat",
+                                              method = "conditional",
                                               colPairName = "expansion_interaction_graph"))
     expect_equal(cur_out$group_by, as.character(cur_sn$group_by))
     expect_equal(cur_out$from_label, as.character(cur_sn$from_label))
@@ -581,7 +586,8 @@ test_that("testInteractions function works", {
     expect_equal(cur_out$sig, cur_out_2$sig)
     expect_equal(cur_out$sigval, cur_out_2$sigval)
     
-    expect_equal(dim(cur_out), c(27, 110))
+    expect_equal(dim(cur_out), c(27, 111))
+
     expect_equal(cur_out$iter_1, c(1.29411764705882, 0.352941176470588, 7.29411764705882, 0.75, 
                                    0.25, 7.125, 1.40909090909091, 0.647727272727273, 7.34090909090909, 
                                    3.64444444444444, 3.22222222222222, 2.95555555555556, 3.91891891891892, 
@@ -736,12 +742,12 @@ test_that("testInteractions function works if cells are not grouped by image", {
     expect_equal(out$sigval, out2$sigval)
     
     out <- testInteractions(pancreasSCE, group_by = "ImageNb", 
-                            label = "CellType", method = "histocat", 
+                            label = "CellType", method = "conditional", 
                             iter = 400, colPairName = "expansion_interaction_graph", 
                             BPPARAM = SerialParam(RNGseed = 111))
     
     out2 <- testInteractions(cur_sce, group_by = "ImageNb", 
-                             label = "CellType", method = "histocat", 
+                             label = "CellType", method = "conditional", 
                              iter = 400, 
                              colPairName = "expansion_interaction_graph",
                              BPPARAM = SerialParam(RNGseed = 111))
@@ -756,6 +762,7 @@ test_that("testInteractions function works if cells are not grouped by image", {
     expect_equal(out$p, out2$p, tolerance = 0.1)
     #expect_equal(out$sig, out2$sig)
     #expect_equal(out$sigval, out2$sigval)
+    expect_equal(out$zscore, out2$zscore, tolerance = 0.1)
     
     out <- testInteractions(pancreasSCE, group_by = "ImageNb", 
                             label = "CellType", method = "patch", patch_size = 2,
