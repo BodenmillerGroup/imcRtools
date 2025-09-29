@@ -1,0 +1,5 @@
+image,width_px,height_px,num_channels,source_file,recovery_file,recovered,acquisition_id,acquisition_description,acquisition_start_x_um,acquisition_start_y_um,acquisition_end_x_um,acquisition_end_y_um,acquisition_width_um,acquisition_height_um
+compensation_001.tiff,100,5,4,compensation.mcd,,FALSE,1,Dy161,20966.317,12253.957,21066.317,12248.957,100,5
+compensation_002.tiff,100,5,4,compensation.mcd,,FALSE,2,Dy162,25112.317,12241.957,25212.317,12236.957,100,5
+compensation_003.tiff,100,5,4,compensation.mcd,,FALSE,3,Dy163,28596.317,12467.957,28696.317,12462.957,100,5
+compensation_004.tiff,100,5,4,compensation.mcd,,FALSE,4,Dy164,32861.317,12538.957,32961.317,12533.957,100,5

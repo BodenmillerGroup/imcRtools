@@ -25,10 +25,9 @@
 #' are stored in single .tiff files after extraction with the steinbock pipeline.
 #' 
 #' This function aggregates these measurements into a single
-#' \code{SingleCellExperiment} object.
+#' \code{SingleCellExperiment} object:
 #' 
-#' \enumerate{
-#' \item \code{x} is a path:
+#' \code{x} is a path:
 #' All .tiff files are read in from the specified path. Here, the path
 #' should indicate the location of the spillover slide measurement. Additionally,
 #' the images.csv and panel.csv files generated with the steinbock pipeline 
@@ -58,6 +57,7 @@
 #' @importFrom S4Vectors DataFrame
 #' @importFrom EBImage readImage
 #' @importFrom SummarizedExperiment colData<- rowData<-
+#' @importFrom stringr str_extract str_split
 #' @export
 readSCEfromTIFF <- function(x, 
                             image_df_path,
@@ -73,13 +73,14 @@ readSCEfromTIFF <- function(x,
     stop("Panel dataframe path does not exist.")
   }
   
-  tiff_files <- list.files(x, pattern = ".tiff$|.tif$", full.names = TRUE)
-  if (length(tiff_files) == 0) {
-    stop("Files could not be read in.")
-  }
-  
   img_df   <- read.csv(image_df_path, stringsAsFactors = FALSE)
+  img_df <- img_df[order(img_df$acquisition_description), ]
   panel_df <- read.csv(panel_df_path, stringsAsFactors = FALSE)
+  tiff_files <- file.path(x, img_df$image)
+
+  if (!all(file.exists(tiff_files))) {
+    stop("Some TIFF files listed in img_df$image do not exist in the folder.")
+  }
   
   tiff_list <- lapply(seq_along(tiff_files), function(i) {
     img <- readImage(tiff_files[i])
@@ -88,6 +89,7 @@ readSCEfromTIFF <- function(x,
     mat <- matrix(img, nrow = dims[1]*dims[2], ncol = dims[3])
     
     rownames(mat) <- paste0(basename(img_df$acquisition_description[i]), "_", seq_len(nrow(mat)))
+    colnames(mat) <- panel_df$channel
     
     return(mat)
   })
@@ -112,7 +114,6 @@ readSCEfromTIFF <- function(x,
   sce <- SingleCellExperiment(assays = list(counts = cur_counts))
   rowData(sce) <- channel_meta
   colData(sce) <- cell_meta
-  sce <- sce[, order(colData(sce)$sample_id, colnames(sce))]
   
   return(sce)
 }
