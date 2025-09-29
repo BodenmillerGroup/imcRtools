@@ -97,7 +97,7 @@ readSCEfromTIFF <- function(x,
   .valid.readSCEfromTIFF.input(img_df, panel_df, verbose)
   
   cur_counts <- do.call(rbind, tiff_list)
-  cell_meta <- DataFrame(cur_counts[,1]) 
+  cell_meta <- DataFrame(cell_id = rownames(cur_counts))
   cell_meta$sample_id <- str_split(cell_meta$cell_id, "\\_", 
                                    simplify = TRUE)[,1]
   cell_meta$sample_metal <- str_extract(cell_meta$sample_id, 
