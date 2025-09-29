@@ -18,7 +18,7 @@ a cell of type A has using different approaches."><!-- mathjax --><script src="h
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.15.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.15.3</span>
       </span>
     </div>
 
@@ -60,7 +60,7 @@ a cell of type A has using different approaches.</p>
 <span>  <span class="va">group_by</span>,</span>
 <span>  <span class="va">label</span>,</span>
 <span>  <span class="va">colPairName</span>,</span>
-<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"classic"</span>, <span class="st">"histocat"</span>, <span class="st">"patch"</span>, <span class="st">"interaction"</span><span class="op">)</span>,</span>
+<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"classic"</span>, <span class="st">"conditional"</span>, <span class="st">"patch"</span>, <span class="st">"interaction"</span><span class="op">)</span>,</span>
 <span>  patch_size <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -123,10 +123,10 @@ This count is averaged within each unique entry
 <p>1. <code>method = "classic"</code>: The count is divided by the total number of
 cells of type A. The final count can be interpreted as "How many neighbors
 of type B does a cell of type A have on average?"</p>
-<p>2. <code>method = "histocat"</code>: The count is divided by the number of cells
-of type A that have at least one neighbor of type B. The final count can be
-interpreted as "How many many neighbors of type B has a cell of type A on
-average, given it has at least one neighbor of type B?"</p>
+<p>2. <code>method = "conditional"</code>: Formerly named "histocat". The count is divided
+by the number of cells of type A that have at least one neighbor of type B. The
+final count can be interpreted as "How many neighbors of type B has a cell of
+type A on average, given it has at least one neighbor of type B?".</p>
 <p>3. <code>method = "patch"</code>: For each cell, the count is binarized to 0
 (less than <code>patch_size</code> neighbors of type B) or 1 (more or equal to
 <code>patch_size</code> neighbors of type B). The binarized counts are averaged
@@ -144,7 +144,7 @@ Schulz, D. et al., Simultaneous Multiplexed Imaging of mRNA and Proteins with
 Subcellular Resolution in Breast Cancer Tissue Samples by Mass Cytometry.,
 Cell Systems 2018 6(1):25-36.e5</a></p>
 <p><a href="https://www.nature.com/articles/nmeth.4391" class="external-link">
-Shapiro, D. et al., histoCAT: analysis of cell phenotypes and interactions in
+Schapiro, D. et al., histoCAT: analysis of cell phenotypes and interactions in
 multiplex image cytometry data, Nature Methods 2017 14, p. 873–876</a></p>
     </div>
     <div id="see-also">
@@ -190,11 +190,11 @@ interactions per grouping level.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 26          3 celltype_C celltype_B  0.704918</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 27          3 celltype_C celltype_C  2.295082</span>
 <span class="r-in"><span>                                </span></span>
-<span class="r-in"><span><span class="co"># Histocat style calculation</span></span></span>
+<span class="r-in"><span><span class="co"># Conditional style calculation</span></span></span>
 <span class="r-in"><span><span class="op">(</span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">countInteractions</span><span class="op">(</span><span class="va">pancreasSCE</span>, </span></span>
 <span class="r-in"><span>                                group_by <span class="op">=</span> <span class="st">"ImageNb"</span>,</span></span>
 <span class="r-in"><span>                                label <span class="op">=</span> <span class="st">"CellType"</span>, </span></span>
-<span class="r-in"><span>                                method <span class="op">=</span> <span class="st">"histocat"</span>,</span></span>
+<span class="r-in"><span>                                method <span class="op">=</span> <span class="st">"conditional"</span>,</span></span>
 <span class="r-in"><span>                                colPairName <span class="op">=</span> <span class="st">"knn_interaction_graph"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> DataFrame with 27 rows and 4 columns</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      group_by from_label   to_label        ct</span>

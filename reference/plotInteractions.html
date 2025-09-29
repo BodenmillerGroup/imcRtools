@@ -21,7 +21,7 @@ styling and `ggraph` for edge-specific customization."><!-- mathjax --><script s
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.15.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.15.3</span>
       </span>
     </div>
 
@@ -88,7 +88,8 @@ styling and `ggraph` for edge-specific customization.</p>
 
 
 <dl><dt id="arg-out">out<a class="anchor" aria-label="anchor" href="#arg-out"></a></dt>
-<dd><p>a data frame representing an edge list with columns <code>"group_by",
+<dd><p>a data frame, usually the output from <code>countInteractions</code> or
+<code>testInteractions</code>, representing an edge list with columns <code>"group_by",
 "from_label" and "to_label"</code>. Additional columns may be included to specify
 edge attributes (weight or color).</p></dd>
 
@@ -145,8 +146,10 @@ labels.</p></dd>
 
 
 <dt id="arg-edge-color-by">edge_color_by<a class="anchor" aria-label="anchor" href="#arg-edge-color-by"></a></dt>
-<dd><p>single character indicating the column name of <code>"out"</code>
-by which the edges are colored.</p></dd>
+<dd><p>single character indicating the name of the column of <code>"out"</code>
+used represent edge colors. This column is usually newly added by the user and must assign a
+unique value to each 'from_label'–'to_label' pair. Typically, these values could encode
+the direction of significantly interacting cell type pairs.</p></dd>
 
 
 <dt id="arg-edge-color-fix">edge_color_fix<a class="anchor" aria-label="anchor" href="#arg-edge-color-fix"></a></dt>
@@ -154,8 +157,10 @@ by which the edges are colored.</p></dd>
 
 
 <dt id="arg-edge-width-by">edge_width_by<a class="anchor" aria-label="anchor" href="#arg-edge-width-by"></a></dt>
-<dd><p>single character indicating the column name of <code>"out"</code>
-by which the width of the edges are scaled.</p></dd>
+<dd><p>single character indicating the name of the column of <code>"out"</code>
+used to scale edge widths. The values in this column are averaged for each
+'from_label'–'to_label' pair. Typically, this could be the 'ct' column from
+of <code>"out"</code> or a newly added column representing an interaction feature.</p></dd>
 
 
 <dt id="arg-edge-width-fix">edge_width_fix<a class="anchor" aria-label="anchor" href="#arg-edge-width-fix"></a></dt>
