@@ -725,7 +725,7 @@
 }
 
 #' @importFrom data.table CJ
-.aggregate_histo <- function(dat_table, object, group_by, label,
+.aggregate_conditional <- function(dat_table, object, group_by, label,
                              check_missing = TRUE) {
     . <- ct <- .N <- NULL
     dat_temp <- dat_table[, .(ct=.N), by = c("group_by", "from_label",
@@ -921,8 +921,8 @@
                                 cur_perm <- .aggregate_classic(cur_perm, object,
                                                                group_by, label,
                                                                check_missing = FALSE)
-                            } else if (method == "histocat") {
-                                cur_perm <- .aggregate_histo(cur_perm, object,
+                            } else if (method == "conditional") {
+                                cur_perm <- .aggregate_conditional(cur_perm, object,
                                                              group_by, label,
                                                              check_missing = FALSE)
                             } else if (method == "patch") {
@@ -946,7 +946,7 @@
     return(cur_out)
 }
 
-.calc_p_vals<- function(dat_baseline, dat_perm, n_perm, p_thres, return_samples, 
+.calc_p_vals<- function(dat_baseline, dat_perm, n_perm, p_thres, return_samples,
                         tolerance){
     dat_perm <- merge(dat_perm,
                       dat_baseline[, c("from_label", "to_label",
@@ -957,7 +957,7 @@
     # dat_perm <- as.data.table(as.data.frame(dat_perm))
 
     . <- ct_perm <- ct_obs <- p_gt <- p_lt <- NULL
-    direction <- sig <- sigval <- p <-  NULL
+    direction <- sig <- sigval <- p <- zscore <- NULL
 
     dat_perm[, ':='(ct_perm = replace(ct_perm, is.na(ct_perm), 0),
                     ct_obs = replace(ct_obs, is.na(ct_obs), 0))]
@@ -967,7 +967,8 @@
     dat_stat <- dat_perm[ , .(ct = mean(ct_obs),
                               p_gt = ifelse(max(ct_obs) == 0, 1,
                                             (sum((ct_perm - ct_obs) > -tolerance) + 1) / (n_perm + 1)),
-                              p_lt = (n_perm - sum((ct_perm - ct_obs) > tolerance) + 1) / (n_perm + 1)),
+                              p_lt = (n_perm - sum((ct_perm - ct_obs) > tolerance) + 1) / (n_perm + 1),
+                              zscore = (mean(ct_obs) - mean(ct_perm)) / sd(ct_perm)),
                           by=c("group_by", "from_label", "to_label")]
 
     dat_stat[, interaction := p_gt < p_lt]
@@ -984,6 +985,7 @@
     dat_stat$group_by <- as.character(dat_stat$group_by)
     dat_stat$from_label <- as.character(dat_stat$from_label)
     dat_stat$to_label <- as.character(dat_stat$to_label)
+    dat_stat[is.infinite(zscore), zscore := NA]
     
     setorder(dat_stat, "group_by", "from_label", "to_label")
     setorder(dat_baseline, "group_by", "from_label", "to_label")
@@ -1011,7 +1013,7 @@
 
     dat_stat[is.na(dat_baseline$ct),
              c("p_gt", "p_lt", "ct", "interaction",
-               "p", "sig", "sigval") := NA]
+               "p", "sig", "sigval", "zscore") := NA]
 
     return(dat_stat)
 }

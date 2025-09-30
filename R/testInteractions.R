@@ -43,10 +43,10 @@
 #' cells of type A. The final count can be interpreted as "How many neighbors 
 #' of type B does a cell of type A have on average?" 
 #' 
-#' 2. \code{method = "histocat"}: The count is divided by the number of cells
-#' of type A that have at least one neighbor of type B. The final count can be 
-#' interpreted as "How many many neighbors of type B has a cell of type A on 
-#' average, given it has at least one neighbor of type B?"
+#' 2. \code{method = "conditional"}: Formerly named "histocat". The count is divided 
+#' by the number of cells of type A that have at least one neighbor of type B. The 
+#' final count can be interpreted as "How many neighbors of type B has a cell of 
+#' type A on average, given it has at least one neighbor of type B?".
 #' 
 #' 3. \code{method = "patch"}: For each cell, the count is binarized to 0 
 #' (less than \code{patch_size} neighbors of type B) or 1 (more or equal to 
@@ -119,11 +119,11 @@
 #'                          iter = 1000,
 #'                          BPPARAM = SerialParam(RNGseed = 123)))
 #'                                 
-#' # Histocat style calculation
+#' # Conditional style calculation
 #' (out <- testInteractions(pancreasSCE, 
 #'                          group_by = "ImageNb",
 #'                          label = "CellType", 
-#'                          method = "histocat",
+#'                          method = "conditional",
 #'                          colPairName = "knn_interaction_graph",
 #'                          iter = 1000,
 #'                          BPPARAM = SerialParam(RNGseed = 123)))
@@ -155,6 +155,7 @@
 #' @author Jana Fischer
 #' @author adapted by Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #' @author adapted by Marlene Lutz (\email{marlene.lutz@@uzh.ch})
+#' @author adapted by Chiara Schiller (\email{chiara.schiller@uni-heidelberg.de})
 #' 
 #' @references
 #' \href{https://www.sciencedirect.com/science/article/pii/S2405471217305434}{
@@ -163,15 +164,19 @@
 #' Cell Systems 2018 6(1):25-36.e5}
 #' 
 #' \href{https://www.nature.com/articles/nmeth.4391}{
-#' Shapiro, D. et al., histoCAT: analysis of cell phenotypes and interactions in 
+#' Schapiro, D. et al., histoCAT: analysis of cell phenotypes and interactions in 
 #' multiplex image cytometry data, Nature Methods 2017 14, p. 873–876}
+#' 
+#' \href{https://doi.org/10.1101/2025.03.31.646289}{
+#' Schiller, C. et al., Comparison and Optimization of Cellular Neighbor Preference Methods 
+#' for Quantitative Tissue Analysis, biorRxiv 2025.03.31.646289}
 #' 
 #' @export
 testInteractions <- function(object, 
                                 group_by,
                                 label,
                                 colPairName,
-                                method = c("classic", "histocat", "patch", "interaction"),
+                                method = c("classic", "conditional", "patch", "interaction"),
                                 patch_size = NULL,
                                 iter = 1000,
                                 p_threshold = 0.01,
@@ -180,11 +185,11 @@ testInteractions <- function(object,
                                 BPPARAM = SerialParam()){
 
     # Input check
-    method <- match.arg(method)
     .valid.countInteractions.input(object, group_by, label, method,
-                                        patch_size, colPairName)
-    .valid.testInteractions.input(iter, p_threshold, return_samples, 
+                                    patch_size, colPairName)
+    .valid.testInteractions.input(iter, p_threshold, return_samples, method,
                                   tolerance)
+    method <- match.arg(method)
     
     # Re-level group_by label
     if(is.factor(colData(object)[[group_by]])) {
@@ -200,8 +205,8 @@ testInteractions <- function(object,
     # Count interactions
     if (method == "classic") {
         cur_count <- .aggregate_classic(cur_table, object, group_by, label)
-    } else if (method == "histocat") {
-        cur_count <- .aggregate_histo(cur_table, object, group_by, label)
+    } else if (method == "conditional") {
+        cur_count <- .aggregate_conditional(cur_table, object, group_by, label)
     } else if (method == "patch") {
         cur_count <- .aggregate_classic_patch(cur_table, 
                                             patch_size = patch_size, 

@@ -48,6 +48,7 @@ editor_options:
 ```{r, echo=FALSE, results="hide"}
 knitr::opts_chunk$set(error=FALSE, warning=FALSE, message=FALSE, crop = NULL)
 library(BiocStyle)
+library(data.table)
 ```
 
 ```{r library, echo=FALSE}
@@ -1023,10 +1024,11 @@ level (e.g. image) in four different ways:
     cells of type A. The final count can be interpreted as "How many
     neighbors of type B does a cell of type A have on average?"
 
-2.  `method = "histocat"`: The count is divided by the number of cells
-    of type A that have at least one neighbor of type B. The final count
-    can be interpreted as "How many many neighbors of type B has a cell
-    of type A on average, given it has at least one neighbor of type B?"
+2.  `method = "conditional"`: Previously named "histocat". The count is 
+    divided by the number of cells of type A that have at least one neighbor 
+    of type B. The final count can be interpreted as "How many many neighbors 
+    of type B has a cell of type A on average, given it has at least one 
+    neighbor of type B?".
 
 3.  `method = "patch"`: For each cell, the count is binarized to 0 (less
     than `patch_size` neighbors of type B) or 1 (more or equal to
@@ -1060,12 +1062,14 @@ labels. For this, the `testInteractions` function permutes the cell
 labels `iter` times and counts interactions as described above. This
 approach generates a distribution of the interaction count under a
 random distribution of cell labels. The observed interaction count is
-compared against this Null distribution to derive empirical p-values:
+compared against this Null distribution to derive z-scores and empirical p-values:
 
 `p_gt`: fraction of perturbations equal or greater than the observed
 count
 
 `p_lt`: fraction of perturbations equal or less than the observed count
+
+`zscore`: (observed count - mean of permuted counts) / sd of permuted counts
 
 Based on these empirical p-values, the `interaction` score (attraction
 or avoidance), overall `p` value and significance by comparison to
@@ -1225,14 +1229,75 @@ plotInteractions(out, pancreasSCE, "CellType", "ImageNb",
                 return_data = TRUE)
 ```
 
+### Visualizing interactions when choosing method = "conditional"
 
+We first run the testInteractions() functions with the "conditional" method. 
+
+```{r run-cozi}
+out <- testInteractions(pancreasSCE,
+                        group_by = "ImageNb",
+                        label = "CellType",
+                        method = "conditional",
+                        colPairName = "knn_interaction_graph",
+                        BPPARAM = BiocParallel::SerialParam(RNGseed = 123))
+```
+
+Interaction z-scores from conditional normalization, described as COZI in [Schiller et al. 2025](https://www.biorxiv.org/content/10.1101/2025.03.31.646289v2), can be 
+best interpreted by additionally considering the conditional cell ratio (CCR). The CCR is the ratio of cells of type A with at least one neighbor of type B in an image. 
+
+We can calculate the CCR for the priorly chosen neighborhood size and append the output from the testInteractions() function as follows:
+```{r}
+cd <- as.data.table(colData(pancreasSCE))
+
+cond_ratio_df <- as.data.table(colPair(pancreasSCE, "knn_interaction_graph"))[
+  , .(from_label = cd$CellType[from],
+      to_label   = cd$CellType[to],
+      group_by   = cd$ImageNb[from],
+      from)
+][, .(N = uniqueN(from)), by = .(group_by, from_label, to_label)
+][cd[, .(total_from_type = .N), by = .(group_by = ImageNb, from_label = CellType)], 
+  on = .(group_by, from_label)
+][, .(group_by, from_label, to_label, cond_ratio = N / total_from_type)]
+
+out_cr <- merge(
+  as.data.table(out)[, `:=`(
+    group_by   = as.integer(group_by),
+    from_label = as.character(from_label),
+    to_label   = as.character(to_label)
+  )],
+  cond_ratio_df,
+  by = c("group_by", "from_label", "to_label"),
+  all.x = TRUE
+)
+```
+
+We visualize both the z-score and the CCR simultaneously in a dotplot to help interpreting results. 
+With that, you know how many cells of type A neighbor a cell of type B (CCR), and how strong this interaction is (z-score). 
+For example, if the CCR is very low (small dot) but the z-score is very high, this means that a small amount of cells of type A are strongly 
+surrounded by cells of type B. 
+We show how to plot the results in the following:
+
+```{r}
+library(RColorBrewer)
+
+p <- out_cr %>%
+  filter(!is.na(zscore), !is.na(cond_ratio), sig) %>%
+  ggplot(aes(from_label, to_label, size = cond_ratio, color = zscore)) +
+  geom_point() +
+  theme_bw() +
+  scale_size(range = c(1,10)) +
+  scale_color_gradient2(low = brewer.pal(11,"RdBu")[10], mid = "white", high = brewer.pal(11,"RdBu")[2], midpoint = 0) +
+  facet_wrap(~group_by)
+
+p
+```
 
 # Contributions
 
 Large chunks of the code of the `imcRtools` package is based on the work
 of [Vito Zanotelli](https://github.com/votti). Vito has co-developed the
 spillover correction approach and translated the interaction testing
-approach developed by [Denis Shapiro](https://github.com/DenisSch) and
+approach developed by [Denis Schapiro](https://github.com/DenisSch) and
 [Jana Fischer](https://github.com/JanaFischer) into R (formerly known as
 the [neighbouRhood](https://github.com/BodenmillerGroup/neighbouRhood) R
 package). Jana has furthermore added the "patch" method for interaction
@@ -1245,7 +1310,9 @@ clustering approach. [Lasse Meyer](https://github.com/lassedochreden) has
 implemented the functions for spatial context analysis and developed the 
 `detectCommunity` function. [Marlene Lutz](https://github.com/marlene1) has 
 contributed the "interaction" method for interaction counting and testing, and
-implemented the `plotInteractions` function.
+implemented the `plotInteractions` function. [Chiara Schiller](https://github.com/chiarasch) has 
+implemented the zscore calculation within the `testInteractions()` function and introduced the 
+conditional cell ratio for interpreting results.
 
 # Session info {.unnumbered}
 

@@ -132,14 +132,14 @@ test_that("countInteractions function works", {
     
     expect_equal(cur_out$ct, test$ct)
     
-    ########################### histocat ############################
+    ########################### conditional ############################
     data(pancreasSCE)
     
     pancreasSCE <- buildSpatialGraph(pancreasSCE, img_id = "ImageNb", type = "knn",
                                      k = 3)
     
     expect_silent(cur_out <- countInteractions(pancreasSCE, group_by = "ImageNb",
-                                                   label = "CellType", method = "histocat",
+                                                   label = "CellType", method = "conditional",
                                                    colPairName = "knn_interaction_graph")) 
     
     cur_out <- as.data.frame(cur_out)
@@ -162,7 +162,7 @@ test_that("countInteractions function works", {
     # As factor
     pancreasSCE$CellType <- as.factor(pancreasSCE$CellType)
     expect_silent(cur_out_2 <- countInteractions(pancreasSCE, group_by = "ImageNb",
-                                                     label = "CellType", method = "histocat",
+                                                     label = "CellType", method = "conditional",
                                                      colPairName = "knn_interaction_graph")) 
     cur_out_2 <- as.data.frame(cur_out_2)
     cur_out_2 <- cur_out_2[order(cur_out_2$group_by, cur_out_2$from_label, cur_out_2$to_label),]
@@ -172,7 +172,7 @@ test_that("countInteractions function works", {
     # As character
     pancreasSCE$CellType <- as.character(pancreasSCE$CellType)
     expect_silent(cur_out_2 <- countInteractions(pancreasSCE, group_by = "ImageNb",
-                                                     label = "CellType", method = "histocat",
+                                                     label = "CellType", method = "conditional",
                                                      colPairName = "knn_interaction_graph")) 
     cur_out_2 <- as.data.frame(cur_out_2)
     cur_out_2 <- cur_out_2[order(cur_out_2$group_by, cur_out_2$from_label, cur_out_2$to_label),]
@@ -182,7 +182,7 @@ test_that("countInteractions function works", {
     # As numeric
     pancreasSCE$CellType <- as.numeric(as.factor(pancreasSCE$CellType))
     expect_silent(cur_out_2 <- countInteractions(pancreasSCE, group_by = "ImageNb",
-                                                     label = "CellType", method = "histocat",
+                                                     label = "CellType", method = "conditional",
                                                      colPairName = "knn_interaction_graph")) 
     cur_out_2 <- as.data.frame(cur_out_2)
     cur_out_2 <- cur_out_2[order(cur_out_2$group_by, cur_out_2$from_label, cur_out_2$to_label),]
@@ -191,7 +191,7 @@ test_that("countInteractions function works", {
     
     # Logical
     expect_silent(cur_out_2 <- countInteractions(pancreasSCE, group_by = "ImageNb",
-                                                   label = "Pattern", method = "histocat",
+                                                   label = "Pattern", method = "conditional",
                                                    colPairName = "knn_interaction_graph")) 
     
     cur_out_2 <- as.data.frame(cur_out_2)
@@ -217,7 +217,7 @@ test_that("countInteractions function works", {
     pancreasSCE$test <- pancreasSCE$CellType
     pancreasSCE$test[pancreasSCE$ImageNb == 3] <- "test" 
     expect_silent(cur_out_3 <- countInteractions(pancreasSCE, group_by = "ImageNb",
-                                                     label = "test", method = "histocat",
+                                                     label = "test", method = "conditional",
                                                      colPairName = "knn_interaction_graph")) 
     
     cur_out_3 <- as.data.frame(cur_out_3)
@@ -242,7 +242,7 @@ test_that("countInteractions function works", {
     pancreasSCE$ImageName <- "test"
     
     expect_silent(cur_out <- countInteractions(pancreasSCE, group_by = "ImageName",
-                                                   label = "CellType", method = "histocat",
+                                                   label = "CellType", method = "conditional",
                                                    colPairName = "knn_interaction_graph")) 
     
     cur_table <- as.data.frame(colPair(pancreasSCE, "knn_interaction_graph"))

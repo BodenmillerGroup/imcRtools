@@ -247,3 +247,8 @@ Changes in version 1.15.2 (2025-06-18)
 
 + Added "interaction" method to countInteractions and testInteractions
 + Added plotInteractions function
+
+Changes in version 1.15.3 (2025-09-26)
+
++ Added general zscore output to 'testInteractions()'
++ Changed name "histocat" method to "conditional" method in countInteractions and testInteractions
