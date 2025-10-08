@@ -3,7 +3,8 @@
 #' @description Helper function to process .tiff files created with the 
 #' steinbock pipeline into a \code{\linkS4class{SingleCellExperiment}}
 #' object. This function is mainly used to read-in data generated from a
-#' "spillover slide". Here, each .tiff file contains the measurements of
+#' "spillover slide" from the new XTi generation of IMC machines. 
+#' Here, each .tiff file contains the measurements of
 #' multiple pixels for a single stain across all open channels.
 #'
 #' @param x has to be a path to a folder containing .tiff files.
