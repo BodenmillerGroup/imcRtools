@@ -252,3 +252,7 @@ Changes in version 1.15.3 (2025-09-26)
 
 + Added general zscore output to 'testInteractions()'
 + Changed name "histocat" method to "conditional" method in countInteractions and testInteractions
+
+Changes in version 1.15.4 (2025-10-08)
+
++ added readImagefromTIFF function and tests
