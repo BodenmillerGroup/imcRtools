@@ -373,7 +373,7 @@ anymore. The `readSCEfromTIFF` function can be used to generate a
 
 # From txt
 
-```{r read-single-metals}
+```{r read-single-metals txt}
 path <- system.file("extdata/spillover", package = "imcRtools")
 sce <- readSCEfromTXT(path) 
 sce
@@ -381,7 +381,7 @@ sce
 
 # From tiff
 
-```{r read-single-metals}
+```{r read-single-metals tiff}
 path <- system.file("extdata/spillover_tiff/img", package = "imcRtools")
 image_df_path <- system.file("extdata/spillover_tiff/images.csv", package = "imcRtools")
 panel_df_path <- system.file("extdata/spillover_tiff/panel.csv", package = "imcRtools")
