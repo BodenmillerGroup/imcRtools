@@ -1,3 +1,7 @@
+if (!requireNamespace("CATALYST", quietly = TRUE)) {
+  testthat::skip("CATALYST package not installed")
+}
+
 test_that("readSCEfromTIFF function reads in correct objects.", {
   path <- system.file("extdata/spillover_tiff/img", package = "imcRtools")
   image_df_path <- system.file("extdata/spillover_tiff/images.csv", package = "imcRtools")
@@ -29,20 +33,20 @@ test_that("readSCEfromTIFF function reads in correct objects.", {
   assay(txt_sce, "exprs") <- asinh(counts(txt_sce) / 5)
   bc_key_txt <- as.numeric(unique(txt_sce$sample_mass))
   bc_key_txt <- bc_key_txt[order(bc_key_txt)]
-  txt_sce <- assignPrelim(txt_sce, bc_key = bc_key_txt)
-  txt_sce <- estCutoffs(txt_sce)
-  txt_sce <- applyCutoffs(txt_sce)
+  txt_sce <- CATALYST::assignPrelim(txt_sce, bc_key = bc_key_txt)
+  txt_sce <- CATALYST::estCutoffs(txt_sce)
+  txt_sce <- CATALYST::applyCutoffs(txt_sce)
   txt_sce <- filterPixels(txt_sce, minevents = 40, correct_pixels = TRUE)
-  txt_sce <- computeSpillmat(txt_sce)
+  txt_sce <- CATALYST::computeSpillmat(txt_sce)
   
   assay(cur_sce, "exprs") <- asinh(counts(cur_sce) / 5)
   bc_key_tiff <- as.numeric(unique(cur_sce$sample_mass))
   bc_key_tiff <- bc_key_tiff[order(bc_key_tiff)]
-  cur_sce <- assignPrelim(cur_sce, bc_key = bc_key_tiff)
-  cur_sce <- estCutoffs(cur_sce)
-  cur_sce <- applyCutoffs(cur_sce)
+  cur_sce <- CATALYST::assignPrelim(cur_sce, bc_key = bc_key_tiff)
+  cur_sce <- CATALYST::estCutoffs(cur_sce)
+  cur_sce <- CATALYST::applyCutoffs(cur_sce)
   cur_sce <- filterPixels(cur_sce, minevents = 40, correct_pixels = TRUE)
-  cur_sce <- computeSpillmat(cur_sce)
+  cur_sce <- CATALYST::computeSpillmat(cur_sce)
   
   expect_equal(
     metadata(cur_sce)$spillover_matrix,
