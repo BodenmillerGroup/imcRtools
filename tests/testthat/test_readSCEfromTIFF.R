@@ -22,7 +22,7 @@ test_that("readSCEfromTIFF function reads in correct objects.", {
   cur_out <- capture_output(cur_sce <- readSCEfromTIFF(path, image_df_path, panel_df_path))
   expect_equal(cur_out, "Spotted channels:  Dy161, Dy162, Dy163, Dy164\nAcquired channels:  Dy161, Dy162, Dy163, Dy164\nChannels spotted but not acquired:  \nChannels acquired but not spotted:  ")
   
-  # Compare spillover created with readSCEfromTXT to readSCEfromTIFF
+  # Compare spillover matrix created with readSCEfromTXT to readSCEfromTIFF
   path_txt <- system.file("extdata/spillover_tiff/txt", package = "imcRtools")
   txt_sce <- readSCEfromTXT(path_txt, verbose = FALSE)
   txt_sce <- readSCEfromTXT(path_txt, verbose = FALSE)
