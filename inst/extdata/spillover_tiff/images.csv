@@ -1,5 +1,5 @@
 image,width_px,height_px,num_channels,source_file,recovery_file,recovered,acquisition_id,acquisition_description,acquisition_start_x_um,acquisition_start_y_um,acquisition_end_x_um,acquisition_end_y_um,acquisition_width_um,acquisition_height_um
-compensation_001.tiff,100,5,4,compensation.mcd,,FALSE,1,Dy161,20966.317,12253.957,21066.317,12248.957,100,5
-compensation_002.tiff,100,5,4,compensation.mcd,,FALSE,2,Dy162,25112.317,12241.957,25212.317,12236.957,100,5
-compensation_003.tiff,100,5,4,compensation.mcd,,FALSE,3,Dy163,28596.317,12467.957,28696.317,12462.957,100,5
-compensation_004.tiff,100,5,4,compensation.mcd,,FALSE,4,Dy164,32861.317,12538.957,32961.317,12533.957,100,5
+compensation_001.tiff,200,100,4,20210205_CompSlide_NSCLC_TMA_LC.mcd,,False,1,Dy161,32799.413,16252.932,32999.413,16152.932,200.0,100.0
+compensation_002.tiff,200,100,4,20210205_CompSlide_NSCLC_TMA_LC.mcd,,False,2,Dy162,7097.493,18762.768,7297.493,18662.768,200.0,100.0
+compensation_003.tiff,200,100,4,20210205_CompSlide_NSCLC_TMA_LC.mcd,,False,3,Dy163,49974.785,19588.045,50174.785,19488.045,200.0,100.0
+compensation_004.tiff,200,100,4,20210205_CompSlide_NSCLC_TMA_LC.mcd,,False,4,Dy164,14362.302,6920.984,14562.302,6820.984,200.0,100.0
