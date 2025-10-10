@@ -1,7 +1,3 @@
-if (!requireNamespace("CATALYST", quietly = TRUE)) {
-  testthat::skip("CATALYST package not installed")
-}
-
 test_that("readSCEfromTIFF function reads in correct objects.", {
   path <- system.file("extdata/spillover_tiff/img", package = "imcRtools")
   image_df_path <- system.file("extdata/spillover_tiff/images.csv", package = "imcRtools")
