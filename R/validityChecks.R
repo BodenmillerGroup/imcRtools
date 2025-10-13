@@ -51,6 +51,32 @@
     }
 }
 
+.valid.readSCEfromTIFF.input <- function (img_df, panel_df, verbose) {
+  cur_names <- img_df$acquisition_description
+  cur_mass <- str_extract(cur_names, "[0-9]{2,3}$")
+  cur_names <- cur_names[order(as.numeric(cur_mass))]
+  if (!all(grepl("^[A-Z]{1}[a-z]{0,1}[0-9]{2,3}$", cur_names))) {
+    stop("Not all names match the pattern (mt)(mass).")
+  }
+  cur_channels <- panel_df$channel
+  spot_not_ac <- cur_names[!(cur_names %in% cur_channels)]
+  ac_not_spot <- cur_channels[!(cur_channels %in% cur_names)]
+  if (verbose) {
+    cat("Spotted channels: ", paste(cur_names, collapse = ", "))
+    cat("\n")
+    cat("Acquired channels: ", paste(cur_channels, collapse = ", "))
+    cat("\n")
+    cat("Channels spotted but not acquired: ", paste(spot_not_ac, 
+                                                     collapse = ", "))
+    cat("\n")
+    cat("Channels acquired but not spotted: ", paste(ac_not_spot, 
+                                                     collapse = ", "))
+  }
+  if (!all(cur_names %in% cur_channels)) {
+    stop("Not all spotted channels were acquired.")
+  }
+}
+
 #' @importFrom SummarizedExperiment colData assayNames
 #' @importFrom methods is
 .valid.plotSpotHeatmap.input <- function(object, spot_id, channel_id,
