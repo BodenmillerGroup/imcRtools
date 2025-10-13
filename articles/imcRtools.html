@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.15.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.15.4</span>
       </span>
     </div>
 
@@ -92,7 +92,7 @@ ZurichInstitute for Molecular Health Sciences, ETH
 Zurich<br><a class="author_email" href="mailto:#">daniel.schulz@<span class="citation">(<strong>uzh.ch?</strong>)</span></a>
       </address>
                   
-            <h4 data-toc-skip class="date">29 September 2025</h4>
+            <h4 data-toc-skip class="date">13 October 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/BodenmillerGroup/imcRtools/blob/devel/vignettes/imcRtools.Rmd" class="external-link"><code>vignettes/imcRtools.Rmd</code></a></small>
       <div class="hidden name"><code>imcRtools.Rmd</code></div>
@@ -522,8 +522,17 @@ data analysis book</a>.</p>
 <p>In the first step, the pixel intensities of individually spotted
 metals need to be read into a <code>SingleCellExperiment</code>
 container for downstream use with the <em><a href="https://bioconductor.org/packages/3.21/CATALYST" class="external-link">CATALYST</a></em>
-package. For this, the <code>readSCEfromTXT</code> function can be
-used:</p>
+package. For this, the <code>readSCEfromTXT</code> function can be used
+when txt files are available. The latest generation of IMC machines -
+XTi - does not produce txt files anymore. The
+<code>readSCEfromTIFF</code> function can be used to generate a
+<code>SingleCellExperiment</code> container from tiff files produced
+with the <code>steinbock</code> framework:</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="from-txt">From txt<a class="anchor" aria-label="anchor" href="#from-txt"></a>
+</h2>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/spillover"</span>, package <span class="op">=</span> <span class="st">"imcRtools"</span><span class="op">)</span></span>
 <span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readSCEfromTXT.html">readSCEfromTXT</a></span><span class="op">(</span><span class="va">path</span><span class="op">)</span> </span></code></pre></div>
@@ -545,11 +554,36 @@ used:</p>
 <span><span class="co">## reducedDimNames(0):</span></span>
 <span><span class="co">## mainExpName: NULL</span></span>
 <span><span class="co">## altExpNames(0):</span></span></code></pre>
+</div>
+<div class="section level2">
+<h2 id="from-tiff">From tiff<a class="anchor" aria-label="anchor" href="#from-tiff"></a>
+</h2>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/spillover_tiff/img"</span>, package <span class="op">=</span> <span class="st">"imcRtools"</span><span class="op">)</span></span>
+<span><span class="va">image_df_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/spillover_tiff/images.csv"</span>, package <span class="op">=</span> <span class="st">"imcRtools"</span><span class="op">)</span></span>
+<span><span class="va">panel_df_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/spillover_tiff/panel.csv"</span>, package <span class="op">=</span> <span class="st">"imcRtools"</span><span class="op">)</span></span>
+<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readSCEfromTIFF.html">readSCEfromTIFF</a></span><span class="op">(</span><span class="va">path</span>, <span class="va">image_df_path</span>, <span class="va">panel_df_path</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Spotted channels:  Dy161, Dy162, Dy163, Dy164</span></span>
+<span><span class="co">## Acquired channels:  Dy161, Dy162, Dy163, Dy164</span></span>
+<span><span class="co">## Channels spotted but not acquired:  </span></span>
+<span><span class="co">## Channels acquired but not spotted:</span></span></code></pre>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sce</span></span></code></pre></div>
+<pre><code><span><span class="co">## class: SingleCellExperiment </span></span>
+<span><span class="co">## dim: 4 80000 </span></span>
+<span><span class="co">## metadata(0):</span></span>
+<span><span class="co">## assays(1): counts</span></span>
+<span><span class="co">## rownames(4): Dy161 Dy162 Dy163 Dy164</span></span>
+<span><span class="co">## rowData names(2): channel_name marker_name</span></span>
+<span><span class="co">## colnames: NULL</span></span>
+<span><span class="co">## colData names(4): cell_id sample_id sample_metal sample_mass</span></span>
+<span><span class="co">## reducedDimNames(0):</span></span>
+<span><span class="co">## mainExpName: NULL</span></span>
+<span><span class="co">## altExpNames(0):</span></span></code></pre>
 <p>Here, the example metal spot files are read in. The spot information
 are stored in the <code>colData(sce)</code> slot and channel information
 are stored in <code>rowData(sce)</code>. Each column represents a single
 pixel.</p>
-</div>
 <div class="section level3">
 <h3 id="quality-control-on-single-spot-acquisitions">Quality control on single-spot acquisitions<a class="anchor" aria-label="anchor" href="#quality-control-on-single-spot-acquisitions"></a>
 </h3>
@@ -558,14 +592,14 @@ spots or spots with low pixel intensities. The <code>imcRtools</code>
 package exports the <code>plotSpotHeatmap</code> function, which
 visualizes the aggregated (default <code>median</code>) pixel
 intensities per spot and per metal:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSpotHeatmap.html">plotSpotHeatmap</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></span></code></pre></div>
 <p><img src="imcRtools_files/figure-html/plotSpotHeatmap-1.png" width="480"></p>
 <p>Here, high median pixel intensities can be observed in each spot and
 their corresponding channels (visualized on the <code>log10</code> scale
 by default). To quickly identify spot/channel combinations with low
 signal, the <code>threshold</code> parameter can be set:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSpotHeatmap.html">plotSpotHeatmap</a></span><span class="op">(</span><span class="va">sce</span>, log <span class="op">=</span> <span class="cn">FALSE</span>, threshold <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span></code></pre></div>
 <p><img src="imcRtools_files/figure-html/plotSpotHeatmap-2-1.png" width="480"></p>
 </div>
@@ -576,7 +610,7 @@ signal, the <code>threshold</code> parameter can be set:</p>
 robust. Therefore, the <code>binAcrossPixels</code> function can be used
 to sum consecutive pixels and enhance the acquired signal. This step is
 optional for spillover estimation.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sce2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/binAcrossPixels.html">binAcrossPixels</a></span><span class="op">(</span><span class="va">sce</span>, bin_size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/plotSpotHeatmap.html">plotSpotHeatmap</a></span><span class="op">(</span><span class="va">sce2</span>, log <span class="op">=</span> <span class="cn">FALSE</span>, threshold <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span></code></pre></div>
@@ -596,7 +630,7 @@ assigned to their spotted mass, potentially indicating pixels with weak
 signal. To remove these pixels, the <code>filterPixels</code> function
 can be used. This function further removes pixels assigned to masses,
 which only contain very few pixels.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/HelenaLC/CATALYST" class="external-link">CATALYST</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">bc_key</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">sce</span><span class="op">$</span><span class="va">sample_mass</span><span class="op">)</span><span class="op">)</span></span>
@@ -610,12 +644,12 @@ which only contain very few pixels.</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">sce</span><span class="op">$</span><span class="va">bc_id</span>, <span class="va">sce</span><span class="op">$</span><span class="va">sample_mass</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##      </span></span>
-<span><span class="co">##       161 162 163 164</span></span>
-<span><span class="co">##   0     0   0   0   2</span></span>
-<span><span class="co">##   161 100   0   0   0</span></span>
-<span><span class="co">##   162   0 100   0   0</span></span>
-<span><span class="co">##   163   0   0 100   0</span></span>
-<span><span class="co">##   164   0   0   0  98</span></span></code></pre>
+<span><span class="co">##         161   162   163   164</span></span>
+<span><span class="co">##   0      11    78   123    10</span></span>
+<span><span class="co">##   161 19989     0     0     0</span></span>
+<span><span class="co">##   162     0 19922     0     0</span></span>
+<span><span class="co">##   163     0     0 19877     0</span></span>
+<span><span class="co">##   164     0     0     0 19990</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="estimating-the-spillover-matrix">Estimating the spillover matrix<a class="anchor" aria-label="anchor" href="#estimating-the-spillover-matrix"></a>
@@ -623,14 +657,14 @@ which only contain very few pixels.</p>
 <p>Finally, the pre-processed <code>SiingleCellExperiment</code> object
 can be used to generate the spillover matrix using the
 <code><a href="https://rdrr.io/pkg/CATALYST/man/computeSpillmat.html" class="external-link">CATALYST::computeSpillmat</a></code> function:</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CATALYST/man/computeSpillmat.html" class="external-link">computeSpillmat</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></span>
 <span><span class="fu">metadata</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">spillover_matrix</span></span></code></pre></div>
 <pre><code><span><span class="co">##             Dy161Di     Dy162Di     Dy163Di     Dy164Di</span></span>
-<span><span class="co">## Dy161Di 1.000000000 0.031443129 0.009734712 0.006518048</span></span>
-<span><span class="co">## Dy162Di 0.015715159 1.000000000 0.048116187 0.008250039</span></span>
-<span><span class="co">## Dy163Di 0.003809504 0.012159704 1.000000000 0.020214651</span></span>
-<span><span class="co">## Dy164Di 0.005058069 0.008457546 0.028912343 1.000000000</span></span></code></pre>
+<span><span class="co">## Dy161Di 1.000000000 0.027691801 0.009718301 0.005720745</span></span>
+<span><span class="co">## Dy162Di 0.016014265 1.000000000 0.043053239 0.009650176</span></span>
+<span><span class="co">## Dy163Di 0.003140381 0.012804170 1.000000000 0.016494897</span></span>
+<span><span class="co">## Dy164Di 0.000000000 0.002627576 0.011235724 1.000000000</span></span></code></pre>
 <p>This spillover matrix can be directly applied to compensate the
 summarized pixel intensities per cell and per channel as described <a href="https://bioconductor.org/packages/release/bioc/vignettes/CATALYST/inst/doc/preprocessing.html#compcytof-compensation-of-mass-cytometry-data" class="external-link">here</a>.</p>
 </div>
@@ -651,7 +685,7 @@ functions, the generated graphs are automatically stored in the
 package constructs interaction graphs using either (i) cell-centroid
 expansion, (ii) k-nearest neighbor search or (iii) delaunay
 triangulation.</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/BodenmillerGroup/cytomapper" class="external-link">cytomapper</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"pancreasSCE"</span><span class="op">)</span></span>
 <span></span>
@@ -685,7 +719,7 @@ single entry using the <code>*_fix</code> parameters. By default the
 the x- and y-axis with an aspect ratio of 1. The example data are
 located in different regions of an image and we therefore set
 <code>scales = "free"</code> for simpler visualization.</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggraph.data-imaginist.com" class="external-link">ggraph</a></span><span class="op">)</span></span>
 <span></span>
@@ -699,7 +733,7 @@ located in different regions of an image and we therefore set
 <span>            directed <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>            scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="imcRtools_files/figure-html/plotSpatial-1.png" width="700"></p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Colored by expression and with arrows</span></span>
 <span><span class="fu"><a href="../reference/plotSpatial.html">plotSpatial</a></span><span class="op">(</span><span class="va">pancreasSCE</span>,</span>
 <span>            img_id <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
@@ -714,7 +748,7 @@ located in different regions of an image and we therefore set
 <span>            end_cap <span class="op">=</span> <span class="fu">ggraph</span><span class="fu">::</span><span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geometry.html" class="external-link">circle</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="st">"cm"</span><span class="op">)</span>,</span>
 <span>            scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="imcRtools_files/figure-html/plotSpatial-2.png" width="700"></p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Subsetting the SingleCellExperiment</span></span>
 <span><span class="fu"><a href="../reference/plotSpatial.html">plotSpatial</a></span><span class="op">(</span><span class="va">pancreasSCE</span><span class="op">[</span>,<span class="va">pancreasSCE</span><span class="op">$</span><span class="va">Pattern</span><span class="op">]</span>,</span>
 <span>            img_id <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
@@ -750,7 +784,7 @@ are aggregated using the specified <code>statistic</code> (defaults to
 </ol>
 <p>Each cell’s neighborhood is defined as endpoints of edges stored in
 <code>colPair(sce, colPairName)</code>.</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pancreasSCE</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/aggregateNeighbors.html">aggregateNeighbors</a></span><span class="op">(</span><span class="va">pancreasSCE</span>,</span>
 <span>                                  colPairName <span class="op">=</span> <span class="st">"knn_interaction_graph"</span>,</span>
 <span>                                  aggregate_by <span class="op">=</span> <span class="st">"metadata"</span>,</span>
@@ -765,7 +799,7 @@ are aggregated using the specified <code>statistic</code> (defaults to
 <span><span class="co">## 4          0        0.0        1.0</span></span>
 <span><span class="co">## 5          0        0.0        1.0</span></span>
 <span><span class="co">## 6          0        0.0        1.0</span></span></code></pre>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pancreasSCE</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/aggregateNeighbors.html">aggregateNeighbors</a></span><span class="op">(</span><span class="va">pancreasSCE</span>,</span>
 <span>                                  colPairName <span class="op">=</span> <span class="st">"knn_interaction_graph"</span>,</span>
 <span>                                  aggregate_by <span class="op">=</span> <span class="st">"expression"</span>,</span>
@@ -783,7 +817,7 @@ are aggregated using the specified <code>statistic</code> (defaults to
 <p>The returned entries can now be used for clustering to group cells
 based on their environment (either by aggregated categorical features or
 expression).</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">22</span><span class="op">)</span></span>
 <span><span class="va">cur_cluster</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/kmeans.html" class="external-link">kmeans</a></span><span class="op">(</span><span class="va">pancreasSCE</span><span class="op">$</span><span class="va">aggregatedNeighbors</span>, centers <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">pancreasSCE</span><span class="op">$</span><span class="va">clustered_neighbors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cur_cluster</span><span class="op">$</span><span class="va">cluster</span><span class="op">)</span></span>
@@ -803,7 +837,7 @@ expression).</p>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_color_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set2"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/scale_edge_colour.html" class="external-link">scale_edge_color_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set1"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="imcRtools_files/figure-html/aggregateNeigbors-clustering-1.png" width="700"></p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Visualize clustered_neighbors</span></span>
 <span><span class="fu"><a href="../reference/plotSpatial.html">plotSpatial</a></span><span class="op">(</span><span class="va">pancreasSCE</span>,</span>
 <span>            img_id <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
@@ -859,7 +893,7 @@ represent the dominant CNs, hence the most prevalent signals, in a given
 window.</p>
 <p>For more details, please refer to <span class="citation">(Bhate et
 al. 2022)</span>.</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Generate k-nearest neighbor graph</span></span>
 <span><span class="va">pancreasSCE</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/buildSpatialGraph.html">buildSpatialGraph</a></span><span class="op">(</span><span class="va">pancreasSCE</span>, img_id <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
 <span>                                 type <span class="op">=</span> <span class="st">"knn"</span>,</span>
@@ -868,7 +902,7 @@ al. 2022)</span>.</p>
 <span><span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/colPairs.html" class="external-link">colPairNames</a></span><span class="op">(</span><span class="va">pancreasSCE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "expansion_interaction_graph" "knn_interaction_graph"      </span></span>
 <span><span class="co">## [3] "delaunay_interaction_graph"  "knn_spatialcontext_graph"</span></span></code></pre>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Aggregate based on clustered_neighbors</span></span>
 <span><span class="va">pancreasSCE</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/aggregateNeighbors.html">aggregateNeighbors</a></span><span class="op">(</span><span class="va">pancreasSCE</span>, </span>
 <span>                                  colPairName <span class="op">=</span> <span class="st">"knn_spatialcontext_graph"</span>,</span>
@@ -906,7 +940,7 @@ image or patient ID) and/or total number of cells per SC.</p>
 <code>colData(object)</code>, the function also returns a
 <code>data.frame</code> entry to <code>metadata(object)</code>
 containing filtered group and cell counts per SC.</p>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Filter spatial contexts</span></span>
 <span><span class="co"># By number of group entries</span></span>
 <span><span class="va">pancreasSCE</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filterSpatialContext.html">filterSpatialContext</a></span><span class="op">(</span><span class="va">pancreasSCE</span>, </span>
@@ -922,7 +956,7 @@ containing filtered group and cell counts per SC.</p>
 <span><span class="co">## 4             1_3      90       2</span></span>
 <span><span class="co">## 5               2      55       2</span></span>
 <span><span class="co">## 7               3      14       2</span></span></code></pre>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSpatial.html">plotSpatial</a></span><span class="op">(</span><span class="va">pancreasSCE</span>,</span>
 <span>            img_id <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
 <span>            node_color_by <span class="op">=</span> <span class="st">"spatial_context_filtered_group"</span>,</span>
@@ -935,7 +969,7 @@ containing filtered group and cell counts per SC.</p>
 <span>            scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="va">col_SC</span><span class="op">)</span></span></code></pre></div>
 <p><img src="imcRtools_files/figure-html/filterSpatialContext-1.png" width="700"></p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># By total number of cells</span></span>
 <span><span class="va">pancreasSCE</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filterSpatialContext.html">filterSpatialContext</a></span><span class="op">(</span><span class="va">pancreasSCE</span>, </span>
 <span>                            entry <span class="op">=</span> <span class="st">"spatial_context"</span>,</span>
@@ -951,7 +985,7 @@ containing filtered group and cell counts per SC.</p>
 <span><span class="co">## 4             1_3      90       2</span></span>
 <span><span class="co">## 5               2      55       2</span></span>
 <span><span class="co">## 6             2_3      29       1</span></span></code></pre>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSpatial.html">plotSpatial</a></span><span class="op">(</span><span class="va">pancreasSCE</span>,</span>
 <span>            img_id <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
 <span>            node_color_by <span class="op">=</span> <span class="st">"spatial_context_filtered_cells"</span>,</span>
@@ -967,14 +1001,14 @@ containing filtered group and cell counts per SC.</p>
 <p>Lastly, the <code>plotSpatialContext</code> function plots directed
 <em>SC graphs</em>, akin to <em>CN combination maps</em> in <span class="citation">(Bhate et al. 2022)</span>, based on symbolic
 edge-lists and vertex metadata, which operates on cohort-level.</p>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot spatial context graph </span></span>
 <span><span class="co"># Default</span></span>
 <span><span class="fu"><a href="../reference/plotSpatialContext.html">plotSpatialContext</a></span><span class="op">(</span><span class="va">pancreasSCE</span>,</span>
 <span>                   entry <span class="op">=</span> <span class="st">"spatial_context"</span>, </span>
 <span>                   group_by <span class="op">=</span> <span class="st">"ImageNb"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="imcRtools_files/figure-html/plotSpatialContext-1.png" width="700"></p>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Colored by name and size by n_cells</span></span>
 <span><span class="fu"><a href="../reference/plotSpatialContext.html">plotSpatialContext</a></span><span class="op">(</span><span class="va">pancreasSCE</span>, </span>
 <span>                   entry <span class="op">=</span> <span class="st">"spatial_context"</span>,</span>
@@ -983,7 +1017,7 @@ edge-lists and vertex metadata, which operates on cohort-level.</p>
 <span>                   node_size_by <span class="op">=</span> <span class="st">"n_cells"</span>,</span>
 <span>                   node_label_color_by <span class="op">=</span> <span class="st">"name"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="imcRtools_files/figure-html/plotSpatialContext-2.png" width="700"></p>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Colored by n_cells and size by n_group                   </span></span>
 <span><span class="fu"><a href="../reference/plotSpatialContext.html">plotSpatialContext</a></span><span class="op">(</span><span class="va">pancreasSCE</span>, </span>
 <span>                   entry <span class="op">=</span> <span class="st">"spatial_context"</span>,</span>
@@ -1001,7 +1035,7 @@ function exported by <code>ggraph</code>.</p>
 <p>Furthermore, setting <code>return_data = TRUE</code> returns the
 symbolic edge-list and vertex metadata used for graph construction in a
 <code>list</code> of two <code>data.frames</code>.</p>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Return data</span></span>
 <span><span class="fu"><a href="../reference/plotSpatialContext.html">plotSpatialContext</a></span><span class="op">(</span><span class="va">pancreasSCE</span>,</span>
 <span>                   entry <span class="op">=</span> <span class="st">"spatial_context"</span>, </span>
@@ -1046,7 +1080,7 @@ follows:</p>
 <li><p>Store the community IDs in a vector and replace all communities
 with a size smaller than by NA.</p></li>
 </ol>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Detect spatial community </span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">22</span><span class="op">)</span></span>
 <span><span class="va">pancreasSCE</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/detectCommunity.html">detectCommunity</a></span><span class="op">(</span><span class="va">pancreasSCE</span>, </span>
@@ -1063,7 +1097,7 @@ with a size smaller than by NA.</p></li>
 <span>            nodes_first <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>            scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="imcRtools_files/figure-html/detectCommunity-1.png" width="700"></p>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Detect spatial community - specify size_threshold</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">22</span><span class="op">)</span></span>
 <span><span class="va">pancreasSCE</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/detectCommunity.html">detectCommunity</a></span><span class="op">(</span><span class="va">pancreasSCE</span>, </span>
@@ -1083,7 +1117,7 @@ with a size smaller than by NA.</p></li>
 <p><img src="imcRtools_files/figure-html/detectCommunity-2.png" width="700">
 It is also possible to use different community detection algorithms from
 the <code>igraph</code>package.</p>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Detect spatial community - walktrap community detection</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">22</span><span class="op">)</span></span>
 <span><span class="va">pancreasSCE</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/detectCommunity.html">detectCommunity</a></span><span class="op">(</span><span class="va">pancreasSCE</span>, </span>
@@ -1104,7 +1138,7 @@ the <code>igraph</code>package.</p>
 <p>Moreover, the user can specify to perform spatial community detection
 separately for all unique entries to e.g. for tumor and non-tumor
 cells.</p>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Detect spatial community - specify group_by</span></span>
 <span><span class="va">pancreasSCE</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/detectCommunity.html">detectCommunity</a></span><span class="op">(</span><span class="va">pancreasSCE</span>, </span>
 <span>                               colPairName <span class="op">=</span> <span class="st">"expansion_interaction_graph"</span>, </span>
@@ -1130,7 +1164,7 @@ cells.</p>
 <p>To exclude cells that are close to the image border, the
 <code>imcRtools</code> package exports the <code>findBorderCells</code>
 function.</p>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pancreasSCE</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/findBorderCells.html">findBorderCells</a></span><span class="op">(</span><span class="va">pancreasSCE</span>,</span>
 <span>                               img_id <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
 <span>                               border_dist <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
@@ -1169,7 +1203,7 @@ additionally draws a concave hull around the detected patch, expands the
 hull by
 20<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mrow></mrow><mi>m</mi></mrow><annotation encoding="application/x-tex">\mu{}m</annotation></semantics></math>
 and defines all cells within this expanded hulls as patch cells.</p>
-<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pancreasSCE</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/patchDetection.html">patchDetection</a></span><span class="op">(</span><span class="va">pancreasSCE</span>, </span>
 <span>                              patch_cells <span class="op">=</span> <span class="va">pancreasSCE</span><span class="op">$</span><span class="va">CellType</span> <span class="op">==</span> <span class="st">"celltype_B"</span>,</span>
 <span>                              colPairName <span class="op">=</span> <span class="st">"expansion_interaction_graph"</span>,</span>
@@ -1184,7 +1218,7 @@ and defines all cells within this expanded hulls as patch cells.</p>
 <p>Patches that only consist of 1 or 2 cells cannot be expanded.</p>
 <p>For each patch larger than 2 cells, the spatial area can be computed
 using the <code>patchSize</code> function:</p>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/patchSize.html">patchSize</a></span><span class="op">(</span><span class="va">pancreasSCE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## DataFrame with 8 rows and 3 columns</span></span>
 <span><span class="co">##      patch_id                polygon      size</span></span>
@@ -1219,7 +1253,7 @@ cells inside to the closest point on the patch border. If
 <code>return_neg</code> is set to <code>FALSE</code>, distances from the
 cells of interest (or cells inside the patches) to non cells of interest
 are computed as positive distances.</p>
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pancreasSCE</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/distToCells.html">distToCells</a></span><span class="op">(</span><span class="va">pancreasSCE</span>,</span>
 <span>                              x_cells <span class="op">=</span> <span class="va">pancreasSCE</span><span class="op">$</span><span class="va">CellType</span> <span class="op">==</span> <span class="st">"celltype_B"</span>,</span>
 <span>                              coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pos_X"</span>,<span class="st">"Pos_Y"</span><span class="op">)</span>,</span>
@@ -1240,7 +1274,7 @@ are computed as positive distances.</p>
 <span>            scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://sjmgarnier.github.io/viridis/reference/scale_viridis.html" class="external-link">scale_color_viridis</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="imcRtools_files/figure-html/distToCells-1.png" width="700"></p>
-<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSpatial.html">plotSpatial</a></span><span class="op">(</span><span class="va">pancreasSCE</span>,</span>
 <span>            img_id <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
 <span>            node_color_by <span class="op">=</span> <span class="st">"meanDist"</span>,</span>
@@ -1299,7 +1333,7 @@ with cell type B.</p></li>
 containing the summarized counts (<code>ct</code>) for all combinations
 of <code>from_label</code>, <code>to_label</code> and
 <code>group_by</code>.</p>
-<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/countInteractions.html">countInteractions</a></span><span class="op">(</span><span class="va">pancreasSCE</span>,</span>
 <span>                         group_by <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
 <span>                         label <span class="op">=</span> <span class="st">"CellType"</span>,</span>
@@ -1345,7 +1379,7 @@ by comparison to <code>p_treshold</code> (<code>sig</code> and
 <code>DataFrame</code>.</p>
 <p>We set the seed within the <code>SerialParam</code> (or
 <code>MulticoreParam</code>) function for reproducibility.</p>
-<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/testInteractions.html">testInteractions</a></span><span class="op">(</span><span class="va">pancreasSCE</span>,</span>
 <span>                        group_by <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
 <span>                        label <span class="op">=</span> <span class="st">"CellType"</span>,</span>
@@ -1388,7 +1422,7 @@ by comparison to <code>p_treshold</code> (<code>sig</code> and
 interaction networks from an edge list, typically the output of the
 <code>countInteractions</code>and <code>testInteractions</code>
 functions.</p>
-<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotInteractions.html">plotInteractions</a></span><span class="op">(</span><span class="va">out</span>,</span>
 <span>                 <span class="va">pancreasSCE</span>,</span>
 <span>                 group_by <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
@@ -1399,7 +1433,7 @@ relevant cell-cell interactions, groupings, and significance.</p>
 <p>In the example below we retain interactions whose fraction of
 significant pairs (based on sigval) exceeds 75% and tag the edges as
 attraction or repulsion.</p>
-<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">out</span> <span class="op">&lt;-</span> <span class="va">out</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pair_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">from_label</span>, <span class="va">to_label</span>, sep <span class="op">=</span> <span class="st">"__"</span><span class="op">)</span>,</span>
@@ -1448,7 +1482,7 @@ from <code>countInteractions</code> or <code>testInteractions</code>,
 averaged per cell-pair and grouping level. In our example, the “ct”
 value refers to the average neighboring cells of cell type B from cell
 type A averaged across all images.</p>
-<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggraph.data-imaginist.com" class="external-link">ggraph</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">edge_color</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blue"</span>, <span class="st">"red"</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"attraction"</span>, <span class="st">"repulsion"</span><span class="op">)</span><span class="op">)</span></span>
@@ -1463,7 +1497,7 @@ type A averaged across all images.</p>
 <p><img src="imcRtools_files/figure-html/plotInteractions-edge%20aesthetics-1.png" width="700"></p>
 <p>Control node properties via: <code>node_color_by</code>,
 <code>node_size_by</code>, <code>node_label_color_by</code>.</p>
-<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotInteractions.html">plotInteractions</a></span><span class="op">(</span><span class="va">out</span>,</span>
 <span>                 <span class="va">pancreasSCE</span>,</span>
 <span>                 group_by <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
@@ -1472,7 +1506,7 @@ type A averaged across all images.</p>
 <span>                 node_label_color_by <span class="op">=</span> <span class="st">"name"</span>,</span>
 <span>                 node_size_by <span class="op">=</span> <span class="st">"n_cells"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="imcRtools_files/figure-html/plotInteractions-node%20aesthetics-1.png" width="700"></p>
-<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Define custom colors for node and node_label</span></span>
 <span><span class="va">node_color</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"blue"</span>, <span class="st">"green"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"celltype_A"</span>, <span class="st">"celltype_B"</span>, <span class="st">"celltype_C"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plotInteractions.html">plotInteractions</a></span><span class="op">(</span><span class="va">out</span>,</span>
@@ -1486,14 +1520,14 @@ type A averaged across all images.</p>
 <p><img src="imcRtools_files/figure-html/plotInteractions-node%20aesthetics-2.png" width="700"></p>
 <p>The layout of the graph can be customized using the
 <code>graph_layout</code>argument. For more information see .</p>
-<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Default is "circle"</span></span>
 <span><span class="fu"><a href="../reference/plotInteractions.html">plotInteractions</a></span><span class="op">(</span><span class="va">out</span>,</span>
 <span>                 <span class="va">pancreasSCE</span>,</span>
 <span>                 group_by <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
 <span>                 label <span class="op">=</span> <span class="st">"CellType"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="imcRtools_files/figure-html/plotInteractions-layout-1.png" width="700"></p>
-<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Chord diagram layout</span></span>
 <span><span class="fu"><a href="../reference/plotInteractions.html">plotInteractions</a></span><span class="op">(</span><span class="va">out</span>,</span>
 <span>                 <span class="va">pancreasSCE</span>,</span>
@@ -1501,7 +1535,7 @@ type A averaged across all images.</p>
 <span>                 label <span class="op">=</span> <span class="st">"CellType"</span>,</span>
 <span>                 graph_layout <span class="op">=</span> <span class="st">"chord"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="imcRtools_files/figure-html/plotInteractions-layout-2.png" width="700"></p>
-<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Linear layout</span></span>
 <span><span class="fu"><a href="../reference/plotInteractions.html">plotInteractions</a></span><span class="op">(</span><span class="va">out</span>,</span>
 <span>                 <span class="va">pancreasSCE</span>,</span>
@@ -1513,7 +1547,7 @@ type A averaged across all images.</p>
 symbolic edge-list, along with any specified edge aesthetic parameters
 and vertex metadata used for graph construction, as a <code>list</code>
 of two <code>data.frames</code>.</p>
-<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># return data</span></span>
 <span><span class="fu"><a href="../reference/plotInteractions.html">plotInteractions</a></span><span class="op">(</span><span class="va">out</span>, <span class="va">pancreasSCE</span>, <span class="st">"CellType"</span>, <span class="st">"ImageNb"</span>,</span>
 <span>                return_data <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
@@ -1558,7 +1592,7 @@ of two <code>data.frames</code>.</p>
 </h4>
 <p>We first run the testInteractions() functions with the “conditional”
 method.</p>
-<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/testInteractions.html">testInteractions</a></span><span class="op">(</span><span class="va">pancreasSCE</span>,</span>
 <span>                        group_by <span class="op">=</span> <span class="st">"ImageNb"</span>,</span>
 <span>                        label <span class="op">=</span> <span class="st">"CellType"</span>,</span>
@@ -1572,7 +1606,7 @@ conditional cell ratio (CCR). The CCR is the ratio of cells of type A
 with at least one neighbor of type B in an image.</p>
 <p>We can calculate the CCR for the priorly chosen neighborhood size and
 append the output from the testInteractions() function as follows:</p>
-<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cd</span> <span class="op">&lt;-</span> <span class="fu">as.data.table</span><span class="op">(</span><span class="fu">colData</span><span class="op">(</span><span class="va">pancreasSCE</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">cond_ratio_df</span> <span class="op">&lt;-</span> <span class="fu">as.data.table</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/colPairs.html" class="external-link">colPair</a></span><span class="op">(</span><span class="va">pancreasSCE</span>, <span class="st">"knn_interaction_graph"</span><span class="op">)</span><span class="op">)</span><span class="op">[</span></span>
@@ -1602,7 +1636,7 @@ A neighbor a cell of type B (CCR), and how strong this interaction is
 z-score is very high, this means that a small amount of cells of type A
 are strongly surrounded by cells of type B. We show how to plot the
 results in the following:</p>
-<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">RColorBrewer</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">out_cr</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -1667,12 +1701,12 @@ results.</p>
 <span><span class="co">##  [1] RColorBrewer_1.1-3          dplyr_1.1.4                </span></span>
 <span><span class="co">##  [3] ggraph_2.2.2                ggplot2_4.0.0              </span></span>
 <span><span class="co">##  [5] cytomapper_1.20.0           EBImage_4.50.0             </span></span>
-<span><span class="co">##  [7] CATALYST_1.32.0             imcRtools_1.15.3           </span></span>
+<span><span class="co">##  [7] CATALYST_1.32.1             imcRtools_1.15.4           </span></span>
 <span><span class="co">##  [9] SpatialExperiment_1.18.1    SingleCellExperiment_1.30.1</span></span>
 <span><span class="co">## [11] SummarizedExperiment_1.38.1 Biobase_2.68.0             </span></span>
 <span><span class="co">## [13] GenomicRanges_1.60.0        GenomeInfoDb_1.44.3        </span></span>
 <span><span class="co">## [15] IRanges_2.42.0              S4Vectors_0.46.0           </span></span>
-<span><span class="co">## [17] BiocGenerics_0.54.0         generics_0.1.4             </span></span>
+<span><span class="co">## [17] BiocGenerics_0.54.1         generics_0.1.4             </span></span>
 <span><span class="co">## [19] MatrixGenerics_1.20.0       matrixStats_1.5.0          </span></span>
 <span><span class="co">## [21] data.table_1.17.8           BiocStyle_2.36.0           </span></span>
 <span><span class="co">## </span></span>
@@ -1685,12 +1719,12 @@ results.</p>
 <span><span class="co">##  [11] rhdf5filters_1.20.0         GetoptLong_1.0.5           </span></span>
 <span><span class="co">##  [13] withr_3.0.2                 sp_2.2-0                   </span></span>
 <span><span class="co">##  [15] gridExtra_2.3               cli_3.6.5                  </span></span>
-<span><span class="co">##  [17] textshaping_1.0.3           sandwich_3.1-1             </span></span>
+<span><span class="co">##  [17] textshaping_1.0.4           sandwich_3.1-1             </span></span>
 <span><span class="co">##  [19] labeling_0.4.3              sass_0.4.10                </span></span>
 <span><span class="co">##  [21] nnls_1.6                    mvtnorm_1.3-3              </span></span>
 <span><span class="co">##  [23] S7_0.2.0                    readr_2.1.5                </span></span>
 <span><span class="co">##  [25] ggridges_0.5.7              proxy_0.4-27               </span></span>
-<span><span class="co">##  [27] pkgdown_2.1.3               systemfonts_1.2.3          </span></span>
+<span><span class="co">##  [27] pkgdown_2.1.3               systemfonts_1.3.1          </span></span>
 <span><span class="co">##  [29] colorRamps_2.3.4            svglite_2.2.1              </span></span>
 <span><span class="co">##  [31] scater_1.36.0               plotrix_3.8-4              </span></span>
 <span><span class="co">##  [33] flowCore_2.20.0             shape_1.4.6.1              </span></span>
@@ -1709,14 +1743,14 @@ results.</p>
 <span><span class="co">##  [59] pillar_1.11.1               knitr_1.50                 </span></span>
 <span><span class="co">##  [61] ComplexHeatmap_2.24.1       RTriangle_1.6-0.15         </span></span>
 <span><span class="co">##  [63] rjson_0.2.23                codetools_0.2-20           </span></span>
-<span><span class="co">##  [65] glue_1.8.0                  V8_8.0.0                   </span></span>
+<span><span class="co">##  [65] glue_1.8.0                  V8_8.0.1                   </span></span>
 <span><span class="co">##  [67] vctrs_0.6.5                 png_0.1-8                  </span></span>
 <span><span class="co">##  [69] gtable_0.3.6                cachem_1.1.0               </span></span>
 <span><span class="co">##  [71] xfun_0.53                   S4Arrays_1.8.1             </span></span>
 <span><span class="co">##  [73] mime_0.13                   tidygraph_1.3.1            </span></span>
 <span><span class="co">##  [75] ConsensusClusterPlus_1.72.0 survival_3.8-3             </span></span>
 <span><span class="co">##  [77] pheatmap_1.0.13             iterators_1.0.14           </span></span>
-<span><span class="co">##  [79] cytolib_2.20.0              units_0.8-7                </span></span>
+<span><span class="co">##  [79] cytolib_2.20.0              units_1.0-0                </span></span>
 <span><span class="co">##  [81] TH.data_1.1-4               bit64_4.6.0-1              </span></span>
 <span><span class="co">##  [83] bslib_0.9.0                 irlba_2.3.5.1              </span></span>
 <span><span class="co">##  [85] svgPanZoom_0.3.4            vipor_0.4.7                </span></span>
@@ -1726,7 +1760,7 @@ results.</p>
 <span><span class="co">##  [93] bit_4.6.0                   compiler_4.5.1             </span></span>
 <span><span class="co">##  [95] BiocNeighbors_2.2.0         h5mread_1.0.1              </span></span>
 <span><span class="co">##  [97] desc_1.4.3                  DelayedArray_0.34.1        </span></span>
-<span><span class="co">##  [99] bookdown_0.44               scales_1.4.0               </span></span>
+<span><span class="co">##  [99] bookdown_0.45               scales_1.4.0               </span></span>
 <span><span class="co">## [101] classInt_0.4-11             distances_0.1.12           </span></span>
 <span><span class="co">## [103] tiff_0.1-12                 stringr_1.5.2              </span></span>
 <span><span class="co">## [105] digest_0.6.37               fftwtools_0.9-11           </span></span>
@@ -1748,7 +1782,7 @@ results.</p>
 <span><span class="co">## [137] ggrepel_0.9.6               graphlayouts_1.2.2         </span></span>
 <span><span class="co">## [139] splines_4.5.1               hms_1.1.3                  </span></span>
 <span><span class="co">## [141] circlize_0.4.16             locfit_1.5-9.12            </span></span>
-<span><span class="co">## [143] igraph_2.1.4                ggpubr_0.6.1               </span></span>
+<span><span class="co">## [143] igraph_2.2.0                ggpubr_0.6.1               </span></span>
 <span><span class="co">## [145] ggsignif_0.6.4              ScaledMatrix_1.16.0        </span></span>
 <span><span class="co">## [147] reshape2_1.4.4              XML_3.99-0.19              </span></span>
 <span><span class="co">## [149] drc_3.0-1                   evaluate_1.0.5             </span></span>
@@ -1764,7 +1798,7 @@ results.</p>
 <span><span class="co">## [169] ragg_1.5.0                  tibble_3.3.0               </span></span>
 <span><span class="co">## [171] memoise_2.0.1               FlowSOM_2.16.0             </span></span>
 <span><span class="co">## [173] beeswarm_0.4.0              cluster_2.1.8.1            </span></span>
-<span><span class="co">## [175] concaveman_1.1.0</span></span></code></pre>
+<span><span class="co">## [175] concaveman_1.2.0</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
