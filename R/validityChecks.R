@@ -1294,6 +1294,10 @@
   if (!entry %in% names(colData(object))) {
     stop("'entry' not in 'colData(object)'.")
   }
+  
+  if (all(is.na(colData(object)[[entry]]))) {
+    stop("'entry' contains only NAs.")
+  }
 
   if (!group_by %in% names(colData(object))) {
     stop("'group_by' not in 'colData(object)'.")

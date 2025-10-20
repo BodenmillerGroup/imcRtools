@@ -236,7 +236,7 @@ test_that("plotSpatialContext function works", {
   #spatial context is NA vector
   sce$spatial_context <- NA
   expect_error(plotSpatialContext(sce, group_by = "ImageNb"), 
-               regexp = "the data frame should contain at least two columns", 
+               regexp = "'entry' contains only NAs.", 
                fixed = TRUE)
   
 }
