@@ -33,7 +33,14 @@ test_that("aggregateNeighbors function works", {
                  c("ImageName", "Pos_X", "Pos_Y", "Area", "CellType", "ImageNb",
                    "CellNb", "MaskName", "Pattern", "aggregatedNeighbors"))
     expect_s4_class(cur_sce$aggregatedNeighbors, "DataFrame")
-    expect_true(all(rowSums(as.matrix(cur_sce$aggregatedNeighbors)) == 1))
+    
+    # with machine tolerance
+    tolerance <- sqrt(.Machine$double.eps)
+    expect_equal(
+      rowSums(as.matrix(cur_sce$aggregatedNeighbors)),
+      rep(1, nrow(cur_sce$aggregatedNeighbors)),
+      tolerance = tolerance
+    )
     
     # check for correct results of neighboring metadata
     cur_dat <- data.frame(colPair(pancreasSCE,"knn_10"))
@@ -113,7 +120,11 @@ test_that("aggregateNeighbors function works", {
                  c("ImageName", "Pos_X", "Pos_Y", "Area", "CellType", "ImageNb",
                    "CellNb", "MaskName", "Pattern", "aggregatedNeighbors"))
     expect_s4_class(cur_sce$aggregatedNeighbors, "DataFrame")
-    expect_true(all(rowSums(as.matrix(cur_sce$aggregatedNeighbors)) == 1))
+    expect_equal(
+      rowSums(as.matrix(cur_sce$aggregatedNeighbors)),
+      rep(1, nrow(cur_sce$aggregatedNeighbors)),
+      tolerance = tolerance
+    )
     
     # check for correct results of neighboring metadata
     cur_dat <- data.frame(colPair(pancreasSCE,"knn_10"))
@@ -519,7 +530,11 @@ test_that("aggregateNeighbors function works", {
                  c("ImageName", "Pos_X", "Pos_Y", "Area", "CellType", "ImageNb",
                    "CellNb", "MaskName", "Pattern", "aggregatedNeighbors"))
     expect_s4_class(cur_sce$aggregatedNeighbors, "DataFrame")
-    expect_true(all(rowSums(as.matrix(cur_sce$aggregatedNeighbors)) == 1))
+    expect_equal(
+      rowSums(as.matrix(cur_sce$aggregatedNeighbors)),
+      rep(1, nrow(cur_sce$aggregatedNeighbors)),
+      tolerance = tolerance
+    )
     
     cur_dat <- data.frame(colPair(pancreasSCE,"exp_20"))
     cur_dat$Pattern <- factor(colData(cur_sce)$Pattern)[cur_dat$to]
@@ -542,7 +557,11 @@ test_that("aggregateNeighbors function works", {
                  c("ImageName", "Pos_X", "Pos_Y", "Area", "CellType", "ImageNb",
                    "CellNb", "MaskName", "Pattern", "aggregatedNeighbors"))
     expect_s4_class(cur_sce$aggregatedNeighbors, "DataFrame")
-    expect_true(all(rowSums(as.matrix(cur_sce$aggregatedNeighbors)) == 1))
+    expect_equal(
+      rowSums(as.matrix(cur_sce$aggregatedNeighbors)),
+      rep(1, nrow(cur_sce$aggregatedNeighbors)),
+      tolerance = tolerance
+    )
     
     cur_dat <- data.frame(colPair(pancreasSCE,"exp_20"))
     cur_dat$Area <- factor(colData(cur_sce)$Area)[cur_dat$to]
