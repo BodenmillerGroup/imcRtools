@@ -19,7 +19,7 @@ from random permutations."><!-- mathjax --><script src="https://cdnjs.cloudflare
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.15.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.17.0</span>
       </span>
     </div>
 
@@ -356,10 +356,10 @@ interactions per grouping level.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        group_by  from_label    to_label        ct        p_gt        p_lt</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;character&gt; &lt;character&gt; &lt;character&gt; &lt;numeric&gt;   &lt;numeric&gt;   &lt;numeric&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1             1  celltype_A  celltype_A 0.6078431 0.000999001 1.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2             1  celltype_A  celltype_B 0.1568627 0.027972028 0.993006993</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2             1  celltype_A  celltype_B 0.1568627 0.020979021 0.995004995</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3             1  celltype_A  celltype_C 0.2352941 1.000000000 0.000999001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4             1  celltype_B  celltype_A 0.2916667 0.057942058 0.974025974</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5             1  celltype_B  celltype_B 0.0833333 0.499500500 0.800199800</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4             1  celltype_B  celltype_A 0.2916667 0.046953047 0.983016983</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5             1  celltype_B  celltype_B 0.0833333 0.454545455 0.802197802</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ...         ...         ...         ...       ...         ...         ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 23            3  celltype_B  celltype_B  0.787879 0.000999001 1.000000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 24            3  celltype_B  celltype_C  0.212121 1.000000000 0.000999001</span>
@@ -368,17 +368,17 @@ interactions per grouping level.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 27            3  celltype_C  celltype_C  0.765027 0.000999001 1.000000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        zscore interaction           p       sig    sigval</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;numeric&gt;   &lt;logical&gt;   &lt;numeric&gt; &lt;logical&gt; &lt;numeric&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    7.933619        TRUE 0.000999001      TRUE         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2    2.423092        TRUE 0.027972028     FALSE         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   -8.453573       FALSE 0.000999001      TRUE        -1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4    1.894474        TRUE 0.057942058     FALSE         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   -0.339332        TRUE 0.499500500     FALSE         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    7.277495        TRUE 0.000999001      TRUE         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    2.607528        TRUE 0.020979021     FALSE         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   -8.091884       FALSE 0.000999001      TRUE        -1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    2.043291        TRUE 0.046953047     FALSE         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   -0.315012        TRUE 0.454545455     FALSE         0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ...       ...         ...         ...       ...       ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23    7.42465        TRUE 0.000999001      TRUE         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24   -7.42465       FALSE 0.000999001      TRUE        -1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23    7.36213        TRUE 0.000999001      TRUE         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24   -7.36213       FALSE 0.000999001      TRUE        -1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 25         NA          NA          NA        NA        NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26   -7.56632       FALSE 0.000999001      TRUE        -1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27    7.56632        TRUE 0.000999001      TRUE         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26   -7.41956       FALSE 0.000999001      TRUE        -1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27    7.41956        TRUE 0.000999001      TRUE         1</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -394,7 +394,7 @@ interactions per grouping level.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer></div>
