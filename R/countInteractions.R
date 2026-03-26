@@ -45,8 +45,8 @@
 #' type B?"
 #' 
 #' 4. \code{method = "interaction"}: The count is divided by the total number of 
-#' interactions from cell type A. The final count can be interpreted as the 
-#' fraction of interactions of cell type A that occur with cell type B.
+#' interactions from cell type A. The final count can be interpreted as "What 
+#' fraction of interactions of cell type A occur with cell type B."
 #' 
 #' @return a DataFrame containing one row per \code{group_by} entry and unique
 #' \code{label} entry combination (\code{from_label}, \code{to_label}). The
