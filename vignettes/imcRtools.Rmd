@@ -1042,7 +1042,7 @@ level (e.g. image) in four different ways:
 
 2.  `method = "conditional"`: Previously named "histocat". The count is 
     divided by the number of cells of type A that have at least one neighbor 
-    of type B. The final count can be interpreted as "How many many neighbors 
+    of type B. The final count can be interpreted as "How many neighbors 
     of type B has a cell of type A on average, given it has at least one 
     neighbor of type B?".
 
@@ -1054,8 +1054,8 @@ level (e.g. image) in four different ways:
     neighbors of type B?"
 
 4.  `method = "interaction"`: The count is divided by the total number of 
-    interactions from cell type A. The final count can be interpreted as the 
-    fraction of interactions of cell type A that occur with cell type B.
+    interactions from cell type A. The final count can be interpreted as "What 
+    fraction of interactions of cell type A occur with cell type B."
 
 The `countInteractions` returns a `DataFrame` containing the summarized
 counts (`ct`) for all combinations of `from_label`, `to_label` and
@@ -1121,7 +1121,7 @@ plotInteractions(out,
 Before visualization, the edge list can be filtered to focus on relevant 
 cell-cell interactions, groupings, and significance.
 
-In the example below we retain interactions whose fraction of significant pairs
+In the example below, we retain interactions whose fraction of significant pairs
 (based on sigval) exceeds 75% and tag the edges as attraction or repulsion.
 
 ```{r plotInteractions-filter data}
@@ -1210,8 +1210,8 @@ plotInteractions(out,
   scale_color_manual(values = node_color)
 ```
 
-The layout of the graph can be customized using the `graph_layout`argument. 
-For more information see \link[ggraph]{ggraph}.
+The layout of the graph can be customized using the `graph_layout` argument. 
+For more information see [ggraph](https://ggraph.data-imaginist.com/reference/ggraph.html).
 
 ```{r plotInteractions-layout}
 # Default is "circle"
