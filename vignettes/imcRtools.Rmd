@@ -1042,7 +1042,7 @@ level (e.g. image) in four different ways:
 
 2.  `method = "conditional"`: Previously named "histocat". The count is 
     divided by the number of cells of type A that have at least one neighbor 
-    of type B. The final count can be interpreted as "How many many neighbors 
+    of type B. The final count can be interpreted as "How many neighbors 
     of type B has a cell of type A on average, given it has at least one 
     neighbor of type B?".
 
