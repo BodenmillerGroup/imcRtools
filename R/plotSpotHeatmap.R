@@ -95,9 +95,9 @@ plotSpotHeatmap <- function(object,
                                             factors = list(spot_id = object[[spot_id]]))
   
   spot_names <- cur_out$combinations
-  
+  #### check here
   if (statistic == "mean") {
-    cur_out <- cur_out$sums/cur_out$detected
+    cur_out <- t(cur_out$sums)/cur_out$counts
   } else if (statistic == "sum") {
     cur_out <- cur_out$sums
   } else if (statistic == "median") {

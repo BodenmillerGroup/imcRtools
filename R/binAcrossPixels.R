@@ -70,8 +70,8 @@ binAcrossPixels <- function(object,
                                        ...)
     
     if (statistic == "mean") {
-      cur_counts <- assay(cur_out, "sums")/assay(cur_out, "detected")
-      assay(cur_out, "counts") <- cur_counts
+      cur_counts <- t(assay(cur_out, "sums"))/cur_out$counts
+      assay(cur_out, "counts") <- t(cur_counts)
     } else if (statistic == "sum") {
       assay(cur_out, "counts") <- assay(cur_out, "sums")
     } else if (statistic == "median") {

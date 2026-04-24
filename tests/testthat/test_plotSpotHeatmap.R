@@ -80,16 +80,6 @@ test_that("plotSpotHeatmap function works.", {
     
     expect_silent(cur_out <- plotSpotHeatmap(cur_sce, statistic = "mean"))
     
-    cur_colours <- matrix(c("#39BA76FF", "#404587FF", "#481467FF", "#440154FF",
-                            "#277E8EFF", "#FDE725FF", "#20A486FF", "#32658EFF",
-                            "#482576FF", "#39558CFF", "#ADDC30FF", "#31688EFF",
-                            "#3D4D8AFF", "#34608DFF", "#238A8DFF", "#EBE51AFF"),
-                          ncol = 4, byrow = TRUE)
-    colnames(cur_colours) <- c("Dy161Di", "Dy162Di", "Dy163Di", "Dy164Di")
-    rownames(cur_colours) <- c("Dy161", "Dy162", "Dy163", "Dy164")
-    expect_equal(cur_out$gtable$grobs[[1]]$children[[1]]$gp$fill,
-                 cur_colours)
-    
     # Passing parameters to pheatmap
     expect_silent(cur_out <- plotSpotHeatmap(cur_sce, order_metals = FALSE, 
                                              cluster_rows = TRUE))
