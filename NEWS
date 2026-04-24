@@ -265,3 +265,7 @@ Changes in version 1.15.5 (2025-10-20)
 Changes in version 1.17.1 (2026-03-30)
 
 + update function page/vignette
+
+Changes in version 1.17.2 (2026-04-24)
+
++ Replaced deprecated aggregateAcrossCells function from scuttle package with scrapper implementation

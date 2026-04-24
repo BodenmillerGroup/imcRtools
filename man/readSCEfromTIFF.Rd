@@ -24,9 +24,11 @@ channels are stored as rows.
 }
 \description{
 Helper function to process .tiff files created with the 
-steinbock pipeline into a \code{\linkS4class{SingleCellExperiment}}
+steinbock pipeline \href{https://bodenmillergroup.github.io/steinbock/latest/} 
+into a \code{\linkS4class{SingleCellExperiment}}
 object. This function is mainly used to read-in data generated from a
-"spillover slide". Here, each .tiff file contains the measurements of
+"spillover slide" from the new XTi generation of IMC machines. 
+Here, each .tiff file contains the measurements of
 multiple pixels for a single stain across all open channels.
 }
 \section{Reading in .tiff files for spillover correction}{
@@ -65,6 +67,9 @@ sce
 \href{https://www.sciencedirect.com/science/article/pii/S1550413118306910}{Chevrier,
 S. et al. 2017. “Compensation of Signal Spillover in Suspension and Imaging
 Mass Cytometry.” Cell Systems 6: 612–20.}
+\href{https://www.nature.com/articles/s41596-023-00881-0}{Windhager,
+J. et al. 2023. “An end-to-end workflow for multiplexed image processing and analysis.” 
+Nature Protocols 18: 3565–3613.}
 }
 \author{
 Victor Ibañez (\email{victor.ibanez@uzh.ch})

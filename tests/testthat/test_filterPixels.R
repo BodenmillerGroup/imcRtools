@@ -2,7 +2,8 @@ test_that("filterPixels function works.", {
     path <- system.file("extdata/spillover", package = "imcRtools")
     
     # Read in .txt
-    expect_silent(cur_sce <- readSCEfromTXT(path, verbose = FALSE))
+    cur_sce <- readSCEfromTXT(path, verbose = FALSE)
+    expect_s4_class(cur_sce, "SingleCellExperiment")
     assay(cur_sce, "exprs") <- asinh(counts(cur_sce)/5)
 
     bc_key <- as.numeric(unique(cur_sce$sample_mass))

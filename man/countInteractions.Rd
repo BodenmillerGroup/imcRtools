@@ -72,8 +72,8 @@ fraction of cells of type A have at least a given number of neighbors of
 type B?"
 
 4. \code{method = "interaction"}: The count is divided by the total number of 
-interactions from cell type A. The final count can be interpreted as the 
-fraction of interactions of cell type A that occur with cell type B.
+interactions from cell type A. The final count can be interpreted as "What 
+fraction of interactions of cell type A occur with cell type B."
 }
 
 \examples{

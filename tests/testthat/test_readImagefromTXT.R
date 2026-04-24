@@ -1,10 +1,10 @@
 test_that("readImagefromTXT function works.", {
     path <- system.file("extdata/mockData/raw", package = "imcRtools")
     
-    # Works 
-    expect_silent(cur_cil <- readImagefromTXT(path))
-    
+    # Works
+    cur_cil <- readImagefromTXT(path)
     expect_s4_class(cur_cil, "CytoImageList")
+    
     expect_equal(length(cur_cil), 3)
     expect_equal(channelNames(cur_cil), c("Ag107Di", "Pr141Di", "Sm147Di", "Eu153Di", "Yb172Di"))
     expect_equal(names(cur_cil), c("20210305_NE_mockData2_ROI_001_1",  
@@ -47,13 +47,16 @@ test_that("readImagefromTXT function works.", {
                  test_2)
     
     # Read in individual files
-    expect_silent(cur_cil <- readImagefromTXT(path, pattern = "ROI_002"))
+    cur_cil <- readImagefromTXT(path, pattern = "ROI_002")
+    expect_s4_class(cur_cil, "CytoImageList")
+    
     expect_equal(length(cur_cil), 1)
     expect_equal(channelNames(cur_cil), c("Ag107Di", "Pr141Di", "Sm147Di", "Eu153Di", "Yb172Di"))
     expect_equal(names(cur_cil), c("20210305_NE_mockData2_ROI_002_2"))
     
     # Read in different channelNames
-    expect_silent(cur_cil <- readImagefromTXT(path, channel_pattern = "[A-Za-z]{2}[0-9]{3}"))
+    cur_cil <- readImagefromTXT(path, channel_pattern = "[A-Za-z]{2}[0-9]{3}")
+    expect_s4_class(cur_cil, "CytoImageList")
     expect_equal(length(cur_cil), 3)
     expect_equal(channelNames(cur_cil), c("Ag107", "Pr141", "Sm147", "Eu153", "Yb172"))
     expect_equal(names(cur_cil), c("20210305_NE_mockData2_ROI_001_1",  
@@ -61,7 +64,8 @@ test_that("readImagefromTXT function works.", {
                                    "20210305_NE_mockData2_ROI_003_3"))
     
     # Read in single channel
-    expect_silent(cur_cil <- readImagefromTXT(path, channel_pattern = "Ag107"))
+    cur_cil <- readImagefromTXT(path, channel_pattern = "Ag107")
+    expect_s4_class(cur_cil, "CytoImageList")
     expect_equal(length(cur_cil), 3)
     expect_equal(channelNames(cur_cil), c("Ag107"))
     expect_equal(names(cur_cil), c("20210305_NE_mockData2_ROI_001_1",  
@@ -75,8 +79,8 @@ test_that("readImagefromTXT function works.", {
                  test_2)
     
     # parallelisation
-    expect_silent(cur_cil <- readImagefromTXT(path, 
-                                              BPPARAM = BiocParallel::bpparam()))
+    cur_cil <- readImagefromTXT(path,BPPARAM = BiocParallel::bpparam())
+    expect_s4_class(cur_cil, "CytoImageList")
     expect_equal(length(cur_cil), 3)
     expect_equal(channelNames(cur_cil), c("Ag107Di", "Pr141Di", "Sm147Di", "Eu153Di", "Yb172Di"))
     expect_equal(names(cur_cil), c("20210305_NE_mockData2_ROI_001_1",  

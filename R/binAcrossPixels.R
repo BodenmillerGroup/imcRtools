@@ -34,12 +34,13 @@
 #' # Visualizes heatmap after aggregation
 #' plotSpotHeatmap(sce)
 #' 
-#' @seealso \code{\link[scuttle]{aggregateAcrossCells}} for the aggregation
+#' @seealso \code{\link[scrapper]{aggregateAcrossCells}} for the aggregation
 #' function
 #' 
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #'
-#' @importFrom scuttle aggregateAcrossCells
+#' @importFrom scrapper aggregateAcrossCells
+#' @importFrom scrapper aggregateAcrossCells.se
 #' @export
 binAcrossPixels <- function(object, 
                             bin_size,
@@ -64,10 +65,23 @@ binAcrossPixels <- function(object,
     cur_df <- DataFrame(spot_id = object[[spot_id]],
                         bin = unlist(cur_split))
     
-    cur_out <- aggregateAcrossCells(object, cur_df, 
-                                    statistics = statistic,
-                                    use.assay.type = assay_type,
-                                    ...)
+    cur_out <- aggregateAcrossCells.se(object, cur_df,
+                                       assay.type = assay_type,
+                                       ...)
+    
+    if (statistic == "mean") {
+      cur_counts <- t(assay(cur_out, "sums"))/cur_out$counts
+      assay(cur_out, "counts") <- t(cur_counts)
+    } else if (statistic == "sum") {
+      assay(cur_out, "counts") <- assay(cur_out, "sums")
+    } else if (statistic == "median") {
+      cur_counts <- aggregateAcrossCells(assay(object, assay_type),factors = cur_df,compute.median = TRUE)
+      assay(cur_out, "counts") <- cur_counts$medians
+    }
+    cur_out <- as(cur_out,"SingleCellExperiment")
+    cur_out$spot_id <- cur_out$factor.spot_id
+    cur_out$bin <- cur_out$factor.bin
+    cur_out$ncells <- cur_out$counts
     
     return(cur_out)
     

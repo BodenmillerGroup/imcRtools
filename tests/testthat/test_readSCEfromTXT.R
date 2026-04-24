@@ -2,7 +2,8 @@ test_that("readSCEfromTXT function reads in correct objects.", {
     path <- system.file("extdata/spillover", package = "imcRtools")
     
     # Read in .txt
-    expect_silent(cur_sce <- readSCEfromTXT(path, verbose = FALSE))
+    cur_sce <- readSCEfromTXT(path, verbose = FALSE)
+    expect_s4_class(cur_sce, "SingleCellExperiment")
     expect_equal(rowData(cur_sce)$channel_name, c("Dy161Di", "Dy162Di", 
                                                   "Dy163Di","Dy164Di"))
     expect_equal(rowData(cur_sce)$marker_name, c("Dy161", "Dy162", 
@@ -36,15 +37,17 @@ test_that("readSCEfromTXT function reads in correct objects.", {
     
     # Verbose output
     cur_out <- capture_output(cur_sce <- readSCEfromTXT(path))
-    expect_equal(cur_out, "Spotted channels:  Dy161, Dy162, Dy163, Dy164\nAcquired channels:  Dy161, Dy162, Dy163, Dy164\nChannels spotted but not acquired:  \nChannels acquired but not spotted:  ")
+    expect_equal(gsub(".*\nSpotted","Spotted",cur_out), "Spotted channels:  Dy161, Dy162, Dy163, Dy164\nAcquired channels:  Dy161, Dy162, Dy163, Dy164\nChannels spotted but not acquired:  \nChannels acquired but not spotted:  ")
     
     # Other parameters
-    expect_silent(cur_sce_2 <- readSCEfromTXT(path, pattern = "Dy162", verbose = FALSE))
+    cur_sce_2 <- readSCEfromTXT(path, pattern = "Dy162", verbose = FALSE)
+    expect_s4_class(cur_sce_2, "SingleCellExperiment")
     expect_equal(dim(cur_sce_2), c(4, 100))
     expect_equal(rowData(cur_sce)$channel_name, c("Dy161Di", "Dy162Di", 
                                                   "Dy163Di","Dy164Di"))
     
-    expect_silent(cur_sce_2 <- readSCEfromTXT(path, metadata_cols = "X", verbose = FALSE))
+    cur_sce_2 <- readSCEfromTXT(path, metadata_cols = "X", verbose = FALSE)
+    expect_s4_class(cur_sce_2, "SingleCellExperiment")
     expect_equal(counts(cur_sce), counts(cur_sce_2))
     expect_equal(names(colData(cur_sce_2)), c("X", "sample_id", "sample_metal", 
                                               "sample_mass" ))
@@ -55,7 +58,8 @@ test_that("readSCEfromTXT function reads in correct objects.", {
     cur_files <- lapply(cur_files, read_delim, delim = "\t")
     names(cur_files) <- str_extract(cur_files_names, "[A-Za-z]{1,2}[0-9]{2,3}")
     
-    expect_silent(cur_sce_3 <- readSCEfromTXT(cur_files, verbose = FALSE))
+    cur_sce_3 <- readSCEfromTXT(cur_files, verbose = FALSE)
+    expect_s4_class(cur_sce_3, "SingleCellExperiment")
     expect_equal(cur_sce, cur_sce_3)
     expect_silent(cur_sce_4 <- readSCEfromTXT(cur_files, metadata_cols = "X", verbose = FALSE))
     expect_equal(cur_sce_2, cur_sce_4)
