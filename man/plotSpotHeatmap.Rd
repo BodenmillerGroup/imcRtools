@@ -100,7 +100,7 @@ plotSpotHeatmap(sce, log = FALSE, threshold = 200)
 \seealso{
 \code{\link[pheatmap]{pheatmap}} for visual modifications
 
-\code{\link[scuttle]{aggregateAcrossCells}} for the aggregation
+\code{\link[scrapper]{aggregateAcrossCells}} for the aggregation
 function
 }
 \author{

@@ -2,7 +2,8 @@ test_that("plotSpotHeatmap function works.", {
     path <- system.file("extdata/spillover", package = "imcRtools")
     
     # Read in .txt
-    expect_silent(cur_sce <- readSCEfromTXT(path, verbose = FALSE))
+    cur_sce <- readSCEfromTXT(path, verbose = FALSE)
+    expect_s4_class(cur_sce, "SingleCellExperiment")
     
     # Defaults work
     expect_silent(cur_out <- plotSpotHeatmap(cur_sce))

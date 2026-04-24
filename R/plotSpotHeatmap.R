@@ -58,13 +58,13 @@
 #' plotSpotHeatmap(sce, log = FALSE, threshold = 200)
 #' 
 #' @seealso \code{\link[pheatmap]{pheatmap}} for visual modifications
-#' @seealso \code{\link[scuttle]{aggregateAcrossCells}} for the aggregation
+#' @seealso \code{\link[scrapper]{aggregateAcrossCells}} for the aggregation
 #' function
 #' 
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #'
 #' @importFrom pheatmap pheatmap
-#' @importFrom scuttle aggregateAcrossCells
+#' @importFrom scrapper aggregateAcrossCells
 #' @importFrom viridis viridis
 #' @importFrom stringr str_extract
 #' @importFrom SummarizedExperiment assay
@@ -91,56 +91,65 @@ plotSpotHeatmap <- function(object,
         stop("'statistic' must be either 'median', 'mean' or 'sum'")
     }
     
-    cur_out <- aggregateAcrossCells(object, object[[spot_id]], 
-                                    statistics = statistic,
-                                    use.assay.type = assay_type)
+  cur_out <- aggregateAcrossCells(assay(object,assay_type),
+                                            factors = list(spot_id = object[[spot_id]]))
+  
+  spot_names <- cur_out$combinations
+  
+  if (statistic == "mean") {
+    cur_out <- cur_out$sums/cur_out$detected
+  } else if (statistic == "sum") {
+    cur_out <- cur_out$sums
+  } else if (statistic == "median") {
+    cur_out <- cur_out$medians
+  }
+  
+  if (log) {
+    cur_mat <- log10(cur_out+1)
+  } else {
+    cur_mat <- cur_out
+  }
+  
+  if (!is.null(threshold)) {
+    cur_mat <- (cur_mat > threshold) * 1
     
-    if (log) {
-        cur_mat <- log10(assay(cur_out, assay_type) + 1)
-    } else {
-        cur_mat <- assay(cur_out, assay_type)
+    if (is.na(breaks)) { 
+      breaks <- c(0, 0.5, 1)
     }
     
-    if (!is.null(threshold)) {
-        cur_mat <- (cur_mat > threshold) * 1
-        
-        if (is.na(breaks)) { 
-            breaks <- c(0, 0.5, 1)
-        }
-        
-        if (is.na(legend_breaks)) { 
-            legend_breaks <- c(0, 1)
-        }
-
-        color <- c(color[1], color[length(color)])
+    if (is.na(legend_breaks)) { 
+      legend_breaks <- c(0, 1)
     }
     
-    colnames(cur_mat) <- cur_out[[spot_id]] 
-    rownames(cur_mat) <- rowData(cur_out)[[channel_id]] 
+    color <- c(color[1], color[length(color)])
+  }
+  
+  colnames(cur_mat) <- rowData(object)$marker_name
+  rownames(cur_mat) <- rowData(object)[[channel_id]]
+  
+  # Order rows and cols based on spot metal
+  if (order_metals) {
+    cur_spots <- colnames(cur_mat)
+    cur_mass <- as.numeric(str_extract(cur_spots, "[0-9]{2,3}$"))
+    cur_spots <- cur_spots[order(cur_mass)]
     
-    # Order rows and cols based on spot metal
-    if (order_metals) {
-        cur_spots <- colnames(cur_mat)
-        cur_mass <- as.numeric(str_extract(cur_spots, "[0-9]{2,3}$"))
-        cur_spots <- cur_spots[order(cur_mass)]
-        
-        cur_channels <- rownames(cur_mat)
-        cur_mass <- as.numeric(str_extract(cur_channels, "[0-9]{2,3}"))
-        cur_channels <- cur_channels[order(cur_mass)]
-        cur_isotope <- str_extract(cur_channels, "[A-Za-z]{1,2}[0-9]{2,3}")
-        cur_rownames <- c(cur_channels[cur_isotope %in% cur_spots],
-                            cur_channels[!cur_isotope %in% cur_spots])
-        
-        cur_mat <- cur_mat[cur_rownames,cur_spots]
-        
-        cluster_cols <- FALSE
-        cluster_rows <- FALSE
-    }
+    cur_channels <- rownames(cur_mat)
+    cur_mass <- as.numeric(str_extract(cur_channels, "[0-9]{2,3}"))
+    cur_channels <- cur_channels[order(cur_mass)]
+    cur_isotope <- str_extract(cur_channels, "[A-Za-z]{1,2}[0-9]{2,3}")
+    cur_rownames <- c(cur_channels[cur_isotope %in% cur_spots],
+                      cur_channels[!cur_isotope %in% cur_spots])
     
-    # Transposed to match the CATALYST visualization
-    pheatmap(t(cur_mat), color = color, 
-            cluster_cols = cluster_cols,
-            cluster_rows = cluster_rows, 
-            breaks = breaks, legend_breaks = legend_breaks,
-            ...)
+    cur_mat <- cur_mat[cur_rownames,cur_spots]
+    
+    cluster_cols <- FALSE
+    cluster_rows <- FALSE
+  }
+  
+  # Transposed to match the CATALYST visualization
+  pheatmap(t(cur_mat), color = color, 
+           cluster_cols = cluster_cols,
+           cluster_rows = cluster_rows, 
+           breaks = breaks, legend_breaks = legend_breaks,
+           ...)
 }

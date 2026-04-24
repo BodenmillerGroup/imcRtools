@@ -2,7 +2,8 @@ test_that("binAcrossPixels function works.", {
     path <- system.file("extdata/spillover", package = "imcRtools")
     
     # Read in .txt
-    expect_silent(cur_sce <- readSCEfromTXT(path, verbose = FALSE))
+    cur_sce <- readSCEfromTXT(path, verbose = FALSE)
+    expect_s4_class(cur_sce, "SingleCellExperiment")
     
     # Works
     expect_silent(out <- binAcrossPixels(cur_sce, bin_size = 10))
