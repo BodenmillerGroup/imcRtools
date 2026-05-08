@@ -92,7 +92,8 @@ plotSpotHeatmap <- function(object,
     }
     
   cur_out <- aggregateAcrossCells(assay(object,assay_type),
-                                            factors = list(spot_id = object[[spot_id]]))
+                                  factors = list(spot_id = object[[spot_id]]),
+                                  compute.median = TRUE)
   
   spot_names <- cur_out$combinations
   #### check here

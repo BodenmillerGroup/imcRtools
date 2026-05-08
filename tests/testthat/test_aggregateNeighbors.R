@@ -211,7 +211,8 @@ test_that("aggregateNeighbors function works", {
     cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"knn_10"))]
     colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"knn_10"))
 
-    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2,"exprs"), factors = list(from = cur_sce_2$from))
+    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2,"exprs"),
+                                      factors = list(from = cur_sce_2$from))
     
     expect_equal(as.matrix(cur_sce$mean_aggregatedExpression),
                  t(cur_sce_2$sums)/cur_sce_2$counts, check.attributes = FALSE)
@@ -232,7 +233,8 @@ test_that("aggregateNeighbors function works", {
     cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"knn_10"))]
     colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"knn_10"))
     
-    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2,"counts"), factors = list(from = cur_sce_2$from))
+    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2,"counts"),
+                                      factors = list(from = cur_sce_2$from))
     
     expect_equal(as.matrix(cur_sce$mean_aggregatedExpression),
                  t(cur_sce_2$sums)/cur_sce_2$counts, check.attributes = FALSE)
@@ -261,7 +263,9 @@ test_that("aggregateNeighbors function works", {
     cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"knn_10"))]
     colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"knn_10"))
     
-    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "exprs"), factors = list(from = cur_sce_2$from))
+    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "exprs"),
+                                      factors = list(from = cur_sce_2$from),
+                                      compute.median = TRUE)
     
     expect_equal(as.matrix(cur_sce$median_aggregatedExpression),
                  t(as.matrix(cur_sce_2$medians)), check.attributes = FALSE)
@@ -283,7 +287,9 @@ test_that("aggregateNeighbors function works", {
     cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"knn_10"))]
     colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"knn_10"))
     
-    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "counts"), factors = list(from = cur_sce_2$from))
+    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "counts"),
+                                      factors = list(from = cur_sce_2$from),
+                                      compute.median = TRUE)
     
     expect_equal(as.matrix(cur_sce$median_aggregatedExpression),
                  t(as.matrix(cur_sce_2$medians)), check.attributes = FALSE)
@@ -310,7 +316,9 @@ test_that("aggregateNeighbors function works", {
     cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"knn_10"))]
     colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"knn_10"))
     
-    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "exprs"), factors = list(from = cur_sce_2$from))
+    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "exprs"),
+                                      factors = list(from = cur_sce_2$from))
+    
     expect_equal(as.matrix(cur_sce$mean_aggregatedExpression),
                  t(cur_sce_2$sums)/cur_sce_2$counts, check.attributes = FALSE)
     
@@ -330,7 +338,9 @@ test_that("aggregateNeighbors function works", {
     cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"knn_10"))]
     colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"knn_10"))
     
-    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "counts"), factors = list(from = cur_sce_2$from))
+    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "counts"),
+                                      factors = list(from = cur_sce_2$from))
+    
     expect_equal(as.matrix(cur_sce$mean_aggregatedExpression),
                  t(cur_sce_2$sums)/cur_sce_2$counts, check.attributes = FALSE)
     
@@ -357,7 +367,10 @@ test_that("aggregateNeighbors function works", {
     cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"knn_10"))]
     colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"knn_10"))
     
-    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "exprs"), factors = list(from = cur_sce_2$from))
+    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "exprs"),
+                                      factors = list(from = cur_sce_2$from)
+                                      compute.median = TRUE)
+    
         expect_equal(as.matrix(cur_sce$median_aggregatedExpression),
                  t(as.matrix(cur_sce_2$medians)), check.attributes = FALSE)
     
@@ -378,7 +391,9 @@ test_that("aggregateNeighbors function works", {
     cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"knn_10"))]
     colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"knn_10"))
     
-    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "counts"), factors = list(from = cur_sce_2$from))
+    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "counts"),
+                                      factors = list(from = cur_sce_2$from),
+                                      compute.median = TRUE)
     
     expect_equal(as.matrix(cur_sce$median_aggregatedExpression),
                  t(as.matrix(cur_sce_2$medians)), check.attributes = FALSE)
@@ -587,7 +602,8 @@ test_that("aggregateNeighbors function works", {
     cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"exp_20"))]
     colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"exp_20"))
     
-    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "exprs"), factors = list(from = cur_sce_2$from))
+    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "exprs"),
+                                      factors = list(from = cur_sce_2$from))
     
     expect_equal(as.matrix(cur_sce$mean_aggregatedExpression[unique(from(colPair(pancreasSCE,"exp_20"))),]),
                  t(cur_sce_2$sums)/cur_sce_2$counts, check.attributes = FALSE)
@@ -609,7 +625,8 @@ test_that("aggregateNeighbors function works", {
     cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"exp_20"))]
     colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"exp_20"))
     
-    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "counts"), factors = list(from = cur_sce_2$from))
+    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "counts"),
+                                      factors = list(from = cur_sce_2$from))
     
     expect_equal(as.matrix(cur_sce$mean_aggregatedExpression[from(colPair(pancreasSCE,"exp_20")),]),
                  t(cur_sce_2$sums)/cur_sce_2$counts, check.attributes = FALSE)
@@ -633,7 +650,9 @@ test_that("aggregateNeighbors function works", {
     cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"exp_20"))]
     colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"exp_20"))
     
-    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "exprs"), factors = list(from = cur_sce_2$from))
+    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "exprs"),
+                                      factors = list(from = cur_sce_2$from),
+                                      compute.median = TRUE)
     
     expect_equal(as.matrix(cur_sce$median_aggregatedExpression[unique(from(colPair(pancreasSCE,"exp_20"))),]),
                  t(as.matrix(cur_sce_2$medians)), check.attributes = FALSE)
@@ -660,7 +679,8 @@ test_that("aggregateNeighbors function works", {
     cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"exp_20"))]
     colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"exp_20"))
     
-    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "exprs"), factors = list(from = cur_sce_2$from))
+    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "exprs"),
+                                      factors = list(from = cur_sce_2$from))
     
     expect_equal(as.matrix(cur_sce$mean_aggregatedExpression[unique(from(colPair(pancreasSCE,"exp_20"))),]),
                  t(cur_sce_2$sums)/cur_sce_2$counts, check.attributes = FALSE)
@@ -741,7 +761,8 @@ test_that("aggregateNeighbors function works", {
     cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"delaunay_interaction_graph"))]
     colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"delaunay_interaction_graph"))
     
-    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "exprs"), factors = list(from = cur_sce_2$from))
+    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "exprs"),
+                                      factors = list(from = cur_sce_2$from))
     
     expect_equal(as.matrix(cur_sce$mean_aggregatedExpression),
                  t(cur_sce_2$sums)/cur_sce_2$counts, check.attributes = FALSE)
@@ -763,7 +784,9 @@ test_that("aggregateNeighbors function works", {
     cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"delaunay_interaction_graph"))]
     colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"delaunay_interaction_graph"))
     
-    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "exprs"), factors = list(from = cur_sce_2$from))
+    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "exprs"),
+                                      factors = list(from = cur_sce_2$from),
+                                      compute.median = TRUE)
     
     expect_equal(as.matrix(cur_sce$median_aggregatedExpression),
                  t(as.matrix(cur_sce_2$medians)), check.attributes = FALSE)
@@ -778,7 +801,8 @@ test_that("aggregateNeighbors function works", {
     cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"delaunay_interaction_graph"))]
     colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"delaunay_interaction_graph"))
     
-    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "exprs")[c("H3", "PIN"),], factors = list(from = cur_sce_2$from))
+    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "exprs")[c("H3", "PIN"),],
+                                      factors = list(from = cur_sce_2$from))
     
     expect_equal(as.matrix(cur_sce$mean_aggregatedExpression),
                  t(cur_sce_2$sums)/cur_sce_2$counts, check.attributes = FALSE)
@@ -793,7 +817,8 @@ test_that("aggregateNeighbors function works", {
     cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"delaunay_interaction_graph"))]
     colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"delaunay_interaction_graph"))
     
-    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "exprs")[c(1,4),], factors = list(from = cur_sce_2$from))
+    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "exprs")[c(1,4),],
+                                      factors = list(from = cur_sce_2$from))
     
     expect_equal(as.matrix(cur_sce$mean_aggregatedExpression),
                  t(cur_sce_2$sums)/cur_sce_2$counts, check.attributes = FALSE)
@@ -808,7 +833,8 @@ test_that("aggregateNeighbors function works", {
     cur_sce_2 <- cur_sce[,to(colPair(pancreasSCE,"delaunay_interaction_graph"))]
     colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"delaunay_interaction_graph"))
     
-    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "exprs")[!rownames(pancreasSCE) %in% c("H3", "PIN"),], factors = list(from = cur_sce_2$from))
+    cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "exprs")[!rownames(pancreasSCE) %in% c("H3", "PIN"),],
+                                      factors = list(from = cur_sce_2$from))
     
     expect_equal(as.matrix(cur_sce$mean_aggregatedExpression),
                  t(cur_sce_2$sums)/cur_sce_2$counts, check.attributes = FALSE)
