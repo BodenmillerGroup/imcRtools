@@ -19,7 +19,7 @@ from random permutations."><!-- mathjax --><script src="https://cdnjs.cloudflare
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.17.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.19.0</span>
       </span>
     </div>
 
@@ -136,25 +136,9 @@ are regarded as equal. Default taken from <code>all.equal</code>.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a DataFrame containing one row per <code>group_by</code> entry and unique
-<code>label</code> entry combination (<code>from_label</code>, <code>to_label</code>). The
-object contains following entries:</p>
-<ul><li><p><code>ct</code>: stores the interaction count as described in the details</p></li>
-<li><p><code>p_gt</code>: stores the fraction of perturbations equal or greater
-than <code>ct</code></p></li>
-<li><p><code>p_lt</code>: stores the fraction of perturbations equal or less than
-<code>ct</code></p></li>
-<li><p><code>interaction</code>: is there the tendency for a positive interaction
-(attraction) between <code>from_label</code> and <code>to_label</code>? Is <code>p_lt</code>
-greater than <code>p_gt</code>?</p></li>
-<li><p><code>p</code>: the smaller value of <code>p_gt</code> and <code>p_lt</code>.</p></li>
-<li><p><code>sig</code>: is <code>p</code> smaller than <code>p_threshold</code>?</p></li>
-<li><p><code>sigval</code>: Combination of <code>interaction</code> and <code>sig</code>.</p><ul><li><p>-1: <code>interaction == FALSE</code> and <code>sig == TRUE</code></p></li>
-<li><p>0: <code>sig == FALSE</code></p></li>
-<li><p>1: <code>interaction == TRUE</code> and <code>sig == TRUE</code></p></li>
-</ul></li>
-</ul><p><code>NA</code> is returned if a certain label is not present in this grouping
-level.</p>
+
+
+
     </div>
     <div id="counting-and-summarizing-cell-cell-interactions">
     <h2>Counting and summarizing cell-cell interactions</h2>
@@ -180,8 +164,8 @@ across all cells of type A. The final count can be interpreted as "What
 fraction of cells of type A have at least a given number of neighbors of
 type B?"</p>
 <p>4. <code>method = "interaction"</code>: The count is divided by the total number of
-interactions from cell type A. The final count can be interpreted as the
-fraction of interactions of cell type A that occur with cell type B.</p>
+interactions from cell type A. The final count can be interpreted as "What
+fraction of interactions of cell type A occur with cell type B."</p>
     </div>
     <div id="testing-for-significance">
     <h2>Testing for significance</h2>
@@ -356,10 +340,10 @@ interactions per grouping level.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        group_by  from_label    to_label        ct        p_gt        p_lt</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;character&gt; &lt;character&gt; &lt;character&gt; &lt;numeric&gt;   &lt;numeric&gt;   &lt;numeric&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1             1  celltype_A  celltype_A 0.6078431 0.000999001 1.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2             1  celltype_A  celltype_B 0.1568627 0.020979021 0.995004995</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2             1  celltype_A  celltype_B 0.1568627 0.028971029 0.986013986</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3             1  celltype_A  celltype_C 0.2352941 1.000000000 0.000999001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4             1  celltype_B  celltype_A 0.2916667 0.046953047 0.983016983</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5             1  celltype_B  celltype_B 0.0833333 0.454545455 0.802197802</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4             1  celltype_B  celltype_A 0.2916667 0.054945055 0.984015984</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5             1  celltype_B  celltype_B 0.0833333 0.470529471 0.821178821</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ...         ...         ...         ...       ...         ...         ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 23            3  celltype_B  celltype_B  0.787879 0.000999001 1.000000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 24            3  celltype_B  celltype_C  0.212121 1.000000000 0.000999001</span>
@@ -368,17 +352,17 @@ interactions per grouping level.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 27            3  celltype_C  celltype_C  0.765027 0.000999001 1.000000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        zscore interaction           p       sig    sigval</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;numeric&gt;   &lt;logical&gt;   &lt;numeric&gt; &lt;logical&gt; &lt;numeric&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    7.277495        TRUE 0.000999001      TRUE         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2    2.607528        TRUE 0.020979021     FALSE         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   -8.091884       FALSE 0.000999001      TRUE        -1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4    2.043291        TRUE 0.046953047     FALSE         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   -0.315012        TRUE 0.454545455     FALSE         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    7.467495        TRUE 0.000999001      TRUE         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    2.432331        TRUE 0.028971029     FALSE         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   -8.235605       FALSE 0.000999001      TRUE        -1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    1.952776        TRUE 0.054945055     FALSE         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   -0.305756        TRUE 0.470529471     FALSE         0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ...       ...         ...         ...       ...       ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23    7.36213        TRUE 0.000999001      TRUE         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24   -7.36213       FALSE 0.000999001      TRUE        -1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23    7.78653        TRUE 0.000999001      TRUE         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24   -7.78653       FALSE 0.000999001      TRUE        -1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 25         NA          NA          NA        NA        NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26   -7.41956       FALSE 0.000999001      TRUE        -1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27    7.41956        TRUE 0.000999001      TRUE         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26   -7.55069       FALSE 0.000999001      TRUE        -1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27    7.55069        TRUE 0.000999001      TRUE         1</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

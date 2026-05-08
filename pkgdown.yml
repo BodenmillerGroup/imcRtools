@@ -1,6 +1,6 @@
-pandoc: 3.1.11
+pandoc: 3.8.3
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   imcRtools: imcRtools.html
-last_built: 2026-03-30T11:39Z
+last_built: 2026-05-08T21:15Z
