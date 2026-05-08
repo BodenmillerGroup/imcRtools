@@ -272,4 +272,4 @@ Changes in version 1.17.2 (2026-04-24)
 
 Changes in version 1.19.1 (2026-05-08)
 
-# fixed bug in plotSpotHeatmap function
+# fixed bug in plotSpotHeatmap function that had also affected RELEASE_3_23
