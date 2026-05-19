@@ -272,4 +272,4 @@ Changes in version 1.17.2 (2026-04-24)
 
 Changes in version 1.18.1 (2026-05-08)
 
-# bug fix in usage of aggregateAcrossCells function
++ bug fix in usage of aggregateAcrossCells function
