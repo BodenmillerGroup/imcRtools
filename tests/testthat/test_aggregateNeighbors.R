@@ -368,7 +368,7 @@ test_that("aggregateNeighbors function works", {
     colData(cur_sce_2)$from <- from(colPair(pancreasSCE,"knn_10"))
     
     cur_sce_2 <- aggregateAcrossCells(assay(cur_sce_2, "exprs"),
-                                      factors = list(from = cur_sce_2$from)
+                                      factors = list(from = cur_sce_2$from),
                                       compute.median = TRUE)
     
         expect_equal(as.matrix(cur_sce$median_aggregatedExpression),
