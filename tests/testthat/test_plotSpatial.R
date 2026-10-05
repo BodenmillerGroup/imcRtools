@@ -306,7 +306,7 @@ test_that("plotSpatial function works", {
     expect_equal(p2$data$ImageNb, pancreasSCE$ImageNb)
     
     cur_graph <- igraph::as.igraph(attributes(p$data)$graph)
-    cur_graph <- igraph::as.undirected(cur_graph)
+    cur_graph <- igraph::as_undirected(cur_graph)
     cur_graph_2 <- igraph::as.igraph(attributes(p2$data)$graph)
     
     cur_edges <- igraph::as_edgelist(cur_graph)
@@ -336,7 +336,7 @@ test_that("plotSpatial function works", {
     expect_equal(p2$data$ImageNb, pancreasSCE$ImageNb)
     
     cur_graph <- igraph::as.igraph(attributes(p$data)$graph)
-    cur_graph <- igraph::as.undirected(cur_graph)
+    cur_graph <- igraph::as_undirected(cur_graph)
     cur_graph_2 <- igraph::as.igraph(attributes(p2$data)$graph)
     
     cur_edges <- igraph::as_edgelist(cur_graph)
@@ -366,7 +366,7 @@ test_that("plotSpatial function works", {
     expect_equal(p2$data$ImageNb, pancreasSCE$ImageNb)
     
     cur_graph <- igraph::as.igraph(attributes(p$data)$graph)
-    cur_graph <- igraph::as.undirected(cur_graph)
+    cur_graph <- igraph::as_undirected(cur_graph)
     cur_graph_2 <- igraph::as.igraph(attributes(p2$data)$graph)
     
     cur_edges <- igraph::as_edgelist(cur_graph)

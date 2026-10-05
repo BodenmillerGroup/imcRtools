@@ -72,17 +72,21 @@
                                                             ncol = 2, byrow = FALSE,
                                                             dimnames = list(NULL,
                                                                             c("Pos_X", "Pos_Y")))
-                                 colData(y) <- cbind(colData(y),
-                                                     DataFrame(cur_props[, !colnames(cur_props) %in%
-                                                                           c(cell_id, coords)],
-                                                               check.names = FALSE))
+                                 
+                                 cur_sub <- cur_props[, !colnames(cur_props) %in% c(cell_id, coords),
+                                                      drop = FALSE]
+                                 cur_DF  <- DataFrame(cur_sub, check.names = FALSE)
+                                 colnames(cur_DF) <- colnames(cur_sub)
+                                 colData(y) <- cbind(colData(y), cur_DF)
+                                 
                              } else {
                                  colData(y)$Pos_X <- cur_props[[coords[1]]]
                                  colData(y)$Pos_Y <- cur_props[[coords[2]]]
-                                 colData(y) <- cbind(colData(y),
-                                                     DataFrame(cur_props[, !colnames(cur_props) %in%
-                                                                           c(cell_id, coords)],
-                                                               check.names = FALSE))
+                                 cur_sub <- cur_props[, !colnames(cur_props) %in% c(cell_id, coords),
+                                                      drop = FALSE]
+                                 cur_DF  <- DataFrame(cur_sub, check.names = FALSE)
+                                 colnames(cur_DF) <- colnames(cur_sub)
+                                 colData(y) <- cbind(colData(y), cur_DF)
                              }
 
                              return(y)
