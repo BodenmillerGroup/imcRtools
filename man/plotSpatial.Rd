@@ -191,7 +191,7 @@ plotSpatial(sce, img_id = "ImageNb",
 \seealso{
 \code{\link{buildSpatialGraph}} for constructing interaction graphs
 
-\code{\link{ggraph}} for handling graph aesthetics
+\code{\link[ggraph]{ggraph}} for handling graph aesthetics
 }
 \author{
 Nils Eling (\email{nils.eling@dqbm.uzh.ch})

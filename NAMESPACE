@@ -25,141 +25,196 @@ export(show_cpout_features)
 export(testInteractions)
 import(SingleCellExperiment)
 import(ggraph)
-importFrom(BiocNeighbors,KmknnParam)
-importFrom(BiocNeighbors,findKNN)
-importFrom(BiocNeighbors,findNeighbors)
-importFrom(BiocParallel,SerialParam)
-importFrom(BiocParallel,bplapply)
+importFrom(BiocNeighbors,
+  KmknnParam,
+  findKNN,
+  findNeighbors
+)
+importFrom(BiocParallel,
+  SerialParam,
+  bplapply
+)
 importFrom(DT,datatable)
-importFrom(EBImage,Image)
-importFrom(EBImage,readImage)
-importFrom(MatrixGenerics,rowMaxs)
-importFrom(MatrixGenerics,rowMeans)
-importFrom(MatrixGenerics,rowMedians)
-importFrom(MatrixGenerics,rowMins)
-importFrom(RTriangle,pslg)
-importFrom(RTriangle,triangulate)
-importFrom(S4Vectors,DataFrame)
-importFrom(S4Vectors,SelfHits)
-importFrom(S4Vectors,isRedundantHit)
-importFrom(S4Vectors,mcols)
-importFrom(S4Vectors,metadata)
-importFrom(SingleCellExperiment,SingleCellExperiment)
-importFrom(SingleCellExperiment,colData)
-importFrom(SingleCellExperiment,colPair)
-importFrom(SpatialExperiment,"spatialCoords<-")
-importFrom(SpatialExperiment,SpatialExperiment)
-importFrom(SpatialExperiment,spatialCoords)
-importFrom(SpatialExperiment,spatialCoordsNames)
-importFrom(SummarizedExperiment,"colData<-")
-importFrom(SummarizedExperiment,"metadata<-")
-importFrom(SummarizedExperiment,"rowData<-")
-importFrom(SummarizedExperiment,assay)
-importFrom(SummarizedExperiment,assayNames)
-importFrom(SummarizedExperiment,colData)
+importFrom(EBImage,
+  Image,
+  readImage
+)
+importFrom(MatrixGenerics,
+  rowMaxs,
+  rowMeans,
+  rowMedians,
+  rowMins
+)
+importFrom(RTriangle,
+  pslg,
+  triangulate
+)
+importFrom(S4Vectors,
+  DataFrame,
+  SelfHits,
+  isRedundantHit,
+  mcols,
+  metadata
+)
+importFrom(SingleCellExperiment,
+  SingleCellExperiment,
+  colData,
+  colPair
+)
+importFrom(SpatialExperiment,
+  "spatialCoords<-",
+  SpatialExperiment,
+  spatialCoords,
+  spatialCoordsNames
+)
+importFrom(SummarizedExperiment,
+  "assay<-",
+  "colData<-",
+  "metadata<-",
+  "rowData<-",
+  assay,
+  assayNames,
+  colData
+)
 importFrom(abind,abind)
 importFrom(concaveman,concaveman)
-importFrom(cytomapper,"channelNames<-")
-importFrom(cytomapper,CytoImageList)
-importFrom(cytomapper,channelNames)
-importFrom(data.table,":=")
-importFrom(data.table,CJ)
-importFrom(data.table,as.data.table)
-importFrom(data.table,data.table)
-importFrom(data.table,dcast)
-importFrom(data.table,dcast.data.table)
-importFrom(data.table,melt)
-importFrom(data.table,melt.data.table)
-importFrom(data.table,setnames)
-importFrom(data.table,setorder)
-importFrom(distances,distance_columns)
-importFrom(distances,distances)
-importFrom(dplyr,across)
-importFrom(dplyr,all_of)
-importFrom(dplyr,as_tibble)
-importFrom(dplyr,contains)
-importFrom(dplyr,count)
-importFrom(dplyr,filter)
-importFrom(dplyr,group_by)
-importFrom(dplyr,group_by_all)
-importFrom(dplyr,group_by_at)
-importFrom(dplyr,join_by)
-importFrom(dplyr,left_join)
-importFrom(dplyr,mutate)
-importFrom(dplyr,n)
-importFrom(dplyr,nest_by)
-importFrom(dplyr,pull)
-importFrom(dplyr,select)
-importFrom(dplyr,summarise)
-importFrom(dplyr,summarize)
-importFrom(dplyr,sym)
-importFrom(ggplot2,aes)
-importFrom(ggplot2,coord_fixed)
-importFrom(ggplot2,element_blank)
-importFrom(ggplot2,element_text)
-importFrom(ggplot2,ggtitle)
-importFrom(ggplot2,guide_colorbar)
-importFrom(ggplot2,guide_legend)
-importFrom(ggplot2,guides)
-importFrom(ggplot2,labs)
-importFrom(ggplot2,scale_color_manual)
-importFrom(ggplot2,scale_shape_manual)
-importFrom(ggplot2,scale_size_manual)
-importFrom(ggplot2,scale_x_reverse)
-importFrom(ggplot2,scale_y_reverse)
-importFrom(ggplot2,theme)
-importFrom(ggraph,geom_edge_link)
-importFrom(ggraph,geom_node_label)
-importFrom(ggraph,geom_node_point)
-importFrom(ggraph,ggraph)
+importFrom(cytomapper,
+  "channelNames<-",
+  CytoImageList,
+  channelNames
+)
+importFrom(data.table,
+  ":=",
+  CJ,
+  as.data.table,
+  data.table,
+  dcast,
+  dcast.data.table,
+  melt,
+  melt.data.table,
+  setnames,
+  setorder
+)
+importFrom(distances,
+  distance_columns,
+  distances
+)
+importFrom(dplyr,
+  across,
+  all_of,
+  as_tibble,
+  contains,
+  count,
+  everything,
+  filter,
+  group_by,
+  group_by_all,
+  group_by_at,
+  join_by,
+  left_join,
+  mutate,
+  n,
+  n_distinct,
+  nest_by,
+  pull,
+  select,
+  summarise,
+  summarize,
+  sym
+)
+importFrom(ggplot2,
+  aes,
+  coord_fixed,
+  element_blank,
+  element_text,
+  ggtitle,
+  guide_colorbar,
+  guide_legend,
+  guides,
+  labs,
+  scale_color_manual,
+  scale_shape_manual,
+  scale_size_manual,
+  scale_x_reverse,
+  scale_y_reverse,
+  theme
+)
+importFrom(ggraph,
+  geom_edge_link,
+  geom_node_label,
+  geom_node_point,
+  ggraph
+)
 importFrom(grDevices,chull)
-importFrom(grid,arrow)
-importFrom(grid,unit)
-importFrom(igraph,as.directed)
-importFrom(igraph,as.undirected)
-importFrom(igraph,as_edgelist)
-importFrom(igraph,cluster_louvain)
-importFrom(igraph,components)
-importFrom(igraph,edge_attr)
-importFrom(igraph,graph_from_adj_list)
-importFrom(igraph,graph_from_data_frame)
-importFrom(igraph,graph_from_edgelist)
-importFrom(igraph,layout.sugiyama)
-importFrom(igraph,membership)
-importFrom(igraph,simplify)
-importFrom(igraph,sizes)
-importFrom(igraph,vertex_attr)
+importFrom(grid,
+  arrow,
+  unit
+)
+importFrom(igraph,
+  as.directed,
+  as.undirected,
+  as_edgelist,
+  cluster_louvain,
+  components,
+  edge_attr,
+  graph_from_adj_list,
+  graph_from_data_frame,
+  graph_from_edgelist,
+  layout.sugiyama,
+  membership,
+  simplify,
+  sizes,
+  vertex_attr
+)
 importFrom(magrittr,"%>%")
-importFrom(methods,as)
-importFrom(methods,is)
+importFrom(methods,
+  as,
+  is
+)
 importFrom(pheatmap,pheatmap)
-importFrom(readr,cols)
-importFrom(readr,read_delim)
+importFrom(readr,
+  cols,
+  read_delim
+)
 importFrom(rlang,.data)
-importFrom(scrapper,aggregateAcrossCells)
-importFrom(scrapper,aggregateAcrossCells.se)
-importFrom(sf,st_area)
-importFrom(sf,st_buffer)
-importFrom(sf,st_cast)
-importFrom(sf,st_distance)
-importFrom(sf,st_intersects)
-importFrom(sf,st_multipoint)
-importFrom(sf,st_polygon)
-importFrom(sf,st_sfc)
-importFrom(stats,dist)
-importFrom(stats,median)
-importFrom(stats,na.omit)
-importFrom(stats,sd)
-importFrom(stats,var)
-importFrom(stringr,str_count)
-importFrom(stringr,str_extract)
-importFrom(stringr,str_extract_all)
-importFrom(stringr,str_replace)
-importFrom(stringr,str_split)
+importFrom(scrapper,
+  aggregateAcrossCells,
+  aggregateAcrossCells.se
+)
+importFrom(sf,
+  st_area,
+  st_buffer,
+  st_cast,
+  st_distance,
+  st_intersects,
+  st_multipoint,
+  st_polygon,
+  st_sfc
+)
+importFrom(stats,
+  dist,
+  median,
+  na.omit,
+  sd,
+  var
+)
+importFrom(stringr,
+  str_count,
+  str_extract,
+  str_extract_all,
+  str_replace,
+  str_split
+)
 importFrom(tidygraph,tbl_graph)
 importFrom(tidyselect,all_of)
-importFrom(utils,getFromNamespace)
-importFrom(utils,globalVariables)
-importFrom(viridis,scale_color_viridis)
-importFrom(viridis,viridis)
+importFrom(utils,
+  capture.output,
+  getFromNamespace,
+  globalVariables,
+  read.csv
+)
+importFrom(viridis,
+  scale_color_viridis,
+  viridis
+)
 importFrom(vroom,vroom)

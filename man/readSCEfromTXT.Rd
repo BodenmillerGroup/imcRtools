@@ -39,7 +39,7 @@ channels are stored as rows.
 }
 \description{
 Helper function to process raw .txt files acquired by the
-Hyperion imaging system into a \code{\linkS4class{SingleCellExperiment}}
+Hyperion imaging system into a \code{\linkS4class[SingleCellExperiment]{SingleCellExperiment}}
 object. This function is mainly used to read-in data generated from a
 "spillover slide". Here, each .txt file contains the measurements of
 multiple pixels for a single stain across all open channels.

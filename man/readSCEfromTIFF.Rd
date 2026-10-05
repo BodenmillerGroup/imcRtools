@@ -24,8 +24,8 @@ channels are stored as rows.
 }
 \description{
 Helper function to process .tiff files created with the 
-steinbock pipeline \href{https://bodenmillergroup.github.io/steinbock/latest/} 
-into a \code{\linkS4class{SingleCellExperiment}}
+steinbock pipeline \href{https://bodenmillergroup.github.io/steinbock/latest/}{steinbokc} 
+into a \code{\linkS4class[SingleCellExperiment]{SingleCellExperiment}}
 object. This function is mainly used to read-in data generated from a
 "spillover slide" from the new XTi generation of IMC machines. 
 Here, each .tiff file contains the measurements of

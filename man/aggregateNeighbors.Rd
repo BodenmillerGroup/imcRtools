@@ -49,7 +49,7 @@ across all neighboring cells. Supported entries are "mean", "median", "sd",
 
 \item{name}{single character specifying the name of the data frame to be
 saved in the \code{colData(object)}. Defaults to "aggregatedNeighbors" when
-\code{summarize_by = "metadata"} or "{statistic}_aggregatedExpression" when
+\code{summarize_by = "metadata"} or "\{statistic\}_aggregatedExpression" when
 \code{summarize_by = "expression"}.}
 }
 \value{

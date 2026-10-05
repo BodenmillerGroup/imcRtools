@@ -1156,6 +1156,7 @@
 }
 
 #### plotInteractions helpers ####
+utils::globalVariables("weight")
 
 #' @importFrom grid arrow unit
 #' @importFrom ggplot2 labs

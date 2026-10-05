@@ -87,8 +87,8 @@ features be scaled by \code{extract_scalingfactor_from}.}
 entries of the \code{image_file} contain the image specific scaling factor.}
 
 \item{return_as}{should the object be returned as
-\code{\linkS4class{SpatialExperiment}} (\code{return_as = "spe"}) or
-\code{\linkS4class{SingleCellExperiment}} (\code{return_as = "sce"}).}
+\code{\linkS4class[SpatialExperiment]{SpatialExperiment}} (\code{return_as = "spe"}) or
+\code{\linkS4class[SingleCellExperiment]{SingleCellExperiment}} (\code{return_as = "sce"}).}
 }
 \value{
 returns a \code{SpatialExperiment} or \code{SingleCellExperiment}
@@ -96,8 +96,8 @@ object with markers in rows and cells in columns.
 }
 \description{
 Reader function to generate a
-\code{\linkS4class{SpatialExperiment}} or
-\code{\linkS4class{SingleCellExperiment}} object from single-cell data
+\code{\linkS4class[SpatialExperiment]{SpatialExperiment}} or
+\code{\linkS4class[SingleCellExperiment]{SingleCellExperiment}} object from single-cell data
 obtained by the 
 \href{https://github.com/BodenmillerGroup/ImcSegmentationPipeline}{ImcSegmentationPipeline}
 pipeline.

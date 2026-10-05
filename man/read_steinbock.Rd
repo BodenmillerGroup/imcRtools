@@ -59,8 +59,8 @@ somewhere else.}
 file containing the channel names.}
 
 \item{return_as}{should the object be returned as 
-\code{\linkS4class{SpatialExperiment}} (\code{return_as = "spe"}) or
-\code{\linkS4class{SingleCellExperiment}} (\code{return_as = "sce"}).}
+\code{\linkS4class[SpatialExperiment]{SpatialExperiment}} (\code{return_as = "spe"}) or
+\code{\linkS4class[SingleCellExperiment]{SingleCellExperiment}} (\code{return_as = "sce"}).}
 
 \item{BPPARAM}{parameters for parallelised processing.}
 }
@@ -70,8 +70,8 @@ object markers in rows and cells in columns.
 }
 \description{
 Reader function to generate a
-\code{\linkS4class{SpatialExperiment}} or
-\code{\linkS4class{SingleCellExperiment}} object from single-cell data
+\code{\linkS4class[SpatialExperiment]{SpatialExperiment}} or
+\code{\linkS4class[SingleCellExperiment]{SingleCellExperiment}} object from single-cell data
 obtained by the 
 \href{https://github.com/BodenmillerGroup/steinbock}{steinbock}
 pipeline.
