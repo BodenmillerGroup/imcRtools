@@ -46,7 +46,7 @@ Imports:
     dplyr,
     magrittr,
     DT,
-    igraph,
+    igraph (>= 2.1.0),
     SingleCellExperiment,
     vroom,
     BiocNeighbors,

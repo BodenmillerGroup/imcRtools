@@ -280,3 +280,4 @@ Changes in version 1.19.2 (2026-10-05):
 + moved grid from Suggests to Imports
 + require scrapper >= 1.6.0 for aggregateAcrossCells.se
 + colData column names from steinbock regionprops now retain their original names (e.g. 'centroid-0' instead of 'centroid.0')
++ updated as_directed, as_undirected and layout_with_sugiyama functions

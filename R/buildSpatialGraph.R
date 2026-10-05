@@ -119,8 +119,8 @@
 #'
 #' @importFrom BiocNeighbors findNeighbors findKNN KmknnParam
 #' @importFrom SpatialExperiment spatialCoords
-#' @importFrom igraph graph_from_adj_list graph_from_edgelist as.undirected
-#'   simplify as_edgelist as.directed
+#' @importFrom igraph graph_from_adj_list graph_from_edgelist as_undirected
+#'   simplify as_edgelist as_directed
 #' @importFrom RTriangle triangulate pslg
 #' @importFrom stats dist
 #' @export
@@ -186,7 +186,7 @@ buildSpatialGraph <- function(object,
 
                                 cur_graph <- graph_from_edgelist(cur_edges,
                                                             directed = FALSE)
-                                cur_graph <- as.directed(cur_graph,
+                                cur_graph <- as_directed(cur_graph,
                                                         mode = "mutual")
 
                             } else {
@@ -215,9 +215,9 @@ buildSpatialGraph <- function(object,
                                 }
 
                                 if (!directed) {
-                                    cur_graph <- as.undirected(cur_graph,
+                                    cur_graph <- as_undirected(cur_graph,
                                                             mode = "collapse")
-                                    cur_graph <- as.directed(cur_graph,
+                                    cur_graph <- as_directed(cur_graph,
                                                             mode = "mutual")
                                 }
                             }
