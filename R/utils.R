@@ -73,14 +73,16 @@
                                                             dimnames = list(NULL,
                                                                             c("Pos_X", "Pos_Y")))
                                  colData(y) <- cbind(colData(y),
-                                                     cur_props[,!colnames(cur_props) %in%
-                                                                   c(cell_id, coords)])
+                                                     DataFrame(cur_props[, !colnames(cur_props) %in%
+                                                                           c(cell_id, coords)],
+                                                               check.names = FALSE))
                              } else {
                                  colData(y)$Pos_X <- cur_props[[coords[1]]]
                                  colData(y)$Pos_Y <- cur_props[[coords[2]]]
                                  colData(y) <- cbind(colData(y),
-                                                     cur_props[,!colnames(cur_props) %in%
-                                                                   c(cell_id, coords)])
+                                                     DataFrame(cur_props[, !colnames(cur_props) %in%
+                                                                           c(cell_id, coords)],
+                                                               check.names = FALSE))
                              }
 
                              return(y)
@@ -1052,7 +1054,7 @@
 
 #' @importFrom ggplot2 guide_legend guide_colorbar guides scale_size_manual
 #' @importFrom ggraph geom_edge_link geom_node_label geom_node_point ggraph
-#' @importFrom igraph layout.sugiyama vertex_attr
+#' @importFrom igraph layout_with_sugiyama vertex_attr
 
 .generateSpatialContextPlot <- function(graph,
                                         node_color_by,
@@ -1122,7 +1124,7 @@
   }  
   
   # specify vertical layout with sugiyama
-  LO <- layout.sugiyama(graph, vertex_attr(graph,"length"))
+  LO <- layout_with_sugiyama(graph, vertex_attr(graph,"length"))
   
   p <- ggraph(graph, layout = LO$layout) +
       cur_geom_edge +
