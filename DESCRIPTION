@@ -1,5 +1,5 @@
 Package: imcRtools
-Version: 1.19.1
+Version: 1.19.2
 Title: Methods for imaging mass cytometry data analysis
 Description: 
     This R package supports the handling and analysis of imaging mass cytometry 
@@ -35,7 +35,7 @@ Imports:
     SummarizedExperiment,
     methods,
     pheatmap,
-    scrapper,
+    scrapper (>= 1.6.0),
     stringr,
     readr,
     EBImage,
@@ -61,19 +61,20 @@ Imports:
     distances,
     MatrixGenerics,
     rlang,
+    grid,
     grDevices
 Suggests:
     CATALYST,
-    grid,
     tidyr,
     BiocStyle,
     knitr,
     rmarkdown,
     markdown,
+    RColorBrewer,
     testthat
 biocViews: ImmunoOncology, SingleCell, Spatial, DataImport, Clustering
 VignetteBuilder: knitr
 URL: https://github.com/BodenmillerGroup/imcRtools
 BugReports: https://github.com/BodenmillerGroup/imcRtools/issues
-RoxygenNote: 7.3.3
 Encoding: UTF-8
+Config/roxygen2/version: 8.1.0

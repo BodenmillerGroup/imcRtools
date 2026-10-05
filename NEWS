@@ -272,4 +272,11 @@ Changes in version 1.17.2 (2026-04-24)
 
 Changes in version 1.19.1 (2026-05-08)
 
-# fixed bug in plotSpotHeatmap function that had also affected RELEASE_3_23
++ fixed bug in plotSpotHeatmap function that had also affected RELEASE_3_23
+
+Changes in version 1.19.2 (2026-10-05):
+
++ fixed malformed Rd markup in testInteractions, readSCEfromTIFF and aggregateNeighbors
++ moved grid from Suggests to Imports
++ require scrapper >= 1.6.0 for aggregateAcrossCells.se
++ colData column names from steinbock regionprops now retain their original names (e.g. 'centroid-0' instead of 'centroid.0')
