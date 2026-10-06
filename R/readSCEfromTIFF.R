@@ -1,8 +1,8 @@
 #' @title Generates a SingleCellExperiment from .tiff files
 #'
 #' @description Helper function to process .tiff files created with the 
-#' steinbock pipeline \href{https://bodenmillergroup.github.io/steinbock/latest/} 
-#' into a \code{\linkS4class{SingleCellExperiment}}
+#' steinbock pipeline \href{https://bodenmillergroup.github.io/steinbock/latest/}{steinbokc} 
+#' into a \code{\linkS4class[SingleCellExperiment]{SingleCellExperiment}}
 #' object. This function is mainly used to read-in data generated from a
 #' "spillover slide" from the new XTi generation of IMC machines. 
 #' Here, each .tiff file contains the measurements of
@@ -62,7 +62,8 @@
 #' @importFrom S4Vectors DataFrame
 #' @importFrom EBImage readImage
 #' @importFrom SummarizedExperiment colData<- rowData<-
-#' @importFrom stringr str_extract str_split
+#' @importFrom stringr str_extract str_split 
+#' @importFrom utils read.csv
 #' @export
 readSCEfromTIFF <- function(x, 
                             image_df_path,

@@ -29,12 +29,12 @@ of the image}
 This is only recommended for very large images.}
 }
 \value{
-returns a \code{\linkS4class{CytoImageList}} object containing one
-\code{\linkS4class{Image}} object per .txt file.
+returns a \code{\linkS4class[cytomapper]{CytoImageList}} object containing one
+\code{\linkS4class[EBImage]{Image}} object per .txt file.
 }
 \description{
-Reader function to generate \code{\linkS4class{Image}} objects
-in form of a \code{\linkS4class{CytoImageList}} container from .txt files.
+Reader function to generate \code{\linkS4class[EBImage]{Image}} objects
+in form of a \code{\linkS4class[cytomapper]{CytoImageList}} container from .txt files.
 }
 \section{Imaging mass cytometry .txt files}{
 
@@ -43,7 +43,7 @@ one .txt file per acquisition. These files store the ion counts per
 pixel and channel. 
 
 This function reads these .txt files into a single
-\code{\linkS4class{CytoImageList}} object for downstream analysis. The
+\code{\linkS4class[cytomapper]{CytoImageList}} object for downstream analysis. The
 \code{pattern} argument allows selection of all .txt files or a specific
 subset of files. The \code{\link[cytomapper]{channelNames}} of the
 \code{CytoImageList} object are determined by the \code{channel_pattern}
@@ -67,11 +67,11 @@ z
 
 }
 \seealso{
-\code{\linkS4class{CytoImageList}} for the container
+\code{\linkS4class[cytomapper]{CytoImageList}} for the container
 
 \code{\link[BiocParallel]{MulticoreParam}} for parallelized processing
 
-\code{\linkS4class{Image}} for the multi-channel image object
+\code{\linkS4class[EBImage]{Image}} for the multi-channel image object
 
 \code{vignette("cytomapper")} for visualization of multi-channel images
 }

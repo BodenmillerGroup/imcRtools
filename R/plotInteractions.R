@@ -108,6 +108,7 @@
 #' @importFrom tidyselect all_of
 #' @importFrom igraph graph_from_data_frame
 #' @importFrom stats na.omit
+#' @importFrom dplyr everything
 #' @export
 
 plotInteractions <- function(out,
@@ -138,13 +139,13 @@ plotInteractions <- function(out,
   # Edge attributes
   if (is.null(edge_width_by)) {
     edges <- out %>% as.data.frame() %>%
-      select(from_label, to_label, color = all_of(edge_color_by)) %>%
+      select("from_label", "to_label", color = all_of(edge_color_by)) %>%
       mutate(weight = 1)
   } else {
     edges <- out %>% as.data.frame() %>%
-      select(from_label, to_label, color = all_of(edge_color_by), weight = all_of(edge_width_by)) %>%
-      group_by(from_label, to_label) %>%
-      mutate(weight = mean(weight, na.rm = TRUE))
+      select("from_label", "to_label", color = all_of(edge_color_by), weight = all_of(edge_width_by)) %>%
+      group_by(across(all_of(c("from_label", "to_label")))) %>%
+      mutate(weight = mean(.data[["weight"]], na.rm = TRUE))
   }
   
   # Node attributes

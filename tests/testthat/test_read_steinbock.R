@@ -543,8 +543,8 @@ test_that("read_steinbock function works", {
     
     cur_spe <- read_steinbock(path, extract_coords_from = c("area", "axis_major_length"))
     
-    expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "centroid.0",
-                                            "centroid.1", "axis_minor_length", "eccentricity",
+    expect_equal(names(colData(cur_spe)), c("sample_id", "ObjectNumber", "centroid-0",
+                                            "centroid-1", "axis_minor_length", "eccentricity",
                                             "width_px", "height_px"))
     expect_equal(spatialCoordsNames(cur_spe), c("Pos_X", "Pos_Y"))
     
@@ -552,8 +552,8 @@ test_that("read_steinbock function works", {
     cur_morph <- lapply(cur_files, readr::read_csv)
     cur_morph <- do.call("rbind", cur_morph)
     
-    expect_equal(cur_spe$`centroid.1`, cur_morph$`centroid-1`)
-    expect_equal(cur_spe$`centroid.0`, cur_morph$`centroid-0`)
+    expect_equal(cur_spe$`centroid-1`, cur_morph$`centroid-1`)
+    expect_equal(cur_spe$`centroid-0`, cur_morph$`centroid-0`)
     expect_equal(cur_spe$axis_minor_length, cur_morph$axis_minor_length)
     expect_equal(cur_spe$eccentricity, cur_morph$eccentricity)
     expect_equal(as.numeric(spatialCoords(cur_spe)[,1]), cur_morph$area)
@@ -561,16 +561,16 @@ test_that("read_steinbock function works", {
     
     cur_sce <- read_steinbock(path, return_as = "sce", extract_coords_from = c("area", "axis_major_length"))
     
-    expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectNumber", "Pos_X", "Pos_Y", "centroid.0",
-                                            "centroid.1", "axis_minor_length", "eccentricity",
+    expect_equal(names(colData(cur_sce)), c("sample_id", "ObjectNumber", "Pos_X", "Pos_Y", "centroid-0",
+                                            "centroid-1", "axis_minor_length", "eccentricity",
                                             "width_px", "height_px"))
     
     cur_files <- list.files(file.path(path, "regionprops"), full.names = TRUE)
     cur_morph <- lapply(cur_files, readr::read_csv)
     cur_morph <- do.call("rbind", cur_morph)
     
-    expect_equal(cur_sce$`centroid.0`, cur_morph$`centroid-0`)
-    expect_equal(cur_sce$`centroid.1`, cur_morph$`centroid-1`)
+    expect_equal(cur_sce$`centroid-0`, cur_morph$`centroid-0`)
+    expect_equal(cur_sce$`centroid-1`, cur_morph$`centroid-1`)
     expect_equal(cur_sce$axis_minor_length, cur_morph$axis_minor_length)
     expect_equal(cur_sce$eccentricity, cur_morph$eccentricity)
     expect_equal(as.numeric(cur_sce$Pos_X), cur_morph$area)

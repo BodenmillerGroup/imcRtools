@@ -127,14 +127,14 @@
 #' @seealso 
 #' \code{\link{buildSpatialGraph}} for constructing interaction graphs
 #' 
-#' \code{\link{ggraph}} for handling graph aesthetics
+#' \code{\link[ggraph]{ggraph}} for handling graph aesthetics
 #' 
 #' @author Nils Eling (\email{nils.eling@@dqbm.uzh.ch})
 #' 
 #' @import ggraph
 #' @importFrom tidygraph tbl_graph  
 #' @importFrom ggplot2 theme element_text element_blank scale_color_manual
-#' scale_size_manual scale_shape_manual aes
+#'   scale_size_manual scale_shape_manual aes
 #' @importFrom rlang .data
 #' @export
 plotSpatial <- function(object,

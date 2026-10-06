@@ -1429,6 +1429,8 @@
   }
 }
 
+#' @importFrom utils capture.output
+#' @importFrom dplyr n_distinct
 .valid.plotInteractions.input <- function(out,
                                           object,
                                           label,
@@ -1548,7 +1550,7 @@
       stop("'edge_color_by' needs to be contained in 'out'.")
     }
     
-    test <- out %>% group_by(from_label, to_label) %>% summarise(n_unique = n_distinct(.data[[edge_color_by]]))
+    test <- out %>% group_by(across(all_of(c("from_label", "to_label")))) %>% summarise(n_unique = n_distinct(.data[[edge_color_by]]))
     if (any(test$n_unique > 1)) {
       stop("'edge_color_by' needs to be unique for all 'from_label'-'to_label' pairs.")
     }
@@ -1581,7 +1583,7 @@
       stop("'edge_width_by' entries need to be numeric.")
     }
     
-    test <- out %>% as.data.frame() %>% group_by(from_label, to_label) %>% summarise(mean = mean(.data[[edge_width_by]], na.rm = TRUE))
+    test <- out %>% as.data.frame() %>% group_by(across(all_of(c("from_label", "to_label")))) %>% summarise(mean = mean(.data[[edge_width_by]], na.rm = TRUE))
     if (anyNA(test$mean)) {
       missing <- test %>% filter(is.na(mean))
       stop("Missing weights for some 'from_label'-'to_label' pairs:\n", 

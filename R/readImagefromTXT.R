@@ -1,7 +1,7 @@
 #' @title Reads one or multiple .txt files into a CytoImageList object
 #'
-#' @description Reader function to generate \code{\linkS4class{Image}} objects
-#' in form of a \code{\linkS4class{CytoImageList}} container from .txt files.
+#' @description Reader function to generate \code{\linkS4class[EBImage]{Image}} objects
+#' in form of a \code{\linkS4class[cytomapper]{CytoImageList}} container from .txt files.
 #'
 #' @param path Full path to where the individual .txt files are located. This is
 #' usualy the path where the .mcd file is located.
@@ -14,8 +14,8 @@
 #' @param BPPARAM parameters for parallelized reading in of images. 
 #' This is only recommended for very large images. 
 #' 
-#' @return returns a \code{\linkS4class{CytoImageList}} object containing one
-#' \code{\linkS4class{Image}} object per .txt file.
+#' @return returns a \code{\linkS4class[cytomapper]{CytoImageList}} object containing one
+#' \code{\linkS4class[EBImage]{Image}} object per .txt file.
 #' 
 #' @section Imaging mass cytometry .txt files:
 #' As part of the raw data folder, the Hyperion imaging system writes out
@@ -23,7 +23,7 @@
 #' pixel and channel. 
 #' 
 #' This function reads these .txt files into a single
-#' \code{\linkS4class{CytoImageList}} object for downstream analysis. The
+#' \code{\linkS4class[cytomapper]{CytoImageList}} object for downstream analysis. The
 #' \code{pattern} argument allows selection of all .txt files or a specific
 #' subset of files. The \code{\link[cytomapper]{channelNames}} of the
 #' \code{CytoImageList} object are determined by the \code{channel_pattern}
@@ -45,11 +45,11 @@
 #' z
 #' 
 #' @seealso 
-#' \code{\linkS4class{CytoImageList}} for the container
+#' \code{\linkS4class[cytomapper]{CytoImageList}} for the container
 #' 
 #' \code{\link[BiocParallel]{MulticoreParam}} for parallelized processing
 #' 
-#' \code{\linkS4class{Image}} for the multi-channel image object
+#' \code{\linkS4class[EBImage]{Image}} for the multi-channel image object
 #' 
 #' \code{vignette("cytomapper")} for visualization of multi-channel images
 #' 

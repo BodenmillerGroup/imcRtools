@@ -41,6 +41,7 @@
 #'
 #' @importFrom scrapper aggregateAcrossCells
 #' @importFrom scrapper aggregateAcrossCells.se
+#' @importFrom SummarizedExperiment assay<-
 #' @export
 binAcrossPixels <- function(object, 
                             bin_size,

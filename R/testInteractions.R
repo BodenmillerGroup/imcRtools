@@ -80,21 +80,21 @@
 #' \code{label} entry combination (\code{from_label}, \code{to_label}). The
 #' object contains following entries:
 #' 
-#' \itemize{
+#' \describe{
 #' \item{\code{ct}:}{ stores the interaction count as described in the details} 
 #' \item{\code{p_gt}:}{ stores the fraction of perturbations equal or greater 
 #' than \code{ct}}  
 #' \item{\code{p_lt}:}{ stores the fraction of perturbations equal or less than 
 #' \code{ct}}
 #' \item{\code{zscore}:}{ (observed count - mean of permuted counts) / sd of 
-#' permuted counts 
+#' permuted counts}
 #' \item{\code{interaction}:}{ is there the tendency for a positive interaction
 #' (attraction) between \code{from_label} and \code{to_label}? Is \code{p_lt}
 #' greater than \code{p_gt}?}
 #' \item{\code{p}:}{ the smaller value of \code{p_gt} and \code{p_lt}.} 
 #' \item{\code{sig}:}{ is \code{p} smaller than \code{p_threshold}?}
 #' \item{\code{sigval}:}{ Combination of \code{interaction} and \code{sig}.}
-#' \itemize{
+#' \describe{
 #' \item{-1:}{ \code{interaction == FALSE} and \code{sig == TRUE}}  
 #' \item{0:}{ \code{sig == FALSE}}  
 #' \item{1:}{ \code{interaction == TRUE} and \code{sig == TRUE}}

@@ -72,15 +72,17 @@
                                                             ncol = 2, byrow = FALSE,
                                                             dimnames = list(NULL,
                                                                             c("Pos_X", "Pos_Y")))
+                                 
                                  colData(y) <- cbind(colData(y),
-                                                     cur_props[,!colnames(cur_props) %in%
-                                                                   c(cell_id, coords)])
+                                                     cur_props[, !colnames(cur_props) %in%
+                                                                 c(cell_id, coords)])
+                                 
                              } else {
                                  colData(y)$Pos_X <- cur_props[[coords[1]]]
                                  colData(y)$Pos_Y <- cur_props[[coords[2]]]
                                  colData(y) <- cbind(colData(y),
-                                                     cur_props[,!colnames(cur_props) %in%
-                                                                   c(cell_id, coords)])
+                                                     cur_props[, !colnames(cur_props) %in%
+                                                                 c(cell_id, coords)])
                              }
 
                              return(y)
@@ -143,9 +145,15 @@
                           show_col_types = FALSE)
     cur_img_meta$sample_id <- sub("\\.[^.]*$", "", cur_img_meta$image)
     
-    cur_df <- as(left_join(x = as.data.frame(colData(object)), 
-                           y = cur_img_meta[,-1],
-                           by = "sample_id"), "DataFrame")
+    cur_cd  <- colData(object)
+    cur_in  <- as.data.frame(cur_cd)
+    colnames(cur_in) <- colnames(cur_cd)
+    
+    cur_joined <- left_join(x = cur_in, y = cur_img_meta[,-1],
+                            by = "sample_id")
+    
+    cur_df <- as(cur_joined, "DataFrame")
+    colnames(cur_df) <- colnames(cur_joined)
     
     if (!all.equal(paste(cur_df[["sample_id"]], cur_df[["ObjectNumber"]]),
                    paste(object[["sample_id"]], object[["ObjectNumber"]]))) {
@@ -1052,7 +1060,7 @@
 
 #' @importFrom ggplot2 guide_legend guide_colorbar guides scale_size_manual
 #' @importFrom ggraph geom_edge_link geom_node_label geom_node_point ggraph
-#' @importFrom igraph layout.sugiyama vertex_attr
+#' @importFrom igraph layout_with_sugiyama vertex_attr
 
 .generateSpatialContextPlot <- function(graph,
                                         node_color_by,
@@ -1122,7 +1130,7 @@
   }  
   
   # specify vertical layout with sugiyama
-  LO <- layout.sugiyama(graph, vertex_attr(graph,"length"))
+  LO <- layout_with_sugiyama(graph, vertex_attr(graph,"length"))
   
   p <- ggraph(graph, layout = LO$layout) +
       cur_geom_edge +
@@ -1156,6 +1164,7 @@
 }
 
 #### plotInteractions helpers ####
+utils::globalVariables("weight")
 
 #' @importFrom grid arrow unit
 #' @importFrom ggplot2 labs

@@ -27,7 +27,7 @@
 #' "var". Defaults to "mean" if not specified.
 #' @param name single character specifying the name of the data frame to be
 #' saved in the \code{colData(object)}. Defaults to "aggregatedNeighbors" when
-#' \code{summarize_by = "metadata"} or "{statistic}_aggregatedExpression" when
+#' \code{summarize_by = "metadata"} or "\{statistic\}_aggregatedExpression" when
 #' \code{summarize_by = "expression"}.
 #'
 #' @return returns an object of \code{class(object)} containing the aggregated
