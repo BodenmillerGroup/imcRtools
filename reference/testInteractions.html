@@ -19,7 +19,7 @@ from random permutations."><!-- mathjax --><script src="https://cdnjs.cloudflare
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">imcRtools</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.19.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.19.2</span>
       </span>
     </div>
 
@@ -136,9 +136,46 @@ are regarded as equal. Default taken from <code>all.equal</code>.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
+    <p>a DataFrame containing one row per <code>group_by</code> entry and unique
+<code>label</code> entry combination (<code>from_label</code>, <code>to_label</code>). The
+object contains following entries:</p>
+<dl><dt><code>ct</code>:</dt>
+<dd><p>stores the interaction count as described in the details</p></dd>
+
+<dt><code>p_gt</code>:</dt>
+<dd><p>stores the fraction of perturbations equal or greater
+than <code>ct</code></p></dd>
+
+<dt><code>p_lt</code>:</dt>
+<dd><p>stores the fraction of perturbations equal or less than
+<code>ct</code></p></dd>
+
+<dt><code>zscore</code>:</dt>
+<dd><p>(observed count - mean of permuted counts) / sd of
+permuted counts</p></dd>
+
+<dt><code>interaction</code>:</dt>
+<dd><p>is there the tendency for a positive interaction
+(attraction) between <code>from_label</code> and <code>to_label</code>? Is <code>p_lt</code>
+greater than <code>p_gt</code>?</p></dd>
+
+<dt><code>p</code>:</dt>
+<dd><p>the smaller value of <code>p_gt</code> and <code>p_lt</code>.</p></dd>
+
+<dt><code>sig</code>:</dt>
+<dd><p>is <code>p</code> smaller than <code>p_threshold</code>?</p></dd>
+
+<dt><code>sigval</code>:</dt>
+<dd><p>Combination of <code>interaction</code> and <code>sig</code>.</p></dd>
 
 
 
+
+
+
+
+</dl><p><code>NA</code> is returned if a certain label is not present in this grouping
+level.</p>
     </div>
     <div id="counting-and-summarizing-cell-cell-interactions">
     <h2>Counting and summarizing cell-cell interactions</h2>
@@ -378,7 +415,7 @@ interactions per grouping level.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
       </footer></div>
