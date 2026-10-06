@@ -73,20 +73,16 @@
                                                             dimnames = list(NULL,
                                                                             c("Pos_X", "Pos_Y")))
                                  
-                                 cur_sub <- cur_props[, !colnames(cur_props) %in% c(cell_id, coords),
-                                                      drop = FALSE]
-                                 cur_DF  <- DataFrame(cur_sub, check.names = FALSE)
-                                 colnames(cur_DF) <- colnames(cur_sub)
-                                 colData(y) <- cbind(colData(y), cur_DF)
+                                 colData(y) <- cbind(colData(y),
+                                                     cur_props[, !colnames(cur_props) %in%
+                                                                 c(cell_id, coords)])
                                  
                              } else {
                                  colData(y)$Pos_X <- cur_props[[coords[1]]]
                                  colData(y)$Pos_Y <- cur_props[[coords[2]]]
-                                 cur_sub <- cur_props[, !colnames(cur_props) %in% c(cell_id, coords),
-                                                      drop = FALSE]
-                                 cur_DF  <- DataFrame(cur_sub, check.names = FALSE)
-                                 colnames(cur_DF) <- colnames(cur_sub)
-                                 colData(y) <- cbind(colData(y), cur_DF)
+                                 colData(y) <- cbind(colData(y),
+                                                     cur_props[, !colnames(cur_props) %in%
+                                                                 c(cell_id, coords)])
                              }
 
                              return(y)
@@ -149,9 +145,15 @@
                           show_col_types = FALSE)
     cur_img_meta$sample_id <- sub("\\.[^.]*$", "", cur_img_meta$image)
     
-    cur_df <- as(left_join(x = as.data.frame(colData(object)), 
-                           y = cur_img_meta[,-1],
-                           by = "sample_id"), "DataFrame")
+    cur_cd  <- colData(object)
+    cur_in  <- as.data.frame(cur_cd)
+    colnames(cur_in) <- colnames(cur_cd)
+    
+    cur_joined <- left_join(x = cur_in, y = cur_img_meta[,-1],
+                            by = "sample_id")
+    
+    cur_df <- as(cur_joined, "DataFrame")
+    colnames(cur_df) <- colnames(cur_joined)
     
     if (!all.equal(paste(cur_df[["sample_id"]], cur_df[["ObjectNumber"]]),
                    paste(object[["sample_id"]], object[["ObjectNumber"]]))) {
